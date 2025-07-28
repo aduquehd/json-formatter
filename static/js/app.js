@@ -2,10 +2,11 @@
 class JSONViewer {
     constructor() {
         this.initializeElements();
+        this.configureToastr();
         this.bindEvents();
+        this.isFormatted = false;
     }
     initializeElements() {
-        this.jsonInput = document.getElementById('jsonInput');
         this.formattedOutput = document.getElementById('formattedOutput');
         this.treeOutput = document.getElementById('treeOutput');
         this.errorMessage = document.getElementById('errorMessage');
@@ -13,6 +14,29 @@ class JSONViewer {
         this.clearBtn = document.getElementById('clearBtn');
         this.tabBtns = document.querySelectorAll('.tab-btn');
         this.tabContents = document.querySelectorAll('.tab-content');
+        this.pasteHint = document.getElementById('pasteHint');
+        this.editHint = document.getElementById('editHint');
+    }
+    configureToastr() {
+        if (typeof toastr !== 'undefined') {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut",
+            };
+        }
     }
     bindEvents() {
         this.formatBtn.addEventListener('click', () => this.formatJSON());
@@ -26,12 +50,29 @@ class JSONViewer {
                 }
             });
         });
-        this.jsonInput.addEventListener('input', () => this.hideError());
+        this.formattedOutput.addEventListener('input', () => this.hideError());
+        this.formattedOutput.addEventListener('blur', () => {
+            if (this.isFormatted) {
+                this.handleFormattedEdit();
+            }
+        });
+        this.formattedOutput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                if (this.isFormatted) {
+                    this.handleFormattedEdit();
+                } else {
+                    this.formatJSON();
+                }
+            }
+        });
+        this.formattedOutput.addEventListener('paste', (e) => this.handlePaste(e));
     }
     formatJSON() {
-        const input = this.jsonInput.value.trim();
+        const input = this.formattedOutput.textContent?.trim() || '';
         if (!input) {
-            this.showError('Please enter some JSON data');
+            this.showError('Please paste some JSON data first');
+            this.formattedOutput.focus();
             return;
         }
         try {
@@ -46,10 +87,13 @@ class JSONViewer {
             const formattedJSON = JSON.stringify(parsedJSON, null, 2);
             this.formattedOutput.textContent = formattedJSON;
             this.generateTreeView(parsedJSON);
+            this.showFormattedMode();
             this.hideError();
+            this.showSuccess('JSON formatted successfully! Now you can edit it directly.');
         }
         catch (error) {
             this.showError(`Invalid JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            this.formattedOutput.focus();
         }
     }
     generateTreeView(data) {
@@ -145,17 +189,95 @@ class JSONViewer {
         }
     }
     clearAll() {
-        this.jsonInput.value = '';
         this.formattedOutput.textContent = '';
         this.treeOutput.innerHTML = '';
         this.hideError();
+        this.showPasteMode();
+    }
+    showPasteMode() {
+        this.isFormatted = false;
+        this.pasteHint.style.display = 'flex';
+        this.editHint.style.display = 'none';
+        this.formattedOutput.classList.add('paste-mode');
+        this.formattedOutput.classList.remove('formatted-mode');
+        this.formatBtn.textContent = 'Format JSON';
+    }
+    showFormattedMode() {
+        this.isFormatted = true;
+        this.pasteHint.style.display = 'none';
+        this.editHint.style.display = 'flex';
+        this.formattedOutput.classList.remove('paste-mode');
+        this.formattedOutput.classList.add('formatted-mode');
+        this.formatBtn.textContent = 'Re-format JSON';
+    }
+    handleFormattedEdit() {
+        if (!this.isFormatted) return;
+        
+        const editedContent = this.formattedOutput.textContent || '';
+        
+        try {
+            const parsedJSON = JSON.parse(editedContent);
+            this.generateTreeView(parsedJSON);
+            this.hideError();
+            this.showSuccess('Changes saved successfully!');
+        } catch (error) {
+            this.showError(`Invalid JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            setTimeout(() => {
+                this.formattedOutput.focus();
+            }, 100);
+        }
     }
     showError(message) {
-        this.errorMessage.textContent = message;
-        this.errorMessage.classList.remove('hidden');
+        toastr.error(message);
     }
     hideError() {
-        this.errorMessage.classList.add('hidden');
+        toastr.clear();
+    }
+    showSuccess(message) {
+        toastr.success(message);
+    }
+    
+    handlePaste(e) {
+        e.preventDefault();
+        
+        const clipboardData = e.clipboardData || window.clipboardData;
+        
+        // Check if clipboard contains files (images, etc.)
+        if (clipboardData.files && clipboardData.files.length > 0) {
+            this.showError('Only text content is allowed. Images and files cannot be pasted.');
+            return;
+        }
+        
+        // Get text data only
+        const pastedText = clipboardData.getData('text/plain') || clipboardData.getData('text');
+        
+        if (!pastedText) {
+            this.showError('No text content found in clipboard.');
+            return;
+        }
+        
+        // Insert the text at cursor position or replace selection
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.deleteContents();
+            range.insertNode(document.createTextNode(pastedText));
+            
+            // Move cursor to end of inserted text
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        } else {
+            // Fallback: append to end
+            this.formattedOutput.textContent += pastedText;
+        }
+        
+        // Trigger paste mode if not formatted
+        setTimeout(() => {
+            if (!this.isFormatted) {
+                this.showPasteMode();
+            }
+        }, 10);
     }
 }
 document.addEventListener('DOMContentLoaded', () => {

@@ -32,7 +32,7 @@ body::before {
 .container {
     max-width: none;
     margin: 0;
-    padding: 10px 55px 55px 55px;
+    padding: 10px 55px 45px 55px;
     min-height: 100vh;
     width: 100vw;
     box-sizing: border-box;
@@ -69,15 +69,61 @@ main {
     border-radius: 12px;
     padding: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
-    height: calc(100vh - 170px);
+    height: calc(100vh - 180px);
     display: flex;
     flex-direction: column;
     backdrop-filter: blur(10px);
 }
 
-.input-section {
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    height: 40px;
+}
+
+.github-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.github-icon {
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
+}
+
+.github-text {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 #jsonInput {
@@ -102,18 +148,12 @@ main {
     background: #ffffff;
 }
 
-.button-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 15px;
-    flex-wrap: wrap;
-}
 
 .btn {
-    padding: 12px 24px;
+    padding: 8px 16px;
     border: 2px solid #3b82f6;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: 4px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -198,6 +238,7 @@ main {
     display: flex;
     flex-direction: column;
     min-height: 0;
+    overflow: hidden;
 }
 
 .tab-content {
@@ -205,9 +246,15 @@ main {
     animation: fadeIn 0.3s ease;
     flex: 1;
     min-height: 0;
+    overflow: hidden;
 }
 
 .tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+#tree-tab.active {
     display: block;
 }
 
@@ -344,9 +391,100 @@ main {
     display: none;
 }
 
+.paste-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 6px 6px 0 0;
+    font-size: 13px;
+    color: #059669;
+    font-weight: 500;
+    border-bottom: none;
+}
+
+.paste-icon {
+    font-size: 16px;
+}
+
+.paste-text {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.edit-hint {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px 6px 0 0;
+    font-size: 12px;
+    color: #3b82f6;
+    font-weight: 500;
+    border-bottom: none;
+}
+
+.edit-icon {
+    font-size: 14px;
+}
+
+.edit-text {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+.json-output {
+    min-height: 200px;
+    cursor: text;
+    flex: 1;
+    overflow-y: auto;
+    max-height: none;
+}
+
+.json-output:empty::before {
+    content: 'Paste your JSON here...';
+    color: #94a3b8;
+    font-style: italic;
+    pointer-events: none;
+}
+
+.json-output[contenteditable="true"] {
+    border-radius: 0 0 8px 8px;
+    border-top: none;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.json-output.paste-mode {
+    border-radius: 0 0 8px 8px;
+    border-top: none;
+}
+
+.json-output.formatted-mode {
+    border-radius: 8px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.json-output[contenteditable="true"]:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: #fefefe;
+}
+
+.json-output[contenteditable="true"]:hover {
+    background: #fefefe;
+    border-color: #cbd5e1;
+}
+
+
+
+
 @media (max-width: 768px) {
     .container {
-        padding: 8px 35px 35px 35px;
+        padding: 8px 35px 45px 35px;
     }
     
     header h1 {
@@ -355,15 +493,31 @@ main {
     
     main {
         padding: 12px;
-        height: calc(100vh - 114px);
+        height: calc(100vh - 140px);
+    }
+    
+    .top-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
     
     .button-group {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .github-link {
+        align-self: flex-end;
+    }
+    
+    .github-text {
+        font-size: 11px;
     }
     
     .btn {
-        width: 100%;
+        flex: 0 0 auto;
+        min-width: auto;
     }
     
     .tabs {
@@ -383,11 +537,11 @@ main {
 
 @media (max-width: 480px) {
     .container {
-        padding: 5px 25px 25px 25px;
+        padding: 5px 25px 45px 25px;
     }
     
     main {
-        height: calc(100vh - 90px);
+        height: calc(100vh - 130px);
         padding: 10px;
     }
     
