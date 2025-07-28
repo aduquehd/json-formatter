@@ -28,6 +28,8 @@ class JSONViewer {
     this.elements.formatBtn.addEventListener("click", () => this.formatJSON());
     this.elements.compactBtn.addEventListener("click", () => this.compactJSON());
     this.elements.clearBtn.addEventListener("click", () => this.clearAll());
+    this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
+    this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
     
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -165,6 +167,51 @@ class JSONViewer {
   private showFormattedMode(): void {
     this.state.isFormatted = true;
     showFormattedMode(this.elements);
+  }
+
+  private copyJSON(): void {
+    const content = this.elements.formattedOutput.textContent?.trim() || "";
+    
+    if (!content) {
+      toastr.warning("No content to copy!");
+      return;
+    }
+
+    navigator.clipboard.writeText(content).then(() => {
+      toastr.success("JSON copied to clipboard!");
+    }).catch(err => {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = content;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        toastr.success("JSON copied to clipboard!");
+      } catch (err) {
+        toastr.error("Failed to copy JSON. Please try selecting and copying manually.");
+      }
+      
+      document.body.removeChild(textArea);
+    });
+  }
+
+  private pasteFromClipboard(): void {
+    navigator.clipboard.readText().then(text => {
+      if (text) {
+        this.elements.formattedOutput.textContent = text;
+        this.showPasteMode();
+        toastr.success("Content pasted from clipboard!");
+      } else {
+        toastr.warning("Clipboard is empty!");
+      }
+    }).catch(err => {
+      // Fallback message for browsers that don't support clipboard API
+      toastr.error("Unable to access clipboard. Please paste manually using Ctrl+V or Cmd+V.");
+    });
   }
 }
 

@@ -6,12 +6,14 @@ export function initializeElements(): DOMElements | null {
   const formatBtn = document.getElementById("formatBtn") as HTMLButtonElement;
   const compactBtn = document.getElementById("compactBtn") as HTMLButtonElement;
   const clearBtn = document.getElementById("clearBtn") as HTMLButtonElement;
+  const copyBtn = document.getElementById("copyBtn") as HTMLButtonElement;
+  const pasteBtn = document.getElementById("pasteBtn") as HTMLButtonElement;
   const tabBtns = document.querySelectorAll(".tab-btn") as NodeListOf<HTMLButtonElement>;
   const tabContents = document.querySelectorAll(".tab-content") as NodeListOf<HTMLElement>;
   const pasteHint = document.getElementById("pasteHint");
   const editHint = document.getElementById("editHint");
 
-  if (!formattedOutput || !treeOutput || !formatBtn || !compactBtn || !clearBtn || !pasteHint || !editHint) {
+  if (!formattedOutput || !treeOutput || !formatBtn || !compactBtn || !clearBtn || !copyBtn || !pasteBtn || !pasteHint || !editHint) {
     console.error('Required DOM elements not found');
     return null;
   }
@@ -22,6 +24,8 @@ export function initializeElements(): DOMElements | null {
     formatBtn,
     compactBtn,
     clearBtn,
+    copyBtn,
+    pasteBtn,
     tabBtns,
     tabContents,
     pasteHint,

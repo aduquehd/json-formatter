@@ -20,6 +20,8 @@ export interface DOMElements {
   formatBtn: HTMLButtonElement;
   compactBtn: HTMLButtonElement;
   clearBtn: HTMLButtonElement;
+  copyBtn: HTMLButtonElement;
+  pasteBtn: HTMLButtonElement;
   tabBtns: NodeListOf<HTMLButtonElement>;
   tabContents: NodeListOf<HTMLElement>;
   pasteHint: HTMLElement;

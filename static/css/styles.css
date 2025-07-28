@@ -28,10 +28,40 @@ body::before {
   z-index: -1;
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.navbar-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 55px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
 .container {
   max-width: none;
   margin: 0;
-  padding: 10px 55px 45px 55px;
+  padding: 70px 55px 45px 55px;
   min-height: 100vh;
   width: 100vw;
   box-sizing: border-box;
@@ -45,7 +75,7 @@ main {
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.04),
     0 2px 10px rgba(0, 0, 0, 0.02);
-  height: calc(100vh - 45px);
+  height: calc(100vh - 115px);
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(20px);
@@ -204,6 +234,30 @@ main {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   background: rgba(240, 240, 240, 0.9);
   color: #333333;
+}
+
+#copyBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border: none;
+}
+
+#copyBtn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+#pasteBtn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #ffffff;
+  border: none;
+}
+
+#pasteBtn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(240, 147, 251, 0.3);
+  background: linear-gradient(135deg, #ed6ea0 0%, #ec8c69 100%);
 }
 
 .btn-accent {
@@ -510,13 +564,21 @@ main {
 }
 
 @media (max-width: 768px) {
+  .navbar-content {
+    padding: 0 35px;
+  }
+
+  .navbar-title {
+    font-size: 18px;
+  }
+
   .container {
-    padding: 8px 35px 45px 35px;
+    padding: 68px 35px 45px 35px;
   }
 
   main {
     padding: 12px;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 113px);
   }
 
   .top-section {
@@ -565,12 +627,20 @@ main {
 }
 
 @media (max-width: 480px) {
+  .navbar-content {
+    padding: 0 25px;
+  }
+
+  .navbar-title {
+    font-size: 16px;
+  }
+
   .container {
-    padding: 5px 25px 45px 25px;
+    padding: 65px 25px 45px 25px;
   }
 
   main {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 110px);
     padding: 10px;
   }
 
