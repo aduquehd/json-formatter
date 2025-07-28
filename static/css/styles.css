@@ -220,15 +220,15 @@ main {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
-  background: linear-gradient(135deg, #0052cc 0%, #0041a8 100%);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
 .btn-secondary {
@@ -269,15 +269,15 @@ main {
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
 }
 
 .btn-accent:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(0, 212, 170, 0.3);
-  background: linear-gradient(135deg, #00b894 0%, #00a07c 100%);
+  box-shadow: 0 8px 24px rgba(79, 172, 254, 0.3);
+  background: linear-gradient(135deg, #3b8bf8 0%, #00d4fe 100%);
 }
 
 .tabs {
