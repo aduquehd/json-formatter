@@ -1,115 +1,170 @@
 # JSON Viewer
 
-A simple, modern web application for viewing and formatting JSON data.
+A modern web application for viewing and formatting JSON data with a VS Code-style editor interface.
 
 ## Features
 
+- **Monaco Editor**: VS Code-style code editor with syntax highlighting, line numbers, and minimap
 - **JSON Formatting**: Paste raw or encoded JSON and format it with proper indentation
 - **Tree View**: Interactive tree view with expand/collapse functionality
+- **Real-time Validation**: Live JSON validation with error highlighting
+- **Code Folding**: Collapse and expand JSON sections
+- **Theme Support**: Light and dark themes with automatic editor theme switching
 - **Modern UI**: Clean, responsive design that works on all devices
-- **Error Handling**: Clear error messages for invalid JSON
 - **No Database**: Simple, stateless application
 
 ## Requirements
 
+- Docker and Docker Compose
+
+## Quick Start with Docker
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd json-viewer
+   ```
+
+2. Build and run with Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+
+3. Open your browser and go to `http://localhost:8000`
+
+## Development
+
+### Docker Development Setup
+
+For development with auto-reload:
+
+```bash
+# Development mode with volume mounting for live changes
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+### Local Development (without Docker)
+
+If you prefer to develop locally:
+
+#### Requirements
 - Python 3.12+
 - Node.js and npm
 - UV (Python package manager)
 
-## Installation
-
-1. Clone or download this project
-2. Install Python dependencies:
+#### Setup
+1. Install Python dependencies:
    ```bash
    uv sync
    ```
-3. Install Node.js dependencies:
+
+2. Install Node.js dependencies:
    ```bash
    npm install
    ```
-4. Compile TypeScript:
+
+3. Compile TypeScript:
    ```bash
    npm run build
    ```
 
-## Usage
+4. Start the server:
+   ```bash
+   uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+   ```
 
-### Quick Start
-
-```bash
-python run.py
-```
-
-### Manual Start
-
-```bash
-# Compile TypeScript (if changed)
-npm run build
-
-# Start the server
-uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-Open your browser and go to `http://localhost:8000`
-
-## Development
+### TypeScript Development
 
 - TypeScript files are in `static/ts/`
 - Compiled JavaScript goes to `static/js/` (auto-generated, not committed to repo)
 - CSS files are in `static/css/`
 - HTML templates are in `templates/`
 
-### TypeScript Development Workflow
+**Important:** The generated JavaScript files are automatically created from TypeScript and should never be edited directly.
 
-**Important:** The `app.js` file is automatically generated from `app.ts` and should never be edited directly or committed to the repository.
-
-#### Build TypeScript once:
-
+#### Build TypeScript:
 ```bash
 npm run build
 ```
 
 #### Watch TypeScript files during development:
-
 ```bash
 npm run dev
 # or
 npm run watch
 ```
 
-This will automatically recompile TypeScript files whenever you make changes.
-
 ### Code Formatting
 
-This project uses Prettier for code formatting. To format your code:
+Format code with Prettier:
 
 ```bash
-# Format all supported files
+# Format all files
 npx prettier --write .
 
-# Check formatting without making changes
+# Check formatting
 npx prettier --check .
+```
 
-# Format specific files
-npx prettier --write static/js/app.js static/css/styles.css
+### Linting
+
+Python code linting:
+
+```bash
+uv run ruff check    # Check for issues
+uv run ruff format   # Format Python code
+```
+
+## Docker Commands
+
+### Production
+```bash
+# Build and run production container
+docker-compose up --build
+
+# Run in background
+docker-compose up -d --build
+
+# Stop containers
+docker-compose down
+```
+
+### Development
+```bash
+# Development with live reload
+docker-compose -f docker-compose.dev.yml up --build
+
+# Rebuild containers
+docker-compose build --no-cache
 ```
 
 ## Project Structure
 
 ```
 json-viewer/
-├── main.py              # FastAPI application
-├── run.py               # Startup script
+├── main.py                    # FastAPI application
+├── Dockerfile                 # Docker container definition
+├── docker-compose.yml         # Production Docker Compose
+├── docker-compose.dev.yml     # Development Docker Compose
+├── docker-compose.prod.yml    # Production Docker Compose
 ├── templates/
-│   └── index.html       # Main HTML template
+│   └── index.html             # Main HTML template
 ├── static/
 │   ├── css/
-│   │   └── styles.css   # Application styles
-│   ├── js/
-│   │   └── app.js       # Compiled JavaScript
-│   └── ts/
-│       └── app.ts       # TypeScript source
-├── package.json         # Node.js dependencies
-├── tsconfig.json        # TypeScript configuration
-└── pyproject.toml       # Python dependencies
+│   │   └── styles.css         # Application styles
+│   ├── js/                    # Compiled JavaScript (auto-generated)
+│   └── ts/                    # TypeScript source files
+│       ├── app.ts             # Main application
+│       └── utils/             # Utility modules
+├── package.json               # Node.js dependencies
+├── tsconfig.json              # TypeScript configuration
+└── pyproject.toml             # Python dependencies
 ```
+
+## Technology Stack
+
+- **Backend**: FastAPI (Python)
+- **Frontend**: TypeScript, Monaco Editor
+- **Styling**: CSS with CSS Variables for theming
+- **Build Tool**: TypeScript Compiler (tsc)
+- **Containerization**: Docker & Docker Compose

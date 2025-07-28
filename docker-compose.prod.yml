@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: compose/prod/Dockerfile
+    container_name: json_viewer_backend
+    env_file: .env
+    command: uv run uvicorn main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips='*'
+    expose:
+      - 8000
+
+  caddy:
+    image: caddy:2
+    container_name: json_viewer_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./compose/prod/Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - backend
+
+volumes:
+  chat_agent_db_data:
