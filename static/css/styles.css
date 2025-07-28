@@ -21,7 +21,6 @@
   --btn-secondary-bg: #f8f9fa;
   --btn-secondary-hover: #e9ecef;
   --input-bg: #ffffff;
-  --minimap-bg: #f8f9fa;
   --tree-bg: #ffffff;
   --tree-hover: #f8f9fa;
   
@@ -57,7 +56,6 @@
   --btn-secondary-bg: #2d2d2d;
   --btn-secondary-hover: #3a3a3a;
   --input-bg: #242424;
-  --minimap-bg: #2d2d2d;
   --tree-bg: #1a1a1a;
   --tree-hover: #2d2d2d;
   
@@ -679,47 +677,6 @@ main {
 }
 
 
-.minimap-container {
-  width: 120px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-left: none;
-  border-radius: 0 12px 12px 0;
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.minimap-content {
-  width: 100%;
-  height: 100%;
-  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-  font-size: 3px;
-  line-height: 4px;
-  color: var(--text-secondary);
-  white-space: pre-wrap;
-  word-break: break-all;
-  overflow: hidden;
-  padding: 4px;
-  transform-origin: top left;
-  user-select: none;
-  pointer-events: none;
-}
-
-.minimap-viewport {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: rgba(0, 102, 255, 0.15);
-  border: 1px solid rgba(0, 102, 255, 0.3);
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  min-height: 20px;
-}
-
-.minimap-viewport:hover {
-  background: rgba(0, 102, 255, 0.25);
-}
 
 .json-output.paste-mode {
   border-radius: 0;
@@ -768,9 +725,6 @@ main {
     margin-top: 10px;
   }
 
-  .minimap-container {
-    display: none;
-  }
 
   .json-output.paste-mode,
   .json-output.formatted-mode {
@@ -851,9 +805,6 @@ main {
     display: none;
   }
 
-  .minimap-container {
-    display: none;
-  }
 
   .json-output.paste-mode,
   .json-output.formatted-mode {

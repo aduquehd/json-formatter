@@ -13,10 +13,6 @@ export function initializeElements(): DOMElements | null {
   const tabContents = document.querySelectorAll(".tab-content") as NodeListOf<HTMLElement>;
   const pasteHint = document.getElementById("pasteHint");
   const editHint = document.getElementById("editHint");
-  const minimapContainer = document.getElementById("minimapContainer");
-  const minimapContent = document.getElementById("minimapContent");
-  const minimapViewport = document.getElementById("minimapViewport");
-  const lineNumbers = document.getElementById("lineNumbers");
 
   if (
     !formattedOutput ||
@@ -28,11 +24,7 @@ export function initializeElements(): DOMElements | null {
     !pasteBtn ||
     !themeBtn ||
     !pasteHint ||
-    !editHint ||
-    !minimapContainer ||
-    !minimapContent ||
-    !minimapViewport ||
-    !lineNumbers
+    !editHint
   ) {
     console.error("Required DOM elements not found");
     return null;
@@ -51,10 +43,6 @@ export function initializeElements(): DOMElements | null {
     tabContents,
     pasteHint,
     editHint,
-    minimapContainer,
-    minimapContent,
-    minimapViewport,
-    lineNumbers,
   };
 }
 
