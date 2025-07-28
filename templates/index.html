@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON Viewer</h1>
+            <p>Paste, format, and explore JSON data</p>
+        </header>
+        
+        <main>
+            <div class="input-section">
+                <textarea 
+                    id="jsonInput" 
+                    placeholder="Paste your JSON or encoded JSON here..."
+                    rows="10"
+                ></textarea>
+                <div class="button-group">
+                    <button id="formatBtn" class="btn btn-primary">Format JSON</button>
+                    <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="formatted">Formatted View</button>
+                <button class="tab-btn" data-tab="tree">Tree View</button>
+            </div>
+            
+            <div class="output-section">
+                <div id="formatted-tab" class="tab-content active">
+                    <pre id="formattedOutput" class="json-output"></pre>
+                </div>
+                <div id="tree-tab" class="tab-content">
+                    <div id="treeOutput" class="tree-output"></div>
+                </div>
+            </div>
+            
+            <div id="errorMessage" class="error-message hidden"></div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+</body>
+</html>
