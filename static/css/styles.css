@@ -395,20 +395,6 @@ main {
   margin-left: 8px;
 }
 
-.error-message {
-  background: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-  border-radius: 6px;
-  padding: 12px 16px;
-  margin-top: 15px;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.error-message.hidden {
-  display: none;
-}
 
 .paste-hint {
   display: flex;
