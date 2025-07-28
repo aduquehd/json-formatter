@@ -5,6 +5,7 @@ import { initializeElements, switchTab, showPasteMode, showFormattedMode, clearO
 import { parseJSON, formatJSON, compactJSON } from './utils/json-utils.js';
 import { generateTreeView } from './utils/tree-utils.js';
 import { Minimap } from './utils/minimap-utils.js';
+import { copyToClipboard, pasteFromClipboard, handlePasteEvent } from './utils/clipboard-utils.js';
 
 declare var toastr: any;
 
@@ -38,7 +39,7 @@ class JSONViewer {
     this.elements.compactBtn.addEventListener("click", () => this.compactJSON());
     this.elements.clearBtn.addEventListener("click", () => this.clearAll());
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
-    this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
+    this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboardBtn());
     
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -125,21 +126,8 @@ class JSONViewer {
   }
 
   private handlePaste(e: ClipboardEvent): void {
-    e.preventDefault();
-
-    const clipboardData = e.clipboardData || (window as any).clipboardData;
-
-    if (clipboardData.files && clipboardData.files.length > 0) {
-      toastr.error("Only text content is allowed. Images and files cannot be pasted.");
-      return;
-    }
-
-    const pastedText = clipboardData.getData("text/plain") || clipboardData.getData("text");
-
-    if (!pastedText) {
-      toastr.error("No text content found in clipboard.");
-      return;
-    }
+    const pastedText = handlePasteEvent(e);
+    if (!pastedText) return;
 
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
@@ -159,6 +147,8 @@ class JSONViewer {
       } else {
         this.minimap.refresh();
       }
+      // Auto-format the pasted JSON
+      this.formatJSON();
     }, 10);
   }
 
@@ -186,46 +176,19 @@ class JSONViewer {
 
   private copyJSON(): void {
     const content = this.elements.formattedOutput.textContent?.trim() || "";
-    
-    if (!content) {
-      toastr.warning("No content to copy!");
-      return;
-    }
-
-    navigator.clipboard.writeText(content).then(() => {
-      toastr.success("JSON copied to clipboard!");
-    }).catch(() => {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea");
-      textArea.value = content;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999999px";
-      document.body.appendChild(textArea);
-      textArea.select();
-      
-      try {
-        document.execCommand('copy');
-        toastr.success("JSON copied to clipboard!");
-      } catch {
-        toastr.error("Failed to copy JSON. Please try selecting and copying manually.");
-      }
-      
-      document.body.removeChild(textArea);
-    });
+    copyToClipboard(content);
   }
 
-  private pasteFromClipboard(): void {
-    navigator.clipboard.readText().then(text => {
+  private pasteFromClipboardBtn(): void {
+    pasteFromClipboard().then(text => {
       if (text) {
         this.elements.formattedOutput.textContent = text;
         this.showPasteMode();
-        toastr.success("Content pasted from clipboard!");
-      } else {
-        toastr.warning("Clipboard is empty!");
+        // Auto-format the pasted JSON
+        setTimeout(() => {
+          this.formatJSON();
+        }, 10);
       }
-    }).catch(() => {
-      // Fallback message for browsers that don't support clipboard API
-      toastr.error("Unable to access clipboard. Please paste manually using Ctrl+V or Cmd+V.");
     });
   }
 }

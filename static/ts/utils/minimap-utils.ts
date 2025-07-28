@@ -97,12 +97,16 @@ export class Minimap {
 
     this.elements.viewport.style.display = 'block';
 
-    const minimapHeight = this.elements.container.clientHeight;
+    // Account for minimap content padding (4px from CSS)
+    const minimapPadding = 4;
+    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
+    const availableHeight = minimapHeight;
+    
     const viewportHeight = Math.max(
       20, // minimum viewport height
-      (editorClientHeight / editorScrollHeight) * minimapHeight
+      (editorClientHeight / editorScrollHeight) * availableHeight
     );
-    const viewportTop = (editorScrollTop / editorScrollHeight) * minimapHeight;
+    const viewportTop = (editorScrollTop / editorScrollHeight) * availableHeight + minimapPadding;
 
     this.elements.viewport.style.height = `${viewportHeight}px`;
     this.elements.viewport.style.top = `${viewportTop}px`;
@@ -111,9 +115,13 @@ export class Minimap {
   private handleMinimapClick(e: MouseEvent): void {
     const containerRect = this.elements.container.getBoundingClientRect();
     const clickY = e.clientY - containerRect.top;
-    const minimapHeight = this.elements.container.clientHeight;
     
-    const scrollPercentage = clickY / minimapHeight;
+    // Account for minimap content padding
+    const minimapPadding = 4;
+    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
+    const adjustedClickY = Math.max(0, clickY - minimapPadding);
+    
+    const scrollPercentage = adjustedClickY / minimapHeight;
     const editorScrollHeight = this.editor.scrollHeight;
     const editorClientHeight = this.editor.clientHeight;
     const maxScroll = editorScrollHeight - editorClientHeight;
@@ -135,8 +143,9 @@ export class Minimap {
     const deltaY = e.clientY - this.lastMouseY;
     this.lastMouseY = e.clientY;
 
-    const containerRect = this.elements.container.getBoundingClientRect();
-    const minimapHeight = this.elements.container.clientHeight;
+    // Account for minimap content padding
+    const minimapPadding = 4;
+    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
     const editorScrollHeight = this.editor.scrollHeight;
     const editorClientHeight = this.editor.clientHeight;
     const maxScroll = editorScrollHeight - editorClientHeight;

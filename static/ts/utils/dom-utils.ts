@@ -57,7 +57,6 @@ export function showPasteMode(elements: DOMElements): void {
   elements.editHint.style.display = "none";
   elements.formattedOutput.classList.add("paste-mode");
   elements.formattedOutput.classList.remove("formatted-mode");
-  elements.formatBtn.textContent = "Format JSON";
 }
 
 export function showFormattedMode(elements: DOMElements): void {
@@ -65,7 +64,6 @@ export function showFormattedMode(elements: DOMElements): void {
   elements.editHint.style.display = "flex";
   elements.formattedOutput.classList.remove("paste-mode");
   elements.formattedOutput.classList.add("formatted-mode");
-  elements.formatBtn.textContent = "Re-format JSON";
 }
 
 export function clearOutput(elements: DOMElements): void {
