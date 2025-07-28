@@ -24,6 +24,20 @@
   --minimap-bg: #f8f9fa;
   --tree-bg: #ffffff;
   --tree-hover: #f8f9fa;
+  
+  /* JSON Syntax Highlighting - Light Theme */
+  --json-string: #22863a;
+  --json-number: #005cc5;
+  --json-boolean: #d73a49;
+  --json-null: #6f42c1;
+  --json-bracket: #24292e;
+  --json-colon: #586069;
+  --json-comma: #586069;
+  
+  /* Line Numbers */
+  --line-number-bg: #f6f8fa;
+  --line-number-text: #656d76;
+  --line-number-border: #d1d9e0;
 }
 
 [data-theme="dark"] {
@@ -46,6 +60,20 @@
   --minimap-bg: #2d2d2d;
   --tree-bg: #1a1a1a;
   --tree-hover: #2d2d2d;
+  
+  /* JSON Syntax Highlighting - Dark Theme */
+  --json-string: #79b8ff;
+  --json-number: #ffab70;
+  --json-boolean: #f97583;
+  --json-null: #b392f0;
+  --json-bracket: #e1e4e8;
+  --json-colon: #959da5;
+  --json-comma: #959da5;
+  
+  /* Line Numbers - Dark Theme */
+  --line-number-bg: #21262d;
+  --line-number-text: #7d8590;
+  --line-number-border: #30363d;
 }
 
 body {
@@ -325,7 +353,7 @@ main {
 .tabs {
   display: flex;
   margin-bottom: 8px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   background: transparent;
   gap: 4px;
@@ -375,11 +403,16 @@ main {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
 .tab-content.active {
   display: flex;
   flex-direction: column;
+}
+
+#formatted-tab {
+  position: relative;
 }
 
 #tree-tab.active {
@@ -419,8 +452,8 @@ main {
 
 .json-output {
   background: var(--input-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border: none;
+  border-radius: 0;
   padding: 16px;
   font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
   font-size: 12px;
@@ -430,7 +463,7 @@ main {
   height: 100%;
   overflow-y: auto;
   color: var(--text-primary);
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+  box-shadow: none;
 }
 
 .tree-output {
@@ -583,23 +616,55 @@ main {
   opacity: 0.8;
 }
 
+/* JSON Syntax Highlighting Styles */
+.json-string {
+  color: var(--json-string);
+  font-weight: normal;
+}
+
+.json-number {
+  color: var(--json-number);
+  font-weight: 500;
+}
+
+.json-boolean {
+  color: var(--json-boolean);
+  font-weight: 600;
+}
+
+.json-null {
+  color: var(--json-null);
+  font-weight: 600;
+}
+
+.json-bracket {
+  color: var(--json-bracket);
+  font-weight: 600;
+}
+
+.json-colon {
+  color: var(--json-colon);
+  font-weight: normal;
+}
+
+.json-comma {
+  color: var(--json-comma);
+  font-weight: normal;
+}
+
 .json-output[contenteditable="true"] {
-  border-radius: 0 0 8px 8px;
-  border-top: none;
+  border-radius: 0;
+  border: none;
   outline: none;
   transition: all 0.3s ease;
 }
 
-.json-output[contenteditable="true"]:focus {
-  box-shadow:
-    0 0 0 2px rgba(0, 102, 255, 0.1),
-    inset 0 2px 8px rgba(0, 0, 0, 0.02);
-  background: var(--bg-primary);
+.editor-container:focus-within {
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
   border-color: rgba(0, 102, 255, 0.2);
 }
 
-.json-output[contenteditable="true"]:hover {
-  background: var(--bg-tertiary);
+.editor-container:hover {
   border-color: var(--border-hover);
 }
 
@@ -608,7 +673,11 @@ main {
   flex: 1;
   min-height: 0;
   position: relative;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
 }
+
 
 .minimap-container {
   width: 120px;
@@ -653,13 +722,11 @@ main {
 }
 
 .json-output.paste-mode {
-  border-radius: 0 0 12px 0;
-  border-top: none;
+  border-radius: 0;
 }
 
 .json-output.formatted-mode {
-  border-radius: 0 0 12px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 0;
 }
 
 @media (max-width: 768px) {
@@ -736,6 +803,39 @@ main {
     border-left-color: #667eea;
     border-bottom-color: transparent;
   }
+}
+
+/* Monaco Editor Styles */
+.monaco-editor-container {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Override Monaco's default theme colors for better integration */
+.monaco-editor,
+.monaco-editor-background,
+.monaco-editor .inputarea.ime-input {
+  background-color: var(--input-bg) !important;
+}
+
+.monaco-editor .margin {
+  background-color: var(--line-number-bg) !important;
+}
+
+.monaco-editor .margin-view-overlays .line-numbers {
+  color: var(--line-number-text) !important;
+}
+
+/* Ensure Monaco editor fills the container properly */
+.monaco-editor {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 @media (max-width: 480px) {

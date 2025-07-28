@@ -135,22 +135,22 @@
               </svg>
               Paste
             </button>
-            <button id="themeBtn" class="btn btn-secondary">
-              <svg
-                class="btn-icon"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
-              </svg>
-              Theme
-            </button>
           </div>
+          <button id="themeBtn" class="btn btn-secondary">
+            <svg
+              class="btn-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+            </svg>
+            Theme
+          </button>
         </div>
 
         <div class="tabs">
@@ -160,21 +160,7 @@
 
         <div class="output-section">
           <div id="formatted-tab" class="tab-content active">
-            <div class="paste-hint" id="pasteHint">
-              <span class="paste-icon">📋</span>
-              <span class="paste-text">Paste your unformatted JSON here, then click "Format JSON"</span>
-            </div>
-            <div class="edit-hint" id="editHint">
-              <span class="edit-icon">✏️</span>
-              <span class="edit-text">Click to edit JSON directly • Ctrl+S or click outside to save</span>
-            </div>
-            <div class="editor-container">
-              <pre id="formattedOutput" class="json-output" contenteditable="true" spellcheck="false"></pre>
-              <div class="minimap-container" id="minimapContainer">
-                <div class="minimap-content" id="minimapContent"></div>
-                <div class="minimap-viewport" id="minimapViewport"></div>
-              </div>
-            </div>
+            <div id="monaco-editor" class="monaco-editor-container"></div>
           </div>
           <div id="tree-tab" class="tab-content">
             <div id="treeOutput" class="tree-output"></div>
@@ -185,6 +171,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script type="module" src="{{ url_for('static', path='/js/app.js') }}"></script>
   </body>
 </html>

@@ -30,6 +30,7 @@ export interface DOMElements {
   minimapContainer: HTMLElement;
   minimapContent: HTMLElement;
   minimapViewport: HTMLElement;
+  lineNumbers: HTMLElement;
 }
 
 export interface AppState {

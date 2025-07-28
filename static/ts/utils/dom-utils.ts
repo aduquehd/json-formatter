@@ -16,6 +16,7 @@ export function initializeElements(): DOMElements | null {
   const minimapContainer = document.getElementById("minimapContainer");
   const minimapContent = document.getElementById("minimapContent");
   const minimapViewport = document.getElementById("minimapViewport");
+  const lineNumbers = document.getElementById("lineNumbers");
 
   if (
     !formattedOutput ||
@@ -30,7 +31,8 @@ export function initializeElements(): DOMElements | null {
     !editHint ||
     !minimapContainer ||
     !minimapContent ||
-    !minimapViewport
+    !minimapViewport ||
+    !lineNumbers
   ) {
     console.error("Required DOM elements not found");
     return null;
@@ -52,6 +54,7 @@ export function initializeElements(): DOMElements | null {
     minimapContainer,
     minimapContent,
     minimapViewport,
+    lineNumbers,
   };
 }
 
