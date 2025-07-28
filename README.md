@@ -25,12 +25,42 @@ A modern web application for viewing and formatting JSON data with a VS Code-sty
    cd json-viewer
    ```
 
-2. Build and run with Docker Compose:
+2. Copy the environment configuration:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. (Optional) Edit `.env` to configure Google Analytics:
+   ```bash
+   # Edit .env and set your Google Analytics tracking ID
+   GA_TRACKING_ID=G-XXXXXXXXXX
+   ```
+
+4. Build and run with Docker Compose:
    ```bash
    docker-compose up --build
    ```
 
-3. Open your browser and go to `http://localhost:8000`
+5. Open your browser and go to `http://localhost:8000`
+
+## Configuration
+
+The application uses environment variables for configuration. Copy `.env.example` to `.env` and modify as needed:
+
+```bash
+# Analytics Configuration (optional)
+GA_TRACKING_ID=G-xxxxxxxx
+
+# Application Configuration  
+APP_ENV=development
+DEBUG=false
+```
+
+### Environment Variables
+
+- **`GA_TRACKING_ID`** (optional): Google Analytics 4 tracking ID for web analytics
+- **`APP_ENV`**: Application environment (`development`, `production`)
+- **`DEBUG`**: Enable/disable debug mode (`true`, `false`)
 
 ## Development
 
@@ -53,22 +83,27 @@ If you prefer to develop locally:
 - UV (Python package manager)
 
 #### Setup
-1. Install Python dependencies:
+1. Copy the environment configuration:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Install Python dependencies:
    ```bash
    uv sync
    ```
 
-2. Install Node.js dependencies:
+3. Install Node.js dependencies:
    ```bash
    npm install
    ```
 
-3. Compile TypeScript:
+4. Compile TypeScript:
    ```bash
    npm run build
    ```
 
-4. Start the server:
+5. Start the server:
    ```bash
    uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
    ```
