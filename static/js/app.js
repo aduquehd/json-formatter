@@ -2,7 +2,6 @@
 class JSONViewer {
     constructor() {
         this.initializeElements();
-        this.configureToastr();
         this.bindEvents();
         this.isFormatted = false;
     }
@@ -16,27 +15,6 @@ class JSONViewer {
         this.tabContents = document.querySelectorAll('.tab-content');
         this.pasteHint = document.getElementById('pasteHint');
         this.editHint = document.getElementById('editHint');
-    }
-    configureToastr() {
-        if (typeof toastr !== 'undefined') {
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "3000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut",
-            };
-        }
     }
     bindEvents() {
         this.formatBtn.addEventListener('click', () => this.formatJSON());
@@ -89,7 +67,6 @@ class JSONViewer {
             this.generateTreeView(parsedJSON);
             this.showFormattedMode();
             this.hideError();
-            this.showSuccess('JSON formatted successfully! Now you can edit it directly.');
         }
         catch (error) {
             this.showError(`Invalid JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -219,7 +196,6 @@ class JSONViewer {
             const parsedJSON = JSON.parse(editedContent);
             this.generateTreeView(parsedJSON);
             this.hideError();
-            this.showSuccess('Changes saved successfully!');
         } catch (error) {
             this.showError(`Invalid JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
             setTimeout(() => {
@@ -228,13 +204,11 @@ class JSONViewer {
         }
     }
     showError(message) {
-        toastr.error(message);
+        this.errorMessage.textContent = message;
+        this.errorMessage.classList.remove('hidden');
     }
     hideError() {
-        toastr.clear();
-    }
-    showSuccess(message) {
-        toastr.success(message);
+        this.errorMessage.classList.add('hidden');
     }
     
     handlePaste(e) {
