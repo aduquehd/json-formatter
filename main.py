@@ -6,9 +6,9 @@ from fastapi.templating import Jinja2Templates
 from config import settings
 
 app = FastAPI(
-    title="JSON Viewer", 
+    title="JSON Viewer",
     description="A modern JSON viewer and formatter with VS Code-like editor",
-    debug=settings.debug
+    debug=settings.debug,
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -18,13 +18,13 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse(
-        "index.html", 
+        "index.html",
         {
-            "request": request, 
+            "request": request,
             "title": "JSON Viewer/Formatter",
             "ga_tracking_id": settings.ga_tracking_id,
-            "app_env": settings.app_env
-        }
+            "app_env": settings.app_env,
+        },
     )
 
 

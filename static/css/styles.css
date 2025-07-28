@@ -23,7 +23,7 @@
   --input-bg: #ffffff;
   --tree-bg: #ffffff;
   --tree-hover: #f8f9fa;
-  
+
   /* JSON Syntax Highlighting - Light Theme */
   --json-string: #22863a;
   --json-number: #005cc5;
@@ -32,7 +32,7 @@
   --json-bracket: #24292e;
   --json-colon: #586069;
   --json-comma: #586069;
-  
+
   /* Line Numbers */
   --line-number-bg: #f6f8fa;
   --line-number-text: #656d76;
@@ -58,7 +58,7 @@
   --input-bg: #242424;
   --tree-bg: #1a1a1a;
   --tree-hover: #2d2d2d;
-  
+
   /* JSON Syntax Highlighting - Dark Theme */
   --json-string: #79b8ff;
   --json-number: #ffab70;
@@ -67,7 +67,7 @@
   --json-bracket: #e1e4e8;
   --json-colon: #959da5;
   --json-comma: #959da5;
-  
+
   /* Line Numbers - Dark Theme */
   --line-number-bg: #21262d;
   --line-number-text: #7d8590;
@@ -676,8 +676,6 @@ main {
   overflow: hidden;
 }
 
-
-
 .json-output.paste-mode {
   border-radius: 0;
 }
@@ -724,7 +722,6 @@ main {
     justify-content: center;
     margin-top: 10px;
   }
-
 
   .json-output.paste-mode,
   .json-output.formatted-mode {
@@ -804,7 +801,6 @@ main {
   .navbar-links {
     display: none;
   }
-
 
   .json-output.paste-mode,
   .json-output.formatted-mode {

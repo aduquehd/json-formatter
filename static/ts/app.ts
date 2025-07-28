@@ -54,11 +54,13 @@ class JSONViewer {
   }
 
   private initializeMonacoEditor(): void {
-    require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" } });
+    require.config({
+      paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" },
+    });
 
     require(["vs/editor/editor.main"], () => {
       const container = document.getElementById("monaco-editor")!;
-      
+
       // Define custom themes
       monaco.editor.defineTheme("custom-light", {
         base: "vs",
@@ -141,7 +143,7 @@ class JSONViewer {
 
       // Add custom JSON validation
       this.setupJSONValidation();
-      
+
       // Listen for content changes
       this.state.editor.onDidChangeModelContent(() => {
         this.validateAndUpdateTree();
@@ -221,10 +223,10 @@ class JSONViewer {
       const content = this.state.editor.getValue();
       const parsed = JSON.parse(content);
       const formatted = JSON.stringify(parsed, null, 2);
-      
+
       this.state.editor.setValue(formatted);
       generateTreeView(parsed, this.elements.treeOutput);
-      
+
       toastr.success("JSON formatted successfully!");
     } catch (e: any) {
       toastr.error(`Invalid JSON: ${e.message}`);
@@ -238,10 +240,10 @@ class JSONViewer {
       const content = this.state.editor.getValue();
       const parsed = JSON.parse(content);
       const compacted = JSON.stringify(parsed);
-      
+
       this.state.editor.setValue(compacted);
       generateTreeView(parsed, this.elements.treeOutput);
-      
+
       toastr.success("JSON compacted successfully!");
     } catch (e: any) {
       toastr.error(`Invalid JSON: ${e.message}`);
@@ -250,7 +252,7 @@ class JSONViewer {
 
   private clearAll(): void {
     if (!this.state.editor) return;
-    
+
     this.state.editor.setValue("");
     this.elements.treeOutput.innerHTML = "";
     toastr.success("Editor cleared!");
@@ -260,29 +262,35 @@ class JSONViewer {
     if (!this.state.editor) return;
 
     const content = this.state.editor.getValue();
-    navigator.clipboard.writeText(content).then(() => {
-      toastr.success("JSON copied to clipboard!");
-    }).catch(() => {
-      toastr.error("Failed to copy to clipboard!");
-    });
+    navigator.clipboard
+      .writeText(content)
+      .then(() => {
+        toastr.success("JSON copied to clipboard!");
+      })
+      .catch(() => {
+        toastr.error("Failed to copy to clipboard!");
+      });
   }
 
   private pasteFromClipboard(): void {
-    navigator.clipboard.readText().then((text) => {
-      if (text && this.state.editor) {
-        this.state.editor.setValue(text);
-        setTimeout(() => {
-          this.formatJSON();
-        }, 10);
-      }
-    }).catch(() => {
-      toastr.error("Failed to paste from clipboard!");
-    });
+    navigator.clipboard
+      .readText()
+      .then((text) => {
+        if (text && this.state.editor) {
+          this.state.editor.setValue(text);
+          setTimeout(() => {
+            this.formatJSON();
+          }, 10);
+        }
+      })
+      .catch(() => {
+        toastr.error("Failed to paste from clipboard!");
+      });
   }
 
   private switchTab(tabName: string): void {
     this.state.currentTab = tabName;
-    
+
     // Update tab buttons
     this.elements.tabBtns.forEach((btn) => {
       btn.classList.toggle("active", btn.getAttribute("data-tab") === tabName);
@@ -292,7 +300,7 @@ class JSONViewer {
     document.querySelectorAll(".tab-content").forEach((content) => {
       content.classList.remove("active");
     });
-    
+
     const tabContent = document.getElementById(`${tabName}-tab`);
     if (tabContent) {
       tabContent.classList.add("active");
@@ -302,7 +310,7 @@ class JSONViewer {
   private toggleTheme(): void {
     this.state.isDarkTheme = !this.state.isDarkTheme;
     document.documentElement.setAttribute("data-theme", this.state.isDarkTheme ? "dark" : "light");
-    
+
     if (this.state.editor) {
       monaco.editor.setTheme(this.state.isDarkTheme ? "custom-dark" : "custom-light");
     }

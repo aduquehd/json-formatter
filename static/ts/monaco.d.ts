@@ -4,7 +4,7 @@ declare namespace monaco {
     function defineTheme(themeName: string, themeData: any): void;
     function setTheme(themeName: string): void;
   }
-  
+
   namespace languages {
     namespace json {
       namespace jsonDefaults {
