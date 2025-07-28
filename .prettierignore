@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+static/js/
+dist/
+build/
+
+# Python files (handled by ruff)
+*.py
+
+# Environment files
+.env
+.env.*
+
+# Database and logs
+postgres-data/
+*.log
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+
+# Version control
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# Other config files
+*.toml
+*.ini
+*.cfg
+*.conf
+
+# Alembic migrations (auto-generated)
+alembic/versions/
+
+# Lock files
+package-lock.json
+*.lock
