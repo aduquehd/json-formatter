@@ -4,7 +4,94 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ title }}</title>
+
+    <!-- Performance and Security Meta Tags -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- Preconnect for External Resources -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Free online JSON viewer and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly in your browser."
+    />
+    <meta
+      name="keywords"
+      content="json viewer, online json viewer, json editor, online json editor, json formatter, json validator, json parser, json tree view, json beautifier, json minifier, json syntax highlighter, online json tool"
+    />
+    <meta name="author" content="Adrian Duque" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="en" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Online JSON Viewer & Editor - Free JSON Formatter" />
+    <meta
+      property="og:description"
+      content="Free online JSON viewer and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ request.url if request else '' }}" />
+    <meta property="og:site_name" content="Online JSON Viewer" />
+    <meta property="og:image" content="{{ url_for('static', path='/img/optimized-size-logo.png') }}" />
+    <meta property="og:image:alt" content="Online JSON Viewer Logo" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Online JSON Viewer & Editor - Free JSON Formatter" />
+    <meta
+      name="twitter:description"
+      content="Free online JSON viewer and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly."
+    />
+    <meta name="twitter:creator" content="@aduquehd" />
+    <meta name="twitter:image" content="{{ url_for('static', path='/img/optimized-size-logo.png') }}" />
+    <meta name="twitter:image:alt" content="Online JSON Viewer Logo" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Online JSON Viewer & Editor",
+        "description": "Free online JSON viewer and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly in your browser.",
+        "url": "{{ request.url if request else '' }}",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Adrian Duque",
+          "url": "https://aduquehd.com/"
+        },
+        "provider": {
+          "@type": "Organization",
+          "name": "Adrian Duque",
+          "url": "https://aduquehd.com/"
+        }
+      }
+    </script>
+
+    <!-- Favicons and Icons -->
     <link rel="icon" href="{{ url_for('static', path='/img/logo-favicon.png') }}" type="image/png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', path='/img/optimized-size-logo.png') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', path='/img/logo-favicon.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', path='/img/logo-favicon.png') }}" />
+
+    <!-- Additional SEO Tags -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    <link rel="canonical" href="{{ request.url if request else '' }}" />
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
