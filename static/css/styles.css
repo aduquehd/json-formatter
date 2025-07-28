@@ -5,10 +5,11 @@
 }
 
 body {
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #ffffff;
   min-height: 100vh;
-  color: #1e293b;
+  color: #1a1a1a;
   overflow-x: hidden;
   position: relative;
 }
@@ -21,10 +22,8 @@ body::before {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
-  animation: glow 8s ease-in-out infinite alternate;
+    radial-gradient(circle at 20% 50%, rgba(0, 123, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 123, 255, 0.02) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
 }
@@ -38,19 +37,20 @@ body::before {
   box-sizing: border-box;
 }
 
-
 main {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 12px;
-  padding: 15px;
+  background: #ffffff;
+  border: none;
+  border-radius: 24px;
+  padding: 32px;
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 100px);
+    0 10px 40px rgba(0, 0, 0, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.02);
+  height: calc(100vh - 45px);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
 }
 
 .top-section {
@@ -80,20 +80,20 @@ main {
 .creator-link {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
-  font-weight: 600;
-  color: #475569;
+  font-weight: 500;
+  color: #666666;
   text-decoration: none;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.025em;
   white-space: nowrap;
 }
 
 .creator-link:hover {
-  color: #3b82f6;
-  transform: translateY(-1px);
+  color: #0066ff;
+  transform: translateX(2px);
 }
 
 .link-icon {
@@ -107,22 +107,21 @@ main {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
-  border-radius: 6px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  color: #2563eb;
+  padding: 10px 20px;
+  border-radius: 100px;
+  background: #000000;
+  border: none;
+  color: #ffffff;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   height: 44px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .github-link:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #1d4ed8;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  background: #1a1a1a;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .github-icon {
@@ -132,10 +131,10 @@ main {
 }
 
 .github-text {
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  letter-spacing: 0.025em;
   white-space: nowrap;
 }
 
@@ -164,100 +163,97 @@ main {
 }
 
 .btn {
-  padding: 8px 16px;
-  border: 2px solid #3b82f6;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-family: "JetBrains Mono", "Fira Code", monospace;
-  background: #ffffff;
-  color: #3b82f6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: none;
+  letter-spacing: 0.025em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1a1a1a;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .btn-primary {
-  background: #3b82f6;
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
   color: #ffffff;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  background: #2563eb;
-  border-color: #2563eb;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3);
+  background: linear-gradient(135deg, #0052cc 0%, #0041a8 100%);
 }
 
 .btn-secondary {
-  background: #ffffff;
-  border-color: #64748b;
-  color: #64748b;
-  box-shadow: 0 2px 4px rgba(100, 116, 139, 0.1);
+  background: rgba(245, 245, 245, 0.8);
+  color: #666666;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.2);
-  border-color: #475569;
-  color: #475569;
-  background: #f8fafc;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background: rgba(240, 240, 240, 0.9);
+  color: #333333;
 }
 
 .btn-accent {
-  background: #10b981;
-  border-color: #10b981;
+  background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
   color: #ffffff;
-  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
 }
 
 .btn-accent:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-  background: #059669;
-  border-color: #059669;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 212, 170, 0.3);
+  background: linear-gradient(135deg, #00b894 0%, #00a07c 100%);
 }
 
 .tabs {
   display: flex;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+  background: transparent;
+  gap: 8px;
+  padding-bottom: 0;
 }
 
 .tab-btn {
-  padding: 12px 24px;
+  padding: 10px 20px;
   border: none;
-  background: none;
+  background: transparent;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  color: #64748b;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid transparent;
-  font-family: "JetBrains Mono", "Fira Code", monospace;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  color: #999999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 2px solid transparent;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: 0.025em;
+  text-transform: none;
+  margin-bottom: -1px;
 }
 
 .tab-btn.active {
-  color: #3b82f6;
-  border-bottom-color: #3b82f6;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #0066ff;
+  border-bottom-color: #0066ff;
+  background: transparent;
 }
 
-.tab-btn:hover {
-  color: #3b82f6;
-  background-color: rgba(59, 130, 246, 0.05);
+.tab-btn:hover:not(.active) {
+  color: #666666;
+  background-color: rgba(0, 0, 0, 0.02);
+  border-radius: 8px 8px 0 0;
 }
 
 .output-section {
@@ -300,10 +296,10 @@ main {
 @keyframes glow {
   0%,
   100% {
-    opacity: 0.8;
+    opacity: 0.5;
   }
   50% {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 
@@ -318,32 +314,32 @@ main {
 }
 
 .json-output {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 15px;
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  font-size: 14px;
-  line-height: 1.4;
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 12px;
+  line-height: 1.6;
   overflow-x: auto;
   white-space: pre-wrap;
   height: 100%;
   overflow-y: auto;
-  color: #1e293b;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .tree-output {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 15px;
-  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 24px;
+  background: #fafafa;
   height: 100%;
   overflow-y: auto;
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
   font-size: 14px;
-  color: #1e293b;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .tree-node {
@@ -371,8 +367,8 @@ main {
 }
 
 .tree-toggle:hover {
-  background-color: rgba(102, 126, 234, 0.1);
-  border-radius: 2px;
+  background-color: rgba(0, 102, 255, 0.05);
+  border-radius: 4px;
 }
 
 .tree-spacer {
@@ -381,8 +377,8 @@ main {
 }
 
 .tree-key {
-  color: #dc2626;
-  font-weight: 600;
+  color: #e91e63;
+  font-weight: 500;
 }
 
 .tree-value {
@@ -391,19 +387,19 @@ main {
 }
 
 .tree-string {
-  color: #059669;
+  color: #00b894;
 }
 
 .tree-number {
-  color: #2563eb;
+  color: #0066ff;
 }
 
 .tree-boolean {
-  color: #d97706;
+  color: #ff6b6b;
 }
 
 .tree-null {
-  color: #7c3aed;
+  color: #9b59b6;
   font-style: italic;
 }
 
@@ -416,20 +412,21 @@ main {
 }
 
 .tree-children {
-  border-left: 1px dotted #cbd5e1;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
   margin-left: 8px;
+  padding-left: 12px;
 }
 
 .paste-hint {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 6px 6px 0 0;
-  font-size: 13px;
-  color: #059669;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.05) 0%, rgba(0, 184, 148, 0.05) 100%);
+  border: 1px solid rgba(0, 212, 170, 0.1);
+  border-radius: 12px 12px 0 0;
+  font-size: 14px;
+  color: #00b894;
   font-weight: 500;
   border-bottom: none;
 }
@@ -439,20 +436,20 @@ main {
 }
 
 .paste-text {
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: 0.025em;
 }
 
 .edit-hint {
   display: none;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 6px 6px 0 0;
-  font-size: 12px;
-  color: #3b82f6;
+  gap: 10px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(0, 82, 204, 0.05) 100%);
+  border: 1px solid rgba(0, 102, 255, 0.1);
+  border-radius: 12px 12px 0 0;
+  font-size: 13px;
+  color: #0066ff;
   font-weight: 500;
   border-bottom: none;
 }
@@ -462,8 +459,8 @@ main {
 }
 
 .edit-text {
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: 0.025em;
 }
 
 .json-output {
@@ -476,9 +473,10 @@ main {
 
 .json-output:empty::before {
   content: "Paste your JSON here...";
-  color: #94a3b8;
-  font-style: italic;
+  color: #666666;
+  font-style: normal;
   pointer-events: none;
+  opacity: 0.8;
 }
 
 .json-output[contenteditable="true"] {
@@ -489,32 +487,32 @@ main {
 }
 
 .json-output.paste-mode {
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 16px 16px;
   border-top: none;
 }
 
 .json-output.formatted-mode {
-  border-radius: 8px;
-  border-top: 1px solid #e2e8f0;
+  /*border-radius: 16px;*/
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .json-output[contenteditable="true"]:focus {
   box-shadow:
-    0 0 0 3px rgba(59, 130, 246, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.1);
-  background: #fefefe;
+    0 0 0 2px rgba(0, 102, 255, 0.1),
+    inset 0 2px 8px rgba(0, 0, 0, 0.02);
+  background: #ffffff;
+  border-color: rgba(0, 102, 255, 0.2);
 }
 
 .json-output[contenteditable="true"]:hover {
-  background: #fefefe;
-  border-color: #cbd5e1;
+  background: #fcfcfc;
+  border-color: rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 768px) {
   .container {
     padding: 8px 35px 45px 35px;
   }
-
 
   main {
     padding: 12px;
@@ -525,7 +523,6 @@ main {
     flex-wrap: wrap;
     gap: 10px;
   }
-  
 
   .button-group {
     flex-direction: row;
