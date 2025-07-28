@@ -12,38 +12,44 @@ body {
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: none;
+    margin: 0;
+    padding: 10px 55px 55px 55px;
     min-height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
 }
 
 header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     color: white;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 1.8rem;
+    margin-bottom: 5px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 header p {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     opacity: 0.9;
 }
 
 main {
     background: white;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    height: calc(100vh - 170px);
+    display: flex;
+    flex-direction: column;
 }
 
 .input-section {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
 }
 
 #jsonInput {
@@ -107,8 +113,9 @@ main {
 
 .tabs {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-bottom: 2px solid #e0e0e0;
+    flex-shrink: 0;
 }
 
 .tab-btn {
@@ -135,12 +142,17 @@ main {
 
 .output-section {
     position: relative;
-    min-height: 300px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
 }
 
 .tab-content {
     display: none;
     animation: fadeIn 0.3s ease;
+    flex: 1;
+    min-height: 0;
 }
 
 .tab-content.active {
@@ -156,22 +168,22 @@ main {
     background-color: #f8f9fa;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 20px;
+    padding: 15px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.4;
     overflow-x: auto;
     white-space: pre-wrap;
-    max-height: 500px;
+    height: 100%;
     overflow-y: auto;
 }
 
 .tree-output {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 20px;
+    padding: 15px;
     background-color: #f8f9fa;
-    max-height: 500px;
+    height: 100%;
     overflow-y: auto;
     font-family: 'Courier New', monospace;
     font-size: 14px;
@@ -266,15 +278,16 @@ main {
 
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 8px 35px 35px 35px;
     }
     
     header h1 {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     
     main {
-        padding: 20px;
+        padding: 12px;
+        height: calc(100vh - 114px);
     }
     
     .button-group {
@@ -301,6 +314,15 @@ main {
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 5px 25px 25px 25px;
+    }
+    
+    main {
+        height: calc(100vh - 90px);
+        padding: 10px;
+    }
+    
     #jsonInput {
         font-size: 12px;
     }
@@ -308,6 +330,6 @@ main {
     .json-output,
     .tree-output {
         font-size: 12px;
-        padding: 15px;
+        padding: 12px;
     }
 }
