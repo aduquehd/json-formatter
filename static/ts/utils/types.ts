@@ -4,7 +4,7 @@ export interface JSONObject {
 }
 export interface JSONArray extends Array<JSONValue> {}
 
-export type ValueType = 'string' | 'number' | 'boolean' | 'null' | 'object' | 'array';
+export type ValueType = "string" | "number" | "boolean" | "null" | "object" | "array";
 
 export interface TreeNodeData {
   value: JSONValue;
@@ -22,6 +22,7 @@ export interface DOMElements {
   clearBtn: HTMLButtonElement;
   copyBtn: HTMLButtonElement;
   pasteBtn: HTMLButtonElement;
+  themeBtn: HTMLButtonElement;
   tabBtns: NodeListOf<HTMLButtonElement>;
   tabContents: NodeListOf<HTMLElement>;
   pasteHint: HTMLElement;
@@ -34,6 +35,7 @@ export interface DOMElements {
 export interface AppState {
   isFormatted: boolean;
   currentTab: string;
+  isDarkTheme: boolean;
 }
 
 export interface ParseResult {

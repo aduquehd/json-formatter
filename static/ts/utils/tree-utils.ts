@@ -1,5 +1,5 @@
-import { JSONValue, JSONObject, JSONArray, TreeNodeData } from './types.js';
-import { getValueType, isExpandableType, getValueDisplay } from './json-utils.js';
+import { JSONValue, JSONObject, JSONArray, TreeNodeData } from "./types.js";
+import { getValueType, isExpandableType, getValueDisplay } from "./json-utils.js";
 
 export function generateTreeView(data: JSONValue, container: HTMLElement): void {
   container.innerHTML = "";

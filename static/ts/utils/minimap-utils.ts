@@ -14,7 +14,7 @@ export class Minimap {
   constructor(editor: HTMLElement, elements: MinimapElements) {
     this.editor = editor;
     this.elements = elements;
-    this.elements.container.style.cursor = 'grab';
+    this.elements.container.style.cursor = "grab";
     this.bindEvents();
   }
 
@@ -25,57 +25,57 @@ export class Minimap {
         this.updateContent();
       }
     });
-    
+
     observer.observe(this.editor, {
       childList: true,
       subtree: true,
-      characterData: true
+      characterData: true,
     });
 
     // Update viewport when editor scrolls
-    this.editor.addEventListener('scroll', () => {
+    this.editor.addEventListener("scroll", () => {
       this.updateViewport();
     });
 
     // Handle clicks on minimap to navigate
-    this.elements.viewport.addEventListener('click', (e) => {
+    this.elements.viewport.addEventListener("click", (e) => {
       if (!this.isDragging) {
         this.handleMinimapClick(e);
       }
     });
 
-    this.elements.container.addEventListener('click', (e) => {
+    this.elements.container.addEventListener("click", (e) => {
       if (e.target === this.elements.container && !this.isDragging) {
         this.handleMinimapClick(e);
       }
     });
 
     // Handle mouse down for drag start
-    this.elements.container.addEventListener('mousedown', (e) => {
+    this.elements.container.addEventListener("mousedown", (e) => {
       this.handleMouseDown(e);
     });
 
     // Handle mouse move for dragging
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener("mousemove", (e) => {
       this.handleMouseMove(e);
     });
 
     // Handle mouse up for drag end
-    document.addEventListener('mouseup', () => {
+    document.addEventListener("mouseup", () => {
       this.handleMouseUp();
     });
 
     // Update on window resize
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.updateViewport();
     });
   }
 
   private updateContent(): void {
     this.isUpdating = true;
-    const content = this.editor.textContent || '';
+    const content = this.editor.textContent || "";
     this.elements.content.textContent = content;
-    
+
     // Update viewport after content changes
     requestAnimationFrame(() => {
       this.updateViewport();
@@ -91,17 +91,17 @@ export class Minimap {
 
     if (editorScrollHeight <= editorClientHeight) {
       // No scroll needed, hide viewport
-      this.elements.viewport.style.display = 'none';
+      this.elements.viewport.style.display = "none";
       return;
     }
 
-    this.elements.viewport.style.display = 'block';
+    this.elements.viewport.style.display = "block";
 
     // Account for minimap content padding (4px from CSS)
     const minimapPadding = 4;
-    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
+    const minimapHeight = this.elements.container.clientHeight - minimapPadding * 2;
     const availableHeight = minimapHeight;
-    
+
     const viewportHeight = Math.max(
       20, // minimum viewport height
       (editorClientHeight / editorScrollHeight) * availableHeight
@@ -115,17 +115,17 @@ export class Minimap {
   private handleMinimapClick(e: MouseEvent): void {
     const containerRect = this.elements.container.getBoundingClientRect();
     const clickY = e.clientY - containerRect.top;
-    
+
     // Account for minimap content padding
     const minimapPadding = 4;
-    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
+    const minimapHeight = this.elements.container.clientHeight - minimapPadding * 2;
     const adjustedClickY = Math.max(0, clickY - minimapPadding);
-    
+
     const scrollPercentage = adjustedClickY / minimapHeight;
     const editorScrollHeight = this.editor.scrollHeight;
     const editorClientHeight = this.editor.clientHeight;
     const maxScroll = editorScrollHeight - editorClientHeight;
-    
+
     const targetScrollTop = scrollPercentage * maxScroll;
     this.editor.scrollTop = Math.max(0, Math.min(maxScroll, targetScrollTop));
   }
@@ -133,7 +133,7 @@ export class Minimap {
   private handleMouseDown(e: MouseEvent): void {
     this.isDragging = true;
     this.lastMouseY = e.clientY;
-    this.elements.container.style.cursor = 'grabbing';
+    this.elements.container.style.cursor = "grabbing";
     e.preventDefault();
   }
 
@@ -145,7 +145,7 @@ export class Minimap {
 
     // Account for minimap content padding
     const minimapPadding = 4;
-    const minimapHeight = this.elements.container.clientHeight - (minimapPadding * 2);
+    const minimapHeight = this.elements.container.clientHeight - minimapPadding * 2;
     const editorScrollHeight = this.editor.scrollHeight;
     const editorClientHeight = this.editor.clientHeight;
     const maxScroll = editorScrollHeight - editorClientHeight;
@@ -153,7 +153,7 @@ export class Minimap {
     // Calculate scroll delta based on mouse movement
     const scrollRatio = editorScrollHeight / minimapHeight;
     const scrollDelta = deltaY * scrollRatio;
-    
+
     const newScrollTop = this.editor.scrollTop + scrollDelta;
     this.editor.scrollTop = Math.max(0, Math.min(maxScroll, newScrollTop));
   }
@@ -161,17 +161,17 @@ export class Minimap {
   private handleMouseUp(): void {
     if (this.isDragging) {
       this.isDragging = false;
-      this.elements.container.style.cursor = 'grab';
+      this.elements.container.style.cursor = "grab";
     }
   }
 
   public show(): void {
-    this.elements.container.style.display = 'block';
+    this.elements.container.style.display = "block";
     this.updateContent();
   }
 
   public hide(): void {
-    this.elements.container.style.display = 'none';
+    this.elements.container.style.display = "none";
   }
 
   public refresh(): void {

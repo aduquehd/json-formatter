@@ -1,11 +1,17 @@
 "use strict";
 
-import { DOMElements, AppState, JSONValue } from './utils/types.js';
-import { initializeElements, switchTab, showPasteMode, showFormattedMode, clearOutput } from './utils/dom-utils.js';
-import { parseJSON, formatJSON, compactJSON } from './utils/json-utils.js';
-import { generateTreeView } from './utils/tree-utils.js';
-import { Minimap } from './utils/minimap-utils.js';
-import { copyToClipboard, pasteFromClipboard, handlePasteEvent } from './utils/clipboard-utils.js';
+import { DOMElements, AppState, JSONValue } from "./utils/types.js";
+import {
+  initializeElements,
+  switchTab,
+  showPasteMode,
+  showFormattedMode,
+  clearOutput,
+} from "./utils/dom-utils.js";
+import { parseJSON, formatJSON, compactJSON } from "./utils/json-utils.js";
+import { generateTreeView } from "./utils/tree-utils.js";
+import { Minimap } from "./utils/minimap-utils.js";
+import { copyToClipboard, pasteFromClipboard, handlePasteEvent } from "./utils/clipboard-utils.js";
 
 declare var toastr: any;
 
@@ -17,21 +23,30 @@ class JSONViewer {
   constructor() {
     const elements = initializeElements();
     if (!elements) {
-      throw new Error('Failed to initialize required DOM elements');
+      throw new Error("Failed to initialize required DOM elements");
     }
     this.elements = elements;
     this.state = {
       isFormatted: false,
-      currentTab: 'formatted'
+      currentTab: "formatted",
+      isDarkTheme: false,
     };
-    
+
     this.minimap = new Minimap(this.elements.formattedOutput, {
       container: this.elements.minimapContainer,
       content: this.elements.minimapContent,
-      viewport: this.elements.minimapViewport
+      viewport: this.elements.minimapViewport,
     });
-    
+
+    this.initializeTheme();
     this.bindEvents();
+  }
+
+  private initializeTheme(): void {
+    // Load saved theme preference or default to light
+    const savedTheme = localStorage.getItem("theme");
+    this.state.isDarkTheme = savedTheme === "dark";
+    document.documentElement.setAttribute("data-theme", this.state.isDarkTheme ? "dark" : "light");
   }
 
   private bindEvents(): void {
@@ -40,7 +55,8 @@ class JSONViewer {
     this.elements.clearBtn.addEventListener("click", () => this.clearAll());
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
     this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboardBtn());
-    
+    this.elements.themeBtn.addEventListener("click", () => this.toggleTheme());
+
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const target = e.target as HTMLElement;
@@ -180,7 +196,7 @@ class JSONViewer {
   }
 
   private pasteFromClipboardBtn(): void {
-    pasteFromClipboard().then(text => {
+    pasteFromClipboard().then((text) => {
       if (text) {
         this.elements.formattedOutput.textContent = text;
         this.showPasteMode();
@@ -190,6 +206,16 @@ class JSONViewer {
         }, 10);
       }
     });
+  }
+
+  private toggleTheme(): void {
+    this.state.isDarkTheme = !this.state.isDarkTheme;
+    document.documentElement.setAttribute("data-theme", this.state.isDarkTheme ? "dark" : "light");
+
+    // Save theme preference to localStorage
+    localStorage.setItem("theme", this.state.isDarkTheme ? "dark" : "light");
+
+    toastr.success(`Switched to ${this.state.isDarkTheme ? "dark" : "light"} theme`);
   }
 }
 

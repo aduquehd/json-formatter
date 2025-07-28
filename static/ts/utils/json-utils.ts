@@ -1,4 +1,4 @@
-import { JSONValue, ValueType, ParseResult } from './types.js';
+import { JSONValue, ValueType, ParseResult } from "./types.js";
 
 export function parseJSON(input: string): ParseResult {
   if (!input.trim()) {
@@ -14,9 +14,9 @@ export function parseJSON(input: string): ParseResult {
       const parsedJSON = JSON.parse(decodedInput);
       return { success: true, data: parsedJSON };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : "Unknown error"
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
