@@ -548,15 +548,6 @@ main {
   transition: all 0.3s ease;
 }
 
-.json-output.paste-mode {
-  border-radius: 0 0 16px 16px;
-  border-top: none;
-}
-
-.json-output.formatted-mode {
-  /*border-radius: 16px;*/
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-}
 
 .json-output[contenteditable="true"]:focus {
   box-shadow:
@@ -569,6 +560,65 @@ main {
 .json-output[contenteditable="true"]:hover {
   background: #fcfcfc;
   border-color: rgba(0, 0, 0, 0.08);
+}
+
+.editor-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.minimap-container {
+  width: 120px;
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.minimap-content {
+  width: 100%;
+  height: 100%;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 3px;
+  line-height: 4px;
+  color: #666;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow: hidden;
+  padding: 4px;
+  transform-origin: top left;
+  user-select: none;
+  pointer-events: none;
+}
+
+.minimap-viewport {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(0, 102, 255, 0.15);
+  border: 1px solid rgba(0, 102, 255, 0.3);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 20px;
+}
+
+.minimap-viewport:hover {
+  background: rgba(0, 102, 255, 0.25);
+}
+
+.json-output.paste-mode {
+  border-radius: 0 0 12px 0;
+  border-top: none;
+}
+
+.json-output.formatted-mode {
+  border-radius: 0 0 12px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 @media (max-width: 768px) {
@@ -610,6 +660,15 @@ main {
     margin-top: 10px;
   }
 
+  .minimap-container {
+    display: none;
+  }
+
+  .json-output.paste-mode,
+  .json-output.formatted-mode {
+    border-radius: 0 0 12px 12px;
+  }
+
   .creator-link {
     font-size: 13px;
   }
@@ -649,6 +708,15 @@ main {
 
   .navbar-links {
     display: none;
+  }
+
+  .minimap-container {
+    display: none;
+  }
+
+  .json-output.paste-mode,
+  .json-output.formatted-mode {
+    border-radius: 0 0 12px 12px;
   }
 
   .container {

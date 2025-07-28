@@ -12,8 +12,11 @@ export function initializeElements(): DOMElements | null {
   const tabContents = document.querySelectorAll(".tab-content") as NodeListOf<HTMLElement>;
   const pasteHint = document.getElementById("pasteHint");
   const editHint = document.getElementById("editHint");
+  const minimapContainer = document.getElementById("minimapContainer");
+  const minimapContent = document.getElementById("minimapContent");
+  const minimapViewport = document.getElementById("minimapViewport");
 
-  if (!formattedOutput || !treeOutput || !formatBtn || !compactBtn || !clearBtn || !copyBtn || !pasteBtn || !pasteHint || !editHint) {
+  if (!formattedOutput || !treeOutput || !formatBtn || !compactBtn || !clearBtn || !copyBtn || !pasteBtn || !pasteHint || !editHint || !minimapContainer || !minimapContent || !minimapViewport) {
     console.error('Required DOM elements not found');
     return null;
   }
@@ -29,7 +32,10 @@ export function initializeElements(): DOMElements | null {
     tabBtns,
     tabContents,
     pasteHint,
-    editHint
+    editHint,
+    minimapContainer,
+    minimapContent,
+    minimapViewport
   };
 }
 

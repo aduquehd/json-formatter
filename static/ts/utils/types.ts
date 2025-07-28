@@ -26,6 +26,9 @@ export interface DOMElements {
   tabContents: NodeListOf<HTMLElement>;
   pasteHint: HTMLElement;
   editHint: HTMLElement;
+  minimapContainer: HTMLElement;
+  minimapContent: HTMLElement;
+  minimapViewport: HTMLElement;
 }
 
 export interface AppState {

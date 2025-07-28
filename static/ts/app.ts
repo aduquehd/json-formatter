@@ -4,12 +4,14 @@ import { DOMElements, AppState, JSONValue } from './utils/types.js';
 import { initializeElements, switchTab, showPasteMode, showFormattedMode, clearOutput } from './utils/dom-utils.js';
 import { parseJSON, formatJSON, compactJSON } from './utils/json-utils.js';
 import { generateTreeView } from './utils/tree-utils.js';
+import { Minimap } from './utils/minimap-utils.js';
 
 declare var toastr: any;
 
 class JSONViewer {
   private elements: DOMElements;
   private state: AppState;
+  private minimap: Minimap;
 
   constructor() {
     const elements = initializeElements();
@@ -21,6 +23,13 @@ class JSONViewer {
       isFormatted: false,
       currentTab: 'formatted'
     };
+    
+    this.minimap = new Minimap(this.elements.formattedOutput, {
+      container: this.elements.minimapContainer,
+      content: this.elements.minimapContent,
+      viewport: this.elements.minimapViewport
+    });
+    
     this.bindEvents();
   }
 
@@ -75,6 +84,7 @@ class JSONViewer {
     this.elements.formattedOutput.textContent = formattedJSON;
     generateTreeView(parseResult.data!, this.elements.treeOutput);
     this.showFormattedMode();
+    this.minimap.refresh();
     toastr.success("JSON formatted successfully!");
   }
 
@@ -92,6 +102,7 @@ class JSONViewer {
     this.elements.formattedOutput.textContent = compactedJSON;
     generateTreeView(parseResult.data!, this.elements.treeOutput);
     this.showFormattedMode();
+    this.minimap.refresh();
     toastr.success("JSON compacted successfully!");
   }
 
@@ -145,6 +156,8 @@ class JSONViewer {
     setTimeout(() => {
       if (!this.state.isFormatted) {
         this.showPasteMode();
+      } else {
+        this.minimap.refresh();
       }
     }, 10);
   }
@@ -162,11 +175,13 @@ class JSONViewer {
   private showPasteMode(): void {
     this.state.isFormatted = false;
     showPasteMode(this.elements);
+    this.minimap.hide();
   }
 
   private showFormattedMode(): void {
     this.state.isFormatted = true;
     showFormattedMode(this.elements);
+    this.minimap.show();
   }
 
   private copyJSON(): void {
@@ -179,7 +194,7 @@ class JSONViewer {
 
     navigator.clipboard.writeText(content).then(() => {
       toastr.success("JSON copied to clipboard!");
-    }).catch(err => {
+    }).catch(() => {
       // Fallback for older browsers
       const textArea = document.createElement("textarea");
       textArea.value = content;
@@ -191,7 +206,7 @@ class JSONViewer {
       try {
         document.execCommand('copy');
         toastr.success("JSON copied to clipboard!");
-      } catch (err) {
+      } catch {
         toastr.error("Failed to copy JSON. Please try selecting and copying manually.");
       }
       
@@ -208,7 +223,7 @@ class JSONViewer {
       } else {
         toastr.warning("Clipboard is empty!");
       }
-    }).catch(err => {
+    }).catch(() => {
       // Fallback message for browsers that don't support clipboard API
       toastr.error("Unable to access clipboard. Please paste manually using Ctrl+V or Cmd+V.");
     });
