@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "title": "JSON Viewer"})
+    return templates.TemplateResponse("index.html", {"request": request, "title": "JSON Viewer/Formatter"})
 
 
 if __name__ == "__main__":
