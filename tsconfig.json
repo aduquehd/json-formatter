@@ -12,11 +12,6 @@
     "declaration": false,
     "sourceMap": true
   },
-  "include": [
-    "static/ts/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "static/js"
-  ]
+  "include": ["static/ts/**/*"],
+  "exclude": ["node_modules", "static/js"]
 }
