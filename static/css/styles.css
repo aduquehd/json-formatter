@@ -198,6 +198,20 @@ main {
   background: #f8fafc;
 }
 
+.btn-accent {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.btn-accent:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  background: #059669;
+  border-color: #059669;
+}
+
 .tabs {
   display: flex;
   margin-bottom: 10px;
