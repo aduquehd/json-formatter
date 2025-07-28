@@ -9,3 +9,20 @@ dependencies = [
     "jinja2>=3.1.6",
     "uvicorn>=0.35.0",
 ]
+
+[tool.ruff]
+line-length = 100
+exclude = ["alembic/versions/*"]
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["chat_agent"]  # Replace with your package/module name
+combine-as-imports = true
+lines-after-imports = 2
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.5",
+]
