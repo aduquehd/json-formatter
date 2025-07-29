@@ -7,7 +7,6 @@
 
     <!-- Performance and Security Meta Tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -24,7 +23,7 @@
       name="keywords"
       content="json viewer, online json viewer, json editor, online json editor, json formatter, json validator, json parser, json tree view, json beautifier, json minifier, json syntax highlighter, online json tool"
     />
-    <meta name="author" content="Adrian Duque" />
+    <meta name="author" content="Andres Duque" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="en" />
 
@@ -71,12 +70,12 @@
         },
         "author": {
           "@type": "Person",
-          "name": "Adrian Duque",
+          "name": "Andres Duque",
           "url": "https://aduquehd.com/"
         },
         "provider": {
           "@type": "Organization",
-          "name": "Adrian Duque",
+          "name": "Andres Duque",
           "url": "https://aduquehd.com/"
         }
       }
@@ -107,6 +106,23 @@
       gtag("config", "{{ ga_tracking_id }}");
     </script>
     {% endif %}
+
+    <!-- Hotjar Tracking Code for https://json-viewer.aduquehd.com/ -->
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 6477651, hjsv: 6 };
+        a = o.getElementsByTagName("head")[0];
+        r = o.createElement("script");
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+    </script>
   </head>
   <body>
     <nav class="navbar">
@@ -238,7 +254,7 @@
           </div>
           <button id="themeBtn" class="btn btn-secondary">
             <svg
-              class="btn-icon"
+              class="btn-icon theme-icon sun-icon"
               width="16"
               height="16"
               viewBox="0 0 24 24"
@@ -246,16 +262,35 @@
               stroke="currentColor"
               stroke-width="2"
             >
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
-            Theme
+            <svg
+              class="btn-icon theme-icon moon-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span class="theme-text">Theme</span>
           </button>
         </div>
 
         <div class="tabs">
           <button class="tab-btn active" data-tab="formatted">JSON Editor</button>
           <button class="tab-btn" data-tab="tree">Tree View</button>
+          <button class="tab-btn" data-tab="graph">Graph View</button>
         </div>
 
         <div class="output-section">
@@ -265,13 +300,23 @@
           <div id="tree-tab" class="tab-content">
             <div id="treeOutput" class="tree-output"></div>
           </div>
+          <div id="graph-tab" class="tab-content">
+            <div id="graphOutput" class="graph-output"></div>
+          </div>
         </div>
       </main>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script>
+      // Wait for all libraries to load before initializing the app
+      window.addEventListener("load", function () {
+        // Libraries loaded
+      });
+    </script>
     <script type="module" src="{{ url_for('static', path='/js/app.js') }}"></script>
   </body>
 </html>

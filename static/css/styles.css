@@ -756,6 +756,36 @@ main {
   }
 }
 
+/* Theme Icon Styles */
+.theme-icon {
+  display: none;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+/* Show sun icon in light theme */
+[data-theme="light"] .sun-icon {
+  display: block;
+}
+
+[data-theme="light"] .moon-icon {
+  display: none;
+}
+
+/* Show moon icon in dark theme */
+[data-theme="dark"] .sun-icon {
+  display: none;
+}
+
+[data-theme="dark"] .moon-icon {
+  display: block;
+}
+
+.theme-text {
+  margin-left: 2px;
+}
+
 /* Monaco Editor Styles */
 .monaco-editor-container {
   width: 100%;
@@ -787,6 +817,122 @@ main {
   top: 0;
   width: 100% !important;
   height: 100% !important;
+}
+
+/* Graph View Styles */
+.graph-output {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--tree-bg);
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.graph-output svg {
+  width: 100%;
+  height: 100%;
+}
+
+.graph-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.graph-node circle {
+  fill: #4facfe;
+  stroke: #ffffff;
+  stroke-width: 2px;
+}
+
+.graph-node:hover circle {
+  fill: #3b8bf8;
+  stroke-width: 3px;
+}
+
+.graph-node.root circle {
+  fill: #667eea;
+  r: 12;
+}
+
+.graph-node.array circle {
+  fill: #f093fb;
+}
+
+.graph-node.object circle {
+  fill: #4facfe;
+}
+
+.graph-node.value circle {
+  fill: #00d4fe;
+  r: 6;
+}
+
+.graph-node text {
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 12px;
+  fill: var(--text-primary);
+  pointer-events: none;
+  text-anchor: middle;
+}
+
+.graph-link {
+  stroke: var(--border-color);
+  stroke-width: 1.5px;
+  fill: none;
+  opacity: 0.6;
+}
+
+.graph-link:hover {
+  stroke-width: 2.5px;
+  opacity: 1;
+}
+
+.graph-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.graph-control-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.graph-control-btn:hover {
+  background: var(--btn-secondary-hover);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.graph-tooltip {
+  position: absolute;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: "SF Mono", Monaco, monospace;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.graph-tooltip.visible {
+  opacity: 1;
 }
 
 @media (max-width: 480px) {
@@ -821,7 +967,8 @@ main {
   }
 
   .json-output,
-  .tree-output {
+  .tree-output,
+  .graph-output {
     font-size: 12px;
     padding: 12px;
   }
