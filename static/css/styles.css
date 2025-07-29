@@ -123,10 +123,26 @@ body::before {
 
 .navbar-title {
   font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: -0.025em;
   margin: 0;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .navbar-title {
+  background: linear-gradient(135deg, #79b8ff 0%, #b392f0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-title:hover {
+  transform: translateX(2px);
 }
 
 .navbar-links {
@@ -337,15 +353,29 @@ main {
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.25);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .btn-accent:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(79, 172, 254, 0.3);
-  background: linear-gradient(135deg, #3b8bf8 0%, #00d4fe 100%);
+  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.35);
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+}
+
+[data-theme="dark"] .btn-accent {
+  background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+  color: #0a0a0a;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+[data-theme="dark"] .btn-accent:hover {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  color: #ffffff;
 }
 
 .tabs {
@@ -691,6 +721,7 @@ main {
 
   .navbar-title {
     font-size: 16px;
+    font-weight: 700;
   }
 
   .container {
@@ -942,6 +973,7 @@ main {
 
   .navbar-title {
     font-size: 15px;
+    font-weight: 700;
   }
 
   .navbar-links {
