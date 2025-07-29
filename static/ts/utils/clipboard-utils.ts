@@ -50,6 +50,31 @@ export function pasteFromClipboard(): Promise<string | null> {
     });
 }
 
+export function copyEditorContent(editor: any): void {
+  if (!editor) {
+    toastr.error("Editor not initialized!");
+    return;
+  }
+
+  const content = editor.getValue();
+  copyToClipboard(content);
+}
+
+export async function pasteIntoEditor(editor: any, formatCallback?: () => void): Promise<void> {
+  if (!editor) {
+    toastr.error("Editor not initialized!");
+    return;
+  }
+
+  const text = await pasteFromClipboard();
+  if (text) {
+    editor.setValue(text);
+    if (formatCallback) {
+      setTimeout(formatCallback, 10);
+    }
+  }
+}
+
 export function handlePasteEvent(e: ClipboardEvent): string | null {
   e.preventDefault();
 

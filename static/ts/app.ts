@@ -2,9 +2,13 @@
 
 import { generateTreeView } from "./utils/tree-utils.js";
 import { generateGraphView } from "./utils/graph-utils.js";
+import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
+import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
+import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
+import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
+import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
 
 declare var toastr: any;
-declare var require: any;
 declare var d3: any;
 
 interface AppState {
@@ -56,169 +60,41 @@ class JSONViewer {
   }
 
   private initializeTheme(): void {
-    const savedTheme = localStorage.getItem("theme");
-    this.state.isDarkTheme = savedTheme === "dark";
-    document.documentElement.setAttribute("data-theme", this.state.isDarkTheme ? "dark" : "light");
-
-    // Update theme button text
-    const themeText = this.elements.themeBtn.querySelector(".theme-text");
-    if (themeText) {
-      themeText.textContent = this.state.isDarkTheme ? "Light" : "Dark";
-    }
+    const themeState = initializeTheme();
+    this.state.isDarkTheme = themeState.isDarkTheme;
+    updateThemeButtonText(this.elements.themeBtn, this.state.isDarkTheme);
   }
 
-  private initializeMonacoEditor(): void {
-    // Check if Monaco is already loaded
-    if ((window as any).monaco && this.state.editor) {
+  private async initializeMonacoEditor(): Promise<void> {
+    if (this.state.editor) {
       return;
     }
 
-    // Only configure require once
-    if (!(window as any).monacoRequireConfigured) {
-      require.config({
-        paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" },
-      });
-      (window as any).monacoRequireConfigured = true;
-    }
+    const container = document.getElementById("monaco-editor")!;
+    this.state.editor = await initializeMonacoEditor({
+      container,
+      isDarkTheme: this.state.isDarkTheme
+    });
 
-    require(["vs/editor/editor.main"], () => {
-      // Double-check editor doesn't already exist
-      if (this.state.editor) {
-        return;
-      }
-      const container = document.getElementById("monaco-editor")!;
+    // Listen for content changes
+    this.state.editor.onDidChangeModelContent(() => {
+      this.validateAndUpdateTree();
+    });
 
-      // Define custom themes only once
-      if (!(window as any).monacoThemesDefined) {
-        monaco.editor.defineTheme("custom-light", {
-          base: "vs",
-          inherit: true,
-          rules: [
-            { token: "string.key.json", foreground: "d73a49" },
-            { token: "string.value.json", foreground: "22863a" },
-            { token: "number", foreground: "005cc5" },
-            { token: "keyword.json", foreground: "d73a49" },
-            { token: "delimiter.bracket.json", foreground: "24292e" },
-          ],
-          colors: {
-            "editor.background": "#ffffff",
-            "editor.foreground": "#24292e",
-            "editor.lineHighlightBackground": "#f6f8fa",
-            "editorLineNumber.foreground": "#656d76",
-            "editorLineNumber.activeForeground": "#24292e",
-            "editor.selectionBackground": "#0366d625",
-            "editor.inactiveSelectionBackground": "#0366d615",
-          },
-        });
-
-        monaco.editor.defineTheme("custom-dark", {
-          base: "vs-dark",
-          inherit: true,
-          rules: [
-            { token: "string.key.json", foreground: "f97583" },
-            { token: "string.value.json", foreground: "79b8ff" },
-            { token: "number", foreground: "ffab70" },
-            { token: "keyword.json", foreground: "f97583" },
-            { token: "delimiter.bracket.json", foreground: "e1e4e8" },
-          ],
-          colors: {
-            "editor.background": "#1a1a1a",
-            "editor.foreground": "#e1e4e8",
-            "editor.lineHighlightBackground": "#2d2d2d",
-            "editorLineNumber.foreground": "#7d8590",
-            "editorLineNumber.activeForeground": "#e1e4e8",
-            "editor.selectionBackground": "#3392ff44",
-            "editor.inactiveSelectionBackground": "#3392ff22",
-          },
-        });
-        (window as any).monacoThemesDefined = true;
-      }
-
-      this.state.editor = monaco.editor.create(container, {
-        value: "",
-        language: "json",
-        theme: this.state.isDarkTheme ? "custom-dark" : "custom-light",
-        automaticLayout: true,
-        fontSize: 14,
-        fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace',
-        minimap: {
-          enabled: true,
-          renderCharacters: false,
-        },
-        folding: true,
-        lineNumbers: "on",
-        lineNumbersMinChars: 4,
-        lineDecorationsWidth: 0,
-        renderLineHighlight: "all",
-        scrollBeyondLastLine: false,
-        wordWrap: "on",
-        wrappingStrategy: "advanced",
-        formatOnPaste: true,
-        formatOnType: true,
-        autoClosingBrackets: "always",
-        autoClosingQuotes: "always",
-        autoIndent: "full",
-        tabSize: 2,
-        insertSpaces: true,
-        trimAutoWhitespace: true,
-        matchBrackets: "always",
-        bracketPairColorization: {
-          enabled: true,
-        },
-        padding: {
-          top: 16,
-          bottom: 16,
-        },
-      });
-
-      // Add custom JSON validation
-      this.setupJSONValidation();
-
-      // Listen for content changes
-      this.state.editor.onDidChangeModelContent(() => {
-        this.validateAndUpdateTree();
-      });
-
-      // Handle paste events
-      this.state.editor.onDidPaste(() => {
-        setTimeout(() => {
-          this.formatJSON();
-        }, 10);
-      });
+    // Handle paste events
+    this.state.editor.onDidPaste(() => {
+      setTimeout(() => {
+        this.formatJSON();
+      }, 10);
     });
   }
 
-  private setupJSONValidation(): void {
-    if (!this.state.editor) return;
-
-    // Configure JSON language features
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-      schemas: [],
-      allowComments: false,
-      trailingCommas: false,
-    });
-  }
 
   private validateAndUpdateTree(): void {
-    if (!this.state.editor) return;
-
-    try {
-      const content = this.state.editor.getValue();
-      if (!content.trim()) {
-        this.elements.treeOutput.innerHTML = "";
-        return;
-      }
-
-      const parsed = JSON.parse(content);
-
-      // Only update the tree view always (it's lightweight)
-      generateTreeView(parsed, this.elements.treeOutput);
-
-      // Graph view will be generated only when its tab is clicked
-    } catch (e) {
-      // JSON is invalid, don't update tree
-    }
+    validateAndUpdateViews(this.state.editor, {
+      treeOutput: this.elements.treeOutput,
+      graphOutput: this.elements.graphOutput
+    });
   }
 
   private bindEvents(): void {
@@ -251,85 +127,41 @@ class JSONViewer {
   }
 
   private formatJSON(): void {
-    if (!this.state.editor) return;
-
-    try {
-      const content = this.state.editor.getValue();
-      const parsed = JSON.parse(content);
-      const formatted = JSON.stringify(parsed, null, 2);
-
-      this.state.editor.setValue(formatted);
-
-      // Always update tree view (it's lightweight)
-      generateTreeView(parsed, this.elements.treeOutput);
-
-      // Only regenerate current view if it's graph
-      if (this.state.currentTab === "graph") {
-        generateGraphView(parsed, this.elements.graphOutput);
-      }
-    } catch (e: any) {
-      toastr.error(`Invalid JSON: ${e.message}`);
+    const result = formatJSONInEditor(this.state.editor);
+    
+    if (result.success && result.data) {
+      updateViews(result.data, {
+        treeOutput: this.elements.treeOutput,
+        graphOutput: this.elements.graphOutput
+      }, this.state.currentTab);
     }
   }
 
   private compactJSON(): void {
-    if (!this.state.editor) return;
-
-    try {
-      const content = this.state.editor.getValue();
-      const parsed = JSON.parse(content);
-      const compacted = JSON.stringify(parsed);
-
-      this.state.editor.setValue(compacted);
-
-      // Always update tree view (it's lightweight)
-      generateTreeView(parsed, this.elements.treeOutput);
-
-      // Only regenerate current view if it's graph
-      if (this.state.currentTab === "graph") {
-        generateGraphView(parsed, this.elements.graphOutput);
-      }
-    } catch (e: any) {
-      toastr.error(`Invalid JSON: ${e.message}`);
+    const result = compactJSONInEditor(this.state.editor);
+    
+    if (result.success && result.data) {
+      updateViews(result.data, {
+        treeOutput: this.elements.treeOutput,
+        graphOutput: this.elements.graphOutput
+      }, this.state.currentTab);
     }
   }
 
   private clearAll(): void {
-    if (!this.state.editor) return;
-
-    this.state.editor.setValue("");
-    this.elements.treeOutput.innerHTML = "";
-    this.elements.graphOutput.innerHTML = "";
+    clearEditor(this.state.editor);
+    clearViews({
+      treeOutput: this.elements.treeOutput,
+      graphOutput: this.elements.graphOutput
+    });
   }
 
   private copyJSON(): void {
-    if (!this.state.editor) return;
-
-    const content = this.state.editor.getValue();
-    navigator.clipboard
-      .writeText(content)
-      .then(() => {
-        toastr.success("JSON copied to clipboard!");
-      })
-      .catch(() => {
-        toastr.error("Failed to copy to clipboard!");
-      });
+    copyEditorContent(this.state.editor);
   }
 
   private pasteFromClipboard(): void {
-    navigator.clipboard
-      .readText()
-      .then((text) => {
-        if (text && this.state.editor) {
-          this.state.editor.setValue(text);
-          setTimeout(() => {
-            this.formatJSON();
-          }, 10);
-        }
-      })
-      .catch(() => {
-        toastr.error("Failed to paste from clipboard!");
-      });
+    pasteIntoEditor(this.state.editor, () => this.formatJSON());
   }
 
   private switchTab(tabName: string): void {
@@ -379,20 +211,11 @@ class JSONViewer {
   }
 
   private toggleTheme(): void {
-    this.state.isDarkTheme = !this.state.isDarkTheme;
-    document.documentElement.setAttribute("data-theme", this.state.isDarkTheme ? "dark" : "light");
-
-    if (this.state.editor) {
-      monaco.editor.setTheme(this.state.isDarkTheme ? "custom-dark" : "custom-light");
-    }
-
-    // Update theme button text
-    const themeText = this.elements.themeBtn.querySelector(".theme-text");
-    if (themeText) {
-      themeText.textContent = this.state.isDarkTheme ? "Light" : "Dark";
-    }
-
-    localStorage.setItem("theme", this.state.isDarkTheme ? "dark" : "light");
+    const themeState = toggleTheme({ isDarkTheme: this.state.isDarkTheme });
+    this.state.isDarkTheme = themeState.isDarkTheme;
+    
+    setMonacoTheme(this.state.editor, this.state.isDarkTheme);
+    updateThemeButtonText(this.elements.themeBtn, this.state.isDarkTheme);
   }
 }
 

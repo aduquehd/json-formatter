@@ -1,5 +1,7 @@
 import { JSONValue, ValueType, ParseResult } from "./types.js";
 
+declare var toastr: any;
+
 export function parseJSON(input: string): ParseResult {
   if (!input.trim()) {
     return { success: false, error: "Please paste some JSON data first" };
@@ -28,6 +30,44 @@ export function formatJSON(data: JSONValue): string {
 
 export function compactJSON(data: JSONValue): string {
   return JSON.stringify(data);
+}
+
+export function formatJSONInEditor(editor: any): ParseResult {
+  if (!editor) return { success: false, error: "Editor not initialized" };
+
+  try {
+    const content = editor.getValue();
+    const parsed = JSON.parse(content);
+    const formatted = JSON.stringify(parsed, null, 2);
+    editor.setValue(formatted);
+    
+    return { success: true, data: parsed };
+  } catch (e: any) {
+    toastr.error(`Invalid JSON: ${e.message}`);
+    return { success: false, error: e.message };
+  }
+}
+
+export function compactJSONInEditor(editor: any): ParseResult {
+  if (!editor) return { success: false, error: "Editor not initialized" };
+
+  try {
+    const content = editor.getValue();
+    const parsed = JSON.parse(content);
+    const compacted = JSON.stringify(parsed);
+    editor.setValue(compacted);
+    
+    return { success: true, data: parsed };
+  } catch (e: any) {
+    toastr.error(`Invalid JSON: ${e.message}`);
+    return { success: false, error: e.message };
+  }
+}
+
+export function clearEditor(editor: any): void {
+  if (editor) {
+    editor.setValue("");
+  }
 }
 
 export function getValueType(value: JSONValue): ValueType {
