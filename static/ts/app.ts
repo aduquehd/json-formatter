@@ -267,8 +267,6 @@ class JSONViewer {
       if (this.state.currentTab === "graph") {
         generateGraphView(parsed, this.elements.graphOutput);
       }
-
-      toastr.success("JSON formatted successfully!");
     } catch (e: any) {
       toastr.error(`Invalid JSON: ${e.message}`);
     }
@@ -291,8 +289,6 @@ class JSONViewer {
       if (this.state.currentTab === "graph") {
         generateGraphView(parsed, this.elements.graphOutput);
       }
-
-      toastr.success("JSON compacted successfully!");
     } catch (e: any) {
       toastr.error(`Invalid JSON: ${e.message}`);
     }
@@ -304,7 +300,6 @@ class JSONViewer {
     this.state.editor.setValue("");
     this.elements.treeOutput.innerHTML = "";
     this.elements.graphOutput.innerHTML = "";
-    toastr.success("Editor cleared!");
   }
 
   private copyJSON(): void {
@@ -398,7 +393,6 @@ class JSONViewer {
     }
 
     localStorage.setItem("theme", this.state.isDarkTheme ? "dark" : "light");
-    toastr.success(`Switched to ${this.state.isDarkTheme ? "dark" : "light"} theme`);
   }
 }
 
