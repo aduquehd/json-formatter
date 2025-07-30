@@ -130,7 +130,7 @@ If you prefer to develop locally:
 
 ### 📘 TypeScript Development
 
-- TypeScript files are in `static/ts/`
+- TypeScript files are in `src/`
 - Compiled JavaScript goes to `static/js/` (auto-generated, not committed to repo)
 - CSS files are in `static/css/`
 - HTML templates are in `templates/`
@@ -212,10 +212,10 @@ json-viewer/
 ├── 📁 static/
 │   ├── 🎨 css/
 │   │   └── styles.css         # Application styles
-│   ├── 📦 js/                    # Compiled JavaScript (auto-generated)
-│   └── 📘 ts/                    # TypeScript source files
-│       ├── app.ts             # Main application
-│       └── utils/             # Utility modules
+│   └── 📦 js/                    # Compiled JavaScript (auto-generated)
+├── 📁 src/                       # TypeScript source files
+│   ├── 📘 app.ts                 # Main application
+│   └── 📁 utils/                 # Utility modules
 ├── 📦 package.json               # Node.js dependencies
 ├── ⚙️ tsconfig.json              # TypeScript configuration
 └── 🐍 pyproject.toml             # Python dependencies
