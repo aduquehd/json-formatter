@@ -18,8 +18,12 @@ services:
       - "443:443"
     volumes:
       - ./compose/prod/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
     depends_on:
       - backend
 
 volumes:
+  caddy_data:
+  caddy_config:
   chat_agent_db_data:
