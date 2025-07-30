@@ -39,8 +39,15 @@ export function createTreeNode(value: JSONValue, key: string, level: number = 0,
     const nodeKey = path.join('.');
     
     // Determine if node should be expanded
-    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : false;
+    // Default: expand first-level nodes (level 0), unless preserveState is true
+    const isFirstLevel = level === 0;
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : isFirstLevel;
     toggle.textContent = shouldExpand ? "▼" : "▶";
+    
+    // Add to expandedNodes if this is a first-level node being expanded by default
+    if (shouldExpand && !preserveState && isFirstLevel) {
+      expandedNodes.add(nodeKey);
+    }
     
     toggle.addEventListener("click", () => {
       toggleNode(container, toggle, nodeKey);
@@ -95,7 +102,8 @@ export function createTreeNode(value: JSONValue, key: string, level: number = 0,
     
     // Check if this node should be collapsed
     const nodeKey = path.join('.');
-    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : false;
+    const isFirstLevel = level === 0;
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : isFirstLevel;
     
     if (!shouldExpand) {
       childContainer.style.display = "none";

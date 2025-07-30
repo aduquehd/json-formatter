@@ -19,6 +19,7 @@ interface AppState {
 
 class JSONViewer {
   private state: AppState;
+  private isUpdatingFromTree: boolean = false;
   private elements: {
     formatBtn: HTMLElement;
     compactBtn: HTMLElement;
@@ -82,7 +83,9 @@ class JSONViewer {
 
     // Listen for content changes
     this.state.editor.onDidChangeModelContent(() => {
-      this.validateAndUpdateTree();
+      if (!this.isUpdatingFromTree) {
+        this.validateAndUpdateTree();
+      }
     });
 
     // Handle paste events
@@ -94,10 +97,16 @@ class JSONViewer {
   }
 
   private validateAndUpdateTree(): void {
-    validateAndUpdateViews(this.state.editor, {
-      treeOutput: this.elements.treeOutput,
-      graphOutput: this.elements.graphOutput,
-    });
+    validateAndUpdateViews(
+      this.state.editor, 
+      {
+        treeOutput: this.elements.treeOutput,
+        graphOutput: this.elements.graphOutput,
+      },
+      true,
+      () => { this.isUpdatingFromTree = true; },
+      () => { this.isUpdatingFromTree = false; }
+    );
   }
 
   private bindEvents(): void {
@@ -149,7 +158,10 @@ class JSONViewer {
           graphOutput: this.elements.graphOutput,
         },
         this.state.currentTab,
-        this.state.editor
+        this.state.editor,
+        false,
+        () => { this.isUpdatingFromTree = true; },
+        () => { this.isUpdatingFromTree = false; }
       );
     }
   }
@@ -165,7 +177,10 @@ class JSONViewer {
           graphOutput: this.elements.graphOutput,
         },
         this.state.currentTab,
-        this.state.editor
+        this.state.editor,
+        false,
+        () => { this.isUpdatingFromTree = true; },
+        () => { this.isUpdatingFromTree = false; }
       );
     }
   }
