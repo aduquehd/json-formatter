@@ -1,6 +1,6 @@
 "use strict";
 
-import { generateTreeView } from "./utils/tree-utils.js";
+import { generateTreeView, expandAll, collapseAll } from "./utils/tree-utils.js";
 import { generateGraphView } from "./utils/graph-utils.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
@@ -29,6 +29,8 @@ class JSONViewer {
     tabBtns: NodeListOf<HTMLElement>;
     treeOutput: HTMLElement;
     graphOutput: HTMLElement;
+    expandAllBtn: HTMLElement | null;
+    collapseAllBtn: HTMLElement | null;
   };
 
   constructor() {
@@ -48,6 +50,8 @@ class JSONViewer {
       tabBtns: document.querySelectorAll(".tab-btn"),
       treeOutput: document.getElementById("treeOutput")!,
       graphOutput: document.getElementById("graphOutput")!,
+      expandAllBtn: document.getElementById("expandAllBtn"),
+      collapseAllBtn: document.getElementById("collapseAllBtn"),
     };
 
     this.initializeTheme();
@@ -112,6 +116,15 @@ class JSONViewer {
           this.switchTab(tabName);
         }
       });
+    });
+
+    // Tree control buttons
+    this.elements.expandAllBtn?.addEventListener("click", () => {
+      expandAll(this.elements.treeOutput);
+    });
+
+    this.elements.collapseAllBtn?.addEventListener("click", () => {
+      collapseAll(this.elements.treeOutput);
     });
 
     // Keyboard shortcuts

@@ -565,8 +565,16 @@ main {
   border-radius: 3px;
 }
 
+[data-theme="dark"] .tree-key {
+  color: #ff9492;
+}
+
 .tree-key:not([class*="["]):hover {
   background-color: rgba(233, 30, 99, 0.05);
+}
+
+[data-theme="dark"] .tree-key:not([class*="["]):hover {
+  background-color: rgba(255, 148, 146, 0.1);
 }
 
 .tree-value {
@@ -627,6 +635,10 @@ main {
   font-weight: 500;
 }
 
+[data-theme="dark"] .tree-edit-key {
+  color: #ff9492;
+}
+
 .tree-value:not(.tree-object):not(.tree-array) {
   transition: background-color 0.2s ease;
   padding: 1px 4px;
@@ -635,6 +647,57 @@ main {
 
 .tree-value:not(.tree-object):not(.tree-array):hover {
   background-color: rgba(0, 102, 255, 0.05);
+}
+
+[data-theme="dark"] .tree-value:not(.tree-object):not(.tree-array):hover {
+  background-color: rgba(121, 184, 255, 0.1);
+}
+
+.tree-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tree-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tree-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.tree-control-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--btn-secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 36px;
+}
+
+.tree-control-btn:hover {
+  background: var(--btn-secondary-hover);
+  border-color: var(--border-hover);
+}
+
+.tree-control-btn .btn-icon {
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 .paste-hint {
@@ -661,18 +724,23 @@ main {
 }
 
 .edit-hint {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 6px 12px;
   background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(0, 82, 204, 0.05) 100%);
   border: 1px solid rgba(0, 102, 255, 0.1);
-  border-radius: 12px 12px 0 0;
+  border-radius: 8px;
   font-size: 12px;
   color: #0066ff;
   font-weight: 500;
-  border-bottom: none;
-  margin-bottom: -1px;
+  height: 36px;
+}
+
+[data-theme="dark"] .edit-hint {
+  background: linear-gradient(135deg, rgba(121, 184, 255, 0.08) 0%, rgba(147, 197, 253, 0.08) 100%);
+  border: 1px solid rgba(121, 184, 255, 0.2);
+  color: #79b8ff;
 }
 
 .edit-icon {

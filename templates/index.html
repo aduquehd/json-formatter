@@ -298,9 +298,21 @@
             <div id="monaco-editor" class="monaco-editor-container"></div>
           </div>
           <div id="tree-tab" class="tab-content">
-            <div class="edit-hint" id="treeEditHint" style="display: flex;">
-              <span class="edit-icon">✏️</span>
-              <span class="edit-text">Click on any value to edit it directly in the tree view</span>
+            <div class="tree-controls">
+              <div class="tree-controls-left">
+                <div class="edit-hint" id="treeEditHint" style="display: flex;">
+                  <span class="edit-icon">✏️</span>
+                  <span class="edit-text">Click on any value or key to edit directly</span>
+                </div>
+                <div class="tree-buttons">
+                  <button id="expandAllBtn" class="tree-control-btn">
+                    <span class="btn-icon">⊞</span> Expand All
+                  </button>
+                  <button id="collapseAllBtn" class="tree-control-btn">
+                    <span class="btn-icon">⊟</span> Collapse All
+                  </button>
+                </div>
+              </div>
             </div>
             <div id="treeOutput" class="tree-output"></div>
           </div>

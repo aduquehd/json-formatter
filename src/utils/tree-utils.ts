@@ -3,8 +3,15 @@ import { getValueType, isExpandableType, getValueDisplay } from "./json-utils.js
 
 let treeUpdateCallback: ((newData: JSONValue) => void) | null = null;
 let currentJsonData: JSONValue | null = null;
+let expandedNodes: Set<string> = new Set();
+let preserveState: boolean = false;
 
-export function generateTreeView(data: JSONValue, container: HTMLElement, onUpdate?: (newData: JSONValue) => void): void {
+export function generateTreeView(data: JSONValue, container: HTMLElement, onUpdate?: (newData: JSONValue) => void, shouldPreserveState: boolean = false): void {
+  preserveState = shouldPreserveState;
+  if (!preserveState) {
+    expandedNodes.clear();
+  }
+  
   container.innerHTML = "";
   currentJsonData = data;
   treeUpdateCallback = onUpdate || null;
@@ -27,8 +34,17 @@ export function createTreeNode(value: JSONValue, key: string, level: number = 0,
   if (isExpandable) {
     const toggle = document.createElement("span");
     toggle.className = "tree-toggle";
-    toggle.textContent = "▼";
-    toggle.addEventListener("click", () => toggleNode(container, toggle));
+    
+    // Generate a unique key for this node
+    const nodeKey = path.join('.');
+    
+    // Determine if node should be expanded
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : false;
+    toggle.textContent = shouldExpand ? "▼" : "▶";
+    
+    toggle.addEventListener("click", () => {
+      toggleNode(container, toggle, nodeKey);
+    });
     header.appendChild(toggle);
   } else {
     const spacer = document.createElement("span");
@@ -76,6 +92,14 @@ export function createTreeNode(value: JSONValue, key: string, level: number = 0,
   if (isExpandable) {
     const childContainer = document.createElement("div");
     childContainer.className = "tree-children";
+    
+    // Check if this node should be collapsed
+    const nodeKey = path.join('.');
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : false;
+    
+    if (!shouldExpand) {
+      childContainer.style.display = "none";
+    }
 
     if (type === "object") {
       Object.entries(value as JSONObject).forEach(([childKey, childValue]) => {
@@ -99,13 +123,90 @@ export function createTreeNode(value: JSONValue, key: string, level: number = 0,
   return container;
 }
 
-export function toggleNode(container: HTMLElement, toggle: HTMLElement): void {
+export function toggleNode(container: HTMLElement, toggle: HTMLElement, nodeKey: string): void {
   const children = container.querySelector(".tree-children") as HTMLElement;
   if (children) {
     const isExpanded = children.style.display !== "none";
     children.style.display = isExpanded ? "none" : "block";
     toggle.textContent = isExpanded ? "▶" : "▼";
+    
+    // Update the expanded state
+    if (isExpanded) {
+      expandedNodes.delete(nodeKey);
+    } else {
+      expandedNodes.add(nodeKey);
+    }
   }
+}
+
+export function expandAll(container: HTMLElement): void {
+  const allNodes = container.querySelectorAll(".tree-node");
+  
+  allNodes.forEach((node) => {
+    const toggle = node.querySelector(".tree-toggle");
+    const children = node.querySelector(".tree-children");
+    
+    if (toggle && children) {
+      (toggle as HTMLElement).textContent = "▼";
+      (children as HTMLElement).style.display = "block";
+    }
+  });
+  
+  // Mark all nodes as expanded - we'll track this differently
+  // For now, just set preserveState to true for future updates
+  preserveState = true;
+  
+  // Re-generate to properly track all expanded nodes
+  if (currentJsonData && treeUpdateCallback) {
+    const tempContainer = document.createElement("div");
+    generateTreeView(currentJsonData, tempContainer, treeUpdateCallback, false);
+    
+    // Now all nodes are generated, mark them as expanded
+    container.querySelectorAll(".tree-node").forEach((node, index) => {
+      const path = getNodePath(node as HTMLElement);
+      if (path) {
+        expandedNodes.add(path);
+      }
+    });
+  }
+}
+
+export function collapseAll(container: HTMLElement): void {
+  const allNodes = container.querySelectorAll(".tree-node");
+  
+  allNodes.forEach((node) => {
+    const toggle = node.querySelector(".tree-toggle");
+    const children = node.querySelector(".tree-children");
+    
+    if (toggle && children) {
+      (toggle as HTMLElement).textContent = "▶";
+      (children as HTMLElement).style.display = "none";
+    }
+  });
+  
+  // Clear all expanded nodes
+  expandedNodes.clear();
+  preserveState = true;
+}
+
+// Helper function to get node path from DOM
+function getNodePath(node: HTMLElement): string | null {
+  const path: string[] = [];
+  let current = node;
+  
+  while (current && current.classList.contains("tree-node")) {
+    const keySpan = current.querySelector(".tree-key");
+    if (keySpan) {
+      const text = keySpan.textContent || "";
+      const key = text.replace(/[":\s\[\]]/g, "");
+      if (key && key !== "root") {
+        path.unshift(key);
+      }
+    }
+    current = current.parentElement as HTMLElement;
+  }
+  
+  return path.length > 0 ? path.join(".") : null;
 }
 
 function startEditing(valueSpan: HTMLElement, currentValue: JSONValue, type: string, path: (string | number)[]): void {

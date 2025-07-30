@@ -11,14 +11,15 @@ export function updateViews(
   data: JSONValue, 
   elements: ViewElements, 
   currentTab: string,
-  editor?: any
+  editor?: any,
+  preserveTreeState: boolean = false
 ): void {
   // Always update tree view (it's lightweight)
   generateTreeView(data, elements.treeOutput, editor ? (newData) => {
     // Update the editor when tree view changes
     const formatted = JSON.stringify(newData, null, 2);
     editor.setValue(formatted);
-  } : undefined);
+  } : undefined, preserveTreeState);
 
   // Only regenerate graph view if it's the current tab
   if (currentTab === "graph") {
@@ -33,7 +34,8 @@ export function clearViews(elements: ViewElements): void {
 
 export function validateAndUpdateViews(
   editor: any, 
-  elements: ViewElements
+  elements: ViewElements,
+  preserveTreeState: boolean = true
 ): void {
   if (!editor) return;
 
@@ -49,7 +51,7 @@ export function validateAndUpdateViews(
       // Update the editor when tree view changes
       const formatted = JSON.stringify(newData, null, 2);
       editor.setValue(formatted);
-    });
+    }, preserveTreeState);
   } catch (e) {
     // JSON is invalid, don't update views
   }
