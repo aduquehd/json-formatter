@@ -73,7 +73,7 @@ class JSONViewer {
     const container = document.getElementById("monaco-editor")!;
     this.state.editor = await initializeMonacoEditor({
       container,
-      isDarkTheme: this.state.isDarkTheme
+      isDarkTheme: this.state.isDarkTheme,
     });
 
     // Listen for content changes
@@ -89,11 +89,10 @@ class JSONViewer {
     });
   }
 
-
   private validateAndUpdateTree(): void {
     validateAndUpdateViews(this.state.editor, {
       treeOutput: this.elements.treeOutput,
-      graphOutput: this.elements.graphOutput
+      graphOutput: this.elements.graphOutput,
     });
   }
 
@@ -128,23 +127,33 @@ class JSONViewer {
 
   private formatJSON(): void {
     const result = formatJSONInEditor(this.state.editor);
-    
+
     if (result.success && result.data) {
-      updateViews(result.data, {
-        treeOutput: this.elements.treeOutput,
-        graphOutput: this.elements.graphOutput
-      }, this.state.currentTab);
+      updateViews(
+        result.data,
+        {
+          treeOutput: this.elements.treeOutput,
+          graphOutput: this.elements.graphOutput,
+        },
+        this.state.currentTab,
+        this.state.editor
+      );
     }
   }
 
   private compactJSON(): void {
     const result = compactJSONInEditor(this.state.editor);
-    
+
     if (result.success && result.data) {
-      updateViews(result.data, {
-        treeOutput: this.elements.treeOutput,
-        graphOutput: this.elements.graphOutput
-      }, this.state.currentTab);
+      updateViews(
+        result.data,
+        {
+          treeOutput: this.elements.treeOutput,
+          graphOutput: this.elements.graphOutput,
+        },
+        this.state.currentTab,
+        this.state.editor
+      );
     }
   }
 
@@ -152,7 +161,7 @@ class JSONViewer {
     clearEditor(this.state.editor);
     clearViews({
       treeOutput: this.elements.treeOutput,
-      graphOutput: this.elements.graphOutput
+      graphOutput: this.elements.graphOutput,
     });
   }
 
@@ -213,7 +222,7 @@ class JSONViewer {
   private toggleTheme(): void {
     const themeState = toggleTheme({ isDarkTheme: this.state.isDarkTheme });
     this.state.isDarkTheme = themeState.isDarkTheme;
-    
+
     setMonacoTheme(this.state.editor, this.state.isDarkTheme);
     updateThemeButtonText(this.elements.themeBtn, this.state.isDarkTheme);
   }
@@ -239,7 +248,6 @@ function initializeApp() {
     return;
   }
 
-  console.log("D3.js loaded successfully");
   new JSONViewer();
 }
 

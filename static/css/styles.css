@@ -37,6 +37,14 @@
   --line-number-bg: #f6f8fa;
   --line-number-text: #656d76;
   --line-number-border: #d1d9e0;
+
+  /* Tree View Colors - Light Theme */
+  --tree-string: #00b894;
+  --tree-number: #0066ff;
+  --tree-boolean: #ff6b6b;
+  --tree-null: #9b59b6;
+  --tree-object: #059669;
+  --tree-array: #7c3aed;
 }
 
 [data-theme="dark"] {
@@ -72,6 +80,14 @@
   --line-number-bg: #21262d;
   --line-number-text: #7d8590;
   --line-number-border: #30363d;
+
+  /* Tree View Colors - Dark Theme (more readable) */
+  --tree-string: #7ee787;
+  --tree-number: #79c0ff;
+  --tree-boolean: #ff9492;
+  --tree-null: #d2a8ff;
+  --tree-object: #7ee787;
+  --tree-array: #a78bfa;
 }
 
 body {
@@ -544,6 +560,13 @@ main {
 .tree-key {
   color: #e91e63;
   font-weight: 500;
+  transition: background-color 0.2s ease;
+  padding: 1px 2px;
+  border-radius: 3px;
+}
+
+.tree-key:not([class*="["]):hover {
+  background-color: rgba(233, 30, 99, 0.05);
 }
 
 .tree-value {
@@ -552,34 +575,66 @@ main {
 }
 
 .tree-string {
-  color: #00b894;
+  color: var(--tree-string);
 }
 
 .tree-number {
-  color: #0066ff;
+  color: var(--tree-number);
 }
 
 .tree-boolean {
-  color: #ff6b6b;
+  color: var(--tree-boolean);
 }
 
 .tree-null {
-  color: #9b59b6;
+  color: var(--tree-null);
   font-style: italic;
 }
 
 .tree-object {
-  color: #059669;
+  color: var(--tree-object);
 }
 
 .tree-array {
-  color: #7c3aed;
+  color: var(--tree-array);
 }
 
 .tree-children {
   border-left: 1px solid rgba(0, 0, 0, 0.06);
   margin-left: 8px;
   padding-left: 12px;
+}
+
+.tree-edit-input {
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border: 1px solid #0066ff;
+  border-radius: 4px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  outline: none;
+  min-width: 60px;
+}
+
+.tree-edit-input:focus {
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.2);
+}
+
+.tree-edit-key {
+  color: #e91e63;
+  font-weight: 500;
+}
+
+.tree-value:not(.tree-object):not(.tree-array) {
+  transition: background-color 0.2s ease;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.tree-value:not(.tree-object):not(.tree-array):hover {
+  background-color: rgba(0, 102, 255, 0.05);
 }
 
 .paste-hint {
@@ -617,6 +672,7 @@ main {
   color: #0066ff;
   font-weight: 500;
   border-bottom: none;
+  margin-bottom: -1px;
 }
 
 .edit-icon {

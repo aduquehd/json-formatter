@@ -36,7 +36,6 @@ export function pasteFromClipboard(): Promise<string | null> {
     .readText()
     .then((text) => {
       if (text) {
-        toastr.success("Content pasted from clipboard!");
         return text;
       } else {
         toastr.warning("Clipboard is empty!");
