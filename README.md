@@ -6,7 +6,7 @@
 
   <!-- Badges -->
   <p>
-    <a href="https://json-viewer.aduquehd.com/">
+    <a href="https://jsonviewer.me/">
       <img src="https://img.shields.io/badge/🔗%20Live%20Demo-Visit%20Site-blue?style=for-the-badge" alt="Live Demo">
     </a>
    </p>
@@ -254,7 +254,7 @@ json-viewer/
     Made with ❤️ by <a href="https://github.com/aduquehd">aduquehd</a>
   </p>
   <p>
-    <a href="https://json-viewer.aduquehd.com/">🌐 Live Demo</a> • 
+    <a href="https://jsonviewer.me/">🌐 Live Demo</a> • 
     <a href="https://github.com/aduquehd/json-viewer/issues">🐛 Report Bug</a> • 
     <a href="https://github.com/aduquehd/json-viewer/pulls">🚀 Request Feature</a>
   </p>
