@@ -145,8 +145,8 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     // Display stats
     displayStats(layout.statsPanel, stats, graphData.nodes);
     
-    // Set initial display mode
-    let currentDisplayMode: NodeDisplayMode = "keys";
+    // Set initial display mode to "values" for better default view
+    let currentDisplayMode: NodeDisplayMode = "values";
     updateNodeLabels(graphData.nodes, currentDisplayMode, stats);
 
     // Group nodes by type for better visualization
@@ -341,27 +341,41 @@ function createControls(): HTMLElement {
   const controls = document.createElement("div");
   controls.className = "graph-controls";
   controls.innerHTML = `
-    <button class="graph-control-btn" id="zoomInBtn" title="Zoom In">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.35-4.35"></path>
-        <line x1="11" y1="8" x2="11" y2="14"></line>
-        <line x1="8" y1="11" x2="14" y2="11"></line>
-      </svg>
-    </button>
-    <button class="graph-control-btn" id="zoomOutBtn" title="Zoom Out">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.35-4.35"></path>
-        <line x1="8" y1="11" x2="14" y2="11"></line>
-      </svg>
-    </button>
-    <button class="graph-control-btn" id="resetZoomBtn" title="Reset Zoom">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="23 4 23 10 17 10"></polyline>
-        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-      </svg>
-    </button>
+    <div class="graph-controls-container">
+      <button class="graph-control-btn futuristic" id="zoomInBtn" title="Zoom In">
+        <div class="btn-glow"></div>
+        <div class="btn-content">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </div>
+        <div class="btn-border"></div>
+      </button>
+      <button class="graph-control-btn futuristic" id="zoomOutBtn" title="Zoom Out">
+        <div class="btn-glow"></div>
+        <div class="btn-content">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </div>
+        <div class="btn-border"></div>
+      </button>
+      <button class="graph-control-btn futuristic" id="resetZoomBtn" title="Reset Zoom">
+        <div class="btn-glow"></div>
+        <div class="btn-content">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+        </div>
+        <div class="btn-border"></div>
+      </button>
+    </div>
   `;
   return controls;
 }
@@ -373,7 +387,7 @@ function createDisplayModeSelector(): HTMLElement {
     <label for="nodeDisplayMode">Node Display:</label>
     <select id="nodeDisplayMode" class="display-mode-select">
       <option value="keys">Property Keys</option>
-      <option value="values">Value Preview</option>
+      <option value="values" selected>Value Preview</option>
       <option value="types">Data Types</option>
       <option value="analytics">Structure Analytics</option>
       <option value="business">Business Logic</option>

@@ -1282,29 +1282,225 @@ main {
   position: absolute;
   top: 16px;
   right: 16px;
-  display: flex;
-  gap: 8px;
   z-index: 10;
 }
 
-.graph-control-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--btn-secondary-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
+.graph-controls-container {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .graph-controls-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(99, 102, 241, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.graph-control-btn.futuristic {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
   cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.graph-control-btn.futuristic .btn-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 150, 255, 0.1) 100%);
+  border-radius: 12px;
   transition: all 0.3s ease;
 }
 
-.graph-control-btn:hover {
-  background: var(--btn-secondary-hover);
-  color: var(--text-primary);
+[data-theme="light"] .graph-control-btn.futuristic .btn-content {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+}
+
+.graph-control-btn.futuristic .btn-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+}
+
+[data-theme="light"] .graph-control-btn.futuristic .btn-glow {
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+}
+
+.graph-control-btn.futuristic .btn-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(45deg, 
+    #00ffff 0%, 
+    #0099ff 25%, 
+    #ff00ff 50%, 
+    #ff0099 75%, 
+    #00ffff 100%);
+  background-size: 300% 300%;
+  animation: borderGradient 3s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .graph-control-btn.futuristic .btn-border {
+  background: linear-gradient(45deg, 
+    #6366f1 0%, 
+    #8b5cf6 25%, 
+    #ec4899 50%, 
+    #f59e0b 75%, 
+    #6366f1 100%);
+}
+
+@keyframes borderGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Pulse effect for futuristic buttons */
+@keyframes pulseFuturistic {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 255, 0);
+  }
+}
+
+@keyframes pulseFuturisticLight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+[data-theme="light"] .graph-control-btn.futuristic:active .btn-content {
+  animation: pulseFuturisticLight 0.4s ease-out;
+}
+
+.graph-control-btn.futuristic svg {
+  width: 20px;
+  height: 20px;
+  stroke: #00ffff;
+  filter: drop-shadow(0 0 2px rgba(0, 255, 255, 0.5));
+  transition: all 0.3s ease;
+}
+
+[data-theme="light"] .graph-control-btn.futuristic svg {
+  stroke: #6366f1;
+  filter: drop-shadow(0 0 2px rgba(99, 102, 241, 0.5));
+}
+
+.graph-control-btn.futuristic:hover .btn-glow {
+  opacity: 1;
+}
+
+.graph-control-btn.futuristic:hover .btn-border {
+  opacity: 1;
+  animation-duration: 1.5s;
+}
+
+.graph-control-btn.futuristic:hover .btn-content {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2) 0%, rgba(0, 150, 255, 0.2) 100%);
+  transform: scale(1.05);
+}
+
+[data-theme="light"] .graph-control-btn.futuristic:hover .btn-content {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+}
+
+.graph-control-btn.futuristic:hover svg {
+  stroke: #00ffff;
+  filter: drop-shadow(0 0 4px rgba(0, 255, 255, 0.8));
   transform: scale(1.1);
+}
+
+[data-theme="light"] .graph-control-btn.futuristic:hover svg {
+  stroke: #8b5cf6;
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.8));
+}
+
+.graph-control-btn.futuristic:active .btn-content {
+  transform: scale(0.95);
+  animation: pulseFuturistic 0.4s ease-out;
+}
+
+.graph-control-btn.futuristic:active .btn-glow {
+  background: radial-gradient(circle at center, rgba(0, 255, 255, 0.5) 0%, transparent 70%);
+}
+
+/* Tooltip styling for futuristic look */
+.graph-control-btn.futuristic::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 11px;
+  color: #00ffff;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+}
+
+[data-theme="light"] .graph-control-btn.futuristic::after {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #6366f1;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.graph-control-btn.futuristic:hover::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
 }
 
 /* Display Mode Selector */
