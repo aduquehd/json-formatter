@@ -1,0 +1,11 @@
+# Robots.txt for jsonviewer.me
+User-agent: *
+Allow: /
+Disallow: /static/js/
+Disallow: /node_modules/
+
+# Sitemap location
+Sitemap: https://jsonviewer.me/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
