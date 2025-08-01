@@ -4,7 +4,7 @@ import { generateTreeView, expandAll, collapseAll } from "./utils/tree-utils.js"
 import { generateGraphView } from "./utils/graph-utils.js";
 import { generateDiffView } from "./utils/diff-utils.js";
 import { generateStatsView } from "./utils/stats-utils.js";
-import { generateMapView } from "./utils/map-utils.js";
+// import { generateMapView } from "./utils/map-utils.js";
 import { generateChartView } from "./utils/chart-utils.js";
 import { generateSearchView } from "./utils/search-utils.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
@@ -263,7 +263,9 @@ class JSONViewer {
     // Clear previous visualization to free memory for heavy views
     const heavyViews = ["graph", "map", "chart"];
     if (heavyViews.includes(previousTab) && previousTab !== tabName) {
-      const prevOutput = this.elements[`${previousTab}Output` as keyof typeof this.elements] as HTMLElement;
+      const prevOutput = this.elements[
+        `${previousTab}Output` as keyof typeof this.elements
+      ] as HTMLElement;
       if (prevOutput) prevOutput.innerHTML = "";
     }
 
@@ -299,9 +301,9 @@ class JSONViewer {
             case "stats":
               generateStatsView(parsed, this.elements.statsOutput);
               break;
-            case "map":
-              generateMapView(parsed, this.elements.mapOutput);
-              break;
+            // case "map":
+            //   generateMapView(parsed, this.elements.mapOutput);
+            //   break;
             case "chart":
               generateChartView(parsed, this.elements.chartOutput);
               break;
@@ -312,7 +314,9 @@ class JSONViewer {
         }
       } catch (e) {
         // JSON is invalid, show error message
-        const outputElement = this.elements[`${tabName}Output` as keyof typeof this.elements] as HTMLElement;
+        const outputElement = this.elements[
+          `${tabName}Output` as keyof typeof this.elements
+        ] as HTMLElement;
         if (outputElement) {
           outputElement.innerHTML =
             '<div style="padding: 20px; color: var(--text-secondary);">Invalid JSON - Please fix errors in the editor</div>';

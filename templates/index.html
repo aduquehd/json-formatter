@@ -301,19 +301,19 @@
               </svg>
               Clear
             </button>
-            <div class="editor-theme-wrapper">
-              <label for="editorThemeSelect" class="theme-select-label">Editor Theme:</label>
-              <select id="editorThemeSelect" class="theme-select">
-                <option value="default">Default</option>
-                <option value="vs">Light</option>
-                <option value="vs-dark">Dark</option>
-                <option value="hc-black">High Contrast</option>
-                <option value="github-light">GitHub Light</option>
-                <option value="github-dark">GitHub Dark</option>
-                <option value="monokai">Monokai</option>
-                <option value="dracula">Dracula</option>
-              </select>
-            </div>
+          </div>
+          <div class="editor-theme-wrapper">
+            <label for="editorThemeSelect" class="theme-select-label">Editor Theme:</label>
+            <select id="editorThemeSelect" class="theme-select">
+              <option value="default">Default</option>
+              <option value="vs">Light</option>
+              <option value="vs-dark">Dark</option>
+              <option value="hc-black">High Contrast</option>
+              <option value="github-light">GitHub Light</option>
+              <option value="github-dark">GitHub Dark</option>
+              <option value="monokai">Monokai</option>
+              <option value="dracula">Dracula</option>
+            </select>
           </div>
           <button id="themeBtn" class="btn btn-secondary theme-toggle-btn">
             <svg
@@ -365,10 +365,11 @@
             <span class="beta-badge">Beta</span>
           </button>
           <button class="tab-btn" data-tab="search">Search & Filter</button>
-          <button class="tab-btn" data-tab="map">
+          <!-- Map View Tab (temporarily disabled - uncomment to re-enable) -->
+          <!-- <button class="tab-btn" data-tab="map">
             Map View
             <span class="beta-badge">Beta</span>
-          </button>
+          </button> -->
         </div>
 
         <div class="output-section">
@@ -405,9 +406,10 @@
           <div id="stats-tab" class="tab-content">
             <div id="statsOutput" class="stats-output"></div>
           </div>
-          <div id="map-tab" class="tab-content">
+          <!-- Map View Content (temporarily disabled - uncomment to re-enable) -->
+          <!-- <div id="map-tab" class="tab-content">
             <div id="mapOutput" class="map-output"></div>
-          </div>
+          </div> -->
           <div id="chart-tab" class="tab-content">
             <div id="chartOutput" class="chart-output"></div>
           </div>
