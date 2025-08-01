@@ -5,6 +5,11 @@ import { JSONValue } from "./types.js";
 export interface ViewElements {
   treeOutput: HTMLElement;
   graphOutput: HTMLElement;
+  diffOutput?: HTMLElement;
+  statsOutput?: HTMLElement;
+  mapOutput?: HTMLElement;
+  chartOutput?: HTMLElement;
+  searchOutput?: HTMLElement;
 }
 
 export function updateViews(
@@ -41,6 +46,11 @@ export function updateViews(
 export function clearViews(elements: ViewElements): void {
   elements.treeOutput.innerHTML = "";
   elements.graphOutput.innerHTML = "";
+  if (elements.diffOutput) elements.diffOutput.innerHTML = "";
+  if (elements.statsOutput) elements.statsOutput.innerHTML = "";
+  if (elements.mapOutput) elements.mapOutput.innerHTML = "";
+  if (elements.chartOutput) elements.chartOutput.innerHTML = "";
+  if (elements.searchOutput) elements.searchOutput.innerHTML = "";
 }
 
 export function validateAndUpdateViews(

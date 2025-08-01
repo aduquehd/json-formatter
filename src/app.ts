@@ -2,6 +2,11 @@
 
 import { generateTreeView, expandAll, collapseAll } from "./utils/tree-utils.js";
 import { generateGraphView } from "./utils/graph-utils.js";
+import { generateDiffView } from "./utils/diff-utils.js";
+import { generateStatsView } from "./utils/stats-utils.js";
+import { generateMapView } from "./utils/map-utils.js";
+import { generateChartView } from "./utils/chart-utils.js";
+import { generateSearchView } from "./utils/search-utils.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
@@ -32,6 +37,11 @@ class JSONViewer {
     tabBtns: NodeListOf<HTMLElement>;
     treeOutput: HTMLElement;
     graphOutput: HTMLElement;
+    diffOutput: HTMLElement;
+    statsOutput: HTMLElement;
+    mapOutput: HTMLElement;
+    chartOutput: HTMLElement;
+    searchOutput: HTMLElement;
     expandAllBtn: HTMLElement | null;
     collapseAllBtn: HTMLElement | null;
   };
@@ -55,6 +65,11 @@ class JSONViewer {
       tabBtns: document.querySelectorAll(".tab-btn"),
       treeOutput: document.getElementById("treeOutput")!,
       graphOutput: document.getElementById("graphOutput")!,
+      diffOutput: document.getElementById("diffOutput")!,
+      statsOutput: document.getElementById("statsOutput")!,
+      mapOutput: document.getElementById("mapOutput")!,
+      chartOutput: document.getElementById("chartOutput")!,
+      searchOutput: document.getElementById("searchOutput")!,
       expandAllBtn: document.getElementById("expandAllBtn"),
       collapseAllBtn: document.getElementById("collapseAllBtn"),
     };
@@ -221,6 +236,11 @@ class JSONViewer {
     clearViews({
       treeOutput: this.elements.treeOutput,
       graphOutput: this.elements.graphOutput,
+      diffOutput: this.elements.diffOutput,
+      statsOutput: this.elements.statsOutput,
+      mapOutput: this.elements.mapOutput,
+      chartOutput: this.elements.chartOutput,
+      searchOutput: this.elements.searchOutput,
     });
   }
 
@@ -236,9 +256,11 @@ class JSONViewer {
     const previousTab = this.state.currentTab;
     this.state.currentTab = tabName;
 
-    // Clear previous visualization to free memory
-    if (previousTab === "graph" && tabName !== "graph") {
-      this.elements.graphOutput.innerHTML = "";
+    // Clear previous visualization to free memory for heavy views
+    const heavyViews = ["graph", "map", "chart"];
+    if (heavyViews.includes(previousTab) && previousTab !== tabName) {
+      const prevOutput = this.elements[`${previousTab}Output` as keyof typeof this.elements] as HTMLElement;
+      if (prevOutput) prevOutput.innerHTML = "";
     }
 
     // Update tab buttons
@@ -256,22 +278,39 @@ class JSONViewer {
       tabContent.classList.add("active");
     }
 
-    // Generate view only when switching TO graph tab
+    // Generate view based on tab
     if (this.state.editor) {
       try {
         const content = this.state.editor.getValue();
         if (content.trim()) {
           const parsed = JSON.parse(content);
 
-          if (tabName === "graph") {
-            // Generate graph view lazily
-            generateGraphView(parsed, this.elements.graphOutput);
+          switch (tabName) {
+            case "graph":
+              generateGraphView(parsed, this.elements.graphOutput);
+              break;
+            case "diff":
+              generateDiffView(parsed, this.elements.diffOutput);
+              break;
+            case "stats":
+              generateStatsView(parsed, this.elements.statsOutput);
+              break;
+            case "map":
+              generateMapView(parsed, this.elements.mapOutput);
+              break;
+            case "chart":
+              generateChartView(parsed, this.elements.chartOutput);
+              break;
+            case "search":
+              generateSearchView(parsed, this.elements.searchOutput);
+              break;
           }
         }
       } catch (e) {
         // JSON is invalid, show error message
-        if (tabName === "graph") {
-          this.elements.graphOutput.innerHTML =
+        const outputElement = this.elements[`${tabName}Output` as keyof typeof this.elements] as HTMLElement;
+        if (outputElement) {
+          outputElement.innerHTML =
             '<div style="padding: 20px; color: var(--text-secondary);">Invalid JSON - Please fix errors in the editor</div>';
         }
       }
