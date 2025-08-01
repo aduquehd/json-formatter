@@ -37,7 +37,7 @@ function createEditor(config: MonacoEditorConfig): any {
   return monaco.editor.create(config.container, {
     value: "",
     language: "json",
-    theme: config.isDarkTheme ? "custom-dark" : "custom-light",
+    theme: "vs-dark",
     automaticLayout: true,
     fontSize: 14,
     fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace',

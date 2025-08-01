@@ -101,7 +101,7 @@ class JSONViewer {
     });
 
     // Apply saved theme preference
-    const savedTheme = localStorage.getItem("editorTheme") || "default";
+    const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
     this.elements.editorThemeSelect.value = savedTheme;
     this.changeEditorTheme(savedTheme);
 
@@ -344,7 +344,7 @@ class JSONViewer {
   }
 
   private updateEditorThemeBasedOnMode(): void {
-    const savedTheme = localStorage.getItem("editorTheme") || "default";
+    const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
     if (savedTheme === "default") {
       // Apply the appropriate custom theme based on current mode
       setMonacoTheme(this.state.editor, undefined, this.state.isDarkTheme);

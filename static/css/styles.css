@@ -17,7 +17,7 @@
   --shadow-light: rgba(0, 0, 0, 0.02);
   --shadow-medium: rgba(0, 0, 0, 0.1);
   --accent-bg: rgba(0, 123, 255, 0.02);
-  --navbar-bg: rgba(255, 255, 255, 0.95);
+  --navbar-bg: linear-gradient(135deg, rgba(249, 250, 251, 0.98) 0%, rgba(243, 244, 246, 0.98) 100%);
   --btn-secondary-bg: #f8f9fa;
   --btn-secondary-hover: #e9ecef;
   --input-bg: #ffffff;
@@ -60,7 +60,8 @@
   --shadow-light: rgba(0, 0, 0, 0.3);
   --shadow-medium: rgba(0, 0, 0, 0.5);
   --accent-bg: rgba(0, 123, 255, 0.1);
-  --navbar-bg: rgba(26, 26, 26, 0.95);
+  --navbar-bg: linear-gradient(135deg, rgba(23, 23, 23, 0.98) 0%, rgba(31, 31, 31, 0.98) 100%);
+  --navbar-shadow: 0 2px 20px rgba(0, 0, 0, 0.5), 0 1px 8px rgba(0, 0, 0, 0.3);
   --btn-secondary-bg: #2d2d2d;
   --btn-secondary-hover: #3a3a3a;
   --input-bg: #242424;
@@ -124,7 +125,11 @@ body::before {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   z-index: 1000;
-  box-shadow: 0 2px 10px var(--shadow-light);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .navbar {
+  box-shadow: var(--navbar-shadow);
 }
 
 .navbar-content {
@@ -1217,6 +1222,28 @@ main {
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.monaco-editor-container:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+[data-theme="dark"] .monaco-editor-container:hover {
+  border-color: rgba(121, 184, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(121, 184, 255, 0.08);
+}
+
+.monaco-editor-container:focus-within {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+[data-theme="dark"] .monaco-editor-container:focus-within {
+  border-color: rgba(121, 184, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(121, 184, 255, 0.15);
 }
 
 /* Let Monaco themes control their own colors */
@@ -1228,6 +1255,16 @@ main {
   top: 0;
   width: 100% !important;
   height: 100% !important;
+}
+
+/* Monaco placeholder text styling */
+.monaco-editor .view-lines .view-line span.mtk1 {
+  opacity: 1;
+}
+
+.monaco-editor-placeholder {
+  color: var(--text-muted) !important;
+  font-style: italic;
 }
 
 /* Graph View Styles */

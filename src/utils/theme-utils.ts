@@ -4,7 +4,7 @@ export interface ThemeState {
 
 export function initializeTheme(): ThemeState {
   const savedTheme = localStorage.getItem("theme");
-  const isDarkTheme = savedTheme === "dark";
+  const isDarkTheme = savedTheme !== null ? savedTheme === "dark" : true;
   document.documentElement.setAttribute("data-theme", isDarkTheme ? "dark" : "light");
 
   return { isDarkTheme };
