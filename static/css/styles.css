@@ -459,8 +459,8 @@ main {
 }
 
 .tab-btn:hover:not(.active) {
-  color: #666666;
-  background-color: rgba(0, 0, 0, 0.02);
+  color: var(--text-primary);
+  background-color: var(--accent-bg);
   border-radius: 8px 8px 0 0;
 }
 
@@ -1027,6 +1027,21 @@ main {
 
 [data-theme="dark"] .creator-link:hover {
   color: #79b8ff;
+}
+
+/* Dark mode tab styling */
+[data-theme="dark"] .tab-btn {
+  color: #7d8590;
+}
+
+[data-theme="dark"] .tab-btn.active {
+  color: #79b8ff;
+  border-bottom-color: #79b8ff;
+}
+
+[data-theme="dark"] .tab-btn:hover:not(.active) {
+  color: #e1e4e8;
+  background-color: rgba(121, 184, 255, 0.1);
 }
 
 .theme-text {
