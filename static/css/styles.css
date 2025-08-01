@@ -1261,6 +1261,11 @@ main {
   text-anchor: middle;
 }
 
+.graph-node .node-label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
 .graph-link {
   stroke: var(--border-color);
   stroke-width: 1.5px;
@@ -1302,6 +1307,49 @@ main {
   transform: scale(1.1);
 }
 
+/* Display Mode Selector */
+.display-mode-selector {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-primary);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.display-mode-selector label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.display-mode-select {
+  padding: 6px 10px;
+  font-size: 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.display-mode-select:hover {
+  border-color: var(--border-hover);
+}
+
+.display-mode-select:focus {
+  outline: none;
+  border-color: #0066ff;
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
+}
+
 .graph-tooltip {
   position: absolute;
   padding: 8px 12px;
@@ -1328,7 +1376,7 @@ main {
 }
 
 .graph-sidebar {
-  width: 300px;
+  width: 350px;
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   display: flex;
@@ -1446,6 +1494,64 @@ main {
   margin: 4px 0;
 }
 
+/* Business Analytics Styles */
+.enum-item {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.enum-key {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.enum-values {
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding-left: 12px;
+  font-family: "SF Mono", Monaco, monospace;
+}
+
+.id-item {
+  padding: 4px 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 12px;
+  margin: 4px 0;
+  font-family: "SF Mono", Monaco, monospace;
+  color: #0066ff;
+}
+
+[data-theme="dark"] .id-item {
+  color: #79b8ff;
+}
+
+.sensitive-item {
+  padding: 6px 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  margin: 4px 0;
+  color: #dc2626;
+}
+
+[data-theme="dark"] .sensitive-item {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.low-completeness {
+  color: #dc2626 !important;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .low-completeness {
+  color: #f87171 !important;
+}
+
 @media (max-width: 480px) {
   .navbar-content {
     padding: 0 15px;
@@ -1539,7 +1645,21 @@ main {
   }
   
   .graph-sidebar {
-    width: 250px;
+    width: 300px;
+  }
+  
+  .display-mode-selector {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+  
+  .display-mode-selector label {
+    font-size: 12px;
+  }
+  
+  .display-mode-select {
+    font-size: 12px;
+    min-width: 120px;
   }
 
   .tree-control-btn {
@@ -1552,5 +1672,20 @@ main {
     font-size: 11px;
     padding: 6px 10px;
     height: 32px;
+  }
+  
+  .graph-sidebar {
+    width: 100%;
+    max-width: 300px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .graph-layout {
+    flex-direction: column;
+  }
+  
+  .graph-container {
+    min-height: 400px;
   }
 }

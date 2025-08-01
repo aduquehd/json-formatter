@@ -14,7 +14,19 @@ interface GraphNode {
   arrayLength?: number;
   path?: string;
   valueType?: string;
+  displayLabel?: string;
+  businessInfo?: {
+    isEnum?: boolean;
+    enumDistribution?: string;
+    isPotentialId?: boolean;
+    completeness?: number;
+    isAnomaly?: boolean;
+    isSensitive?: boolean;
+    dataType?: string;
+  };
 }
+
+type NodeDisplayMode = "keys" | "values" | "types" | "analytics" | "path" | "business";
 
 interface GraphLink {
   source: string;
@@ -31,6 +43,38 @@ interface JSONStats {
   typeDistribution: Map<string, number>;
   arrayLengths: number[];
   patterns: Pattern[];
+  businessAnalytics: BusinessAnalytics;
+}
+
+interface BusinessAnalytics {
+  enumerations: Map<string, EnumInfo>;
+  potentialIds: Set<string>;
+  dataCompleteness: Map<string, number>;
+  valueDistributions: Map<string, ValueDistribution>;
+  anomalies: Map<string, string[]>;
+  sensitiveData: Map<string, string>;
+  dateFields: Set<string>;
+  numericRanges: Map<string, NumericRange>;
+}
+
+interface EnumInfo {
+  values: Map<string, number>;
+  totalCount: number;
+  isLikelyEnum: boolean;
+}
+
+interface ValueDistribution {
+  uniqueValues: number;
+  totalOccurrences: number;
+  topValues: Array<{value: any, count: number}>;
+}
+
+interface NumericRange {
+  min: number;
+  max: number;
+  avg: number;
+  isLikelyMonetary: boolean;
+  isLikelyId: boolean;
 }
 
 interface Pattern {
@@ -62,6 +106,10 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     
     const controls = createControls();
     layout.graphContainer.appendChild(controls);
+    
+    // Add display mode selector
+    const displayModeSelector = createDisplayModeSelector();
+    layout.graphContainer.appendChild(displayModeSelector);
 
     const width = layout.graphContainer.clientWidth || 800;
     const height = layout.graphContainer.clientHeight || 600;
@@ -96,6 +144,10 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     
     // Display stats
     displayStats(layout.statsPanel, stats, graphData.nodes);
+    
+    // Set initial display mode
+    let currentDisplayMode: NodeDisplayMode = "keys";
+    updateNodeLabels(graphData.nodes, currentDisplayMode, stats);
 
     // Group nodes by type for better visualization
     const groupedNodes = groupNodesByType(graphData.nodes);
@@ -169,10 +221,11 @@ export function generateGraphView(data: any, container: HTMLElement): void {
         return colorScale(d.depth);
       });
 
-    node
+    const nodeText = node
       .append("text")
       .attr("dy", -15)
-      .text((d: any) => d.name);
+      .attr("class", "node-label")
+      .text((d: any) => d.displayLabel || d.name);
 
     const tooltip = createTooltip(layout.graphContainer);
 
@@ -200,6 +253,13 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     });
 
     setupControls(svg, zoom);
+    
+    // Setup display mode selector
+    setupDisplayModeSelector((mode: NodeDisplayMode) => {
+      currentDisplayMode = mode;
+      updateNodeLabels(graphData.nodes, mode, stats);
+      nodeText.text((d: any) => d.displayLabel || d.name);
+    });
   }, 50);
 }
 
@@ -306,6 +366,23 @@ function createControls(): HTMLElement {
   return controls;
 }
 
+function createDisplayModeSelector(): HTMLElement {
+  const selector = document.createElement("div");
+  selector.className = "display-mode-selector";
+  selector.innerHTML = `
+    <label for="nodeDisplayMode">Node Display:</label>
+    <select id="nodeDisplayMode" class="display-mode-select">
+      <option value="keys">Property Keys</option>
+      <option value="values">Value Preview</option>
+      <option value="types">Data Types</option>
+      <option value="analytics">Structure Analytics</option>
+      <option value="business">Business Logic</option>
+      <option value="path">Path Info</option>
+    </select>
+  `;
+  return selector;
+}
+
 function setupControls(svg: any, zoom: any): void {
   const zoomInBtn = document.getElementById("zoomInBtn");
   const zoomOutBtn = document.getElementById("zoomOutBtn");
@@ -405,7 +482,17 @@ function analyzeJSONStructure(data: any, nodes: GraphNode[]): JSONStats {
     keyFrequency: new Map(),
     typeDistribution: new Map(),
     arrayLengths: [],
-    patterns: []
+    patterns: [],
+    businessAnalytics: {
+      enumerations: new Map(),
+      potentialIds: new Set(),
+      dataCompleteness: new Map(),
+      valueDistributions: new Map(),
+      anomalies: new Map(),
+      sensitiveData: new Map(),
+      dateFields: new Set(),
+      numericRanges: new Map()
+    }
   };
   
   nodes.forEach(node => {
@@ -435,6 +522,9 @@ function analyzeJSONStructure(data: any, nodes: GraphNode[]): JSONStats {
   
   // Detect patterns (repeated structures)
   detectPatterns(nodes, stats);
+  
+  // Analyze business logic patterns
+  analyzeBusinessLogic(data, nodes, stats);
   
   return stats;
 }
@@ -559,7 +649,372 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
     html += '</div>';
   }
   
+  // Business Analytics
+  const ba = stats.businessAnalytics;
+  
+  // Enumerations
+  if (ba.enumerations.size > 0) {
+    html += '<div class="stat-group"><h4>Enumerations</h4>';
+    Array.from(ba.enumerations.entries()).slice(0, 3).forEach(([key, enumInfo]) => {
+      const topValues = Array.from(enumInfo.values.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([val, count]) => `${JSON.parse(val)} (${Math.round(count/enumInfo.totalCount*100)}%)`)
+        .join(', ');
+      html += `
+        <div class="enum-item">
+          <div class="enum-key">${key}:</div>
+          <div class="enum-values">${topValues}</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+  
+  // Potential IDs
+  if (ba.potentialIds.size > 0) {
+    html += '<div class="stat-group"><h4>Potential IDs 🔑</h4>';
+    Array.from(ba.potentialIds).slice(0, 5).forEach(id => {
+      html += `<div class="id-item">${id}</div>`;
+    });
+    html += '</div>';
+  }
+  
+  // Data Completeness
+  const incompleteFields = Array.from(ba.dataCompleteness.entries())
+    .filter(([_, completeness]) => completeness < 100)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 5);
+  
+  if (incompleteFields.length > 0) {
+    html += '<div class="stat-group"><h4>Data Completeness</h4>';
+    incompleteFields.forEach(([key, completeness]) => {
+      html += `
+        <div class="stat-item">
+          <span class="stat-label">${key}:</span>
+          <span class="stat-value ${completeness < 50 ? 'low-completeness' : ''}">${Math.round(completeness)}%</span>
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+  
+  // Sensitive Data
+  if (ba.sensitiveData.size > 0) {
+    html += '<div class="stat-group"><h4>Sensitive Data ⚠️</h4>';
+    ba.sensitiveData.forEach((type, key) => {
+      const icon = type === 'email' ? '📧' : '📱';
+      html += `<div class="sensitive-item">${icon} ${key}</div>`;
+    });
+    html += '</div>';
+  }
+  
   panel.innerHTML = html;
+}
+
+function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSONStats): void {
+  nodes.forEach(node => {
+    switch (mode) {
+      case "keys":
+        // Default behavior - show property keys
+        node.displayLabel = node.name;
+        break;
+        
+      case "values":
+        // Show value preview for leaf nodes
+        if (node.type === "value") {
+          const valueStr = JSON.stringify(node.value);
+          node.displayLabel = valueStr.length > 20 ? valueStr.substring(0, 17) + "..." : valueStr;
+        } else if (node.type === "array") {
+          node.displayLabel = `Array[${node.arrayLength}]`;
+        } else if (node.type === "object") {
+          node.displayLabel = `Object{${node.childCount}}`;
+        } else {
+          node.displayLabel = node.name;
+        }
+        break;
+        
+      case "types":
+        // Show data type information
+        if (node.type === "value") {
+          node.displayLabel = `${node.name}: ${node.valueType}`;
+        } else if (node.type === "array") {
+          node.displayLabel = `${node.name}: array[${node.arrayLength}]`;
+        } else if (node.type === "object") {
+          node.displayLabel = `${node.name}: object{${node.childCount}}`;
+        } else {
+          node.displayLabel = node.name;
+        }
+        break;
+        
+      case "analytics":
+        // Show analytical information
+        if (node.type === "value") {
+          // Check if this key appears frequently
+          const keyFreq = stats.keyFrequency.get(node.name) || 0;
+          if (keyFreq > 1) {
+            node.displayLabel = `${node.name} (×${keyFreq})`;
+          } else {
+            node.displayLabel = node.name;
+          }
+        } else if (node.type === "array") {
+          // Show array size analytics
+          const avgLength = stats.arrayLengths.reduce((a, b) => a + b, 0) / stats.arrayLengths.length;
+          if (node.arrayLength! > avgLength * 1.5) {
+            node.displayLabel = `${node.name} [Large: ${node.arrayLength}]`;
+          } else if (node.arrayLength === 0) {
+            node.displayLabel = `${node.name} [Empty]`;
+          } else {
+            node.displayLabel = `${node.name} [${node.arrayLength}]`;
+          }
+        } else if (node.type === "object") {
+          // Check if this object matches a pattern
+          const matchesPattern = stats.patterns.some(p => p.paths.includes(node.path!));
+          if (matchesPattern) {
+            node.displayLabel = `${node.name} 📊`;
+          } else if (node.childCount === 0) {
+            node.displayLabel = `${node.name} {}`;
+          } else {
+            node.displayLabel = node.name;
+          }
+        } else {
+          node.displayLabel = node.name;
+        }
+        break;
+        
+      case "path":
+        // Show simplified path information
+        const pathParts = node.path!.split(".");
+        if (pathParts.length > 2) {
+          node.displayLabel = `...${pathParts.slice(-2).join(".")}`;
+        } else {
+          node.displayLabel = node.path!;
+        }
+        break;
+        
+      case "business":
+        // Show business logic insights
+        if (node.type === "value" && node.businessInfo) {
+          const info = node.businessInfo;
+          if (info.isEnum && info.enumDistribution) {
+            node.displayLabel = `${node.name} [${info.enumDistribution}]`;
+          } else if (info.isPotentialId) {
+            node.displayLabel = `${node.name} 🔑`;
+          } else if (info.isSensitive) {
+            const icon = info.dataType === 'email' ? '📧' : '📱';
+            node.displayLabel = `${node.name} ${icon}`;
+          } else if (info.isAnomaly) {
+            node.displayLabel = `${node.name} ⚠️`;
+          } else if (info.completeness !== undefined && info.completeness < 100) {
+            node.displayLabel = `${node.name} (${Math.round(info.completeness)}%)`;
+          } else {
+            node.displayLabel = node.name;
+          }
+        } else if (node.type === "array") {
+          const dist = stats.businessAnalytics.valueDistributions.get(node.name);
+          if (dist && dist.uniqueValues === 1) {
+            node.displayLabel = `${node.name} [uniform]`;
+          } else if (node.arrayLength === 0) {
+            node.displayLabel = `${node.name} [empty]`;
+          } else {
+            node.displayLabel = `${node.name} [${node.arrayLength}]`;
+          }
+        } else if (node.type === "object") {
+          const childKeys = nodes.filter(n => n.path?.startsWith(node.path + ".") && 
+            n.path.split(".").length === node.path!.split(".").length + 1);
+          const hasId = childKeys.some(n => stats.businessAnalytics.potentialIds.has(n.name));
+          if (hasId) {
+            node.displayLabel = `${node.name} 🏷️`;
+          } else {
+            node.displayLabel = node.name;
+          }
+        } else {
+          node.displayLabel = node.name;
+        }
+        break;
+        
+      default:
+        node.displayLabel = node.name;
+    }
+  });
+}
+
+function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): void {
+  const valuesByKey = new Map<string, any[]>();
+  const keyPaths = new Map<string, string[]>();
+  
+  // Collect all values by key name
+  nodes.forEach(node => {
+    if (node.type === "value" && node.value !== undefined && node.value !== null) {
+      const key = node.name;
+      if (!valuesByKey.has(key)) {
+        valuesByKey.set(key, []);
+        keyPaths.set(key, []);
+      }
+      valuesByKey.get(key)!.push(node.value);
+      keyPaths.get(key)!.push(node.path!);
+    }
+  });
+  
+  // Analyze each key's values
+  valuesByKey.forEach((values, key) => {
+    const uniqueValues = new Set(values);
+    const valueCount = new Map<any, number>();
+    
+    // Count occurrences
+    values.forEach(v => {
+      const vStr = JSON.stringify(v);
+      valueCount.set(vStr, (valueCount.get(vStr) || 0) + 1);
+    });
+    
+    // Check for enumerations (limited set of values)
+    if (uniqueValues.size <= 10 && values.length >= 3 && uniqueValues.size < values.length * 0.5) {
+      const enumInfo: EnumInfo = {
+        values: new Map(),
+        totalCount: values.length,
+        isLikelyEnum: true
+      };
+      
+      valueCount.forEach((count, value) => {
+        enumInfo.values.set(value, count);
+      });
+      
+      stats.businessAnalytics.enumerations.set(key, enumInfo);
+    }
+    
+    // Check for potential IDs
+    if (key.toLowerCase().includes('id') || key.toLowerCase().includes('key') || 
+        key.toLowerCase().includes('uuid') || key.toLowerCase().includes('code')) {
+      if (uniqueValues.size === values.length) {
+        stats.businessAnalytics.potentialIds.add(key);
+      }
+    } else if (uniqueValues.size === values.length && values.length > 5) {
+      // Also check if all values are unique even without ID-like name
+      stats.businessAnalytics.potentialIds.add(key);
+    }
+    
+    // Check for sensitive data patterns
+    if (typeof values[0] === 'string') {
+      const sampleValue = values[0];
+      if (/^[\w._%+-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(sampleValue)) {
+        stats.businessAnalytics.sensitiveData.set(key, 'email');
+      } else if (/^\+?[1-9]\d{1,14}$/.test(sampleValue.replace(/[\s()-]/g, ''))) {
+        stats.businessAnalytics.sensitiveData.set(key, 'phone');
+      } else if (/^\d{4}-\d{2}-\d{2}/.test(sampleValue) || /^\d{2}\/\d{2}\/\d{4}/.test(sampleValue)) {
+        stats.businessAnalytics.dateFields.add(key);
+      }
+    }
+    
+    // Numeric analysis
+    if (typeof values[0] === 'number') {
+      const numbers = values as number[];
+      const min = Math.min(...numbers);
+      const max = Math.max(...numbers);
+      const avg = numbers.reduce((a, b) => a + b, 0) / numbers.length;
+      
+      const range: NumericRange = {
+        min,
+        max,
+        avg,
+        isLikelyMonetary: key.toLowerCase().includes('price') || key.toLowerCase().includes('cost') ||
+                         key.toLowerCase().includes('amount') || key.toLowerCase().includes('total'),
+        isLikelyId: uniqueValues.size === values.length && Number.isInteger(min) && min > 0
+      };
+      
+      stats.businessAnalytics.numericRanges.set(key, range);
+    }
+    
+    // Store value distribution
+    const topValues = Array.from(valueCount.entries())
+      .map(([value, count]) => ({ value: JSON.parse(value), count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+    
+    stats.businessAnalytics.valueDistributions.set(key, {
+      uniqueValues: uniqueValues.size,
+      totalOccurrences: values.length,
+      topValues
+    });
+  });
+  
+  // Calculate data completeness
+  const allObjectPaths = new Set<string>();
+  nodes.forEach(node => {
+    if (node.type === "object") {
+      allObjectPaths.add(node.path!.split('.').slice(0, -1).join('.'));
+    }
+  });
+  
+  valuesByKey.forEach((values, key) => {
+    const keyOccurrences = keyPaths.get(key)!.length;
+    const possibleOccurrences = allObjectPaths.size || 1;
+    const completeness = (keyOccurrences / possibleOccurrences) * 100;
+    stats.businessAnalytics.dataCompleteness.set(key, Math.min(completeness, 100));
+  });
+  
+  // Detect anomalies
+  stats.businessAnalytics.enumerations.forEach((enumInfo, key) => {
+    const values = Array.from(enumInfo.values.entries());
+    values.forEach(([value, count]) => {
+      if (count === 1 && enumInfo.totalCount > 10) {
+        if (!stats.businessAnalytics.anomalies.has(key)) {
+          stats.businessAnalytics.anomalies.set(key, []);
+        }
+        stats.businessAnalytics.anomalies.get(key)!.push(value);
+      }
+    });
+  });
+  
+  // Update nodes with business info
+  nodes.forEach(node => {
+    if (node.type === "value" && node.name) {
+      node.businessInfo = {};
+      
+      // Check if it's an enum
+      if (stats.businessAnalytics.enumerations.has(node.name)) {
+        node.businessInfo.isEnum = true;
+        const enumInfo = stats.businessAnalytics.enumerations.get(node.name)!;
+        const valueStr = JSON.stringify(node.value);
+        const count = enumInfo.values.get(valueStr) || 0;
+        const percentage = Math.round((count / enumInfo.totalCount) * 100);
+        node.businessInfo.enumDistribution = `${percentage}%`;
+      }
+      
+      // Check if it's a potential ID
+      if (stats.businessAnalytics.potentialIds.has(node.name)) {
+        node.businessInfo.isPotentialId = true;
+      }
+      
+      // Add completeness info
+      if (stats.businessAnalytics.dataCompleteness.has(node.name)) {
+        node.businessInfo.completeness = stats.businessAnalytics.dataCompleteness.get(node.name);
+      }
+      
+      // Check for anomalies
+      if (stats.businessAnalytics.anomalies.has(node.name)) {
+        const anomalies = stats.businessAnalytics.anomalies.get(node.name)!;
+        if (anomalies.includes(JSON.stringify(node.value))) {
+          node.businessInfo.isAnomaly = true;
+        }
+      }
+      
+      // Check for sensitive data
+      if (stats.businessAnalytics.sensitiveData.has(node.name)) {
+        node.businessInfo.isSensitive = true;
+        node.businessInfo.dataType = stats.businessAnalytics.sensitiveData.get(node.name);
+      }
+    }
+  });
+}
+
+function setupDisplayModeSelector(onChange: (mode: NodeDisplayMode) => void): void {
+  const selector = document.getElementById("nodeDisplayMode") as HTMLSelectElement;
+  if (selector) {
+    selector.addEventListener("change", (e) => {
+      const target = e.target as HTMLSelectElement;
+      onChange(target.value as NodeDisplayMode);
+    });
+  }
 }
 
 function groupNodesByType(nodes: GraphNode[]): Map<string, GraphNode[]> {
@@ -622,6 +1077,49 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
         <strong>Value Type:</strong> ${node.valueType}
       </div>
     `;
+    
+    // Business analytics details
+    if (node.businessInfo) {
+      html += '<div class="detail-group"><h4>Business Analytics</h4>';
+      
+      if (node.businessInfo.isEnum) {
+        const enumInfo = stats.businessAnalytics.enumerations.get(node.name)!;
+        html += `<div class="detail-item"><strong>Enumeration:</strong> ${enumInfo.values.size} unique values</div>`;
+        if (node.businessInfo.enumDistribution) {
+          html += `<div class="detail-item"><strong>This Value:</strong> ${node.businessInfo.enumDistribution} of occurrences</div>`;
+        }
+      }
+      
+      if (node.businessInfo.isPotentialId) {
+        html += `<div class="detail-item"><strong>Potential ID:</strong> All values are unique</div>`;
+      }
+      
+      if (node.businessInfo.completeness !== undefined) {
+        html += `<div class="detail-item"><strong>Completeness:</strong> ${Math.round(node.businessInfo.completeness)}%</div>`;
+      }
+      
+      if (node.businessInfo.isAnomaly) {
+        html += `<div class="detail-item" style="color: #dc2626;"><strong>⚠️ Anomaly:</strong> Rare value in enumeration</div>`;
+      }
+      
+      if (node.businessInfo.isSensitive) {
+        html += `<div class="detail-item" style="color: #dc2626;"><strong>🔒 Sensitive:</strong> ${node.businessInfo.dataType}</div>`;
+      }
+      
+      html += '</div>';
+    }
+    
+    // Numeric ranges
+    if (stats.businessAnalytics.numericRanges.has(node.name)) {
+      const range = stats.businessAnalytics.numericRanges.get(node.name)!;
+      html += '<div class="detail-group"><h4>Numeric Analysis</h4>';
+      html += `<div class="detail-item"><strong>Range:</strong> ${range.min} - ${range.max}</div>`;
+      html += `<div class="detail-item"><strong>Average:</strong> ${range.avg.toFixed(2)}</div>`;
+      if (range.isLikelyMonetary) {
+        html += `<div class="detail-item"><strong>Type:</strong> Likely monetary value 💰</div>`;
+      }
+      html += '</div>';
+    }
   } else if (node.type === "object") {
     html += `
       <div class="detail-item">
@@ -634,6 +1132,17 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
         <strong>Length:</strong> ${node.arrayLength || 0}
       </div>
     `;
+    
+    // Value distribution for arrays
+    const dist = stats.businessAnalytics.valueDistributions.get(node.name);
+    if (dist) {
+      html += '<div class="detail-group"><h4>Array Analysis</h4>';
+      html += `<div class="detail-item"><strong>Unique Values:</strong> ${dist.uniqueValues}</div>`;
+      if (dist.uniqueValues === 1) {
+        html += `<div class="detail-item"><strong>Pattern:</strong> All values are identical</div>`;
+      }
+      html += '</div>';
+    }
   }
   
   // Show if this node's structure appears in patterns
