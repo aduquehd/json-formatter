@@ -6,7 +6,7 @@ export function initializeTheme(): ThemeState {
   const savedTheme = localStorage.getItem("theme");
   const isDarkTheme = savedTheme === "dark";
   document.documentElement.setAttribute("data-theme", isDarkTheme ? "dark" : "light");
-  
+
   return { isDarkTheme };
 }
 
@@ -14,7 +14,7 @@ export function toggleTheme(currentState: ThemeState): ThemeState {
   const isDarkTheme = !currentState.isDarkTheme;
   document.documentElement.setAttribute("data-theme", isDarkTheme ? "dark" : "light");
   localStorage.setItem("theme", isDarkTheme ? "dark" : "light");
-  
+
   return { isDarkTheme };
 }
 

@@ -16,10 +16,10 @@
 
     <!-- Favicons and Icons -->
     <link rel="icon" href="{{ url_for('static', path='/img/logo-favicon.png') }}" type="image/png" />
-    
+
     <!-- Theme color -->
     <meta name="theme-color" content="#2563eb" />
-    
+
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
     <style>
       .error-container {
@@ -80,7 +80,7 @@
         padding: 1.5rem;
         margin: 2rem 0;
         text-align: left;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
         font-size: 0.875rem;
         overflow-x: auto;
       }
@@ -249,13 +249,33 @@
           <p class="error-message">
             Oops! The JSON resource you're looking for seems to have been parsed into oblivion.
           </p>
-          
+
           <div class="error-json">
-            <span class="json-bracket">{</span><br>
-            &nbsp;&nbsp;<span class="json-key">"error"</span>: <span class="json-string">"Not Found"</span><span class="json-comma">,</span><br>
-            &nbsp;&nbsp;<span class="json-key">"status"</span>: <span class="json-number">404</span><span class="json-comma">,</span><br>
-            &nbsp;&nbsp;<span class="json-key">"message"</span>: <span class="json-string">"The requested resource could not be found"</span><span class="json-comma">,</span><br>
-            &nbsp;&nbsp;<span class="json-key">"suggestion"</span>: <span class="json-string">"Try validating your URL or return to the JSON viewer"</span><br>
+            <span class="json-bracket">{</span>
+            <br />
+            &nbsp;&nbsp;
+            <span class="json-key">"error"</span>
+            :
+            <span class="json-string">"Not Found"</span>
+            <span class="json-comma">,</span>
+            <br />
+            &nbsp;&nbsp;
+            <span class="json-key">"status"</span>
+            :
+            <span class="json-number">404</span>
+            <span class="json-comma">,</span>
+            <br />
+            &nbsp;&nbsp;
+            <span class="json-key">"message"</span>
+            :
+            <span class="json-string">"The requested resource could not be found"</span>
+            <span class="json-comma">,</span>
+            <br />
+            &nbsp;&nbsp;
+            <span class="json-key">"suggestion"</span>
+            :
+            <span class="json-string">"Try validating your URL or return to the JSON viewer"</span>
+            <br />
             <span class="json-bracket">}</span>
           </div>
 
@@ -281,13 +301,13 @@
 
     <script>
       // Theme detection and application
-      (function() {
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-        
-        if (theme === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "dark" : "light");
+
+        if (theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "dark");
         }
       })();
     </script>

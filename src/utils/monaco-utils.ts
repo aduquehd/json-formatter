@@ -225,7 +225,7 @@ export function setMonacoTheme(editor: any, themeName?: string, isDarkTheme?: bo
   if (editor && (window as any).monaco) {
     // Ensure themes are defined before setting
     defineCustomThemes();
-    
+
     if (themeName) {
       // Use specific theme if provided
       monaco.editor.setTheme(themeName);

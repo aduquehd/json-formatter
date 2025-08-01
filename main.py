@@ -37,11 +37,7 @@ async def robots():
 
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc: HTTPException):
-    return templates.TemplateResponse(
-        "404.html",
-        {"request": request},
-        status_code=404
-    )
+    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
 
 
 if __name__ == "__main__":

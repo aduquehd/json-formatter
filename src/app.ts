@@ -107,14 +107,18 @@ class JSONViewer {
 
   private validateAndUpdateTree(): void {
     validateAndUpdateViews(
-      this.state.editor, 
+      this.state.editor,
       {
         treeOutput: this.elements.treeOutput,
         graphOutput: this.elements.graphOutput,
       },
       true,
-      () => { this.isUpdatingFromTree = true; },
-      () => { this.isUpdatingFromTree = false; }
+      () => {
+        this.isUpdatingFromTree = true;
+      },
+      () => {
+        this.isUpdatingFromTree = false;
+      }
     );
   }
 
@@ -125,7 +129,7 @@ class JSONViewer {
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
     this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
     this.elements.themeBtn.addEventListener("click", () => this.toggleTheme());
-    
+
     if (this.elements.mobileThemeBtn) {
       this.elements.mobileThemeBtn.addEventListener("click", () => this.toggleTheme());
     }
@@ -179,8 +183,12 @@ class JSONViewer {
         this.state.currentTab,
         this.state.editor,
         false,
-        () => { this.isUpdatingFromTree = true; },
-        () => { this.isUpdatingFromTree = false; }
+        () => {
+          this.isUpdatingFromTree = true;
+        },
+        () => {
+          this.isUpdatingFromTree = false;
+        }
       );
     }
   }
@@ -198,8 +206,12 @@ class JSONViewer {
         this.state.currentTab,
         this.state.editor,
         false,
-        () => { this.isUpdatingFromTree = true; },
-        () => { this.isUpdatingFromTree = false; }
+        () => {
+          this.isUpdatingFromTree = true;
+        },
+        () => {
+          this.isUpdatingFromTree = false;
+        }
       );
     }
   }
@@ -278,7 +290,7 @@ class JSONViewer {
   private changeEditorTheme(themeName: string): void {
     // Save preference first
     localStorage.setItem("editorTheme", themeName);
-    
+
     if (themeName === "default") {
       // Use theme based on light/dark mode
       setMonacoTheme(this.state.editor, undefined, this.state.isDarkTheme);

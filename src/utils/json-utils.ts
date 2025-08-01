@@ -40,7 +40,7 @@ export function formatJSONInEditor(editor: any): ParseResult {
     const parsed = JSON.parse(content);
     const formatted = JSON.stringify(parsed, null, 2);
     editor.setValue(formatted);
-    
+
     return { success: true, data: parsed };
   } catch (e: any) {
     toastr.error(`Invalid JSON: ${e.message}`);
@@ -56,7 +56,7 @@ export function compactJSONInEditor(editor: any): ParseResult {
     const parsed = JSON.parse(content);
     const compacted = JSON.stringify(parsed);
     editor.setValue(compacted);
-    
+
     return { success: true, data: parsed };
   } catch (e: any) {
     toastr.error(`Invalid JSON: ${e.message}`);
