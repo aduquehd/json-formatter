@@ -65,8 +65,15 @@ export function generateMapView(data: any, container: HTMLElement): void {
     initializeLeafletMap(mapElement, geoData, controls);
   } else {
     // Fallback: Load Leaflet dynamically
+    mapElement.innerHTML = '<div style="padding: 20px; text-align: center;">Loading map...</div>';
     loadLeaflet().then(() => {
-      initializeLeafletMap(mapElement, geoData, controls);
+      // Add a small delay to ensure everything is loaded
+      setTimeout(() => {
+        initializeLeafletMap(mapElement, geoData, controls);
+      }, 100);
+    }).catch((error) => {
+      console.error('Failed to load map library:', error);
+      mapElement.innerHTML = '<div style="padding: 20px; text-align: center;">Failed to load map library. Please check your internet connection and refresh.</div>';
     });
   }
 }
@@ -171,7 +178,19 @@ function extractGeoData(data: any, path: string = '$'): GeoItem[] {
 }
 
 function loadLeaflet(): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    // Check if already loading or loaded
+    if ((window as any).L) {
+      resolve();
+      return;
+    }
+    
+    // Save the current define function (from Monaco/RequireJS)
+    const originalDefine = (window as any).define;
+    
+    // Temporarily remove define to force Leaflet to load as global
+    (window as any).define = undefined;
+    
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
@@ -180,7 +199,10 @@ function loadLeaflet(): Promise<void> {
     const script = document.createElement('script');
     script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
     script.onload = () => {
-      // Load marker cluster plugin
+      // Restore the original define function
+      (window as any).define = originalDefine;
+      
+      // Load marker cluster plugin CSS
       const clusterCSS = document.createElement('link');
       clusterCSS.rel = 'stylesheet';
       clusterCSS.href = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
@@ -191,10 +213,30 @@ function loadLeaflet(): Promise<void> {
       clusterDefaultCSS.href = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
       document.head.appendChild(clusterDefaultCSS);
       
+      // For the cluster plugin, we'll also need to temporarily remove define
       const clusterScript = document.createElement('script');
       clusterScript.src = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
-      clusterScript.onload = () => resolve();
+      
+      // Remove define before loading cluster plugin
+      clusterScript.onload = () => {
+        (window as any).define = originalDefine;
+        resolve();
+      };
+      clusterScript.onerror = () => {
+        // Restore define and continue
+        (window as any).define = originalDefine;
+        console.warn('Failed to load marker cluster plugin, continuing without it');
+        resolve();
+      };
+      
+      // Remove define again for cluster plugin
+      (window as any).define = undefined;
       document.head.appendChild(clusterScript);
+    };
+    script.onerror = () => {
+      // Restore define on error
+      (window as any).define = originalDefine;
+      reject(new Error('Failed to load Leaflet library'));
     };
     document.head.appendChild(script);
   });
@@ -202,6 +244,12 @@ function loadLeaflet(): Promise<void> {
 
 function initializeLeafletMap(mapElement: HTMLElement, geoData: GeoItem[], controls: HTMLElement): void {
   const L = (window as any).L;
+  
+  if (!L) {
+    console.error('Leaflet library not loaded');
+    mapElement.innerHTML = '<div style="padding: 20px; text-align: center;">Error loading map library. Please refresh the page.</div>';
+    return;
+  }
   
   // Calculate center
   const bounds = geoData.reduce((acc, item) => {
@@ -231,8 +279,8 @@ function initializeLeafletMap(mapElement: HTMLElement, geoData: GeoItem[], contr
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
   
-  // Create marker cluster group
-  const markers = L.markerClusterGroup();
+  // Create marker cluster group if available, otherwise use regular layer group
+  const markers = L.markerClusterGroup ? L.markerClusterGroup() : L.layerGroup();
   
   // Add markers
   geoData.forEach(item => {
@@ -269,22 +317,51 @@ function initializeLeafletMap(mapElement: HTMLElement, geoData: GeoItem[], contr
   const clusterToggle = controls.querySelector('#clusterToggle') as HTMLInputElement;
   const heatmapToggle = controls.querySelector('#heatmapToggle') as HTMLInputElement;
   
-  clusterToggle.onchange = () => {
-    if (clusterToggle.checked) {
-      map.addLayer(markers);
-    } else {
-      map.removeLayer(markers);
-      // Add individual markers
-      geoData.forEach(item => {
-        L.marker([item.lat, item.lng]).addTo(map);
-      });
-    }
-  };
+  // Store individual markers for toggle functionality
+  const individualMarkers: any[] = [];
+  
+  if (clusterToggle) {
+    clusterToggle.onchange = () => {
+      if (clusterToggle.checked && L.markerClusterGroup) {
+        // Remove individual markers
+        individualMarkers.forEach(m => map.removeLayer(m));
+        individualMarkers.length = 0;
+        // Add clustered markers
+        map.addLayer(markers);
+      } else {
+        // Remove clustered markers
+        map.removeLayer(markers);
+        // Add individual markers
+        geoData.forEach(item => {
+          const marker = L.marker([item.lat, item.lng]);
+          
+          // Create popup content
+          const popupContent = document.createElement('div');
+          popupContent.className = 'map-popup';
+          popupContent.innerHTML = `
+            <h4>${item.label || 'Location'}</h4>
+            <p class="map-coords">Lat: ${item.lat.toFixed(6)}, Lng: ${item.lng.toFixed(6)}</p>
+            <details>
+              <summary>View Data</summary>
+              <pre>${JSON.stringify(item.data, null, 2)}</pre>
+            </details>
+            <p class="map-path">${item.path}</p>
+          `;
+          
+          marker.bindPopup(popupContent);
+          marker.addTo(map);
+          individualMarkers.push(marker);
+        });
+      }
+    };
+  }
   
   // Note: Heatmap would require additional plugin
-  heatmapToggle.onchange = () => {
-    if (heatmapToggle.checked) {
-      alert('Heatmap visualization requires additional plugins. This is a placeholder.');
-    }
-  };
+  if (heatmapToggle) {
+    heatmapToggle.onchange = () => {
+      if (heatmapToggle.checked) {
+        alert('Heatmap visualization requires additional plugins. This is a placeholder.');
+      }
+    };
+  }
 }

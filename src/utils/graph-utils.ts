@@ -572,7 +572,21 @@ function detectPatterns(nodes: GraphNode[], stats: JSONStats): void {
 }
 
 function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]): void {
-  let html = `
+  const ba = stats.businessAnalytics;
+  let html = '';
+  
+  // Sensitive Data (shown first if present)
+  if (ba.sensitiveData.size > 0) {
+    html += '<div class="stat-group"><h4>Sensitive Data ⚠️</h4>';
+    ba.sensitiveData.forEach((type, key) => {
+      const icon = type === 'email' ? '📧' : '📱';
+      html += `<div class="sensitive-item">${icon} ${key}</div>`;
+    });
+    html += '</div>';
+  }
+  
+  // Basic stats
+  html += `
     <div class="stat-item">
       <span class="stat-label">Total Nodes:</span>
       <span class="stat-value">${stats.totalNodes}</span>
@@ -649,22 +663,7 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
     html += '</div>';
   }
   
-  // Patterns
-  if (stats.patterns.length > 0) {
-    html += '<div class="stat-group"><h4>Patterns Found</h4>';
-    stats.patterns.slice(0, 3).forEach(pattern => {
-      html += `
-        <div class="pattern-item">
-          <div class="pattern-name">${pattern.name}</div>
-          <div class="pattern-count">${pattern.occurrences} occurrences</div>
-        </div>
-      `;
-    });
-    html += '</div>';
-  }
-  
   // Business Analytics
-  const ba = stats.businessAnalytics;
   
   // Enumerations
   if (ba.enumerations.size > 0) {
@@ -713,12 +712,16 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
     html += '</div>';
   }
   
-  // Sensitive Data
-  if (ba.sensitiveData.size > 0) {
-    html += '<div class="stat-group"><h4>Sensitive Data ⚠️</h4>';
-    ba.sensitiveData.forEach((type, key) => {
-      const icon = type === 'email' ? '📧' : '📱';
-      html += `<div class="sensitive-item">${icon} ${key}</div>`;
+  // Patterns
+  if (stats.patterns.length > 0) {
+    html += '<div class="stat-group"><h4>Patterns Found</h4>';
+    stats.patterns.slice(0, 3).forEach(pattern => {
+      html += `
+        <div class="pattern-item">
+          <div class="pattern-name">${pattern.name}</div>
+          <div class="pattern-count">${pattern.occurrences} occurrences</div>
+        </div>
+      `;
     });
     html += '</div>';
   }

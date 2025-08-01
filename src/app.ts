@@ -157,7 +157,7 @@ class JSONViewer {
 
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
+        const target = e.currentTarget as HTMLElement;
         const tabName = target.getAttribute("data-tab");
         if (tabName) {
           this.switchTab(tabName);
@@ -248,8 +248,12 @@ class JSONViewer {
     copyEditorContent(this.state.editor);
   }
 
-  private pasteFromClipboard(): void {
-    pasteIntoEditor(this.state.editor, () => this.formatJSON());
+  private async pasteFromClipboard(): Promise<void> {
+    const success = await pasteIntoEditor(this.state.editor, () => this.formatJSON());
+    if (success) {
+      // Switch to JSON Editor tab after successful paste
+      this.switchTab("formatted");
+    }
   }
 
   private switchTab(tabName: string): void {

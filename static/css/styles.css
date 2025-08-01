@@ -514,6 +514,7 @@ main {
   background: transparent;
   gap: 4px;
   padding-bottom: 0;
+  align-items: center;
 }
 
 .tab-btn {
@@ -553,11 +554,27 @@ main {
   vertical-align: middle;
   position: relative;
   top: -1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.beta-badge:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #f2a1fc 0%, #f6687a 100%);
+  box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
 }
 
 .tab-btn.active .beta-badge {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
+}
+
+.tab-separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color);
+  margin: 0 8px;
+  align-self: center;
 }
 
 .tab-btn:hover:not(.active) {
@@ -1092,6 +1109,11 @@ main {
     padding: 8px 12px;
     font-size: 13px;
   }
+  
+  .tab-separator {
+    margin: 0 4px;
+    height: 16px;
+  }
 
   .tree-controls {
     flex-direction: column;
@@ -1175,6 +1197,10 @@ main {
   background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
 }
 
+[data-theme="dark"] .tab-separator {
+  background-color: var(--border-color);
+}
+
 [data-theme="dark"] .tab-btn:hover:not(.active) {
   color: #e1e4e8;
   background-color: rgba(121, 184, 255, 0.1);
@@ -1222,6 +1248,11 @@ main {
 .graph-node {
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.graph-node text {
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .graph-node circle {
@@ -1280,21 +1311,21 @@ main {
 
 .graph-controls {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 12px;
+  right: 12px;
   z-index: 10;
 }
 
 .graph-controls-container {
   display: flex;
-  gap: 12px;
-  padding: 8px;
+  gap: 8px;
+  padding: 6px;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(20px);
-  border-radius: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -1302,14 +1333,14 @@ main {
   background: rgba(255, 255, 255, 0.85);
   border-color: rgba(99, 102, 241, 0.2);
   box-shadow: 
-    0 8px 32px rgba(99, 102, 241, 0.15),
+    0 4px 16px rgba(99, 102, 241, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .graph-control-btn.futuristic {
   position: relative;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -1326,7 +1357,7 @@ main {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 150, 255, 0.1) 100%);
-  border-radius: 12px;
+  border-radius: 8px;
   transition: all 0.3s ease;
 }
 
@@ -1344,7 +1375,7 @@ main {
   background: radial-gradient(circle at center, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 [data-theme="light"] .graph-control-btn.futuristic .btn-glow {
@@ -1357,7 +1388,7 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 1px;
   background: linear-gradient(45deg, 
     #00ffff 0%, 
@@ -1421,8 +1452,8 @@ main {
 }
 
 .graph-control-btn.futuristic svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   stroke: #00ffff;
   filter: drop-shadow(0 0 2px rgba(0, 255, 255, 0.5));
   transition: all 0.3s ease;
@@ -1475,14 +1506,14 @@ main {
 .graph-control-btn.futuristic::after {
   content: attr(title);
   position: absolute;
-  bottom: -40px;
+  bottom: -36px;
   left: 50%;
   transform: translateX(-50%) scale(0);
-  padding: 6px 12px;
+  padding: 4px 8px;
   background: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 8px;
-  font-size: 11px;
+  border-radius: 6px;
+  font-size: 10px;
   color: #00ffff;
   white-space: nowrap;
   pointer-events: none;
@@ -1506,28 +1537,29 @@ main {
 /* Display Mode Selector */
 .display-mode-selector {
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 12px;
+  left: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: var(--bg-primary);
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   z-index: 10;
 }
 
 .display-mode-selector label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
 .display-mode-select {
-  padding: 6px 10px;
-  font-size: 13px;
+  padding: 4px 8px;
+  font-size: 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background: var(--bg-primary);
@@ -1572,12 +1604,13 @@ main {
 }
 
 .graph-sidebar {
-  width: 350px;
+  width: 280px;
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  font-size: 13px;
 }
 
 .graph-container {
@@ -1589,20 +1622,22 @@ main {
 /* Stats Panel */
 .stats-panel,
 .details-panel {
-  padding: 16px;
+  padding: 12px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .stats-panel h3,
 .details-panel h3 {
-  margin: 0 0 12px 0;
+  margin: 0 0 10px 0;
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-group {
-  margin-top: 16px;
+  margin-top: 12px;
 }
 
 .stat-group h4 {
@@ -1611,37 +1646,131 @@ main {
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-item {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
-  font-size: 13px;
+  align-items: center;
+  padding: 3px 0;
+  font-size: 11px;
+  min-height: 20px;
+  gap: 8px;
 }
 
 .stat-label {
   color: var(--text-secondary);
+  font-weight: 400;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .stat-value {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
   font-family: "SF Mono", Monaco, monospace;
+  font-size: 11px;
+  text-align: right;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* Details panel content */
+.details-content {
+  font-size: 12px;
+}
+
+.details-content pre {
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 11px;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+
+/* Make graph sidebar stats more readable */
+.graph-sidebar .stat-item {
+  padding: 6px 8px;
+  margin: 2px 0;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+[data-theme="dark"] .graph-sidebar .stat-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.graph-sidebar .stat-item:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .graph-sidebar .stat-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.graph-sidebar .stat-label {
+  font-size: 12px;
+  text-transform: none;
+}
+
+.graph-sidebar .stat-value {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.graph-sidebar .stat-group {
+  margin-top: 14px;
+}
+
+.graph-sidebar .stat-group h4 {
+  font-size: 11px;
+  margin-bottom: 6px;
 }
 
 /* Pattern styles */
 .pattern-item {
-  margin: 8px 0;
-  padding: 8px;
+  margin: 6px 0;
+  padding: 6px 8px;
   background: var(--tree-bg);
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .pattern-name {
   color: var(--text-primary);
   font-weight: 500;
+}
+
+.pattern-count {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Sensitive data items */
+.sensitive-item {
+  padding: 4px 8px;
+  margin: 2px 0;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+[data-theme="dark"] .sensitive-item {
+  background: rgba(239, 68, 68, 0.15);
 }
 
 .pattern-count {
@@ -1841,7 +1970,7 @@ main {
   }
   
   .graph-sidebar {
-    width: 300px;
+    width: 280px;
   }
   
   .display-mode-selector {
@@ -1872,7 +2001,7 @@ main {
   
   .graph-sidebar {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
   }
@@ -1936,6 +2065,21 @@ main {
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.diff-format-button:hover {
+  background: var(--btn-secondary-hover);
+}
+
+[data-theme="dark"] .diff-format-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e1e4e8;
+}
+
+[data-theme="dark"] .diff-format-button:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .diff-compare-section {
@@ -2340,7 +2484,20 @@ main {
   border-radius: 8px;
   padding: 40px;
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.chart-empty p {
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+[data-theme="dark"] .chart-empty {
+  color: #e1e4e8;
+}
+
+[data-theme="dark"] .chart-empty p {
+  color: #e1e4e8;
 }
 
 .chart-empty ul {
@@ -2364,9 +2521,21 @@ main {
   padding: 8px 12px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  background: var(--input-bg);
+  background: var(--bg-primary);
   color: var(--text-primary);
   font-size: 14px;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .chart-data-select,
+[data-theme="dark"] .chart-type-select {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e1e4e8;
+}
+
+[data-theme="dark"] .chart-data-select:hover,
+[data-theme="dark"] .chart-type-select:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .chart-export-button {
@@ -2377,10 +2546,21 @@ main {
   cursor: pointer;
   font-size: 14px;
   margin-left: auto;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
 }
 
 .chart-export-button:hover {
   background: var(--btn-secondary-hover);
+}
+
+[data-theme="dark"] .chart-export-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e1e4e8;
+}
+
+[data-theme="dark"] .chart-export-button:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .chart-canvas-wrapper {
@@ -2391,6 +2571,10 @@ main {
   border-radius: 8px;
   padding: 20px;
   min-height: 400px;
+}
+
+[data-theme="dark"] .chart-canvas-wrapper {
+  background: rgba(255, 255, 255, 0.02);
 }
 
 #json-chart {

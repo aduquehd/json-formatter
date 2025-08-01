@@ -59,10 +59,10 @@ export function copyEditorContent(editor: any): void {
   copyToClipboard(content);
 }
 
-export async function pasteIntoEditor(editor: any, formatCallback?: () => void): Promise<void> {
+export async function pasteIntoEditor(editor: any, formatCallback?: () => void): Promise<boolean> {
   if (!editor) {
     toastr.error("Editor not initialized!");
-    return;
+    return false;
   }
 
   const text = await pasteFromClipboard();
@@ -71,7 +71,9 @@ export async function pasteIntoEditor(editor: any, formatCallback?: () => void):
     if (formatCallback) {
       setTimeout(formatCallback, 10);
     }
+    return true;
   }
+  return false;
 }
 
 export function handlePasteEvent(e: ClipboardEvent): string | null {

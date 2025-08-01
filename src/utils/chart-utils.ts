@@ -69,8 +69,14 @@ export function generateChartView(data: any, container: HTMLElement): void {
   
   // Load Chart.js if not available
   if (typeof (window as any).Chart === 'undefined') {
+    canvasWrapper.innerHTML = '<div style="padding: 20px; text-align: center;">Loading Chart.js library...</div>';
     loadChartJS().then(() => {
+      canvasWrapper.innerHTML = '';
+      canvasWrapper.appendChild(canvas);
       initializeChart(canvas, chartableData, dataSelect, typeSelect, exportButton);
+    }).catch((error) => {
+      console.error('Failed to load Chart.js:', error);
+      canvasWrapper.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">Failed to load Chart.js library. Please check your internet connection and refresh.</div>';
     });
   } else {
     initializeChart(canvas, chartableData, dataSelect, typeSelect, exportButton);
@@ -140,16 +146,60 @@ function analyzeChartableData(data: any, path: string = '$'): ChartableDataset[]
   }
   
   // Traverse nested structures
-  function traverse(obj: any, currentPath: string) {
+  function traverse(obj: any, currentPath: string, parentKey?: string) {
     if (Array.isArray(obj) && obj.length > 0) {
       // Check if it's an array of numbers
       if (obj.every(item => typeof item === 'number')) {
         datasets.push({
-          label: `Array at ${currentPath}`,
+          label: parentKey ? `${parentKey} values` : `Array at ${currentPath}`,
           data: obj.map((value, index) => ({ label: `Index ${index}`, value })),
           type: 'numeric',
           path: currentPath,
           suggestions: ['line', 'bar']
+        });
+      }
+      // Check if it's an array of objects with numeric fields
+      else if (obj.every(item => typeof item === 'object' && item !== null)) {
+        const numericFields = new Set<string>();
+        const labelFields = new Set<string>();
+        
+        // Find numeric and potential label fields
+        obj.forEach(item => {
+          Object.entries(item).forEach(([key, value]) => {
+            if (typeof value === 'number') {
+              numericFields.add(key);
+            } else if (typeof value === 'string') {
+              labelFields.add(key);
+            }
+          });
+        });
+        
+        // Create datasets for each numeric field
+        numericFields.forEach(field => {
+          // Find best label field
+          let labelField = 'month' in obj[0] ? 'month' : 
+                          'name' in obj[0] ? 'name' :
+                          'category' in obj[0] ? 'category' :
+                          'city' in obj[0] ? 'city' :
+                          'age_group' in obj[0] ? 'age_group' :
+                          'timestamp' in obj[0] ? 'timestamp' :
+                          Array.from(labelFields)[0];
+          
+          const values = obj.map((item, index) => ({
+            label: labelField && item[labelField] ? String(item[labelField]) : `Item ${index + 1}`,
+            value: item[field]
+          })).filter(item => item.value !== null && item.value !== undefined);
+          
+          if (values.length > 0) {
+            const datasetLabel = parentKey ? `${parentKey} - ${field}` : `${field} (${values.length} items)`;
+            datasets.push({
+              label: datasetLabel,
+              data: values,
+              type: 'numeric',
+              path: `${currentPath}[*].${field}`,
+              suggestions: ['bar', 'line', 'scatter']
+            });
+          }
         });
       }
       
@@ -157,8 +207,22 @@ function analyzeChartableData(data: any, path: string = '$'): ChartableDataset[]
         traverse(item, `${currentPath}[${index}]`);
       });
     } else if (typeof obj === 'object' && obj !== null) {
+      // Check for direct numeric values in this object
+      const numericEntries = Object.entries(obj).filter(([_, value]) => typeof value === 'number');
+      
+      if (numericEntries.length > 0 && parentKey) {
+        datasets.push({
+          label: parentKey,
+          data: numericEntries.map(([key, value]) => ({ label: key, value })),
+          type: 'categorical',
+          path: currentPath,
+          suggestions: ['pie', 'doughnut', 'bar']
+        });
+      }
+      
+      // Continue traversing
       Object.entries(obj).forEach(([key, value]) => {
-        traverse(value, `${currentPath}.${key}`);
+        traverse(value, `${currentPath}.${key}`, key);
       });
     }
   }
@@ -169,10 +233,37 @@ function analyzeChartableData(data: any, path: string = '$'): ChartableDataset[]
 }
 
 function loadChartJS(): Promise<void> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    // Check if already loaded
+    if ((window as any).Chart) {
+      resolve();
+      return;
+    }
+    
+    // Save the current define function (from Monaco/RequireJS)
+    const originalDefine = (window as any).define;
+    
+    // Temporarily remove define to force Chart.js to load as global
+    (window as any).define = undefined;
+    
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-    script.onload = () => resolve();
+    script.onload = () => {
+      // Restore the original define function
+      (window as any).define = originalDefine;
+      
+      // Check if Chart.js loaded successfully
+      if ((window as any).Chart) {
+        resolve();
+      } else {
+        reject(new Error('Chart.js failed to load'));
+      }
+    };
+    script.onerror = () => {
+      // Restore define on error
+      (window as any).define = originalDefine;
+      reject(new Error('Failed to load Chart.js library'));
+    };
     document.head.appendChild(script);
   });
 }
@@ -185,6 +276,13 @@ function initializeChart(
   exportButton: HTMLButtonElement
 ): void {
   const Chart = (window as any).Chart;
+  
+  if (!Chart) {
+    console.error('Chart.js is not available');
+    canvas.parentElement!.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">Error: Chart.js library not loaded properly. Please refresh the page.</div>';
+    return;
+  }
+  
   let currentChart: any = null;
   
   const renderChart = () => {
