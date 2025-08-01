@@ -27,6 +27,7 @@ class JSONViewer {
     copyBtn: HTMLElement;
     pasteBtn: HTMLElement;
     themeBtn: HTMLElement;
+    mobileThemeBtn: HTMLElement | null;
     tabBtns: NodeListOf<HTMLElement>;
     treeOutput: HTMLElement;
     graphOutput: HTMLElement;
@@ -48,6 +49,7 @@ class JSONViewer {
       copyBtn: document.getElementById("copyBtn")!,
       pasteBtn: document.getElementById("pasteBtn")!,
       themeBtn: document.getElementById("themeBtn")!,
+      mobileThemeBtn: document.getElementById("mobileThemeBtn"),
       tabBtns: document.querySelectorAll(".tab-btn"),
       treeOutput: document.getElementById("treeOutput")!,
       graphOutput: document.getElementById("graphOutput")!,
@@ -116,6 +118,10 @@ class JSONViewer {
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
     this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
     this.elements.themeBtn.addEventListener("click", () => this.toggleTheme());
+    
+    if (this.elements.mobileThemeBtn) {
+      this.elements.mobileThemeBtn.addEventListener("click", () => this.toggleTheme());
+    }
 
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
