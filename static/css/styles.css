@@ -538,6 +538,28 @@ main {
   background: transparent;
 }
 
+/* Beta Badge Styles */
+.beta-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.tab-btn.active .beta-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+}
+
 .tab-btn:hover:not(.active) {
   color: #1a1a1a;
   background: linear-gradient(to bottom, rgba(37, 99, 235, 0.04), rgba(37, 99, 235, 0.01));
@@ -1145,6 +1167,14 @@ main {
   border-bottom-color: #79b8ff;
 }
 
+[data-theme="dark"] .beta-badge {
+  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+}
+
+[data-theme="dark"] .tab-btn.active .beta-badge {
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+}
+
 [data-theme="dark"] .tab-btn:hover:not(.active) {
   color: #e1e4e8;
   background-color: rgba(121, 184, 255, 0.1);
@@ -1290,6 +1320,132 @@ main {
   opacity: 1;
 }
 
+/* Graph Layout */
+.graph-layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.graph-sidebar {
+  width: 300px;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.graph-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stats Panel */
+.stats-panel,
+.details-panel {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stats-panel h3,
+.details-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stat-group {
+  margin-top: 16px;
+}
+
+.stat-group h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-family: "SF Mono", Monaco, monospace;
+}
+
+/* Pattern styles */
+.pattern-item {
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--tree-bg);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.pattern-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.pattern-count {
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Details Panel */
+.detail-item {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.detail-item strong {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.detail-item code {
+  background: var(--tree-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "SF Mono", Monaco, monospace;
+  font-size: 12px;
+}
+
+.detail-group {
+  margin-top: 16px;
+}
+
+.detail-group h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.pattern-reference {
+  padding: 4px 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 11px;
+  margin: 4px 0;
+}
+
 @media (max-width: 480px) {
   .navbar-content {
     padding: 0 15px;
@@ -1380,6 +1536,10 @@ main {
   .graph-output {
     font-size: 12px;
     padding: 12px;
+  }
+  
+  .graph-sidebar {
+    width: 250px;
   }
 
   .tree-control-btn {
