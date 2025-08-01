@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -91,6 +91,31 @@
     <meta name="theme-color" content="#2563eb" />
     <meta name="msapplication-TileColor" content="#2563eb" />
     <link rel="canonical" href="{{ request.url if request else '' }}" />
+    
+    <!-- Critical dark theme styles to prevent flash of white -->
+    <style>
+      .dark {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+      }
+      body {
+        margin: 0;
+        background-color: inherit;
+      }
+    </style>
+    
+    <!-- Immediate theme initialization script -->
+    <script>
+      // Run immediately to set theme before page renders
+      (function() {
+        const savedTheme = localStorage.getItem('theme');
+        const isDarkTheme = savedTheme !== null ? savedTheme === 'dark' : true;
+        if (!isDarkTheme) {
+          document.documentElement.classList.remove('dark');
+        }
+        document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+      })();
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
