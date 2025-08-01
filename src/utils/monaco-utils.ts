@@ -10,6 +10,7 @@ export function initializeMonacoEditor(config: MonacoEditorConfig): Promise<any>
   return new Promise((resolve, reject) => {
     // Check if Monaco is already loaded
     if ((window as any).monaco) {
+      defineCustomThemes(); // Ensure themes are always defined
       const editor = createEditor(config);
       resolve(editor);
       return;
@@ -119,6 +120,94 @@ function defineCustomThemes(): void {
     },
   });
 
+  // GitHub Light theme
+  monaco.editor.defineTheme("github-light", {
+    base: "vs",
+    inherit: true,
+    rules: [
+      { token: "string.key.json", foreground: "d73a49" },
+      { token: "string.value.json", foreground: "032f62" },
+      { token: "number", foreground: "005cc5" },
+      { token: "keyword.json", foreground: "e36209" },
+      { token: "delimiter.bracket.json", foreground: "24292e" },
+    ],
+    colors: {
+      "editor.background": "#ffffff",
+      "editor.foreground": "#24292e",
+      "editor.lineHighlightBackground": "#f6f8fa",
+      "editorLineNumber.foreground": "#959da5",
+      "editorLineNumber.activeForeground": "#24292e",
+      "editor.selectionBackground": "#0366d625",
+      "editor.inactiveSelectionBackground": "#0366d615",
+    },
+  });
+
+  // GitHub Dark theme
+  monaco.editor.defineTheme("github-dark", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+      { token: "string.key.json", foreground: "f97583" },
+      { token: "string.value.json", foreground: "9ecbff" },
+      { token: "number", foreground: "79b8ff" },
+      { token: "keyword.json", foreground: "f97583" },
+      { token: "delimiter.bracket.json", foreground: "e1e4e8" },
+    ],
+    colors: {
+      "editor.background": "#0d1117",
+      "editor.foreground": "#c9d1d9",
+      "editor.lineHighlightBackground": "#161b22",
+      "editorLineNumber.foreground": "#8b949e",
+      "editorLineNumber.activeForeground": "#c9d1d9",
+      "editor.selectionBackground": "#3392ff44",
+      "editor.inactiveSelectionBackground": "#3392ff22",
+    },
+  });
+
+  // Monokai theme
+  monaco.editor.defineTheme("monokai", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+      { token: "string.key.json", foreground: "f92672" },
+      { token: "string.value.json", foreground: "e6db74" },
+      { token: "number", foreground: "ae81ff" },
+      { token: "keyword.json", foreground: "f92672" },
+      { token: "delimiter.bracket.json", foreground: "f8f8f2" },
+    ],
+    colors: {
+      "editor.background": "#272822",
+      "editor.foreground": "#f8f8f2",
+      "editor.lineHighlightBackground": "#3e3d32",
+      "editorLineNumber.foreground": "#75715e",
+      "editorLineNumber.activeForeground": "#f8f8f2",
+      "editor.selectionBackground": "#49483e",
+      "editor.inactiveSelectionBackground": "#49483e99",
+    },
+  });
+
+  // Dracula theme
+  monaco.editor.defineTheme("dracula", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [
+      { token: "string.key.json", foreground: "ff79c6" },
+      { token: "string.value.json", foreground: "f1fa8c" },
+      { token: "number", foreground: "bd93f9" },
+      { token: "keyword.json", foreground: "ff79c6" },
+      { token: "delimiter.bracket.json", foreground: "f8f8f2" },
+    ],
+    colors: {
+      "editor.background": "#282a36",
+      "editor.foreground": "#f8f8f2",
+      "editor.lineHighlightBackground": "#44475a",
+      "editorLineNumber.foreground": "#6272a4",
+      "editorLineNumber.activeForeground": "#f8f8f2",
+      "editor.selectionBackground": "#44475a",
+      "editor.inactiveSelectionBackground": "#44475a99",
+    },
+  });
+
   (window as any).monacoThemesDefined = true;
 }
 
@@ -132,8 +221,17 @@ function setupJSONValidation(): void {
   });
 }
 
-export function setMonacoTheme(editor: any, isDarkTheme: boolean): void {
-  if (editor) {
-    monaco.editor.setTheme(isDarkTheme ? "custom-dark" : "custom-light");
+export function setMonacoTheme(editor: any, themeName?: string, isDarkTheme?: boolean): void {
+  if (editor && (window as any).monaco) {
+    // Ensure themes are defined before setting
+    defineCustomThemes();
+    
+    if (themeName) {
+      // Use specific theme if provided
+      monaco.editor.setTheme(themeName);
+    } else if (isDarkTheme !== undefined) {
+      // Fall back to light/dark theme based on isDarkTheme
+      monaco.editor.setTheme(isDarkTheme ? "custom-dark" : "custom-light");
+    }
   }
 }
