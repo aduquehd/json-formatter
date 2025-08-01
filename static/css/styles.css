@@ -261,6 +261,7 @@ main {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  gap: 12px;
 }
 
 .button-group {
@@ -268,37 +269,53 @@ main {
   gap: 6px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  align-items: center;
+  flex: 1;
 }
 
-/* Theme Controls */
-.theme-controls {
+/* Editor Theme Controls */
+.editor-theme-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
+  background: var(--bg-secondary);
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--border-color);
+}
+
+.theme-select-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .theme-select {
-  padding: 8px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 100px;
-  background: var(--btn-secondary-bg);
-  color: var(--text-secondary);
-  font-size: 14px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 13px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 140px;
+  min-width: 120px;
 }
 
 .theme-select:hover {
-  border-color: var(--border-hover);
-  background: var(--btn-secondary-hover);
+  background: var(--bg-primary);
 }
 
 .theme-select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 2px #667eea;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  margin-left: auto;
 }
 
 .creator-link {
@@ -962,14 +979,19 @@ main {
     display: none;
   }
 
-  .theme-controls {
+  .editor-theme-wrapper {
     width: 100%;
-    justify-content: space-between;
+    padding: 4px 10px;
+  }
+
+  .theme-select-label {
+    font-size: 12px;
   }
 
   .theme-select {
     flex: 1;
-    max-width: 200px;
+    font-size: 12px;
+    min-width: 100px;
   }
 
   .container {
@@ -1287,6 +1309,14 @@ main {
   .mobile-github-link .github-icon {
     width: 14px;
     height: 14px;
+  }
+
+  .editor-theme-wrapper {
+    padding: 4px 8px;
+  }
+
+  .theme-select-label {
+    display: none;
   }
 
   .theme-select {
