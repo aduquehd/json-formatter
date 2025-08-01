@@ -23,7 +23,7 @@ async def read_root(request: Request):
         "index.html",
         {
             "request": request,
-            "title": "JSON Viewer/Formatter",
+            "title": "JSON Viewer",
             "ga_tracking_id": settings.ga_tracking_id,
             "app_env": settings.app_env,
         },
