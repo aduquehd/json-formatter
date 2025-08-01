@@ -1020,6 +1020,15 @@ main {
   display: block;
 }
 
+/* Dark mode styling for creator link */
+[data-theme="dark"] .creator-link {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .creator-link:hover {
+  color: #79b8ff;
+}
+
 .theme-text {
   margin-left: 2px;
 }
