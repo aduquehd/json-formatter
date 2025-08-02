@@ -265,7 +265,7 @@ function loadChartJS(): Promise<void> {
     (window as any).define = undefined;
 
     const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
     script.onload = () => {
       // Restore the original define function
       (window as any).define = originalDefine;
