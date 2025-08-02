@@ -219,7 +219,9 @@
 
     <!-- Load CSS synchronously to prevent rendering issues -->
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Defer toastr CSS loading to improve initial render -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></noscript>
 
     {% if ga_tracking_id %}
     <!-- Google tag (gtag.js) -->
@@ -557,17 +559,34 @@
       </main>
     </div>
 
-    <!-- Load JavaScript libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <!-- Load JavaScript libraries with defer to prevent render blocking -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script>
-      // Wait for all libraries to load before initializing the app
-      window.addEventListener("load", function () {
-        // Libraries loaded
+      // Initialize app after all deferred scripts have loaded
+      window.addEventListener('DOMContentLoaded', function() {
+        // Create a promise that resolves when all libraries are loaded
+        const librariesLoaded = new Promise((resolve) => {
+          const checkLibraries = () => {
+            if (window.jQuery && window.toastr && window.d3 && window.require) {
+              resolve();
+            } else {
+              setTimeout(checkLibraries, 50);
+            }
+          };
+          checkLibraries();
+        });
+        
+        // Load the app module after libraries are ready
+        librariesLoaded.then(() => {
+          const script = document.createElement('script');
+          script.type = 'module';
+          script.src = '{{ url_for("static", path="/js/app.js") }}';
+          document.body.appendChild(script);
+        });
       });
     </script>
-    <script type="module" src="{{ url_for('static', path='/js/app.js') }}"></script>
   </body>
 </html>
