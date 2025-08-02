@@ -1,6 +1,5 @@
-import { generateTreeView } from "./tree-utils.js";
-import { generateGraphView } from "./graph-utils.js";
 import { JSONValue } from "./types.js";
+import { loadTreeUtils, loadGraphUtils } from "./lazy-loader.js";
 
 export interface ViewElements {
   treeOutput: HTMLElement;
@@ -12,7 +11,7 @@ export interface ViewElements {
   searchOutput?: HTMLElement;
 }
 
-export function updateViews(
+export async function updateViews(
   data: JSONValue,
   elements: ViewElements,
   currentTab: string,
@@ -20,13 +19,14 @@ export function updateViews(
   preserveTreeState: boolean = false,
   onBeforeEditorUpdate?: () => void,
   onAfterEditorUpdate?: () => void
-): void {
-  // Always update tree view (it's lightweight)
-  generateTreeView(
+): Promise<void> {
+  // Always update tree view (it's lightweight and commonly used)
+  const treeUtils = await loadTreeUtils();
+  treeUtils.generateTreeView(
     data,
     elements.treeOutput,
     editor
-      ? (newData) => {
+      ? (newData: JSONValue) => {
           // Update the editor when tree view changes
           if (onBeforeEditorUpdate) onBeforeEditorUpdate();
           const formatted = JSON.stringify(newData, null, 2);
@@ -39,7 +39,8 @@ export function updateViews(
 
   // Only regenerate graph view if it's the current tab
   if (currentTab === "graph") {
-    generateGraphView(data, elements.graphOutput);
+    const graphUtils = await loadGraphUtils();
+    graphUtils.generateGraphView(data, elements.graphOutput);
   }
 }
 
@@ -53,13 +54,13 @@ export function clearViews(elements: ViewElements): void {
   if (elements.searchOutput) elements.searchOutput.innerHTML = "";
 }
 
-export function validateAndUpdateViews(
+export async function validateAndUpdateViews(
   editor: any,
   elements: ViewElements,
   preserveTreeState: boolean = true,
   onBeforeEditorUpdate?: () => void,
   onAfterEditorUpdate?: () => void
-): void {
+): Promise<void> {
   if (!editor) return;
 
   try {
@@ -70,10 +71,11 @@ export function validateAndUpdateViews(
     }
 
     const parsed = JSON.parse(content);
-    generateTreeView(
+    const treeUtils = await loadTreeUtils();
+    treeUtils.generateTreeView(
       parsed,
       elements.treeOutput,
-      (newData) => {
+      (newData: JSONValue) => {
         // Update the editor when tree view changes
         if (onBeforeEditorUpdate) onBeforeEditorUpdate();
         const formatted = JSON.stringify(newData, null, 2);

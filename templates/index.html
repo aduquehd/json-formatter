@@ -166,9 +166,9 @@
         background-clip: text;
       }
       
-      /* Hide elements until full CSS loads */
+      /* Ensure elements are visible during initial load */
       .btn, .tabs, .output-section {
-        visibility: hidden;
+        opacity: 1;
       }
     </style>
 
@@ -187,10 +187,21 @@
     <!-- Preload critical CSS -->
     <link rel="preload" href="{{ url_for('static', path='/css/styles.css') }}" as="style" />
     
-    <!-- Load non-critical CSS asynchronously -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" onload="document.querySelectorAll('.btn, .tabs, .output-section').forEach(el => el.style.visibility = 'visible');" />
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></noscript>
+    <!-- Preload only essential JavaScript modules for initial JSON formatting -->
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/app.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/theme-utils.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/monaco-utils.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/json-utils.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/clipboard-utils.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/view-utils.js') }}" />
+    
+    <!-- Non-essential modules will be lazy-loaded when needed:
+         tree-utils.js, graph-utils.js, diff-utils.js, stats-utils.js,
+         chart-utils.js, search-utils.js -->
+    
+    <!-- Load CSS synchronously to prevent rendering issues -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     {% if ga_tracking_id %}
     <!-- Google tag (gtag.js) -->
@@ -530,11 +541,11 @@
       </main>
     </div>
 
-    <!-- Defer JavaScript loading -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <!-- Load JavaScript libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script>
       // Wait for all libraries to load before initializing the app
       window.addEventListener("load", function () {

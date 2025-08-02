@@ -1,12 +1,7 @@
 "use strict";
 
-import { generateTreeView, expandAll, collapseAll } from "./utils/tree-utils.js";
-import { generateGraphView } from "./utils/graph-utils.js";
-import { generateDiffView } from "./utils/diff-utils.js";
-import { generateStatsView } from "./utils/stats-utils.js";
-// import { generateMapView } from "./utils/map-utils.js";
-import { generateChartView } from "./utils/chart-utils.js";
-import { generateSearchView } from "./utils/search-utils.js";
+// Tree utils are loaded dynamically when needed
+import { loadTreeUtils, loadGraphUtils, loadDiffUtils, loadStatsUtils, loadChartUtils, loadSearchUtils } from "./utils/lazy-loader.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
@@ -22,9 +17,18 @@ interface AppState {
   isDarkTheme: boolean;
 }
 
+interface ViewCache {
+  jsonHash: string;
+  generatedTabs: Set<string>;
+}
+
 class JSONViewer {
   private state: AppState;
   private isUpdatingFromTree: boolean = false;
+  private viewCache: ViewCache = {
+    jsonHash: '',
+    generatedTabs: new Set()
+  };
   private elements: {
     formatBtn: HTMLElement;
     compactBtn: HTMLElement;
@@ -108,6 +112,8 @@ class JSONViewer {
     // Listen for content changes
     this.state.editor.onDidChangeModelContent(() => {
       if (!this.isUpdatingFromTree) {
+        // Clear view cache when JSON changes
+        this.clearViewCache();
         this.validateAndUpdateTree();
       }
     });
@@ -120,8 +126,8 @@ class JSONViewer {
     });
   }
 
-  private validateAndUpdateTree(): void {
-    validateAndUpdateViews(
+  private async validateAndUpdateTree(): Promise<void> {
+    await validateAndUpdateViews(
       this.state.editor,
       {
         treeOutput: this.elements.treeOutput,
@@ -166,12 +172,14 @@ class JSONViewer {
     });
 
     // Tree control buttons
-    this.elements.expandAllBtn?.addEventListener("click", () => {
-      expandAll(this.elements.treeOutput);
+    this.elements.expandAllBtn?.addEventListener("click", async () => {
+      const treeUtils = await loadTreeUtils();
+      treeUtils.expandAll(this.elements.treeOutput);
     });
 
-    this.elements.collapseAllBtn?.addEventListener("click", () => {
-      collapseAll(this.elements.treeOutput);
+    this.elements.collapseAllBtn?.addEventListener("click", async () => {
+      const treeUtils = await loadTreeUtils();
+      treeUtils.collapseAll(this.elements.treeOutput);
     });
 
     // Keyboard shortcuts
@@ -185,11 +193,11 @@ class JSONViewer {
     });
   }
 
-  private formatJSON(): void {
+  private async formatJSON(): Promise<void> {
     const result = formatJSONInEditor(this.state.editor);
 
     if (result.success && result.data) {
-      updateViews(
+      await updateViews(
         result.data,
         {
           treeOutput: this.elements.treeOutput,
@@ -208,11 +216,11 @@ class JSONViewer {
     }
   }
 
-  private compactJSON(): void {
+  private async compactJSON(): Promise<void> {
     const result = compactJSONInEditor(this.state.editor);
 
     if (result.success && result.data) {
-      updateViews(
+      await updateViews(
         result.data,
         {
           treeOutput: this.elements.treeOutput,
@@ -233,6 +241,7 @@ class JSONViewer {
 
   private clearAll(): void {
     clearEditor(this.state.editor);
+    this.clearViewCache();
     clearViews({
       treeOutput: this.elements.treeOutput,
       graphOutput: this.elements.graphOutput,
@@ -266,7 +275,11 @@ class JSONViewer {
       const prevOutput = this.elements[
         `${previousTab}Output` as keyof typeof this.elements
       ] as HTMLElement;
-      if (prevOutput) prevOutput.innerHTML = "";
+      if (prevOutput) {
+        prevOutput.innerHTML = "";
+        // Also remove from cache so it regenerates next time
+        this.viewCache.generatedTabs.delete(previousTab);
+      }
     }
 
     // Update tab buttons
@@ -290,26 +303,49 @@ class JSONViewer {
         const content = this.state.editor.getValue();
         if (content.trim()) {
           const parsed = JSON.parse(content);
-
-          switch (tabName) {
+          const currentHash = this.hashJSON(content);
+          
+          // Check if JSON has changed
+          if (currentHash !== this.viewCache.jsonHash) {
+            // JSON changed, clear cache
+            this.viewCache.jsonHash = currentHash;
+            this.viewCache.generatedTabs.clear();
+          }
+          
+          // Only generate view if not already cached for current JSON
+          if (!this.viewCache.generatedTabs.has(tabName)) {
+            this.viewCache.generatedTabs.add(tabName);
+            
+            switch (tabName) {
             case "graph":
-              generateGraphView(parsed, this.elements.graphOutput);
+              loadGraphUtils().then(module => {
+                module.generateGraphView(parsed, this.elements.graphOutput);
+              });
               break;
             case "diff":
-              generateDiffView(parsed, this.elements.diffOutput);
+              loadDiffUtils().then(module => {
+                module.generateDiffView(parsed, this.elements.diffOutput);
+              });
               break;
             case "stats":
-              generateStatsView(parsed, this.elements.statsOutput);
+              loadStatsUtils().then(module => {
+                module.generateStatsView(parsed, this.elements.statsOutput);
+              });
               break;
             // case "map":
             //   generateMapView(parsed, this.elements.mapOutput);
             //   break;
             case "chart":
-              generateChartView(parsed, this.elements.chartOutput);
+              loadChartUtils().then(module => {
+                module.generateChartView(parsed, this.elements.chartOutput);
+              });
               break;
             case "search":
-              generateSearchView(parsed, this.elements.searchOutput);
+              loadSearchUtils().then(module => {
+                module.generateSearchView(parsed, this.elements.searchOutput);
+              });
               break;
+            }
           }
         }
       } catch (e) {
@@ -323,6 +359,22 @@ class JSONViewer {
         }
       }
     }
+  }
+  
+  private hashJSON(content: string): string {
+    // Simple hash function for JSON content
+    let hash = 0;
+    for (let i = 0; i < content.length; i++) {
+      const char = content.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return hash.toString(36);
+  }
+  
+  private clearViewCache(): void {
+    this.viewCache.jsonHash = '';
+    this.viewCache.generatedTabs.clear();
   }
 
   private toggleTheme(): void {
