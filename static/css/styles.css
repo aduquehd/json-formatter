@@ -17,7 +17,11 @@
   --shadow-light: rgba(0, 0, 0, 0.02);
   --shadow-medium: rgba(0, 0, 0, 0.1);
   --accent-bg: rgba(0, 123, 255, 0.02);
-  --navbar-bg: linear-gradient(135deg, rgba(249, 250, 251, 0.98) 0%, rgba(243, 244, 246, 0.98) 100%);
+  --navbar-bg: linear-gradient(
+    135deg,
+    rgba(249, 250, 251, 0.98) 0%,
+    rgba(243, 244, 246, 0.98) 100%
+  );
   --btn-secondary-bg: #f8f9fa;
   --btn-secondary-hover: #e9ecef;
   --input-bg: #ffffff;
@@ -125,7 +129,9 @@ body::before {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   z-index: 1000;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="dark"] .navbar {
@@ -1150,7 +1156,7 @@ main {
     padding: 8px 12px;
     font-size: 13px;
   }
-  
+
   .tab-separator {
     margin: 0 4px;
     height: 16px;
@@ -1259,7 +1265,9 @@ main {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .monaco-editor-container:hover {
@@ -1397,7 +1405,7 @@ main {
   backdrop-filter: blur(20px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
@@ -1405,7 +1413,7 @@ main {
 [data-theme="light"] .graph-controls-container {
   background: rgba(255, 255, 255, 0.85);
   border-color: rgba(99, 102, 241, 0.2);
-  box-shadow: 
+  box-shadow:
     0 4px 16px rgba(99, 102, 241, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
@@ -1463,16 +1471,18 @@ main {
   bottom: 0;
   border-radius: 8px;
   padding: 1px;
-  background: linear-gradient(45deg, 
-    #00ffff 0%, 
-    #0099ff 25%, 
-    #ff00ff 50%, 
-    #ff0099 75%, 
-    #00ffff 100%);
+  background: linear-gradient(
+    45deg,
+    #00ffff 0%,
+    #0099ff 25%,
+    #ff00ff 50%,
+    #ff0099 75%,
+    #00ffff 100%
+  );
   background-size: 300% 300%;
   animation: borderGradient 3s ease infinite;
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -1481,18 +1491,26 @@ main {
 }
 
 [data-theme="light"] .graph-control-btn.futuristic .btn-border {
-  background: linear-gradient(45deg, 
-    #6366f1 0%, 
-    #8b5cf6 25%, 
-    #ec4899 50%, 
-    #f59e0b 75%, 
-    #6366f1 100%);
+  background: linear-gradient(
+    45deg,
+    #6366f1 0%,
+    #8b5cf6 25%,
+    #ec4899 50%,
+    #f59e0b 75%,
+    #6366f1 100%
+  );
 }
 
 @keyframes borderGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Pulse effect for futuristic buttons */
@@ -2045,20 +2063,20 @@ main {
     font-size: 12px;
     padding: 12px;
   }
-  
+
   .graph-sidebar {
     width: 280px;
   }
-  
+
   .display-mode-selector {
     font-size: 12px;
     padding: 6px 8px;
   }
-  
+
   .display-mode-selector label {
     font-size: 12px;
   }
-  
+
   .display-mode-select {
     font-size: 12px;
     min-width: 120px;
@@ -2075,18 +2093,18 @@ main {
     padding: 6px 10px;
     height: 32px;
   }
-  
+
   .graph-sidebar {
     width: 100%;
     max-width: 280px;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
   }
-  
+
   .graph-layout {
     flex-direction: column;
   }
-  
+
   .graph-container {
     min-height: 400px;
   }
@@ -2213,10 +2231,22 @@ main {
   font-weight: 600;
 }
 
-.diff-added { background: #d1f5d3; color: #22863a; }
-.diff-removed { background: #ffdce0; color: #d73a49; }
-.diff-modified { background: #fff5b1; color: #b08800; }
-.diff-type-changed { background: #e3d1ff; color: #6f42c1; }
+.diff-added {
+  background: #d1f5d3;
+  color: #22863a;
+}
+.diff-removed {
+  background: #ffdce0;
+  color: #d73a49;
+}
+.diff-modified {
+  background: #fff5b1;
+  color: #b08800;
+}
+.diff-type-changed {
+  background: #e3d1ff;
+  color: #6f42c1;
+}
 
 .diff-list {
   display: flex;
@@ -2230,10 +2260,18 @@ main {
   overflow: hidden;
 }
 
-.diff-item.diff-added { border-color: #22863a; }
-.diff-item.diff-removed { border-color: #d73a49; }
-.diff-item.diff-modified { border-color: #b08800; }
-.diff-item.diff-type-changed { border-color: #6f42c1; }
+.diff-item.diff-added {
+  border-color: #22863a;
+}
+.diff-item.diff-removed {
+  border-color: #d73a49;
+}
+.diff-item.diff-modified {
+  border-color: #b08800;
+}
+.diff-item.diff-type-changed {
+  border-color: #6f42c1;
+}
 
 .diff-path {
   padding: 10px;
@@ -2350,12 +2388,24 @@ main {
   transition: width 0.3s ease;
 }
 
-.type-bar-fill.type-string { background: var(--json-string); }
-.type-bar-fill.type-number { background: var(--json-number); }
-.type-bar-fill.type-boolean { background: var(--json-boolean); }
-.type-bar-fill.type-null { background: var(--json-null); }
-.type-bar-fill.type-object { background: var(--tree-object); }
-.type-bar-fill.type-array { background: var(--tree-array); }
+.type-bar-fill.type-string {
+  background: var(--json-string);
+}
+.type-bar-fill.type-number {
+  background: var(--json-number);
+}
+.type-bar-fill.type-boolean {
+  background: var(--json-boolean);
+}
+.type-bar-fill.type-null {
+  background: var(--json-null);
+}
+.type-bar-fill.type-object {
+  background: var(--tree-object);
+}
+.type-bar-fill.type-array {
+  background: var(--tree-array);
+}
 
 .type-bar-value {
   position: absolute;
@@ -2981,21 +3031,21 @@ main {
   .diff-input-section {
     grid-template-columns: 1fr;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .search-options {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .filter-group {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .filter-group label {
     min-width: auto;
   }

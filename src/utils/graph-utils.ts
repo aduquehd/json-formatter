@@ -66,7 +66,7 @@ interface EnumInfo {
 interface ValueDistribution {
   uniqueValues: number;
   totalOccurrences: number;
-  topValues: Array<{value: any, count: number}>;
+  topValues: Array<{ value: any; count: number }>;
 }
 
 interface NumericRange {
@@ -103,10 +103,10 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     // Create layout with stats panel
     const layout = createLayout();
     container.appendChild(layout.container);
-    
+
     const controls = createControls();
     layout.graphContainer.appendChild(controls);
-    
+
     // Add display mode selector
     const displayModeSelector = createDisplayModeSelector();
     layout.graphContainer.appendChild(displayModeSelector);
@@ -141,17 +141,17 @@ export function generateGraphView(data: any, container: HTMLElement): void {
 
     const graphData = convertJsonToGraph(data);
     const stats = analyzeJSONStructure(data, graphData.nodes);
-    
+
     // Display stats
     displayStats(layout.statsPanel, stats, graphData.nodes);
-    
+
     // Set initial display mode to "values" for better default view
     let currentDisplayMode: NodeDisplayMode = "values";
     updateNodeLabels(graphData.nodes, currentDisplayMode, stats);
 
     // Group nodes by type for better visualization
     const groupedNodes = groupNodesByType(graphData.nodes);
-    
+
     const simulation = d3
       .forceSimulation(graphData.nodes)
       .force(
@@ -171,13 +171,22 @@ export function generateGraphView(data: any, container: HTMLElement): void {
       .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(0, 0))
       .force("collision", d3.forceCollide().radius(30))
-      .force("radial", d3.forceRadial((d: any) => {
-        // Create radial grouping by type
-        if (d.type === "root") return 0;
-        if (d.type === "object") return 150;
-        if (d.type === "array") return 250;
-        return 350;
-      }, 0, 0).strength(0.1));
+      .force(
+        "radial",
+        d3
+          .forceRadial(
+            (d: any) => {
+              // Create radial grouping by type
+              if (d.type === "root") return 0;
+              if (d.type === "object") return 150;
+              if (d.type === "array") return 250;
+              return 350;
+            },
+            0,
+            0
+          )
+          .strength(0.1)
+      );
 
     const link = g
       .append("g")
@@ -197,9 +206,8 @@ export function generateGraphView(data: any, container: HTMLElement): void {
       .call(drag(simulation));
 
     // Color scale based on depth
-    const colorScale = d3.scaleSequential(d3.interpolateViridis)
-      .domain([0, stats.maxDepth]);
-    
+    const colorScale = d3.scaleSequential(d3.interpolateViridis).domain([0, stats.maxDepth]);
+
     node
       .append("circle")
       .attr("r", (d: any) => {
@@ -253,7 +261,7 @@ export function generateGraphView(data: any, container: HTMLElement): void {
     });
 
     setupControls(svg, zoom);
-    
+
     // Setup display mode selector
     setupDisplayModeSelector((mode: NodeDisplayMode) => {
       currentDisplayMode = mode;
@@ -268,7 +276,13 @@ function convertJsonToGraph(data: any): { nodes: GraphNode[]; links: GraphLink[]
   const links: GraphLink[] = [];
   let nodeId = 0;
 
-  function traverse(obj: any, parentId: string | null, key: string, depth: number, path: string): string {
+  function traverse(
+    obj: any,
+    parentId: string | null,
+    key: string,
+    depth: number,
+    path: string
+  ): string {
     const id = `node-${nodeId++}`;
     const type = Array.isArray(obj)
       ? "array"
@@ -431,7 +445,7 @@ function createTooltip(container: HTMLElement): HTMLElement {
 function showTooltip(tooltip: HTMLElement, event: any, d: any): void {
   let content = `<strong>${d.name}</strong>`;
   content += `<br><span style="color: #888;">Path: ${d.path}</span>`;
-  
+
   if (d.type === "value" && d.value !== undefined) {
     content += `<br>Value: ${JSON.stringify(d.value)}`;
     content += `<br>Type: ${d.valueType}`;
@@ -442,7 +456,7 @@ function showTooltip(tooltip: HTMLElement, event: any, d: any): void {
     content += `<br>Type: Array`;
     content += `<br>Length: ${d.arrayLength || 0}`;
   }
-  
+
   content += `<br>Depth: ${d.depth}`;
 
   tooltip.innerHTML = content;
@@ -459,7 +473,12 @@ function hideTooltip(tooltip: HTMLElement): void {
   tooltip.classList.remove("visible");
 }
 
-function createLayout(): { container: HTMLElement; graphContainer: HTMLElement; statsPanel: HTMLElement; detailsPanel: HTMLElement } {
+function createLayout(): {
+  container: HTMLElement;
+  graphContainer: HTMLElement;
+  statsPanel: HTMLElement;
+  detailsPanel: HTMLElement;
+} {
   const container = document.createElement("div");
   container.className = "graph-layout";
   container.innerHTML = `
@@ -477,12 +496,12 @@ function createLayout(): { container: HTMLElement; graphContainer: HTMLElement; 
     </div>
     <div class="graph-container"></div>
   `;
-  
+
   return {
     container,
     graphContainer: container.querySelector(".graph-container")!,
     statsPanel: container.querySelector(".stats-content")!,
-    detailsPanel: container.querySelector(".details-content")!
+    detailsPanel: container.querySelector(".details-content")!,
   };
 }
 
@@ -505,11 +524,11 @@ function analyzeJSONStructure(data: any, nodes: GraphNode[]): JSONStats {
       anomalies: new Map(),
       sensitiveData: new Map(),
       dateFields: new Set(),
-      numericRanges: new Map()
-    }
+      numericRanges: new Map(),
+    },
   };
-  
-  nodes.forEach(node => {
+
+  nodes.forEach((node) => {
     // Count node types
     if (node.type === "object") stats.objectCount++;
     else if (node.type === "array") {
@@ -517,55 +536,66 @@ function analyzeJSONStructure(data: any, nodes: GraphNode[]): JSONStats {
       if (node.arrayLength !== undefined) {
         stats.arrayLengths.push(node.arrayLength);
       }
-    }
-    else if (node.type === "value") stats.valueCount++;
-    
+    } else if (node.type === "value") stats.valueCount++;
+
     // Track max depth
     if (node.depth > stats.maxDepth) stats.maxDepth = node.depth;
-    
+
     // Track key frequency (excluding array indices)
     if (node.type !== "root" && !node.name.startsWith("[")) {
       stats.keyFrequency.set(node.name, (stats.keyFrequency.get(node.name) || 0) + 1);
     }
-    
+
     // Track value type distribution
     if (node.valueType) {
-      stats.typeDistribution.set(node.valueType, (stats.typeDistribution.get(node.valueType) || 0) + 1);
+      stats.typeDistribution.set(
+        node.valueType,
+        (stats.typeDistribution.get(node.valueType) || 0) + 1
+      );
     }
   });
-  
+
   // Detect patterns (repeated structures)
   detectPatterns(nodes, stats);
-  
+
   // Analyze business logic patterns
   analyzeBusinessLogic(data, nodes, stats);
-  
+
   return stats;
 }
 
 function detectPatterns(nodes: GraphNode[], stats: JSONStats): void {
   // Find repeated object structures
   const structureMap = new Map<string, string[]>();
-  
-  nodes.filter(n => n.type === "object").forEach(node => {
-    const children = nodes.filter(n => n.path?.startsWith(node.path + ".") && n.path.split(".").length === node.path!.split(".").length + 1);
-    const structure = children.map(c => c.name).sort().join(",");
-    
-    if (structure) {
-      if (!structureMap.has(structure)) {
-        structureMap.set(structure, []);
+
+  nodes
+    .filter((n) => n.type === "object")
+    .forEach((node) => {
+      const children = nodes.filter(
+        (n) =>
+          n.path?.startsWith(node.path + ".") &&
+          n.path.split(".").length === node.path!.split(".").length + 1
+      );
+      const structure = children
+        .map((c) => c.name)
+        .sort()
+        .join(",");
+
+      if (structure) {
+        if (!structureMap.has(structure)) {
+          structureMap.set(structure, []);
+        }
+        structureMap.get(structure)!.push(node.path!);
       }
-      structureMap.get(structure)!.push(node.path!);
-    }
-  });
-  
+    });
+
   // Convert to patterns
   structureMap.forEach((paths, structure) => {
     if (paths.length > 1) {
       stats.patterns.push({
         name: `Object with keys: ${structure}`,
         occurrences: paths.length,
-        paths: paths.slice(0, 5) // Limit to first 5 examples
+        paths: paths.slice(0, 5), // Limit to first 5 examples
       });
     }
   });
@@ -573,18 +603,18 @@ function detectPatterns(nodes: GraphNode[], stats: JSONStats): void {
 
 function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]): void {
   const ba = stats.businessAnalytics;
-  let html = '';
-  
+  let html = "";
+
   // Sensitive Data (shown first if present)
   if (ba.sensitiveData.size > 0) {
     html += '<div class="stat-group"><h4>Sensitive Data ⚠️</h4>';
     ba.sensitiveData.forEach((type, key) => {
-      const icon = type === 'email' ? '📧' : '📱';
+      const icon = type === "email" ? "📧" : "📱";
       html += `<div class="sensitive-item">${icon} ${key}</div>`;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   // Basic stats
   html += `
     <div class="stat-item">
@@ -611,7 +641,7 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
       </div>
     </div>
   `;
-  
+
   // Value type distribution
   if (stats.typeDistribution.size > 0) {
     html += '<div class="stat-group"><h4>Value Types</h4>';
@@ -623,9 +653,9 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
         </div>
       `;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   // Array statistics
   if (stats.arrayLengths.length > 0) {
     const avgLength = stats.arrayLengths.reduce((a, b) => a + b, 0) / stats.arrayLengths.length;
@@ -644,12 +674,12 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
       </div>
     `;
   }
-  
+
   // Most frequent keys
   const topKeys = Array.from(stats.keyFrequency.entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
-  
+
   if (topKeys.length > 0) {
     html += '<div class="stat-group"><h4>Top Keys</h4>';
     topKeys.forEach(([key, count]) => {
@@ -660,62 +690,69 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
         </div>
       `;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   // Business Analytics
-  
+
   // Enumerations
   if (ba.enumerations.size > 0) {
     html += '<div class="stat-group"><h4>Enumerations</h4>';
-    Array.from(ba.enumerations.entries()).slice(0, 3).forEach(([key, enumInfo]) => {
-      const topValues = Array.from(enumInfo.values.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([val, count]) => `${JSON.parse(val)} (${Math.round(count/enumInfo.totalCount*100)}%)`)
-        .join(', ');
-      html += `
+    Array.from(ba.enumerations.entries())
+      .slice(0, 3)
+      .forEach(([key, enumInfo]) => {
+        const topValues = Array.from(enumInfo.values.entries())
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3)
+          .map(
+            ([val, count]) =>
+              `${JSON.parse(val)} (${Math.round((count / enumInfo.totalCount) * 100)}%)`
+          )
+          .join(", ");
+        html += `
         <div class="enum-item">
           <div class="enum-key">${key}:</div>
           <div class="enum-values">${topValues}</div>
         </div>
       `;
-    });
-    html += '</div>';
+      });
+    html += "</div>";
   }
-  
+
   // Potential IDs
   if (ba.potentialIds.size > 0) {
     html += '<div class="stat-group"><h4>Potential IDs 🔑</h4>';
-    Array.from(ba.potentialIds).slice(0, 5).forEach(id => {
-      html += `<div class="id-item">${id}</div>`;
-    });
-    html += '</div>';
+    Array.from(ba.potentialIds)
+      .slice(0, 5)
+      .forEach((id) => {
+        html += `<div class="id-item">${id}</div>`;
+      });
+    html += "</div>";
   }
-  
+
   // Data Completeness
   const incompleteFields = Array.from(ba.dataCompleteness.entries())
     .filter(([_, completeness]) => completeness < 100)
     .sort((a, b) => a[1] - b[1])
     .slice(0, 5);
-  
+
   if (incompleteFields.length > 0) {
     html += '<div class="stat-group"><h4>Data Completeness</h4>';
     incompleteFields.forEach(([key, completeness]) => {
       html += `
         <div class="stat-item">
           <span class="stat-label">${key}:</span>
-          <span class="stat-value ${completeness < 50 ? 'low-completeness' : ''}">${Math.round(completeness)}%</span>
+          <span class="stat-value ${completeness < 50 ? "low-completeness" : ""}">${Math.round(completeness)}%</span>
         </div>
       `;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   // Patterns
   if (stats.patterns.length > 0) {
     html += '<div class="stat-group"><h4>Patterns Found</h4>';
-    stats.patterns.slice(0, 3).forEach(pattern => {
+    stats.patterns.slice(0, 3).forEach((pattern) => {
       html += `
         <div class="pattern-item">
           <div class="pattern-name">${pattern.name}</div>
@@ -723,20 +760,20 @@ function displayStats(panel: HTMLElement, stats: JSONStats, nodes: GraphNode[]):
         </div>
       `;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   panel.innerHTML = html;
 }
 
 function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSONStats): void {
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     switch (mode) {
       case "keys":
         // Default behavior - show property keys
         node.displayLabel = node.name;
         break;
-        
+
       case "values":
         // Show value preview for leaf nodes
         if (node.type === "value") {
@@ -750,7 +787,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           node.displayLabel = node.name;
         }
         break;
-        
+
       case "types":
         // Show data type information
         if (node.type === "value") {
@@ -763,7 +800,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           node.displayLabel = node.name;
         }
         break;
-        
+
       case "analytics":
         // Show analytical information
         if (node.type === "value") {
@@ -776,7 +813,8 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           }
         } else if (node.type === "array") {
           // Show array size analytics
-          const avgLength = stats.arrayLengths.reduce((a, b) => a + b, 0) / stats.arrayLengths.length;
+          const avgLength =
+            stats.arrayLengths.reduce((a, b) => a + b, 0) / stats.arrayLengths.length;
           if (node.arrayLength! > avgLength * 1.5) {
             node.displayLabel = `${node.name} [Large: ${node.arrayLength}]`;
           } else if (node.arrayLength === 0) {
@@ -786,7 +824,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           }
         } else if (node.type === "object") {
           // Check if this object matches a pattern
-          const matchesPattern = stats.patterns.some(p => p.paths.includes(node.path!));
+          const matchesPattern = stats.patterns.some((p) => p.paths.includes(node.path!));
           if (matchesPattern) {
             node.displayLabel = `${node.name} 📊`;
           } else if (node.childCount === 0) {
@@ -798,7 +836,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           node.displayLabel = node.name;
         }
         break;
-        
+
       case "path":
         // Show simplified path information
         const pathParts = node.path!.split(".");
@@ -808,7 +846,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           node.displayLabel = node.path!;
         }
         break;
-        
+
       case "business":
         // Show business logic insights
         if (node.type === "value" && node.businessInfo) {
@@ -818,7 +856,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           } else if (info.isPotentialId) {
             node.displayLabel = `${node.name} 🔑`;
           } else if (info.isSensitive) {
-            const icon = info.dataType === 'email' ? '📧' : '📱';
+            const icon = info.dataType === "email" ? "📧" : "📱";
             node.displayLabel = `${node.name} ${icon}`;
           } else if (info.isAnomaly) {
             node.displayLabel = `${node.name} ⚠️`;
@@ -837,9 +875,12 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
             node.displayLabel = `${node.name} [${node.arrayLength}]`;
           }
         } else if (node.type === "object") {
-          const childKeys = nodes.filter(n => n.path?.startsWith(node.path + ".") && 
-            n.path.split(".").length === node.path!.split(".").length + 1);
-          const hasId = childKeys.some(n => stats.businessAnalytics.potentialIds.has(n.name));
+          const childKeys = nodes.filter(
+            (n) =>
+              n.path?.startsWith(node.path + ".") &&
+              n.path.split(".").length === node.path!.split(".").length + 1
+          );
+          const hasId = childKeys.some((n) => stats.businessAnalytics.potentialIds.has(n.name));
           if (hasId) {
             node.displayLabel = `${node.name} 🏷️`;
           } else {
@@ -849,7 +890,7 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
           node.displayLabel = node.name;
         }
         break;
-        
+
       default:
         node.displayLabel = node.name;
     }
@@ -859,9 +900,9 @@ function updateNodeLabels(nodes: GraphNode[], mode: NodeDisplayMode, stats: JSON
 function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): void {
   const valuesByKey = new Map<string, any[]>();
   const keyPaths = new Map<string, string[]>();
-  
+
   // Collect all values by key name
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     if (node.type === "value" && node.value !== undefined && node.value !== null) {
       const key = node.name;
       if (!valuesByKey.has(key)) {
@@ -872,36 +913,40 @@ function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): 
       keyPaths.get(key)!.push(node.path!);
     }
   });
-  
+
   // Analyze each key's values
   valuesByKey.forEach((values, key) => {
     const uniqueValues = new Set(values);
     const valueCount = new Map<any, number>();
-    
+
     // Count occurrences
-    values.forEach(v => {
+    values.forEach((v) => {
       const vStr = JSON.stringify(v);
       valueCount.set(vStr, (valueCount.get(vStr) || 0) + 1);
     });
-    
+
     // Check for enumerations (limited set of values)
     if (uniqueValues.size <= 10 && values.length >= 3 && uniqueValues.size < values.length * 0.5) {
       const enumInfo: EnumInfo = {
         values: new Map(),
         totalCount: values.length,
-        isLikelyEnum: true
+        isLikelyEnum: true,
       };
-      
+
       valueCount.forEach((count, value) => {
         enumInfo.values.set(value, count);
       });
-      
+
       stats.businessAnalytics.enumerations.set(key, enumInfo);
     }
-    
+
     // Check for potential IDs
-    if (key.toLowerCase().includes('id') || key.toLowerCase().includes('key') || 
-        key.toLowerCase().includes('uuid') || key.toLowerCase().includes('code')) {
+    if (
+      key.toLowerCase().includes("id") ||
+      key.toLowerCase().includes("key") ||
+      key.toLowerCase().includes("uuid") ||
+      key.toLowerCase().includes("code")
+    ) {
       if (uniqueValues.size === values.length) {
         stats.businessAnalytics.potentialIds.add(key);
       }
@@ -909,66 +954,72 @@ function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): 
       // Also check if all values are unique even without ID-like name
       stats.businessAnalytics.potentialIds.add(key);
     }
-    
+
     // Check for sensitive data patterns
-    if (typeof values[0] === 'string') {
+    if (typeof values[0] === "string") {
       const sampleValue = values[0];
       if (/^[\w._%+-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(sampleValue)) {
-        stats.businessAnalytics.sensitiveData.set(key, 'email');
-      } else if (/^\+?[1-9]\d{1,14}$/.test(sampleValue.replace(/[\s()-]/g, ''))) {
-        stats.businessAnalytics.sensitiveData.set(key, 'phone');
-      } else if (/^\d{4}-\d{2}-\d{2}/.test(sampleValue) || /^\d{2}\/\d{2}\/\d{4}/.test(sampleValue)) {
+        stats.businessAnalytics.sensitiveData.set(key, "email");
+      } else if (/^\+?[1-9]\d{1,14}$/.test(sampleValue.replace(/[\s()-]/g, ""))) {
+        stats.businessAnalytics.sensitiveData.set(key, "phone");
+      } else if (
+        /^\d{4}-\d{2}-\d{2}/.test(sampleValue) ||
+        /^\d{2}\/\d{2}\/\d{4}/.test(sampleValue)
+      ) {
         stats.businessAnalytics.dateFields.add(key);
       }
     }
-    
+
     // Numeric analysis
-    if (typeof values[0] === 'number') {
+    if (typeof values[0] === "number") {
       const numbers = values as number[];
       const min = Math.min(...numbers);
       const max = Math.max(...numbers);
       const avg = numbers.reduce((a, b) => a + b, 0) / numbers.length;
-      
+
       const range: NumericRange = {
         min,
         max,
         avg,
-        isLikelyMonetary: key.toLowerCase().includes('price') || key.toLowerCase().includes('cost') ||
-                         key.toLowerCase().includes('amount') || key.toLowerCase().includes('total'),
-        isLikelyId: uniqueValues.size === values.length && Number.isInteger(min) && min > 0
+        isLikelyMonetary:
+          key.toLowerCase().includes("price") ||
+          key.toLowerCase().includes("cost") ||
+          key.toLowerCase().includes("amount") ||
+          key.toLowerCase().includes("total"),
+        isLikelyId: uniqueValues.size === values.length && Number.isInteger(min) && min > 0,
       };
-      
+
       stats.businessAnalytics.numericRanges.set(key, range);
     }
-    
+
     // Store value distribution
     const topValues = Array.from(valueCount.entries())
       .map(([value, count]) => ({ value: JSON.parse(value), count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
-    
+
     stats.businessAnalytics.valueDistributions.set(key, {
       uniqueValues: uniqueValues.size,
       totalOccurrences: values.length,
-      topValues
+      topValues,
     });
   });
-  
+
   // Calculate data completeness
   const allObjectPaths = new Set<string>();
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     if (node.type === "object") {
-      allObjectPaths.add(node.path!.split('.').slice(0, -1).join('.'));
+      allObjectPaths.add(node.path!.split(".").slice(0, -1).join("."));
     }
   });
-  
+
   valuesByKey.forEach((values, key) => {
     const keyOccurrences = keyPaths.get(key)!.length;
     const possibleOccurrences = allObjectPaths.size || 1;
     const completeness = (keyOccurrences / possibleOccurrences) * 100;
     stats.businessAnalytics.dataCompleteness.set(key, Math.min(completeness, 100));
   });
-  
+
   // Detect anomalies
   stats.businessAnalytics.enumerations.forEach((enumInfo, key) => {
     const values = Array.from(enumInfo.values.entries());
@@ -981,12 +1032,12 @@ function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): 
       }
     });
   });
-  
+
   // Update nodes with business info
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     if (node.type === "value" && node.name) {
       node.businessInfo = {};
-      
+
       // Check if it's an enum
       if (stats.businessAnalytics.enumerations.has(node.name)) {
         node.businessInfo.isEnum = true;
@@ -996,17 +1047,17 @@ function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): 
         const percentage = Math.round((count / enumInfo.totalCount) * 100);
         node.businessInfo.enumDistribution = `${percentage}%`;
       }
-      
+
       // Check if it's a potential ID
       if (stats.businessAnalytics.potentialIds.has(node.name)) {
         node.businessInfo.isPotentialId = true;
       }
-      
+
       // Add completeness info
       if (stats.businessAnalytics.dataCompleteness.has(node.name)) {
         node.businessInfo.completeness = stats.businessAnalytics.dataCompleteness.get(node.name);
       }
-      
+
       // Check for anomalies
       if (stats.businessAnalytics.anomalies.has(node.name)) {
         const anomalies = stats.businessAnalytics.anomalies.get(node.name)!;
@@ -1014,7 +1065,7 @@ function analyzeBusinessLogic(data: any, nodes: GraphNode[], stats: JSONStats): 
           node.businessInfo.isAnomaly = true;
         }
       }
-      
+
       // Check for sensitive data
       if (stats.businessAnalytics.sensitiveData.has(node.name)) {
         node.businessInfo.isSensitive = true;
@@ -1036,14 +1087,14 @@ function setupDisplayModeSelector(onChange: (mode: NodeDisplayMode) => void): vo
 
 function groupNodesByType(nodes: GraphNode[]): Map<string, GraphNode[]> {
   const groups = new Map<string, GraphNode[]>();
-  
-  nodes.forEach(node => {
+
+  nodes.forEach((node) => {
     if (!groups.has(node.type)) {
       groups.set(node.type, []);
     }
     groups.get(node.type)!.push(node);
   });
-  
+
   return groups;
 }
 
@@ -1051,15 +1102,15 @@ function highlightConnections(targetNode: any, allNodes: any, allLinks: any): vo
   // Dim all nodes and links
   allNodes.style("opacity", 0.2);
   allLinks.style("opacity", 0.1);
-  
+
   // Highlight the target node
   allNodes.filter((d: any) => d.id === targetNode.id).style("opacity", 1);
-  
+
   // Highlight connected nodes and links
   allLinks
     .filter((d: any) => d.source.id === targetNode.id || d.target.id === targetNode.id)
     .style("opacity", 1)
-    .each(function(d: any) {
+    .each(function (d: any) {
       allNodes.filter((n: any) => n.id === d.source.id || n.id === d.target.id).style("opacity", 1);
     });
 }
@@ -1084,7 +1135,7 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
       <strong>Depth:</strong> ${node.depth}
     </div>
   `;
-  
+
   if (node.type === "value") {
     html += `
       <div class="detail-item">
@@ -1094,11 +1145,11 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
         <strong>Value Type:</strong> ${node.valueType}
       </div>
     `;
-    
+
     // Business analytics details
     if (node.businessInfo) {
       html += '<div class="detail-group"><h4>Business Analytics</h4>';
-      
+
       if (node.businessInfo.isEnum) {
         const enumInfo = stats.businessAnalytics.enumerations.get(node.name)!;
         html += `<div class="detail-item"><strong>Enumeration:</strong> ${enumInfo.values.size} unique values</div>`;
@@ -1106,26 +1157,26 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
           html += `<div class="detail-item"><strong>This Value:</strong> ${node.businessInfo.enumDistribution} of occurrences</div>`;
         }
       }
-      
+
       if (node.businessInfo.isPotentialId) {
         html += `<div class="detail-item"><strong>Potential ID:</strong> All values are unique</div>`;
       }
-      
+
       if (node.businessInfo.completeness !== undefined) {
         html += `<div class="detail-item"><strong>Completeness:</strong> ${Math.round(node.businessInfo.completeness)}%</div>`;
       }
-      
+
       if (node.businessInfo.isAnomaly) {
         html += `<div class="detail-item" style="color: #dc2626;"><strong>⚠️ Anomaly:</strong> Rare value in enumeration</div>`;
       }
-      
+
       if (node.businessInfo.isSensitive) {
         html += `<div class="detail-item" style="color: #dc2626;"><strong>🔒 Sensitive:</strong> ${node.businessInfo.dataType}</div>`;
       }
-      
-      html += '</div>';
+
+      html += "</div>";
     }
-    
+
     // Numeric ranges
     if (stats.businessAnalytics.numericRanges.has(node.name)) {
       const range = stats.businessAnalytics.numericRanges.get(node.name)!;
@@ -1135,7 +1186,7 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
       if (range.isLikelyMonetary) {
         html += `<div class="detail-item"><strong>Type:</strong> Likely monetary value 💰</div>`;
       }
-      html += '</div>';
+      html += "</div>";
     }
   } else if (node.type === "object") {
     html += `
@@ -1149,7 +1200,7 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
         <strong>Length:</strong> ${node.arrayLength || 0}
       </div>
     `;
-    
+
     // Value distribution for arrays
     const dist = stats.businessAnalytics.valueDistributions.get(node.name);
     if (dist) {
@@ -1158,19 +1209,19 @@ function showNodeDetails(panel: HTMLElement, node: GraphNode, stats: JSONStats):
       if (dist.uniqueValues === 1) {
         html += `<div class="detail-item"><strong>Pattern:</strong> All values are identical</div>`;
       }
-      html += '</div>';
+      html += "</div>";
     }
   }
-  
+
   // Show if this node's structure appears in patterns
-  const relatedPatterns = stats.patterns.filter(p => p.paths.includes(node.path!));
+  const relatedPatterns = stats.patterns.filter((p) => p.paths.includes(node.path!));
   if (relatedPatterns.length > 0) {
     html += '<div class="detail-group"><h4>Part of Patterns</h4>';
-    relatedPatterns.forEach(pattern => {
+    relatedPatterns.forEach((pattern) => {
       html += `<div class="pattern-reference">${pattern.name}</div>`;
     });
-    html += '</div>';
+    html += "</div>";
   }
-  
+
   panel.innerHTML = html;
 }

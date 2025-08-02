@@ -214,23 +214,32 @@
     <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/view-utils.js') }}" />
 
     <!-- Non-essential modules will be lazy-loaded when needed:
-         tree-utils.js, graph-utils.js, diff-utils.js, stats-utils.js,
-         chart-utils.js, search-utils.js -->
+       tree-utils.js, graph-utils.js, diff-utils.js, stats-utils.js,
+       chart-utils.js, search-utils.js -->
 
     <!-- Load CSS synchronously to prevent rendering issues -->
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
     <!-- Defer toastr CSS loading to improve initial render -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></noscript>
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    </noscript>
 
     {% if ga_tracking_id %}
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_tracking_id }}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
+
       function gtag() {
         dataLayer.push(arguments);
       }
+
       gtag("js", new Date());
       gtag("config", "{{ ga_tracking_id }}");
     </script>
@@ -506,9 +515,9 @@
           <button class="tab-btn" data-tab="search">Search & Filter</button>
           <!-- Map View Tab (temporarily disabled - uncomment to re-enable) -->
           <!-- <button class="tab-btn" data-tab="map">
-            Map View
-            <span class="beta-badge">Beta</span>
-          </button> -->
+        Map View
+        <span class="beta-badge">Beta</span>
+      </button> -->
         </div>
 
         <div class="output-section">
@@ -547,8 +556,8 @@
           </div>
           <!-- Map View Content (temporarily disabled - uncomment to re-enable) -->
           <!-- <div id="map-tab" class="tab-content">
-            <div id="mapOutput" class="map-output"></div>
-          </div> -->
+        <div id="mapOutput" class="map-output"></div>
+      </div> -->
           <div id="chart-tab" class="tab-content">
             <div id="chartOutput" class="chart-output"></div>
           </div>
@@ -566,7 +575,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script>
       // Initialize app after all deferred scripts have loaded
-      window.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener("DOMContentLoaded", function () {
         // Create a promise that resolves when all libraries are loaded
         const librariesLoaded = new Promise((resolve) => {
           const checkLibraries = () => {
@@ -578,11 +587,11 @@
           };
           checkLibraries();
         });
-        
+
         // Load the app module after libraries are ready
         librariesLoaded.then(() => {
-          const script = document.createElement('script');
-          script.type = 'module';
+          const script = document.createElement("script");
+          script.type = "module";
           script.src = '{{ url_for("static", path="/js/app.js") }}';
           document.body.appendChild(script);
         });

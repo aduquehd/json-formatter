@@ -1,7 +1,14 @@
 "use strict";
 
 // Tree utils are loaded dynamically when needed
-import { loadTreeUtils, loadGraphUtils, loadDiffUtils, loadStatsUtils, loadChartUtils, loadSearchUtils } from "./utils/lazy-loader.js";
+import {
+  loadTreeUtils,
+  loadGraphUtils,
+  loadDiffUtils,
+  loadStatsUtils,
+  loadChartUtils,
+  loadSearchUtils,
+} from "./utils/lazy-loader.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
@@ -26,8 +33,8 @@ class JSONViewer {
   private state: AppState;
   private isUpdatingFromTree: boolean = false;
   private viewCache: ViewCache = {
-    jsonHash: '',
-    generatedTabs: new Set()
+    jsonHash: "",
+    generatedTabs: new Set(),
   };
   private elements: {
     formatBtn: HTMLElement;
@@ -304,47 +311,47 @@ class JSONViewer {
         if (content.trim()) {
           const parsed = JSON.parse(content);
           const currentHash = this.hashJSON(content);
-          
+
           // Check if JSON has changed
           if (currentHash !== this.viewCache.jsonHash) {
             // JSON changed, clear cache
             this.viewCache.jsonHash = currentHash;
             this.viewCache.generatedTabs.clear();
           }
-          
+
           // Only generate view if not already cached for current JSON
           if (!this.viewCache.generatedTabs.has(tabName)) {
             this.viewCache.generatedTabs.add(tabName);
-            
+
             switch (tabName) {
-            case "graph":
-              loadGraphUtils().then(module => {
-                module.generateGraphView(parsed, this.elements.graphOutput);
-              });
-              break;
-            case "diff":
-              loadDiffUtils().then(module => {
-                module.generateDiffView(parsed, this.elements.diffOutput);
-              });
-              break;
-            case "stats":
-              loadStatsUtils().then(module => {
-                module.generateStatsView(parsed, this.elements.statsOutput);
-              });
-              break;
-            // case "map":
-            //   generateMapView(parsed, this.elements.mapOutput);
-            //   break;
-            case "chart":
-              loadChartUtils().then(module => {
-                module.generateChartView(parsed, this.elements.chartOutput);
-              });
-              break;
-            case "search":
-              loadSearchUtils().then(module => {
-                module.generateSearchView(parsed, this.elements.searchOutput);
-              });
-              break;
+              case "graph":
+                loadGraphUtils().then((module) => {
+                  module.generateGraphView(parsed, this.elements.graphOutput);
+                });
+                break;
+              case "diff":
+                loadDiffUtils().then((module) => {
+                  module.generateDiffView(parsed, this.elements.diffOutput);
+                });
+                break;
+              case "stats":
+                loadStatsUtils().then((module) => {
+                  module.generateStatsView(parsed, this.elements.statsOutput);
+                });
+                break;
+              // case "map":
+              //   generateMapView(parsed, this.elements.mapOutput);
+              //   break;
+              case "chart":
+                loadChartUtils().then((module) => {
+                  module.generateChartView(parsed, this.elements.chartOutput);
+                });
+                break;
+              case "search":
+                loadSearchUtils().then((module) => {
+                  module.generateSearchView(parsed, this.elements.searchOutput);
+                });
+                break;
             }
           }
         }
@@ -360,20 +367,20 @@ class JSONViewer {
       }
     }
   }
-  
+
   private hashJSON(content: string): string {
     // Simple hash function for JSON content
     let hash = 0;
     for (let i = 0; i < content.length; i++) {
       const char = content.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return hash.toString(36);
   }
-  
+
   private clearViewCache(): void {
-    this.viewCache.jsonHash = '';
+    this.viewCache.jsonHash = "";
     this.viewCache.generatedTabs.clear();
   }
 
