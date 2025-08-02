@@ -17,11 +17,11 @@
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Free online JSON viewer and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly in your browser."
+      content="Free JSON viewer and formatter with syntax highlighting, validation, and tree view."
     />
     <meta
       name="keywords"
-      content="json viewer, json formatter, json editor, json validator, json parser, json tree view, json beautifier, json minifier"
+      content="json viewer, json formatter, json editor, json validator, json parser, json online, json beautifier"
     />
     <meta name="author" content="Andres Duque" />
     <meta name="robots" content="index, follow" />
@@ -31,7 +31,7 @@
     <meta property="og:title" content="Online JSON Viewer & Formatter" />
     <meta
       property="og:description"
-      content="Free online JSON viewer, formatter, and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly."
+      content="Free JSON viewer and formatter with syntax highlighting, validation, and tree view."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="{{ request.url if request else '' }}" />
@@ -44,10 +44,10 @@
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Online JSON Viewer & Formatter - Free JSON Editor" />
+    <meta name="twitter:title" content="JSON Viewer & Formatter" />
     <meta
       name="twitter:description"
-      content="Free online JSON viewer, formatter, and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly."
+      content="Free JSON viewer and formatter with syntax highlighting, validation, and tree view."
     />
     <meta name="twitter:creator" content="@aduquehd" />
     <meta name="twitter:image" content="{{ url_for('static', path='/img/optimized-size-logo.png') }}" />
@@ -58,8 +58,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "Online JSON Viewer, Formatter, and Editor",
-        "description": "Free online JSON viewer, Formatter, and editor with syntax highlighting, formatting, validation, and tree view. Format, validate, and visualize JSON data instantly in your browser.",
+        "name": "JSON Viewer & Formatter",
+        "description": "Free JSON viewer and formatter with syntax highlighting, validation, and tree view.",
         "url": "{{ request.url if request else '' }}",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
@@ -91,7 +91,7 @@
     <meta name="theme-color" content="#2563eb" />
     <meta name="msapplication-TileColor" content="#2563eb" />
     <link rel="canonical" href="{{ request.url if request else '' }}" />
-    
+
     <!-- Critical dark theme styles to prevent flash of white -->
     <style>
       .dark {
@@ -103,17 +103,17 @@
         background-color: inherit;
       }
     </style>
-    
+
     <!-- Immediate theme initialization script -->
     <script>
       // Run immediately to set theme before page renders
-      (function() {
-        const savedTheme = localStorage.getItem('theme');
-        const isDarkTheme = savedTheme !== null ? savedTheme === 'dark' : true;
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+        const isDarkTheme = savedTheme !== null ? savedTheme === "dark" : true;
         if (!isDarkTheme) {
-          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.remove("dark");
         }
-        document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+        document.documentElement.setAttribute("data-theme", isDarkTheme ? "dark" : "light");
       })();
     </script>
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
@@ -153,8 +153,18 @@
     <nav class="navbar">
       <div class="navbar-content">
         <div class="navbar-left">
-          <h1 class="navbar-title">Online Json <span class="highlight">Viewer</span>, <span class="highlight">Formatter</span>, and <span class="highlight">Editor</span></h1>
-          <p class="navbar-description">Free, open source, and secure. All JSON content is processed in your browser, we don't send any data to servers</p>
+          <h1 class="navbar-title">
+            Online Json
+            <span class="highlight">Viewer</span>
+            ,
+            <span class="highlight">Formatter</span>
+            , and
+            <span class="highlight">Editor</span>
+          </h1>
+          <p class="navbar-description">
+            Free, open source, and secure. All JSON content is processed in your browser, we don't send any data to
+            servers
+          </p>
         </div>
         <div class="mobile-navbar-actions">
           <a
