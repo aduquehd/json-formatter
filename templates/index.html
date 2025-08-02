@@ -9,6 +9,16 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.hotjar.com;
+      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+      font-src 'self' https://cdnjs.cloudflare.com;
+      img-src 'self' data: https:;
+      connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com;
+      frame-src 'self' https://vars.hotjar.com;
+      worker-src 'self' blob:;
+    " />
 
     <!-- Preconnect for External Resources -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
@@ -109,86 +119,7 @@
     <link rel="canonical" href="{{ request.url if request else '' }}" />
 
     <!-- Critical CSS for above-the-fold content -->
-    <style>
-      /* Reset and critical layout */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      /* Critical root variables */
-      :root {
-        --bg-primary: #ffffff;
-        --bg-secondary: #f8f9fa;
-        --text-primary: #1a1a1a;
-        --text-secondary: #666;
-        --border-color: rgba(0, 0, 0, 0.06);
-        --navbar-bg: linear-gradient(135deg, rgba(249, 250, 251, 0.98) 0%, rgba(243, 244, 246, 0.98) 100%);
-      }
-
-      [data-theme="dark"] {
-        --bg-primary: #1a1a1a;
-        --bg-secondary: #2d2d2d;
-        --text-primary: #ffffff;
-        --text-secondary: #b0b0b0;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --navbar-bg: linear-gradient(135deg, rgba(23, 23, 23, 0.98) 0%, rgba(31, 31, 31, 0.98) 100%);
-      }
-
-      .dark {
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        background: var(--bg-primary);
-        min-height: 100vh;
-        color: var(--text-primary);
-        overflow-x: hidden;
-      }
-
-      /* Critical navbar styles */
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: var(--navbar-bg);
-        border-bottom: 1px solid var(--border-color);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-      }
-
-      .navbar-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .navbar-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        line-height: 1.3;
-      }
-
-      .highlight {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      /* Ensure elements are visible during initial load */
-      .btn,
-      .tabs,
-      .output-section {
-        opacity: 1;
-      }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/critical.css') }}" />
 
     <!-- Immediate theme initialization script -->
     <script>
@@ -224,7 +155,8 @@
       rel="preload"
       href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
       as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="this.onload=null;this.rel='stylesheet';this.media='all'"
+      media="print"
     />
     <noscript>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
@@ -265,6 +197,8 @@
     </script>
   </head>
   <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <nav class="navbar">
       <div class="navbar-content">
         <div class="navbar-left">
@@ -294,7 +228,7 @@
             </svg>
             <span class="mobile-github-text">Open Source</span>
           </a>
-          <button id="mobileThemeBtn" class="mobile-theme-btn">
+          <button id="mobileThemeBtn" class="mobile-theme-btn" aria-label="Toggle theme">
             <svg
               class="btn-icon theme-icon sun-icon"
               width="20"
@@ -367,10 +301,10 @@
       </div>
     </nav>
     <div class="container">
-      <main>
+      <main id="main-content">
         <div class="top-section">
           <div class="button-group">
-            <button id="formatBtn" class="btn btn-primary">
+            <button id="formatBtn" class="btn btn-primary" aria-label="Format JSON">
               <svg
                 class="btn-icon"
                 width="16"
@@ -385,7 +319,7 @@
               </svg>
               Format JSON
             </button>
-            <button id="compactBtn" class="btn btn-accent">
+            <button id="compactBtn" class="btn btn-accent" aria-label="Compact JSON">
               <svg
                 class="btn-icon"
                 width="16"
@@ -402,7 +336,7 @@
               </svg>
               Compact JSON
             </button>
-            <button id="copyBtn" class="btn btn-secondary">
+            <button id="copyBtn" class="btn btn-secondary" aria-label="Copy JSON">
               <svg
                 class="btn-icon"
                 width="16"
@@ -417,7 +351,7 @@
               </svg>
               Copy
             </button>
-            <button id="pasteBtn" class="btn btn-secondary">
+            <button id="pasteBtn" class="btn btn-secondary" aria-label="Paste JSON">
               <svg
                 class="btn-icon"
                 width="16"
@@ -432,7 +366,7 @@
               </svg>
               Paste
             </button>
-            <button id="clearBtn" class="btn btn-secondary">
+            <button id="clearBtn" class="btn btn-secondary" aria-label="Clear editor">
               <svg
                 class="btn-icon"
                 width="16"
@@ -452,7 +386,7 @@
           </div>
           <div class="editor-theme-wrapper">
             <label for="editorThemeSelect" class="theme-select-label">Editor Theme:</label>
-            <select id="editorThemeSelect" class="theme-select">
+            <select id="editorThemeSelect" class="theme-select" aria-label="Select editor theme">
               <option value="default">Default</option>
               <option value="vs">Light</option>
               <option value="vs-dark">Dark</option>
@@ -463,7 +397,7 @@
               <option value="dracula">Dracula</option>
             </select>
           </div>
-          <button id="themeBtn" class="btn btn-secondary theme-toggle-btn">
+          <button id="themeBtn" class="btn btn-secondary theme-toggle-btn" aria-label="Toggle theme">
             <svg
               class="btn-icon theme-icon sun-icon"
               width="16"
@@ -498,21 +432,21 @@
           </button>
         </div>
 
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="formatted">JSON Editor</button>
-          <button class="tab-btn" data-tab="tree">Tree View</button>
-          <button class="tab-btn" data-tab="graph">
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="formatted" role="tab" aria-selected="true" aria-controls="formatted-tab">JSON Editor</button>
+          <button class="tab-btn" data-tab="tree" role="tab" aria-selected="false" aria-controls="tree-tab">Tree View</button>
+          <button class="tab-btn" data-tab="graph" role="tab" aria-selected="false" aria-controls="graph-tab">
             Graph View
             <span class="beta-badge">Beta</span>
           </button>
-          <button class="tab-btn" data-tab="stats">Statistics</button>
+          <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false" aria-controls="stats-tab">Statistics</button>
           <div class="tab-separator"></div>
-          <button class="tab-btn" data-tab="diff">Diff View</button>
-          <button class="tab-btn" data-tab="chart">
+          <button class="tab-btn" data-tab="diff" role="tab" aria-selected="false" aria-controls="diff-tab">Diff View</button>
+          <button class="tab-btn" data-tab="chart" role="tab" aria-selected="false" aria-controls="chart-tab">
             Charts
             <span class="beta-badge">Beta</span>
           </button>
-          <button class="tab-btn" data-tab="search">Search & Filter</button>
+          <button class="tab-btn" data-tab="search" role="tab" aria-selected="false" aria-controls="search-tab">Search & Filter</button>
           <!-- Map View Tab (temporarily disabled - uncomment to re-enable) -->
           <!-- <button class="tab-btn" data-tab="map">
         Map View
@@ -521,10 +455,10 @@
         </div>
 
         <div class="output-section">
-          <div id="formatted-tab" class="tab-content active">
+          <div id="formatted-tab" class="tab-content active" role="tabpanel" aria-labelledby="formatBtn">
             <div id="monaco-editor" class="monaco-editor-container"></div>
           </div>
-          <div id="tree-tab" class="tab-content">
+          <div id="tree-tab" class="tab-content" role="tabpanel" aria-labelledby="treeBtn">
             <div class="tree-controls">
               <div class="tree-controls-left">
                 <div class="edit-hint" id="treeEditHint" style="display: flex">
@@ -532,11 +466,11 @@
                   <span class="edit-text">Click on any value or key to edit directly</span>
                 </div>
                 <div class="tree-buttons">
-                  <button id="expandAllBtn" class="tree-control-btn">
+                  <button id="expandAllBtn" class="tree-control-btn" aria-label="Expand all tree nodes">
                     <span class="btn-icon">⊞</span>
                     Expand All
                   </button>
-                  <button id="collapseAllBtn" class="tree-control-btn">
+                  <button id="collapseAllBtn" class="tree-control-btn" aria-label="Collapse all tree nodes">
                     <span class="btn-icon">⊟</span>
                     Collapse All
                   </button>
@@ -545,23 +479,23 @@
             </div>
             <div id="treeOutput" class="tree-output"></div>
           </div>
-          <div id="graph-tab" class="tab-content">
+          <div id="graph-tab" class="tab-content" role="tabpanel" aria-labelledby="graphBtn">
             <div id="graphOutput" class="graph-output"></div>
           </div>
-          <div id="diff-tab" class="tab-content">
+          <div id="diff-tab" class="tab-content" role="tabpanel" aria-labelledby="diffBtn">
             <div id="diffOutput" class="diff-output"></div>
           </div>
-          <div id="stats-tab" class="tab-content">
+          <div id="stats-tab" class="tab-content" role="tabpanel" aria-labelledby="statsBtn">
             <div id="statsOutput" class="stats-output"></div>
           </div>
           <!-- Map View Content (temporarily disabled - uncomment to re-enable) -->
           <!-- <div id="map-tab" class="tab-content">
         <div id="mapOutput" class="map-output"></div>
       </div> -->
-          <div id="chart-tab" class="tab-content">
+          <div id="chart-tab" class="tab-content" role="tabpanel" aria-labelledby="chartBtn">
             <div id="chartOutput" class="chart-output"></div>
           </div>
-          <div id="search-tab" class="tab-content">
+          <div id="search-tab" class="tab-content" role="tabpanel" aria-labelledby="searchBtn">
             <div id="searchOutput" class="search-output"></div>
           </div>
         </div>
@@ -574,28 +508,51 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script>
-      // Initialize app after all deferred scripts have loaded
-      window.addEventListener("DOMContentLoaded", function () {
-        // Create a promise that resolves when all libraries are loaded
-        const librariesLoaded = new Promise((resolve) => {
-          const checkLibraries = () => {
-            if (window.jQuery && window.toastr && window.d3 && window.require) {
-              resolve();
-            } else {
-              setTimeout(checkLibraries, 50);
-            }
-          };
-          checkLibraries();
-        });
+      // Modern library loading with error handling and fallbacks
+      (function() {
+        const loadScript = (src) => {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error(`Failed to load ${src}`));
+            document.body.appendChild(script);
+          });
+        };
 
-        // Load the app module after libraries are ready
-        librariesLoaded.then(() => {
-          const script = document.createElement("script");
-          script.type = "module";
-          script.src = '{{ url_for("static", path="/js/app.js") }}';
-          document.body.appendChild(script);
-        });
-      });
+        const loadApp = async () => {
+          try {
+            // Check if libraries are already loaded (from defer)
+            const librariesReady = window.jQuery && window.toastr && window.d3 && window.require;
+            
+            if (!librariesReady) {
+              // Wait a bit for deferred scripts
+              await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            // Load the main app module
+            const script = document.createElement("script");
+            script.type = "module";
+            script.src = '{{ url_for("static", path="/js/app.js") }}';
+            document.body.appendChild(script);
+          } catch (error) {
+            console.error('Error loading application:', error);
+            // Show user-friendly error message
+            document.getElementById('main-content').innerHTML = 
+              '<div style="text-align: center; padding: 2rem;">' +
+              '<h2>Error Loading Application</h2>' +
+              '<p>Please refresh the page or check your internet connection.</p>' +
+              '</div>';
+          }
+        };
+
+        // Start loading when DOM is ready
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadApp);
+        } else {
+          loadApp();
+        }
+      })();
     </script>
   </body>
 </html>
