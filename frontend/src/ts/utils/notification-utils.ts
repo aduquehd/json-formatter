@@ -32,8 +32,6 @@ function initializeToastr(): void {
       hideMethod: "fadeOut",
     };
 
-    console.log("Toastr initialized successfully");
-
     // Process any pending notifications
     while (pendingNotifications.length > 0) {
       const notification = pendingNotifications.shift();
