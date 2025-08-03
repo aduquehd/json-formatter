@@ -7,6 +7,9 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from config import settings
 
+# Application version for cache busting
+APP_VERSION = "1.0.0"
+
 app = FastAPI(
     title="JSON Viewer",
     description="A modern JSON viewer and formatter with VS Code-like editor",
@@ -26,6 +29,7 @@ async def read_root(request: Request):
             "title": "JSON Viewer | Formatter",
             "ga_tracking_id": settings.ga_tracking_id,
             "app_env": settings.app_env,
+            "version": APP_VERSION,
         },
     )
 

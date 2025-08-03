@@ -122,7 +122,7 @@
     <link rel="canonical" href="{{ request.url if request else '' }}" />
 
     <!-- Critical CSS for above-the-fold content -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/critical.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/critical.css') }}?v={{ version }}" />
 
     <!-- Immediate theme initialization script -->
     <script>
@@ -137,22 +137,22 @@
       })();
     </script>
     <!-- Preload critical CSS -->
-    <link rel="preload" href="{{ url_for('static', path='/css/styles.css') }}" as="style" />
+    <link rel="preload" href="{{ url_for('static', path='/css/styles.css') }}?v={{ version }}" as="style" />
 
     <!-- Preload only essential JavaScript modules for initial JSON formatting -->
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/app.js') }}" />
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/theme-utils.js') }}" />
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/monaco-utils.js') }}" />
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/json-utils.js') }}" />
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/clipboard-utils.js') }}" />
-    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/view-utils.js') }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/app.js') }}?v={{ version }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/theme-utils.js') }}?v={{ version }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/monaco-utils.js') }}?v={{ version }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/json-utils.js') }}?v={{ version }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/clipboard-utils.js') }}?v={{ version }}" />
+    <link rel="modulepreload" href="{{ url_for('static', path='/js/utils/view-utils.js') }}?v={{ version }}" />
 
     <!-- Non-essential modules will be lazy-loaded when needed:
        tree-utils.js, graph-utils.js, diff-utils.js, stats-utils.js,
        chart-utils.js, search-utils.js -->
 
     <!-- Load CSS synchronously to prevent rendering issues -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}?v={{ version }}" />
     <!-- Defer toastr CSS loading to improve initial render -->
     <link
       rel="preload"
@@ -552,7 +552,7 @@
             // Load the main app module
             const script = document.createElement("script");
             script.type = "module";
-            script.src = '{{ url_for("static", path="/js/app.js") }}';
+            script.src = '{{ url_for("static", path="/js/app.js") }}?v={{ version }}';
             document.body.appendChild(script);
           } catch (error) {
             console.error("Error loading application:", error);
