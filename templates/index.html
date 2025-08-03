@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JSON Formatter & JSON Viewer - Free Online Tool</title>
+    <title>JSON Formatter & Viewer</title>
 
     <!-- Performance and Security Meta Tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -13,7 +13,7 @@
       http-equiv="Content-Security-Policy"
       content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.hotjar.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com;
       style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
       font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;
       img-src 'self' data: https:;
@@ -741,7 +741,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <!-- Load modal handler separately for better code organization -->
     <script type="module" src="{{ url_for('static', path='/js/modal-loader.js') }}?v={{ version }}"></script>
-    
+
     <!-- Main app loader -->
     <script>
       (function () {
