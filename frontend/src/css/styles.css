@@ -1118,13 +1118,13 @@ main {
 
 .tree-node {
   margin: 2px 0;
+  border-left: 2px solid transparent;
 }
 
 .tree-node-header {
   display: flex;
   align-items: center;
   padding: 2px 0;
-  cursor: default;
 }
 
 .tree-toggle {
@@ -3537,8 +3537,6 @@ main {
 [data-theme="dark"] .tree-node:hover {
   background: rgba(14, 165, 233, 0.05);
   border-left: 2px solid var(--accent-cyan);
-  padding-left: 18px;
-  transition: all 0.3s ease;
 }
 
 /* Scrollbar styling for dark theme */

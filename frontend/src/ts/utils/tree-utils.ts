@@ -49,19 +49,38 @@ export function createTreeNode(
     const nodeKey = path.join(".");
 
     // Determine if node should be expanded
-    // Default: expand first-level nodes (level 0), unless preserveState is true
-    const isFirstLevel = level === 0;
-    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : isFirstLevel;
+    // Default: expand first two levels and first 3 items of arrays
+    const shouldExpandByDefault = () => {
+      if (level <= 1) {
+        // For arrays at level 0 or 1, only expand first 3 items
+        if (type === "array" && key.startsWith("[")) {
+          const index = parseInt(key.slice(1, -1));
+          return index < 3;
+        }
+        return true;
+      }
+      return false;
+    };
+    
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : shouldExpandByDefault();
     toggle.textContent = shouldExpand ? "▼" : "▶";
 
-    // Add to expandedNodes if this is a first-level node being expanded by default
-    if (shouldExpand && !preserveState && isFirstLevel) {
+    // Add to expandedNodes if this node is being expanded by default
+    if (shouldExpand && !preserveState) {
       expandedNodes.add(nodeKey);
     }
 
-    toggle.addEventListener("click", () => {
+    // Make the entire header clickable for expand/collapse
+    header.style.cursor = "pointer";
+    header.addEventListener("click", (e) => {
+      // Don't toggle if clicking on editable elements
+      const target = e.target as HTMLElement;
+      if (target.classList.contains("tree-key") || target.classList.contains("tree-value")) {
+        return;
+      }
       toggleNode(container, toggle, nodeKey);
     });
+    
     header.appendChild(toggle);
   } else {
     const spacer = document.createElement("span");
@@ -112,8 +131,19 @@ export function createTreeNode(
 
     // Check if this node should be collapsed
     const nodeKey = path.join(".");
-    const isFirstLevel = level === 0;
-    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : isFirstLevel;
+    const shouldExpandByDefault = () => {
+      if (level <= 1) {
+        // For arrays at level 0 or 1, only expand first 3 items
+        if (type === "array" && key.startsWith("[")) {
+          const index = parseInt(key.slice(1, -1));
+          return index < 3;
+        }
+        return true;
+      }
+      return false;
+    };
+    
+    const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : shouldExpandByDefault();
 
     if (!shouldExpand) {
       childContainer.style.display = "none";
