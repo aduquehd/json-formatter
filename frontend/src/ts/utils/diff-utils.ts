@@ -1,3 +1,9 @@
+declare var monaco: any;
+declare var require: any;
+
+let leftEditor: any = null;
+let rightEditor: any = null;
+
 export function generateDiffView(data: any, container: HTMLElement): void {
   container.innerHTML = "";
 
@@ -29,19 +35,26 @@ export function generateDiffView(data: any, container: HTMLElement): void {
   resultsSection.className = "diff-results-section";
   resultsSection.style.display = "none";
 
-  // Set initial data if available
-  const leftTextarea = leftPanel.querySelector("textarea") as HTMLTextAreaElement;
-  if (data) {
-    leftTextarea.value = JSON.stringify(data, null, 2);
-  }
+  diffContainer.appendChild(inputSection);
+  diffContainer.appendChild(compareSection);
+  diffContainer.appendChild(resultsSection);
+
+  container.appendChild(diffContainer);
+
+  // Initialize Monaco editors after DOM is ready
+  setTimeout(() => {
+    initializeDiffEditors(leftPanel, rightPanel, data);
+  }, 100);
 
   // Event handlers
   compareButton.onclick = () => {
-    const rightTextarea = rightPanel.querySelector("textarea") as HTMLTextAreaElement;
+    if (!leftEditor || !rightEditor) {
+      return;
+    }
 
     try {
-      const leftData = JSON.parse(leftTextarea.value || "{}");
-      const rightData = JSON.parse(rightTextarea.value || "{}");
+      const leftData = JSON.parse(leftEditor.getValue() || "{}");
+      const rightData = JSON.parse(rightEditor.getValue() || "{}");
 
       const differences = compareJSON(leftData, rightData);
       displayDifferences(differences, resultsSection);
@@ -50,12 +63,6 @@ export function generateDiffView(data: any, container: HTMLElement): void {
       alert("Invalid JSON. Please check both inputs.");
     }
   };
-
-  diffContainer.appendChild(inputSection);
-  diffContainer.appendChild(compareSection);
-  diffContainer.appendChild(resultsSection);
-
-  container.appendChild(diffContainer);
 }
 
 function createDiffPanel(title: string, side: string): HTMLElement {
@@ -66,25 +73,208 @@ function createDiffPanel(title: string, side: string): HTMLElement {
   header.textContent = title;
   panel.appendChild(header);
 
-  const textarea = document.createElement("textarea");
-  textarea.className = "diff-textarea";
-  textarea.placeholder = "Paste JSON here...";
-  panel.appendChild(textarea);
+  // Create container for Monaco editor
+  const editorContainer = document.createElement("div");
+  editorContainer.className = `diff-editor-container diff-editor-${side}`;
+  editorContainer.style.height = "300px";
+  editorContainer.style.border = "1px solid var(--border-color)";
+  editorContainer.style.borderRadius = "6px";
+  panel.appendChild(editorContainer);
+
+  // Create button group for format and compact
+  const buttonGroup = document.createElement("div");
+  buttonGroup.className = "diff-button-group";
 
   const formatButton = document.createElement("button");
-  formatButton.className = "diff-format-button";
-  formatButton.textContent = "Format";
-  formatButton.onclick = () => {
-    try {
-      const data = JSON.parse(textarea.value);
-      textarea.value = JSON.stringify(data, null, 2);
-    } catch (error) {
-      // Invalid JSON, ignore
-    }
-  };
-  panel.appendChild(formatButton);
+  formatButton.className = "diff-action-button diff-format-button";
+  formatButton.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="16,18 22,12 16,6"></polyline>
+      <polyline points="8,6 2,12 8,18"></polyline>
+    </svg>
+    Format JSON
+  `;
+  formatButton.setAttribute("data-side", side);
+  formatButton.setAttribute("data-action", "format");
+
+  const compactButton = document.createElement("button");
+  compactButton.className = "diff-action-button diff-compact-button";
+  compactButton.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="4,14 10,14 10,20"></polyline>
+      <polyline points="20,10 14,10 14,4"></polyline>
+      <line x1="14" y1="10" x2="21" y2="3"></line>
+      <line x1="3" y1="21" x2="10" y2="14"></line>
+    </svg>
+    Compact JSON
+  `;
+  compactButton.setAttribute("data-side", side);
+  compactButton.setAttribute("data-action", "compact");
+
+  buttonGroup.appendChild(formatButton);
+  buttonGroup.appendChild(compactButton);
+  panel.appendChild(buttonGroup);
 
   return panel;
+}
+
+function initializeDiffEditors(leftPanel: HTMLElement, rightPanel: HTMLElement, initialData?: any): void {
+  // Check if Monaco is available
+  if (typeof monaco === "undefined" || !monaco) {
+    console.error("Monaco editor is not loaded");
+    return;
+  }
+
+  // Get the current theme from localStorage or default
+  const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
+  const isDarkTheme = document.documentElement.classList.contains("dark");
+  
+  // Determine which Monaco theme to use
+  let monacoTheme = savedTheme;
+  if (savedTheme === "default") {
+    monacoTheme = isDarkTheme ? "custom-dark" : "custom-light";
+  }
+
+  // Create left editor
+  const leftContainer = leftPanel.querySelector(".diff-editor-left") as HTMLElement;
+  if (leftContainer && !leftEditor) {
+    leftEditor = monaco.editor.create(leftContainer, {
+      value: initialData ? JSON.stringify(initialData, null, 2) : "",
+      language: "json",
+      theme: monacoTheme,
+      automaticLayout: true,
+      fontSize: 14,
+      fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, monospace',
+      fontLigatures: true,
+      lineHeight: 1.7,
+      minimap: {
+        enabled: false,
+      },
+      folding: true,
+      lineNumbers: "on",
+      lineNumbersMinChars: 3,
+      scrollBeyondLastLine: false,
+      wordWrap: "on",
+      wrappingStrategy: "advanced",
+      formatOnPaste: true,
+      formatOnType: true,
+      autoClosingBrackets: "always",
+      autoClosingQuotes: "always",
+      autoIndent: "full",
+      tabSize: 2,
+      insertSpaces: true,
+      trimAutoWhitespace: true,
+      matchBrackets: "always",
+      bracketPairColorization: {
+        enabled: true,
+      },
+      padding: {
+        top: 10,
+        bottom: 10,
+      },
+      scrollbar: {
+        vertical: "visible",
+        horizontal: "visible",
+        useShadows: false,
+        verticalScrollbarSize: 10,
+        horizontalScrollbarSize: 10,
+      },
+    });
+  }
+
+  // Create right editor
+  const rightContainer = rightPanel.querySelector(".diff-editor-right") as HTMLElement;
+  if (rightContainer && !rightEditor) {
+    rightEditor = monaco.editor.create(rightContainer, {
+      value: "",
+      language: "json",
+      theme: monacoTheme,
+      automaticLayout: true,
+      fontSize: 14,
+      fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, monospace',
+      fontLigatures: true,
+      lineHeight: 1.7,
+      minimap: {
+        enabled: false,
+      },
+      folding: true,
+      lineNumbers: "on",
+      lineNumbersMinChars: 3,
+      scrollBeyondLastLine: false,
+      wordWrap: "on",
+      wrappingStrategy: "advanced",
+      formatOnPaste: true,
+      formatOnType: true,
+      autoClosingBrackets: "always",
+      autoClosingQuotes: "always",
+      autoIndent: "full",
+      tabSize: 2,
+      insertSpaces: true,
+      trimAutoWhitespace: true,
+      matchBrackets: "always",
+      bracketPairColorization: {
+        enabled: true,
+      },
+      padding: {
+        top: 10,
+        bottom: 10,
+      },
+      scrollbar: {
+        vertical: "visible",
+        horizontal: "visible",
+        useShadows: false,
+        verticalScrollbarSize: 10,
+        horizontalScrollbarSize: 10,
+      },
+    });
+  }
+
+  // Add action button handlers
+  const actionButtons = document.querySelectorAll(".diff-action-button");
+  actionButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const target = e.currentTarget as HTMLElement;
+      const side = target.getAttribute("data-side");
+      const action = target.getAttribute("data-action");
+      const editor = side === "left" ? leftEditor : rightEditor;
+      
+      if (editor) {
+        try {
+          const data = JSON.parse(editor.getValue() || "{}");
+          if (action === "format") {
+            editor.setValue(JSON.stringify(data, null, 2));
+          } else if (action === "compact") {
+            editor.setValue(JSON.stringify(data));
+          }
+        } catch (error) {
+          // Invalid JSON, show error using toastr if available
+          if ((window as any).toastr) {
+            (window as any).toastr.error("Invalid JSON format", "Error");
+          }
+        }
+      }
+    });
+  });
+}
+
+// Clean up editors when switching away from diff view
+export function cleanupDiffEditors(): void {
+  if (leftEditor) {
+    leftEditor.dispose();
+    leftEditor = null;
+  }
+  if (rightEditor) {
+    rightEditor.dispose();
+    rightEditor = null;
+  }
+}
+
+// Update theme for diff editors
+export function updateDiffEditorsTheme(themeName: string): void {
+  if (leftEditor && monaco) {
+    monaco.editor.setTheme(themeName);
+  }
+  // Note: Setting theme on one editor sets it globally for all Monaco instances
 }
 
 interface DiffResult {

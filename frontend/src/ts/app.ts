@@ -307,6 +307,16 @@ class JSONViewer {
       }
     }
 
+    // Clean up diff editors when switching away from diff view
+    if (previousTab === "diff" && tabName !== "diff") {
+      loadDiffUtils().then((module) => {
+        module.cleanupDiffEditors();
+      });
+      // Clear the diff output and remove from cache
+      this.elements.diffOutput.innerHTML = "";
+      this.viewCache.generatedTabs.delete("diff");
+    }
+
     // Update tab buttons
     this.elements.tabBtns.forEach((btn) => {
       btn.classList.toggle("active", btn.getAttribute("data-tab") === tabName);
