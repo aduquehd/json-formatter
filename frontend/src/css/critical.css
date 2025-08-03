@@ -13,7 +13,11 @@
   --text-primary: #1a1a1a;
   --text-secondary: #666;
   --border-color: rgba(0, 0, 0, 0.06);
-  --navbar-bg: linear-gradient(135deg, rgba(249, 250, 251, 0.98) 0%, rgba(243, 244, 246, 0.98) 100%);
+  --navbar-bg: linear-gradient(
+    135deg,
+    rgba(249, 250, 251, 0.98) 0%,
+    rgba(243, 244, 246, 0.98) 100%
+  );
 }
 
 [data-theme="dark"] {
@@ -31,7 +35,8 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--bg-primary);
   min-height: 100vh;
   color: var(--text-primary);

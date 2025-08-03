@@ -9,7 +9,9 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Content-Security-Policy" content="
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.hotjar.com;
       style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
@@ -18,7 +20,8 @@
       connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com;
       frame-src 'self' https://vars.hotjar.com;
       worker-src 'self' blob:;
-    " />
+    "
+    />
 
     <!-- Preconnect for External Resources -->
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
@@ -433,20 +436,36 @@
         </div>
 
         <div class="tabs" role="tablist">
-          <button class="tab-btn active" data-tab="formatted" role="tab" aria-selected="true" aria-controls="formatted-tab">JSON Editor</button>
-          <button class="tab-btn" data-tab="tree" role="tab" aria-selected="false" aria-controls="tree-tab">Tree View</button>
+          <button
+            class="tab-btn active"
+            data-tab="formatted"
+            role="tab"
+            aria-selected="true"
+            aria-controls="formatted-tab"
+          >
+            JSON Editor
+          </button>
+          <button class="tab-btn" data-tab="tree" role="tab" aria-selected="false" aria-controls="tree-tab">
+            Tree View
+          </button>
           <button class="tab-btn" data-tab="graph" role="tab" aria-selected="false" aria-controls="graph-tab">
             Graph View
             <span class="beta-badge">Beta</span>
           </button>
-          <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false" aria-controls="stats-tab">Statistics</button>
+          <button class="tab-btn" data-tab="stats" role="tab" aria-selected="false" aria-controls="stats-tab">
+            Statistics
+          </button>
           <div class="tab-separator"></div>
-          <button class="tab-btn" data-tab="diff" role="tab" aria-selected="false" aria-controls="diff-tab">Diff View</button>
+          <button class="tab-btn" data-tab="diff" role="tab" aria-selected="false" aria-controls="diff-tab">
+            Diff View
+          </button>
           <button class="tab-btn" data-tab="chart" role="tab" aria-selected="false" aria-controls="chart-tab">
             Charts
             <span class="beta-badge">Beta</span>
           </button>
-          <button class="tab-btn" data-tab="search" role="tab" aria-selected="false" aria-controls="search-tab">Search & Filter</button>
+          <button class="tab-btn" data-tab="search" role="tab" aria-selected="false" aria-controls="search-tab">
+            Search & Filter
+          </button>
           <!-- Map View Tab (temporarily disabled - uncomment to re-enable) -->
           <!-- <button class="tab-btn" data-tab="map">
         Map View
@@ -509,10 +528,10 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <script>
       // Modern library loading with error handling and fallbacks
-      (function() {
+      (function () {
         const loadScript = (src) => {
           return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
+            const script = document.createElement("script");
             script.src = src;
             script.onload = resolve;
             script.onerror = () => reject(new Error(`Failed to load ${src}`));
@@ -524,10 +543,10 @@
           try {
             // Check if libraries are already loaded (from defer)
             const librariesReady = window.jQuery && window.toastr && window.d3 && window.require;
-            
+
             if (!librariesReady) {
               // Wait a bit for deferred scripts
-              await new Promise(resolve => setTimeout(resolve, 100));
+              await new Promise((resolve) => setTimeout(resolve, 100));
             }
 
             // Load the main app module
@@ -536,19 +555,19 @@
             script.src = '{{ url_for("static", path="/js/app.js") }}';
             document.body.appendChild(script);
           } catch (error) {
-            console.error('Error loading application:', error);
+            console.error("Error loading application:", error);
             // Show user-friendly error message
-            document.getElementById('main-content').innerHTML = 
+            document.getElementById("main-content").innerHTML =
               '<div style="text-align: center; padding: 2rem;">' +
-              '<h2>Error Loading Application</h2>' +
-              '<p>Please refresh the page or check your internet connection.</p>' +
-              '</div>';
+              "<h2>Error Loading Application</h2>" +
+              "<p>Please refresh the page or check your internet connection.</p>" +
+              "</div>";
           }
         };
 
         // Start loading when DOM is ready
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', loadApp);
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", loadApp);
         } else {
           loadApp();
         }

@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && npm run copy-css",
+    "build": "npm run build:js && npm run build:css",
+    "build:js": "tsc && npm run minify:js",
+    "minify:js": "find static/js -name '*.js' -type f | while read file; do esbuild \"$file\" --minify --sourcemap --target=es2020 --format=esm --outfile=\"$file\" --allow-overwrite; done",
+    "build:css": "cp -r frontend/src/css/* static/css/ && npm run minify:css",
+    "minify:css": "find static/css -name '*.css' -type f | while read file; do postcss \"$file\" -o \"$file\" --use cssnano --no-map; done",
     "watch": "tsc --watch",
-    "dev": "tsc --watch",
+    "dev": "npm run watch",
     "copy-css": "cp -r frontend/src/css/* static/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +18,10 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "^24.1.0",
+    "cssnano": "^7.0.6",
+    "esbuild": "^0.24.2",
+    "postcss": "^8.5.2",
+    "postcss-cli": "^11.0.0",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   }
