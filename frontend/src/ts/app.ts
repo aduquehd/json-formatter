@@ -168,7 +168,7 @@ class JSONViewer {
         modal.style.display = "flex";
       }
     });
-    
+
     // Listen for JSON example selection
     window.addEventListener("useJsonExample", (e: Event) => {
       const customEvent = e as CustomEvent;

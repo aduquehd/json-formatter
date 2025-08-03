@@ -8,11 +8,11 @@ const pendingNotifications: Array<{ type: string; message: string }> = [];
 
 function initializeToastr(): void {
   initAttempts++;
-  
+
   // Check if both jQuery and toastr are available
   if (typeof jQuery !== "undefined" && typeof toastr !== "undefined") {
     toastrReady = true;
-    
+
     // Configure toastr options
     toastr.options = {
       closeButton: true,
@@ -29,11 +29,11 @@ function initializeToastr(): void {
       showEasing: "swing",
       hideEasing: "linear",
       showMethod: "fadeIn",
-      hideMethod: "fadeOut"
+      hideMethod: "fadeOut",
     };
-    
+
     console.log("Toastr initialized successfully");
-    
+
     // Process any pending notifications
     while (pendingNotifications.length > 0) {
       const notification = pendingNotifications.shift();
@@ -73,7 +73,7 @@ function showNotification(type: string, message: string): void {
   } else {
     // Queue the notification
     pendingNotifications.push({ type, message });
-    
+
     // If we haven't started initialization yet, start it
     if (initAttempts === 0) {
       initializeToastr();
@@ -104,7 +104,7 @@ if (typeof window !== "undefined") {
     // Give a small delay to ensure deferred scripts are executed
     setTimeout(initializeToastr, 100);
   });
-  
+
   // Also try on DOMContentLoaded as a backup
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {

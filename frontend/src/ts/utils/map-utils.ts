@@ -209,7 +209,8 @@ function loadLeaflet(): Promise<void> {
       // Load marker cluster plugin CSS
       const clusterCSS = document.createElement("link");
       clusterCSS.rel = "stylesheet";
-      clusterCSS.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css";
+      clusterCSS.href =
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css";
       document.head.appendChild(clusterCSS);
 
       const clusterDefaultCSS = document.createElement("link");

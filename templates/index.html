@@ -741,10 +741,10 @@
             // Wait for all libraries to be loaded
             let attempts = 0;
             const maxAttempts = 100; // 10 seconds max
-            
+
             while (attempts < maxAttempts) {
               const librariesReady = window.jQuery && window.toastr && window.d3 && window.require;
-              
+
               if (librariesReady) {
                 // Initialize toastr globally before loading the app
                 if (window.toastr) {
@@ -763,13 +763,10 @@
                     showEasing: "swing",
                     hideEasing: "linear",
                     showMethod: "fadeIn",
-                    hideMethod: "fadeOut"
+                    hideMethod: "fadeOut",
                   };
-                  console.log("Toastr initialized in app loader");
-                  // Test notification to ensure toastr is working
-                  // window.toastr.info("Application loaded successfully");
                 }
-                
+
                 // Load the main app module
                 const script = document.createElement("script");
                 script.type = "module";
@@ -777,11 +774,11 @@
                 document.body.appendChild(script);
                 break;
               }
-              
+
               attempts++;
               await new Promise((resolve) => setTimeout(resolve, 100));
             }
-            
+
             if (attempts >= maxAttempts) {
               throw new Error("Failed to load required libraries");
             }

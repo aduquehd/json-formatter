@@ -73,8 +73,8 @@ function createEditor(config: MonacoEditorConfig): any {
       bottom: 16,
     },
     scrollbar: {
-      vertical: 'visible',
-      horizontal: 'visible',
+      vertical: "visible",
+      horizontal: "visible",
       useShadows: false,
       verticalScrollbarSize: 10,
       horizontalScrollbarSize: 10,

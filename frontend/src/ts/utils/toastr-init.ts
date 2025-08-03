@@ -23,19 +23,19 @@ export function ensureToastrInitialized(): Promise<void> {
           showEasing: "swing",
           hideEasing: "linear",
           showMethod: "fadeIn",
-          hideMethod: "fadeOut"
+          hideMethod: "fadeOut",
         };
-        
+
         // Make toastr available globally
         (window as any).toastr = toastr;
-        
+
         console.log("Toastr initialized globally");
         resolve();
       } else {
         setTimeout(checkLibraries, 50);
       }
     };
-    
+
     checkLibraries();
   });
 }

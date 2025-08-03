@@ -57,12 +57,12 @@ export function copyEditorContent(editor: any): void {
 
   const content = editor.getValue();
   copyToClipboard(content);
-  
+
   // Add pulse animation to copy button
-  const copyBtn = document.getElementById('copyBtn');
+  const copyBtn = document.getElementById("copyBtn");
   if (copyBtn) {
-    copyBtn.classList.add('copied');
-    setTimeout(() => copyBtn.classList.remove('copied'), 400);
+    copyBtn.classList.add("copied");
+    setTimeout(() => copyBtn.classList.remove("copied"), 400);
   }
 }
 
@@ -75,14 +75,14 @@ export async function pasteIntoEditor(editor: any, formatCallback?: () => void):
   const text = await pasteFromClipboard();
   if (text) {
     editor.setValue(text);
-    
+
     // Add pulse animation to paste button
-    const pasteBtn = document.getElementById('pasteBtn');
+    const pasteBtn = document.getElementById("pasteBtn");
     if (pasteBtn) {
-      pasteBtn.classList.add('pasted');
-      setTimeout(() => pasteBtn.classList.remove('pasted'), 400);
+      pasteBtn.classList.add("pasted");
+      setTimeout(() => pasteBtn.classList.remove("pasted"), 400);
     }
-    
+
     if (formatCallback) {
       setTimeout(formatCallback, 10);
     }

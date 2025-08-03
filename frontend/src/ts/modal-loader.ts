@@ -15,7 +15,7 @@ async function handleExampleSelection(exampleType: string): Promise<void> {
     const card = document.querySelector(`[data-example="${exampleType}"]`);
     const button = card?.querySelector(".json-example-use-btn") as HTMLButtonElement;
     let originalText = "";
-    
+
     if (button) {
       originalText = button.textContent || "";
       button.textContent = "Loading...";
@@ -24,17 +24,17 @@ async function handleExampleSelection(exampleType: string): Promise<void> {
 
     // Dynamically import the json-example-utils module directly
     const module = await import("./utils/json-example-utils.js");
-    
+
     // Get the JSON content
     const jsonContent = module.getJsonExampleContent(exampleType);
-    
+
     if (jsonContent) {
       // Dispatch event for the app to handle
       const event = new CustomEvent("useJsonExample", {
-        detail: { type: exampleType }
+        detail: { type: exampleType },
       });
       window.dispatchEvent(event);
-      
+
       // Close the modal
       closeJsonExampleModal();
     } else {
@@ -80,16 +80,16 @@ function initializeModalHandlers(): void {
     card.addEventListener("click", (e) => {
       // Prevent multiple triggers
       e.stopPropagation();
-      
+
       const exampleType = card.getAttribute("data-example");
       if (exampleType) {
         handleExampleSelection(exampleType);
       }
     });
   });
-  
+
   // Add visual feedback - make cards look clickable
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.textContent = `
     .json-example-card {
       cursor: pointer;
