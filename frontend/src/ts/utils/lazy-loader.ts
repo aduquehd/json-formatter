@@ -59,3 +59,7 @@ export async function loadSearchUtils() {
 export async function loadMapUtils() {
   return lazyLoadModule("./map-utils.js");
 }
+
+export async function loadJsonExampleUtils() {
+  return lazyLoadModule("./json-example-utils.js");
+}

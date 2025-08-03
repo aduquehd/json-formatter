@@ -9,13 +9,13 @@ import {
   loadChartUtils,
   loadSearchUtils,
   loadMapUtils,
+  loadJsonExampleUtils,
 } from "./utils/lazy-loader.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
 import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
-import { openJsonExampleModal, getJsonExampleContent } from "./utils/json-example-utils.js";
 
 declare var toastr: any;
 declare var d3: any;
@@ -161,7 +161,13 @@ class JSONViewer {
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
     this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
     this.elements.themeBtn.addEventListener("click", () => this.toggleTheme());
-    this.elements.jsonExampleBtn.addEventListener("click", () => openJsonExampleModal());
+    this.elements.jsonExampleBtn.addEventListener("click", () => {
+      // Simple modal opening - no module loading needed
+      const modal = document.getElementById("jsonExampleModal");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    });
     
     // Listen for JSON example selection
     window.addEventListener("useJsonExample", (e: Event) => {
@@ -431,8 +437,9 @@ class JSONViewer {
     }
   }
 
-  private useJsonExample(exampleType: string): void {
-    const jsonContent = getJsonExampleContent(exampleType);
+  private async useJsonExample(exampleType: string): Promise<void> {
+    const jsonExampleUtils = await loadJsonExampleUtils();
+    const jsonContent = jsonExampleUtils.getJsonExampleContent(exampleType);
     if (jsonContent && this.state.editor) {
       this.state.editor.setValue(jsonContent);
       // Switch to JSON Editor tab
