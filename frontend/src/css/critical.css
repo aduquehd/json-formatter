@@ -8,16 +8,14 @@
 
 /* Critical root variables */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
+  --bg-primary: #fafafa;
+  --bg-secondary: #f5f5f5;
   --text-primary: #1a1a1a;
   --text-secondary: #666;
-  --border-color: rgba(0, 0, 0, 0.06);
-  --navbar-bg: linear-gradient(
-    135deg,
-    rgba(249, 250, 251, 0.98) 0%,
-    rgba(243, 244, 246, 0.98) 100%
-  );
+  --border-color: #e0e0e0;
+  --navbar-bg: #ffffff;
+  --navbar-border: #e0e0e0;
+  --navbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="dark"] {

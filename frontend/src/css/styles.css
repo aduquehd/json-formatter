@@ -6,24 +6,27 @@
 
 :root {
   /* Light theme variables (default) */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
+  --bg-primary: #fafafa;
+  --bg-secondary: #f5f5f5;
   --bg-tertiary: #ffffff;
   --text-primary: #1a1a1a;
   --text-secondary: #666;
   --text-muted: #999;
-  --border-color: rgba(0, 0, 0, 0.06);
-  --border-hover: rgba(0, 0, 0, 0.1);
-  --shadow-light: rgba(0, 0, 0, 0.02);
-  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --border-color: #e0e0e0;
+  --border-hover: #d0d0d0;
+  --shadow-light: rgba(0, 0, 0, 0.04);
+  --shadow-medium: rgba(0, 0, 0, 0.08);
   --accent-bg: rgba(0, 123, 255, 0.02);
-  --navbar-bg: linear-gradient(
-    135deg,
-    rgba(249, 250, 251, 0.98) 0%,
-    rgba(243, 244, 246, 0.98) 100%
-  );
-  --btn-secondary-bg: #f8f9fa;
-  --btn-secondary-hover: #e9ecef;
+  --navbar-bg: #ffffff;
+  --navbar-border: #e0e0e0;
+  --navbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --btn-primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-hover: #f5f5f5;
+  --btn-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --btn-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --tabs-bg: #f5f5f5;
+  --tabs-border: #e0e0e0;
   --input-bg: #ffffff;
   --tree-bg: #ffffff;
   --tree-hover: #f8f9fa;
@@ -71,6 +74,8 @@
   --input-bg: rgba(36, 40, 59, 0.6);
   --tree-bg: #1a1b26;
   --tree-hover: rgba(122, 162, 247, 0.1);
+  --tabs-bg: transparent;
+  --tabs-border: #3b4261;
 
   /* Soft Accent Colors */
   --accent-primary: #7aa2f7;
@@ -181,11 +186,9 @@ body::before {
   height: 56px;
   background: var(--navbar-bg);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--navbar-border);
   z-index: 1000;
-  box-shadow:
-    0 2px 12px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--navbar-shadow);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -357,13 +360,11 @@ body::before {
 }
 
 main {
-  background: var(--bg-primary);
-  border: none;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.04),
-    0 2px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--container-shadow);
   height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
@@ -545,7 +546,7 @@ main {
 
 .btn {
   padding: 12px 24px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
@@ -554,15 +555,27 @@ main {
   text-transform: none;
   letter-spacing: 0.02em;
   font-family: 'Inter', 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--btn-secondary-bg);
   color: var(--text-primary);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--btn-shadow);
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--btn-shadow-hover);
+  background: var(--btn-secondary-hover);
+  border-color: var(--border-hover);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--btn-shadow);
 }
 
 [data-theme="dark"] .btn {
@@ -606,7 +619,7 @@ main {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--btn-primary-bg);
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
   border: 1px solid transparent;
@@ -636,6 +649,7 @@ main {
   background: var(--btn-secondary-bg);
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
+  box-shadow: var(--btn-shadow);
 }
 
 [data-theme="dark"] .btn-secondary {
@@ -798,12 +812,13 @@ main {
 .tabs {
   display: flex;
   margin-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--tabs-border);
   flex-shrink: 0;
-  background: transparent;
+  background: var(--tabs-bg);
   gap: 4px;
-  padding-bottom: 0;
+  padding: 8px 8px 0 8px;
   align-items: center;
+  border-radius: 8px 8px 0 0;
 }
 
 .tab-btn {
@@ -1543,6 +1558,7 @@ main {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
+  background: var(--bg-tertiary);
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
