@@ -21,7 +21,9 @@ ENV UV_PROJECT_ENVIRONMENT="/usr/local"
 ADD . /app
 
 # Install Node.js dependencies and build TypeScript
-RUN npm install && npm run build
+# Clean install to ensure correct platform binaries
+RUN npm ci --omit=optional || npm install
+RUN npm run build
 
 # Install Python dependencies with uv
 RUN uv sync
