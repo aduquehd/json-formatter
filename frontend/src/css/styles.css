@@ -500,27 +500,72 @@ main {
 }
 
 #copyBtn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
-  border: none;
+  background: var(--btn-secondary-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 #copyBtn:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  box-shadow: 0 6px 20px var(--shadow-medium);
+  background: var(--btn-secondary-hover);
+  color: var(--text-primary);
 }
 
 #pasteBtn {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: #ffffff;
-  border: none;
+  background: var(--btn-secondary-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 #pasteBtn:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 24px rgba(240, 147, 251, 0.3);
-  background: linear-gradient(135deg, #ed6ea0 0%, #ec8c69 100%);
+  box-shadow: 0 6px 20px var(--shadow-medium);
+  background: var(--btn-secondary-hover);
+  color: var(--text-primary);
+}
+
+#compactBtn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: #ffffff;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
+}
+
+#compactBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+#compactBtn:hover::before {
+  left: 100%;
+}
+
+#compactBtn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+}
+
+[data-theme="dark"] #compactBtn {
+  background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%);
+  box-shadow: 0 4px 14px rgba(167, 139, 250, 0.25);
+}
+
+[data-theme="dark"] #compactBtn:hover {
+  background: linear-gradient(135deg, #9333ea 0%, #6366f1 100%);
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.35);
 }
 
 .btn-accent {
