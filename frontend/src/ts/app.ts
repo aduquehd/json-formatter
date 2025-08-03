@@ -14,6 +14,7 @@ import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js"
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
 import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
+import { openJsonExampleModal, getJsonExampleContent } from "./utils/json-example-utils.js";
 
 declare var toastr: any;
 declare var d3: any;
@@ -44,6 +45,7 @@ class JSONViewer {
     pasteBtn: HTMLElement;
     themeBtn: HTMLElement;
     mobileThemeBtn: HTMLElement | null;
+    jsonExampleBtn: HTMLElement;
     editorThemeSelect: HTMLSelectElement;
     tabBtns: NodeListOf<HTMLElement>;
     treeOutput: HTMLElement;
@@ -72,6 +74,7 @@ class JSONViewer {
       pasteBtn: document.getElementById("pasteBtn")!,
       themeBtn: document.getElementById("themeBtn")!,
       mobileThemeBtn: document.getElementById("mobileThemeBtn"),
+      jsonExampleBtn: document.getElementById("jsonExampleBtn")!,
       editorThemeSelect: document.getElementById("editorThemeSelect") as HTMLSelectElement,
       tabBtns: document.querySelectorAll(".tab-btn"),
       treeOutput: document.getElementById("treeOutput")!,
@@ -157,6 +160,14 @@ class JSONViewer {
     this.elements.copyBtn.addEventListener("click", () => this.copyJSON());
     this.elements.pasteBtn.addEventListener("click", () => this.pasteFromClipboard());
     this.elements.themeBtn.addEventListener("click", () => this.toggleTheme());
+    this.elements.jsonExampleBtn.addEventListener("click", () => openJsonExampleModal());
+    
+    // Listen for JSON example selection
+    window.addEventListener("useJsonExample", (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const exampleType = customEvent.detail.type;
+      this.useJsonExample(exampleType);
+    });
 
     if (this.elements.mobileThemeBtn) {
       this.elements.mobileThemeBtn.addEventListener("click", () => this.toggleTheme());
@@ -414,6 +425,17 @@ class JSONViewer {
     } else {
       // Keep the specific theme that was selected
       setMonacoTheme(this.state.editor, savedTheme);
+    }
+  }
+
+  private useJsonExample(exampleType: string): void {
+    const jsonContent = getJsonExampleContent(exampleType);
+    if (jsonContent && this.state.editor) {
+      this.state.editor.setValue(jsonContent);
+      // Switch to JSON Editor tab
+      this.switchTab("formatted");
+      // Show success notification
+      toastr.success("JSON example loaded successfully!");
     }
   }
 }

@@ -28,9 +28,12 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
+
     <!-- Modern Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- SEO Meta Tags -->
     <meta
@@ -392,6 +395,23 @@
               Clear
             </button>
           </div>
+          <!-- JSON Example Button -->
+          <button id="jsonExampleBtn" class="json-example-btn" aria-label="Use JSON examples">
+            <svg
+              class="json-example-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+            <span class="json-example-text">Use a JSON example</span>
+            <span class="json-example-badge">NEW</span>
+          </button>
           <div class="editor-theme-wrapper">
             <label for="editorThemeSelect" class="theme-select-label">Editor Theme:</label>
             <select id="editorThemeSelect" class="theme-select" aria-label="Select editor theme">
@@ -472,10 +492,10 @@
             Search & Filter
           </button>
           <!-- Map View Tab (temporarily disabled - uncomment to re-enable) -->
-          <!-- <button class="tab-btn" data-tab="map">
-        Map View
-        <span class="beta-badge">Beta</span>
-      </button> -->
+          <button class="tab-btn" data-tab="map">
+            Map View
+            <span class="beta-badge">Beta</span>
+          </button>
         </div>
 
         <div class="output-section">
@@ -513,9 +533,9 @@
             <div id="statsOutput" class="stats-output"></div>
           </div>
           <!-- Map View Content (temporarily disabled - uncomment to re-enable) -->
-          <!-- <div id="map-tab" class="tab-content">
-        <div id="mapOutput" class="map-output"></div>
-      </div> -->
+          <div id="map-tab" class="tab-content">
+            <div id="mapOutput" class="map-output"></div>
+          </div>
           <div id="chart-tab" class="tab-content" role="tabpanel" aria-labelledby="chartBtn">
             <div id="chartOutput" class="chart-output"></div>
           </div>
@@ -524,6 +544,194 @@
           </div>
         </div>
       </main>
+    </div>
+
+    <!-- JSON Example Modal -->
+    <div id="jsonExampleModal" class="json-example-modal" style="display: none">
+      <div class="json-example-modal-content">
+        <div class="json-example-modal-header">
+          <h2 class="json-example-modal-title">Choose a JSON Example</h2>
+          <button class="json-example-modal-close" aria-label="Close modal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="json-example-modal-body">
+          <div class="json-example-grid">
+            <!-- E-commerce Product Catalog Example -->
+            <div class="json-example-card" data-example="ecommerce">
+              <div class="json-example-card-header">
+                <svg
+                  class="json-example-card-icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <h3 class="json-example-card-title">E-commerce Catalog</h3>
+              </div>
+              <div class="json-example-preview">
+                <pre class="json-example-code">
+{
+  "████████": [
+    {
+      "██": "██████████",
+      "████": "████████████",
+      "█████": ███.██,
+      "████████": { ███ },
+      "██████": [████, ████]
+    },
+    { ███████████████ }
+  ],
+  "██████████": [███████],
+  "████████": {
+    "█████": "████-██-██",
+    "███████": ████
+  }
+}</pre
+                >
+              </div>
+              <button class="json-example-use-btn">Use this example</button>
+            </div>
+
+            <!-- Company Financial Sales Data Example -->
+            <div class="json-example-card" data-example="financial">
+              <div class="json-example-card-header">
+                <svg
+                  class="json-example-card-icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <h3 class="json-example-card-title">Financial Sales</h3>
+              </div>
+              <div class="json-example-preview">
+                <pre class="json-example-code">
+{
+  "███████": "████ ███████████",
+  "████████████": ████,
+  "████████": [
+    {
+      "███████": ███████,
+      "██████": ██████,
+      "████████████": █.███
+    },
+    { ███████████████ }
+  ],
+  "██████████████": {
+    "█████████████": ████████,
+    "████████": █.███
+  }
+}</pre
+                >
+              </div>
+              <button class="json-example-use-btn">Use this example</button>
+            </div>
+
+            <!-- Application Configuration Settings Example -->
+            <div class="json-example-card" data-example="configuration">
+              <div class="json-example-card-header">
+                <svg
+                  class="json-example-card-icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path
+                    d="M12 1v6m0 6v6m11-7h-6m-6 0H1m20.485-6.515l-4.242 4.243m-8.485 8.485l-4.243 4.243m0-13.456l4.243 4.242m8.485 8.485l4.242 4.242"
+                  ></path>
+                </svg>
+                <h3 class="json-example-card-title">Application Configuration</h3>
+              </div>
+              <div class="json-example-preview">
+                <pre class="json-example-code">
+{
+  "███": {
+    "████": "████████████",
+    "███████": "█.█.█",
+    "███████████": "██████████",
+    "████████": {
+      "█████": █████,
+      "████████": "████"
+    }
+  },
+  "██████": {
+    "████": "███.██████.███",
+    "████": ████,
+    "████████": "█████████"
+  },
+  "████████": [ ███████ ]
+}</pre
+                >
+              </div>
+              <button class="json-example-use-btn">Use this example</button>
+            </div>
+
+            <!-- Geographic Data - World Cities GeoJSON Example -->
+            <div class="json-example-card" data-example="geographic">
+              <div class="json-example-card-header">
+                <svg
+                  class="json-example-card-icon"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                  ></path>
+                </svg>
+                <h3 class="json-example-card-title">Geographic Data</h3>
+              </div>
+              <div class="json-example-preview">
+                <pre class="json-example-code">
+{
+  "████": "██████████████████",
+  "████████": [
+    {
+      "████": "███████",
+      "████████": {
+        "████": "█████",
+        "███████████": [██.████, ██.████]
+      },
+      "██████████": {
+        "████": "███ ████",
+        "███████": "██████ ██████"
+      }
+    },
+    { ███████████████ }
+  ],
+  "████": [████, ███, ███, ███]
+}</pre
+                >
+              </div>
+              <button class="json-example-use-btn">Use this example</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Load JavaScript libraries with defer to prevent render blocking -->
