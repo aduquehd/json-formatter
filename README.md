@@ -28,6 +28,10 @@
 - ✅ **Real-time Validation**: Live JSON validation with error highlighting
 - 📁 **Code Folding**: Collapse and expand JSON sections
 - 🎨 **Theme Support**: Light and dark themes with automatic editor theme switching
+- 🔍 **Search & Replace**: Built-in search functionality with regex support
+- 🖨️ **Print Support**: Print-friendly formatted JSON output
+- 📋 **Copy to Clipboard**: One-click copy of formatted JSON
+- 🔧 **URL Parameter Support**: Load JSON from URL parameters
 - 📱 **Modern UI**: Clean, responsive design that works on all devices
 - 🚀 **No Database**: Simple, stateless application
 
@@ -59,7 +63,7 @@
    docker-compose up --build
    ```
 
-5. Open your browser and go to `http://localhost:8000`
+5. Open your browser and go to `http://localhost:8001`
 
 ## ⚙️ Configuration
 
@@ -68,6 +72,7 @@ The application uses environment variables for configuration. Copy `.env.example
 ```bash
 # Analytics Configuration (optional)
 GA_TRACKING_ID=G-xxxxxxxx
+HOTJAR_ID=xxxxxxxx
 
 # Application Configuration  
 APP_ENV=development
@@ -77,6 +82,7 @@ DEBUG=false
 ### 🔧 Environment Variables
 
 - **`GA_TRACKING_ID`** (optional): Google Analytics 4 tracking ID for web analytics
+- **`HOTJAR_ID`** (optional): Hotjar site ID for user behavior analytics
 - **`APP_ENV`**: Application environment (`development`, `production`)
 - **`DEBUG`**: Enable/disable debug mode (`true`, `false`)
 
@@ -125,7 +131,7 @@ If you prefer to develop locally:
 
 5. Start the server:
    ```bash
-   uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+   uv run uvicorn main:app --host 0.0.0.0 --port 8001 --reload
    ```
 
 ### 📘 TypeScript Development
@@ -136,8 +142,10 @@ If you prefer to develop locally:
 - CSS files are copied to `static/css/` during build
 - HTML templates are in `templates/`
 
-**Important:** The generated JavaScript files are automatically created from TypeScript and should never be edited
-directly.
+**Important:** 
+- Never edit files in the `static/` directory - they are auto-generated
+- All frontend source code is in the `frontend/src/` directory
+- Run `npm run build` after making changes to TypeScript files
 
 #### Build TypeScript:
 
@@ -199,6 +207,13 @@ docker-compose -f docker-compose.dev.yml up --build
 docker-compose build --no-cache
 ```
 
+### 🏭 Production Deployment
+
+```bash
+# Build and run with production optimizations
+docker-compose -f docker-compose.prod.yml up --build -d
+```
+
 ## 📂 Project Structure
 
 ```
@@ -209,21 +224,31 @@ json-viewer/
 ├── 🐳 docker-compose.dev.yml     # Development Docker Compose
 ├── 🐳 docker-compose.prod.yml    # Production Docker Compose
 ├── 📁 templates/
-│   └── 🌐 index.html             # Main HTML template
-├── 📁 static/                    # Served static files
+│   └── 🌐 index.html             # Main HTML template with Jinja2
+├── 📁 static/                    # Served static files (auto-generated)
 │   ├── 🎨 css/                   # CSS (copied from frontend/src/css)
-│   └── 📦 js/                    # Compiled JavaScript (auto-generated)
-├── 📁 frontend/                  # Frontend application
+│   ├── 📦 js/                    # Compiled JavaScript (from TypeScript)
+│   └── 🖼️ favicon.ico            # Site favicon
+├── 📁 frontend/                  # Frontend source code
 │   └── 📁 src/                   # Source files
 │       ├── 📁 ts/                # TypeScript source
-│       │   ├── 📘 app.ts         # Main application
-│       │   └── 📁 utils/         # Utility modules
+│       │   ├── 📘 app.ts         # Main JSONViewer class
+│       │   ├── 📁 utils/         # Utility modules
+│       │   │   ├── 📄 clipboard.ts    # Clipboard operations
+│       │   │   ├── 📄 json.ts         # JSON parsing/validation
+│       │   │   ├── 📄 theme.ts        # Theme management
+│       │   │   ├── 📄 treeBuilder.ts  # Tree view generation
+│       │   │   └── 📄 urlParams.ts    # URL parameter handling
+│       │   └── 📁 types/         # TypeScript type definitions
 │       └── 🎨 css/               # CSS source files
 │           ├── styles.css        # Main styles
 │           └── critical.css      # Critical path CSS
 ├── 📦 package.json               # Node.js dependencies
 ├── ⚙️ tsconfig.json              # TypeScript configuration
-└── 🐍 pyproject.toml             # Python dependencies
+├── 🐍 pyproject.toml             # Python dependencies
+├── 📋 CLAUDE.md                  # AI assistant instructions
+├── 🔧 .env.example               # Example environment configuration
+└── 📄 README.md                  # This file
 ```
 
 ## 🛠️ Technology Stack
@@ -246,6 +271,7 @@ json-viewer/
 ![Monaco Editor](https://img.shields.io/badge/Monaco%20Editor-0066CC?style=flat-square&logo=visualstudiocode&logoColor=white)
 ![npm](https://img.shields.io/badge/npm-CB3837?style=flat-square&logo=npm&logoColor=white)
 ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=flat-square&logo=prettier&logoColor=black)
+![Ruff](https://img.shields.io/badge/Ruff-D7191C?style=flat-square&logo=python&logoColor=white)
 
 ### Infrastructure
 
