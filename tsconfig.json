@@ -3,7 +3,7 @@
     "target": "ES2020",
     "module": "ESNext",
     "outDir": "./static/js",
-    "rootDir": "./src",
+    "rootDir": "./frontend/src/ts",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -12,6 +12,6 @@
     "declaration": false,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["frontend/src/**/*"],
   "exclude": ["node_modules", "static/js"]
 }

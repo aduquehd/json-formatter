@@ -117,5 +117,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
- TypeScript compiled output
+# TypeScript compiled output
 static/js/*
+
+# CSS copied from frontend/src/css
+static/css/*

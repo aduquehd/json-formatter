@@ -130,9 +130,10 @@ If you prefer to develop locally:
 
 ### 📘 TypeScript Development
 
-- TypeScript files are in `src/`
+- TypeScript files are in `frontend/src/ts/`
 - Compiled JavaScript goes to `static/js/` (auto-generated, not committed to repo)
-- CSS files are in `static/css/`
+- CSS source files are in `frontend/src/css/`
+- CSS files are copied to `static/css/` during build
 - HTML templates are in `templates/`
 
 **Important:** The generated JavaScript files are automatically created from TypeScript and should never be edited
@@ -209,13 +210,17 @@ json-viewer/
 ├── 🐳 docker-compose.prod.yml    # Production Docker Compose
 ├── 📁 templates/
 │   └── 🌐 index.html             # Main HTML template
-├── 📁 static/
-│   ├── 🎨 css/
-│   │   └── styles.css         # Application styles
+├── 📁 static/                    # Served static files
+│   ├── 🎨 css/                   # CSS (copied from frontend/src/css)
 │   └── 📦 js/                    # Compiled JavaScript (auto-generated)
-├── 📁 src/                       # TypeScript source files
-│   ├── 📘 app.ts                 # Main application
-│   └── 📁 utils/                 # Utility modules
+├── 📁 frontend/                  # Frontend application
+│   └── 📁 src/                   # Source files
+│       ├── 📁 ts/                # TypeScript source
+│       │   ├── 📘 app.ts         # Main application
+│       │   └── 📁 utils/         # Utility modules
+│       └── 🎨 css/               # CSS source files
+│           ├── styles.css        # Main styles
+│           └── critical.css      # Critical path CSS
 ├── 📦 package.json               # Node.js dependencies
 ├── ⚙️ tsconfig.json              # TypeScript configuration
 └── 🐍 pyproject.toml             # Python dependencies

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-css",
     "watch": "tsc --watch",
     "dev": "tsc --watch",
+    "copy-css": "cp -r frontend/src/css/* static/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
