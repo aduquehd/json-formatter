@@ -64,6 +64,13 @@ export function compactJSONInEditor(editor: any): ParseResult {
     const compacted = JSON.stringify(parsed);
     editor.setValue(compacted);
 
+    // Add pulse animation to compact button
+    const compactBtn = document.getElementById('compactBtn');
+    if (compactBtn) {
+      compactBtn.classList.add('compacted');
+      setTimeout(() => compactBtn.classList.remove('compacted'), 400);
+    }
+
     return { success: true, data: parsed };
   } catch (e: any) {
     toastr.error(`Invalid JSON: ${e.message}`);
@@ -74,6 +81,13 @@ export function compactJSONInEditor(editor: any): ParseResult {
 export function clearEditor(editor: any): void {
   if (editor) {
     editor.setValue("");
+    
+    // Add pulse animation to clear button
+    const clearBtn = document.getElementById('clearBtn');
+    if (clearBtn) {
+      clearBtn.classList.add('cleared');
+      setTimeout(() => clearBtn.classList.remove('cleared'), 400);
+    }
   }
 }
 

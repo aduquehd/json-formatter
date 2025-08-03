@@ -75,6 +75,14 @@ export async function pasteIntoEditor(editor: any, formatCallback?: () => void):
   const text = await pasteFromClipboard();
   if (text) {
     editor.setValue(text);
+    
+    // Add pulse animation to paste button
+    const pasteBtn = document.getElementById('pasteBtn');
+    if (pasteBtn) {
+      pasteBtn.classList.add('pasted');
+      setTimeout(() => pasteBtn.classList.remove('pasted'), 400);
+    }
+    
     if (formatCallback) {
       setTimeout(formatCallback, 10);
     }
