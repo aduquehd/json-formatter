@@ -57,6 +57,13 @@ export function copyEditorContent(editor: any): void {
 
   const content = editor.getValue();
   copyToClipboard(content);
+  
+  // Add pulse animation to copy button
+  const copyBtn = document.getElementById('copyBtn');
+  if (copyBtn) {
+    copyBtn.classList.add('copied');
+    setTimeout(() => copyBtn.classList.remove('copied'), 400);
+  }
 }
 
 export async function pasteIntoEditor(editor: any, formatCallback?: () => void): Promise<boolean> {

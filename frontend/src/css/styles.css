@@ -81,13 +81,14 @@
   --accent-purple: #A78BFA;
 
   /* JSON Syntax Highlighting - Futuristic Theme */
-  --json-string: #50FA7B;
-  --json-number: #F59E0B;
-  --json-boolean: #EC4899;
-  --json-null: #EC4899;
-  --json-bracket: #94A3B8;
-  --json-colon: #64748B;
-  --json-comma: #64748B;
+  --json-string: #F59E0B;
+  --json-number: #FF79C6;
+  --json-boolean: #B392F0;
+  --json-null: #B392F0;
+  --json-bracket: #6B7280;
+  --json-colon: #6B7280;
+  --json-comma: #6B7280;
+  --json-key: #06B6D4;
 
   /* Line Numbers - Futuristic Theme */
   --line-number-bg: #111113;
@@ -95,11 +96,11 @@
   --line-number-border: rgba(14, 165, 233, 0.1);
 
   /* Tree View Colors - Futuristic Theme */
-  --tree-string: #50FA7B;
-  --tree-number: #F59E0B;
-  --tree-boolean: #EC4899;
-  --tree-null: #EC4899;
-  --tree-object: #0EA5E9;
+  --tree-string: #F59E0B;
+  --tree-number: #FF79C6;
+  --tree-boolean: #B392F0;
+  --tree-null: #B392F0;
+  --tree-object: #06B6D4;
   --tree-array: #A78BFA;
 
   /* Glow Effects */
@@ -115,6 +116,9 @@ body {
   color: var(--text-primary);
   overflow-x: hidden;
   position: relative;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body::before {
@@ -545,6 +549,7 @@ main {
   background: rgba(14, 165, 233, 0.05);
   border: 1px solid rgba(14, 165, 233, 0.2);
   box-shadow: none;
+  transition: all 0.2s ease;
 }
 
 [data-theme="dark"] .btn::before {
@@ -558,8 +563,19 @@ main {
   transition: left 0.5s;
 }
 
+[data-theme="dark"] .btn:hover {
+  border-color: rgba(14, 165, 233, 0.4);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+  transform: translateY(-1px);
+}
+
 [data-theme="dark"] .btn:hover::before {
   left: 100%;
+}
+
+[data-theme="dark"] .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
 }
 
 .btn-icon {
@@ -645,6 +661,17 @@ main {
   background: rgba(80, 250, 123, 0.1);
   border-color: var(--accent-green);
   box-shadow: 0 0 15px rgba(80, 250, 123, 0.3);
+}
+
+/* Copy button animation on click */
+[data-theme="dark"] #copyBtn.copied {
+  animation: copyPulse 0.4s ease;
+}
+
+@keyframes copyPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); box-shadow: 0 0 25px rgba(80, 250, 123, 0.5); }
+  100% { transform: scale(1); }
 }
 
 #pasteBtn {
@@ -797,15 +824,16 @@ main {
 /* Beta Badge Styles */
 .beta-badge {
   display: inline-block;
-  margin-left: 6px;
-  padding: 2px 6px;
-  font-size: 10px;
-  font-weight: 700;
+  margin-left: 8px;
+  padding: 1px 5px;
+  font-size: 9px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: #ffffff;
-  border-radius: 12px;
+  background: rgba(236, 72, 153, 0.1);
+  color: #EC4899;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  border-radius: 4px;
   vertical-align: middle;
   position: relative;
   top: -1px;
@@ -814,14 +842,12 @@ main {
 }
 
 .beta-badge:hover {
-  transform: scale(1.1);
-  background: linear-gradient(135deg, #f2a1fc 0%, #f6687a 100%);
-  box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);
+  background: rgba(236, 72, 153, 0.2);
+  border-color: rgba(236, 72, 153, 0.3);
 }
 
 .tab-btn.active .beta-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
+  opacity: 0.8;
 }
 
 .tab-separator {
@@ -911,16 +937,17 @@ main {
   background: var(--input-bg);
   border: none;
   border-radius: 0;
-  padding: 16px;
-  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", monospace;
-  font-size: 12px;
-  line-height: 1.5;
+  padding: 20px;
+  font-family: 'JetBrains Mono', 'Fira Code', "SF Mono", Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.7;
   overflow-x: auto;
   white-space: pre-wrap;
   height: 100%;
   overflow-y: auto;
   color: var(--text-primary);
   box-shadow: none;
+  font-feature-settings: "liga" 1, "calt" 1;
 }
 
 .tree-output {
@@ -1450,11 +1477,14 @@ main {
 /* Dark mode tab styling */
 
 [data-theme="dark"] .beta-badge {
-  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  background: rgba(0, 217, 255, 0.1);
+  color: var(--accent-cyan);
+  border-color: rgba(0, 217, 255, 0.2);
+  font-size: 8px;
 }
 
 [data-theme="dark"] .tab-btn.active .beta-badge {
-  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  opacity: 0.9;
 }
 
 [data-theme="dark"] .tab-separator {
@@ -1484,8 +1514,10 @@ main {
 }
 
 [data-theme="dark"] .monaco-editor-container {
-  border: 1px solid rgba(14, 165, 233, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border: 1px solid #1a1a1d;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(14, 165, 233, 0.1) inset;
   background: #111113;
 }
 
@@ -1495,11 +1527,11 @@ main {
 }
 
 [data-theme="dark"] .monaco-editor-container:hover {
-  border-color: rgba(14, 165, 233, 0.4);
+  border-color: rgba(14, 165, 233, 0.3);
   box-shadow: 
-    0 0 0 3px rgba(14, 165, 233, 0.1),
-    0 4px 20px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(0, 217, 255, 0.1);
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(14, 165, 233, 0.2) inset,
+    0 0 20px rgba(0, 217, 255, 0.1);
 }
 
 .monaco-editor-container:focus-within {
