@@ -41,6 +41,13 @@ export function formatJSONInEditor(editor: any): ParseResult {
     const formatted = JSON.stringify(parsed, null, 2);
     editor.setValue(formatted);
 
+    // Add pulse animation to format button
+    const formatBtn = document.getElementById('formatBtn');
+    if (formatBtn) {
+      formatBtn.classList.add('formatted');
+      setTimeout(() => formatBtn.classList.remove('formatted'), 400);
+    }
+
     return { success: true, data: parsed };
   } catch (e: any) {
     toastr.error(`Invalid JSON: ${e.message}`);
