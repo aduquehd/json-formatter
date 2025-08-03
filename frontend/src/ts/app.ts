@@ -8,6 +8,7 @@ import {
   loadStatsUtils,
   loadChartUtils,
   loadSearchUtils,
+  loadMapUtils,
 } from "./utils/lazy-loader.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
@@ -350,9 +351,11 @@ class JSONViewer {
                   module.generateStatsView(parsed, this.elements.statsOutput);
                 });
                 break;
-              // case "map":
-              //   generateMapView(parsed, this.elements.mapOutput);
-              //   break;
+              case "map":
+                loadMapUtils().then((module) => {
+                  module.generateMapView(parsed, this.elements.mapOutput);
+                });
+                break;
               case "chart":
                 loadChartUtils().then((module) => {
                   module.generateChartView(parsed, this.elements.chartOutput);

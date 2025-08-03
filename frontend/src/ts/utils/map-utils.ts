@@ -197,11 +197,11 @@ function loadLeaflet(): Promise<void> {
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+    link.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css";
     document.head.appendChild(link);
 
     const script = document.createElement("script");
-    script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
     script.onload = () => {
       // Restore the original define function
       (window as any).define = originalDefine;
@@ -209,19 +209,19 @@ function loadLeaflet(): Promise<void> {
       // Load marker cluster plugin CSS
       const clusterCSS = document.createElement("link");
       clusterCSS.rel = "stylesheet";
-      clusterCSS.href = "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css";
+      clusterCSS.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css";
       document.head.appendChild(clusterCSS);
 
       const clusterDefaultCSS = document.createElement("link");
       clusterDefaultCSS.rel = "stylesheet";
       clusterDefaultCSS.href =
-        "https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css";
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css";
       document.head.appendChild(clusterDefaultCSS);
 
       // For the cluster plugin, we'll also need to temporarily remove define
       const clusterScript = document.createElement("script");
       clusterScript.src =
-        "https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js";
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js";
 
       // Remove define before loading cluster plugin
       clusterScript.onload = () => {

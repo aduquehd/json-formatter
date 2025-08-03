@@ -55,3 +55,7 @@ export async function loadChartUtils() {
 export async function loadSearchUtils() {
   return lazyLoadModule("./search-utils.js");
 }
+
+export async function loadMapUtils() {
+  return lazyLoadModule("./map-utils.js");
+}
