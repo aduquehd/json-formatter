@@ -16,8 +16,8 @@ import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js"
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
 import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
+import { showSuccess } from "./utils/notification-utils.js";
 
-declare var toastr: any;
 declare var d3: any;
 
 interface AppState {
@@ -445,7 +445,7 @@ class JSONViewer {
       // Switch to JSON Editor tab
       this.switchTab("formatted");
       // Show success notification
-      toastr.success("JSON example loaded successfully!");
+      showSuccess("JSON example loaded successfully!");
     }
   }
 }

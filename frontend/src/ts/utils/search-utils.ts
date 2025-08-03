@@ -1,3 +1,5 @@
+import { showSuccess } from "./notification-utils.js";
+
 export function generateSearchView(data: any, container: HTMLElement): void {
   container.innerHTML = "";
 
@@ -442,7 +444,5 @@ function updateSavedSearchesList(
 }
 
 function showToast(message: string): void {
-  if (typeof (window as any).toastr !== "undefined") {
-    (window as any).toastr.success(message);
-  }
+  showSuccess(message);
 }

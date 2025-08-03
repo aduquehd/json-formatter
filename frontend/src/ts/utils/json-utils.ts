@@ -1,6 +1,5 @@
 import { JSONValue, ValueType, ParseResult } from "./types.js";
-
-declare var toastr: any;
+import { showError } from "./notification-utils.js";
 
 export function parseJSON(input: string): ParseResult {
   if (!input.trim()) {
@@ -50,7 +49,7 @@ export function formatJSONInEditor(editor: any): ParseResult {
 
     return { success: true, data: parsed };
   } catch (e: any) {
-    toastr.error(`Invalid JSON: ${e.message}`);
+    showError(`Invalid JSON: ${e.message}`);
     return { success: false, error: e.message };
   }
 }
@@ -73,7 +72,7 @@ export function compactJSONInEditor(editor: any): ParseResult {
 
     return { success: true, data: parsed };
   } catch (e: any) {
-    toastr.error(`Invalid JSON: ${e.message}`);
+    showError(`Invalid JSON: ${e.message}`);
     return { success: false, error: e.message };
   }
 }

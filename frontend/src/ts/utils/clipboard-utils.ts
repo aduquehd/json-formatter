@@ -1,15 +1,15 @@
-declare var toastr: any;
+import { showSuccess, showError, showWarning } from "./notification-utils.js";
 
 export function copyToClipboard(content: string): void {
   if (!content) {
-    toastr.warning("No content to copy!");
+    showWarning("No content to copy!");
     return;
   }
 
   navigator.clipboard
     .writeText(content)
     .then(() => {
-      toastr.success("JSON copied to clipboard!");
+      showSuccess("JSON copied to clipboard!");
     })
     .catch(() => {
       // Fallback for older browsers
@@ -22,9 +22,9 @@ export function copyToClipboard(content: string): void {
 
       try {
         document.execCommand("copy");
-        toastr.success("JSON copied to clipboard!");
+        showSuccess("JSON copied to clipboard!");
       } catch {
-        toastr.error("Failed to copy JSON. Please try selecting and copying manually.");
+        showError("Failed to copy JSON. Please try selecting and copying manually.");
       }
 
       document.body.removeChild(textArea);
@@ -38,20 +38,20 @@ export function pasteFromClipboard(): Promise<string | null> {
       if (text) {
         return text;
       } else {
-        toastr.warning("Clipboard is empty!");
+        showWarning("Clipboard is empty!");
         return null;
       }
     })
     .catch(() => {
       // Fallback message for browsers that don't support clipboard API
-      toastr.error("Unable to access clipboard. Please paste manually using Ctrl+V or Cmd+V.");
+      showError("Unable to access clipboard. Please paste manually using Ctrl+V or Cmd+V.");
       return null;
     });
 }
 
 export function copyEditorContent(editor: any): void {
   if (!editor) {
-    toastr.error("Editor not initialized!");
+    showError("Editor not initialized!");
     return;
   }
 
@@ -68,7 +68,7 @@ export function copyEditorContent(editor: any): void {
 
 export async function pasteIntoEditor(editor: any, formatCallback?: () => void): Promise<boolean> {
   if (!editor) {
-    toastr.error("Editor not initialized!");
+    showError("Editor not initialized!");
     return false;
   }
 
@@ -97,14 +97,14 @@ export function handlePasteEvent(e: ClipboardEvent): string | null {
   const clipboardData = e.clipboardData || (window as any).clipboardData;
 
   if (clipboardData.files && clipboardData.files.length > 0) {
-    toastr.error("Only text content is allowed. Images and files cannot be pasted.");
+    showError("Only text content is allowed. Images and files cannot be pasted.");
     return null;
   }
 
   const pastedText = clipboardData.getData("text/plain") || clipboardData.getData("text");
 
   if (!pastedText) {
-    toastr.error("No text content found in clipboard.");
+    showError("No text content found in clipboard.");
     return null;
   }
 

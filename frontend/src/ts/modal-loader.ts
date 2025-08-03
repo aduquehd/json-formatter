@@ -22,7 +22,7 @@ async function handleExampleSelection(exampleType: string): Promise<void> {
       button.disabled = true;
     }
 
-    // Dynamically import the json-example-utils module
+    // Dynamically import the json-example-utils module directly
     const module = await import("./utils/json-example-utils.js");
     
     // Get the JSON content
