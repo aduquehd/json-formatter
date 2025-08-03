@@ -1,5 +1,3 @@
-declare var toastr: any;
-
 export interface JsonExample {
   id: string;
   name: string;

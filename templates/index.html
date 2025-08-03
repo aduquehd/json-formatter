@@ -13,9 +13,9 @@
       http-equiv="Content-Security-Policy"
       content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com;
-      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
-      font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://www.googletagmanager.com https://static.hotjar.com https://script.hotjar.com;
+      style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com;
+      font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://script.hotjar.com;
       img-src 'self' data: https:;
       connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.hotjar.com https://*.hotjar.io wss://*.hotjar.com;
       frame-src 'self' https://vars.hotjar.com;
@@ -24,7 +24,7 @@
     />
 
     <!-- Preconnect for External Resources -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -161,8 +161,8 @@
 
     <!-- Load CSS synchronously to prevent rendering issues -->
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}?v={{ version }}" />
-    <!-- Load toastr CSS normally to ensure it's available -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Load Notyf CSS for notifications -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
 
     {% if ga_tracking_id %}
     <!-- Google tag (gtag.js) -->
@@ -726,9 +726,7 @@
     </div>
 
     <!-- Load JavaScript libraries with defer to prevent render blocking -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <!-- Load modal handler separately for better code organization -->
     <script type="module" src="{{ url_for('static', path='/js/modal-loader.js') }}?v={{ version }}"></script>
@@ -743,28 +741,46 @@
             const maxAttempts = 100; // 10 seconds max
 
             while (attempts < maxAttempts) {
-              const librariesReady = window.jQuery && window.toastr && window.d3 && window.require;
+              const librariesReady = window.Notyf && window.require;
 
               if (librariesReady) {
-                // Initialize toastr globally before loading the app
-                if (window.toastr) {
-                  window.toastr.options = {
-                    closeButton: true,
-                    debug: false,
-                    newestOnTop: false,
-                    progressBar: true,
-                    positionClass: "toast-top-right",
-                    preventDuplicates: false,
-                    onclick: null,
-                    showDuration: "300",
-                    hideDuration: "1000",
-                    timeOut: "5000",
-                    extendedTimeOut: "1000",
-                    showEasing: "swing",
-                    hideEasing: "linear",
-                    showMethod: "fadeIn",
-                    hideMethod: "fadeOut",
-                  };
+                // Initialize Notyf globally before loading the app
+                if (window.Notyf) {
+                  window.notyf = new window.Notyf({
+                    duration: 5000,
+                    position: {
+                      x: "right",
+                      y: "top",
+                    },
+                    types: [
+                      {
+                        type: "success",
+                        background: "green",
+                      },
+                      {
+                        type: "error",
+                        background: "indianred",
+                      },
+                      {
+                        type: "warning",
+                        background: "orange",
+                        icon: {
+                          className: "material-icons",
+                          tagName: "i",
+                          text: "warning",
+                        },
+                      },
+                      {
+                        type: "info",
+                        background: "#3498db",
+                        icon: {
+                          className: "material-icons",
+                          tagName: "i",
+                          text: "info",
+                        },
+                      },
+                    ],
+                  });
                 }
 
                 // Load the main app module

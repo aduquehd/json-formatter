@@ -1,7 +1,5 @@
 "use strict";
 
-declare const d3: any;
-
 interface GraphNode {
   id: string;
   name: string;
@@ -84,13 +82,16 @@ interface Pattern {
 }
 
 export function generateGraphView(data: any, container: HTMLElement): void {
-  // Check if d3 is available
-  if (typeof d3 === "undefined") {
+  // Check if d3 is available on window
+  if (typeof (window as any).d3 === "undefined") {
     console.error("D3.js is not loaded");
     container.innerHTML =
       '<div style="padding: 20px; color: red;">Error: D3.js library not loaded</div>';
     return;
   }
+  
+  // Use d3 from window
+  const d3 = (window as any).d3;
 
   // Show loading indicator
   container.innerHTML =
@@ -203,7 +204,7 @@ export function generateGraphView(data: any, container: HTMLElement): void {
       .enter()
       .append("g")
       .attr("class", (d: any) => `graph-node ${d.type}`)
-      .call(drag(simulation));
+      .call(drag(simulation, d3));
 
     // Color scale based on depth
     const colorScale = d3.scaleSequential(d3.interpolateViridis).domain([0, stats.maxDepth]);
@@ -260,7 +261,7 @@ export function generateGraphView(data: any, container: HTMLElement): void {
       node.attr("transform", (d: any) => `translate(${d.x},${d.y})`);
     });
 
-    setupControls(svg, zoom);
+    setupControls(svg, zoom, d3);
 
     // Setup display mode selector
     setupDisplayModeSelector((mode: NodeDisplayMode) => {
@@ -330,7 +331,7 @@ function convertJsonToGraph(data: any): { nodes: GraphNode[]; links: GraphLink[]
   return { nodes, links };
 }
 
-function drag(simulation: any) {
+function drag(simulation: any, d3: any) {
   function dragstarted(event: any, d: any) {
     if (!event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
@@ -411,7 +412,7 @@ function createDisplayModeSelector(): HTMLElement {
   return selector;
 }
 
-function setupControls(svg: any, zoom: any): void {
+function setupControls(svg: any, zoom: any, d3: any): void {
   const zoomInBtn = document.getElementById("zoomInBtn");
   const zoomOutBtn = document.getElementById("zoomOutBtn");
   const resetZoomBtn = document.getElementById("resetZoomBtn");

@@ -10,6 +10,7 @@ import {
   loadSearchUtils,
   loadMapUtils,
   loadJsonExampleUtils,
+  loadD3Library,
 } from "./utils/lazy-loader.js";
 import { initializeTheme, toggleTheme, updateThemeButtonText } from "./utils/theme-utils.js";
 import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js";
@@ -18,7 +19,6 @@ import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
 import { showSuccess } from "./utils/notification-utils.js";
 
-declare var d3: any;
 
 interface AppState {
   editor: any | null;
@@ -353,9 +353,16 @@ class JSONViewer {
 
             switch (tabName) {
               case "graph":
-                loadGraphUtils().then((module) => {
-                  module.generateGraphView(parsed, this.elements.graphOutput);
-                });
+                // Load D3 first, then graph utils
+                loadD3Library()
+                  .then(() => loadGraphUtils())
+                  .then((module) => {
+                    module.generateGraphView(parsed, this.elements.graphOutput);
+                  })
+                  .catch((error) => {
+                    console.error("Failed to load graph dependencies:", error);
+                    this.elements.graphOutput.innerHTML = '<div class="error-message">Failed to load graph visualization. Please try again.</div>';
+                  });
                 break;
               case "diff":
                 loadDiffUtils().then((module) => {
@@ -461,25 +468,7 @@ class JSONViewer {
 }
 
 // Initialize when DOM and all resources are ready
-let d3LoadRetries = 0;
-const MAX_D3_RETRIES = 30; // 3 seconds max wait time
-
 function initializeApp() {
-  if (typeof d3 === "undefined") {
-    d3LoadRetries++;
-    if (d3LoadRetries >= MAX_D3_RETRIES) {
-      console.error(
-        "D3.js failed to load after maximum retries. Graph View will not be available."
-      );
-      // Initialize app anyway, Graph View will show error when accessed
-      new JSONViewer();
-      return;
-    }
-    console.warn(`D3.js is not available. Retry ${d3LoadRetries}/${MAX_D3_RETRIES}...`);
-    setTimeout(initializeApp, 100);
-    return;
-  }
-
   new JSONViewer();
 }
 

@@ -247,9 +247,9 @@ function initializeDiffEditors(leftPanel: HTMLElement, rightPanel: HTMLElement, 
             editor.setValue(JSON.stringify(data));
           }
         } catch (error) {
-          // Invalid JSON, show error using toastr if available
-          if ((window as any).toastr) {
-            (window as any).toastr.error("Invalid JSON format", "Error");
+          // Invalid JSON, show error using notyf if available
+          if ((window as any).notyf) {
+            (window as any).notyf.error("Invalid JSON format");
           }
         }
       }
