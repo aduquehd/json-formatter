@@ -451,8 +451,6 @@ class JSONViewer {
       this.state.editor.setValue(jsonContent);
       // Switch to JSON Editor tab
       this.switchTab("formatted");
-      // Show success notification
-      showSuccess("JSON example loaded successfully!");
     }
   }
 }

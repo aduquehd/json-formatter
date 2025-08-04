@@ -888,6 +888,10 @@ main {
   position: relative;
 }
 
+[data-theme="dark"] .tab-btn {
+  color: #e5e7eb; /* Light gray for better contrast */
+}
+
 [data-theme="dark"] .tab-btn::after {
   content: "";
   position: absolute;
