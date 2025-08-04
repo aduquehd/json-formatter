@@ -27,7 +27,7 @@ async def read_root(request: Request):
             "request": request,
             "ga_tracking_id": settings.ga_tracking_id,
             "app_env": settings.app_env,
-            "version": "1.0.3",
+            "version": "1.0.4",
         },
     )
 

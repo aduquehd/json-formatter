@@ -46,7 +46,6 @@ class JSONViewer {
     themeBtn: HTMLElement;
     mobileThemeBtn: HTMLElement | null;
     jsonExampleBtn: HTMLElement;
-    editorThemeSelect: HTMLSelectElement;
     tabBtns: NodeListOf<HTMLElement>;
     treeOutput: HTMLElement;
     graphOutput: HTMLElement;
@@ -75,7 +74,6 @@ class JSONViewer {
       themeBtn: document.getElementById("themeBtn")!,
       mobileThemeBtn: document.getElementById("mobileThemeBtn"),
       jsonExampleBtn: document.getElementById("jsonExampleBtn")!,
-      editorThemeSelect: document.getElementById("editorThemeSelect") as HTMLSelectElement,
       tabBtns: document.querySelectorAll(".tab-btn"),
       treeOutput: document.getElementById("treeOutput")!,
       graphOutput: document.getElementById("graphOutput")!,
@@ -122,10 +120,9 @@ class JSONViewer {
       isDarkTheme: this.state.isDarkTheme,
     });
 
-    // Apply saved theme preference
-    const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
-    this.elements.editorThemeSelect.value = savedTheme;
-    this.changeEditorTheme(savedTheme);
+    // Sync editor theme with website theme on initialization
+    const editorTheme = this.state.isDarkTheme ? "vs-dark" : "vs";
+    this.changeEditorTheme(editorTheme);
 
     // Listen for content changes
     this.state.editor.onDidChangeModelContent(() => {
@@ -187,11 +184,6 @@ class JSONViewer {
       this.elements.mobileThemeBtn.addEventListener("click", () => this.toggleTheme());
     }
 
-    // Editor theme selector
-    this.elements.editorThemeSelect.addEventListener("change", (e) => {
-      const target = e.target as HTMLSelectElement;
-      this.changeEditorTheme(target.value);
-    });
 
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
@@ -433,8 +425,10 @@ class JSONViewer {
     const themeState = toggleTheme({ isDarkTheme: this.state.isDarkTheme });
     this.state.isDarkTheme = themeState.isDarkTheme;
 
-    // Update editor theme based on current selection
-    this.updateEditorThemeBasedOnMode();
+    // Automatically sync editor theme with website theme
+    const editorTheme = this.state.isDarkTheme ? "vs-dark" : "vs";
+    this.changeEditorTheme(editorTheme);
+
     updateThemeButtonText(this.elements.themeBtn, this.state.isDarkTheme);
   }
 
@@ -448,17 +442,6 @@ class JSONViewer {
     } else {
       // Use specific theme
       setMonacoTheme(this.state.editor, themeName);
-    }
-  }
-
-  private updateEditorThemeBasedOnMode(): void {
-    const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
-    if (savedTheme === "default") {
-      // Apply the appropriate custom theme based on current mode
-      setMonacoTheme(this.state.editor, undefined, this.state.isDarkTheme);
-    } else {
-      // Keep the specific theme that was selected
-      setMonacoTheme(this.state.editor, savedTheme);
     }
   }
 

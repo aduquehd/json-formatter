@@ -415,60 +415,6 @@ main {
   flex: 1;
 }
 
-/* Editor Theme Controls */
-.editor-theme-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-secondary);
-  padding: 6px 12px;
-  border-radius: 100px;
-  border: 1px solid var(--border-color);
-}
-
-.theme-select-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.theme-select {
-  padding: 4px 8px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--input-bg);
-  color: var(--text-primary);
-  font-size: 13px;
-  font-family: "JetBrains Mono", "Fira Code", monospace;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 120px;
-}
-
-[data-theme="dark"] .theme-select {
-  background: rgba(14, 165, 233, 0.05);
-  border: 1px solid rgba(14, 165, 233, 0.2);
-}
-
-.theme-select:hover {
-  background: var(--bg-primary);
-}
-
-[data-theme="dark"] .theme-select:hover {
-  background: rgba(14, 165, 233, 0.1);
-  border-color: rgba(14, 165, 233, 0.3);
-}
-
-.theme-select:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #667eea;
-}
-
-[data-theme="dark"] .theme-select:focus {
-  box-shadow: 0 0 0 2px var(--accent-cyan);
-  border-color: var(--accent-cyan);
-}
 
 /* Theme Toggle Button */
 .theme-toggle-btn {
@@ -1440,6 +1386,84 @@ main {
   border-radius: 0;
 }
 
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .top-section {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+  }
+
+  .button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 0 0 auto;
+    order: 1;
+  }
+
+  .button-group .btn {
+    flex: 0 0 auto;
+    min-width: 100px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  /* JSON example button */
+  #jsonExampleBtn {
+    flex: 0 0 auto;
+    order: 2;
+    min-width: 160px;
+  }
+
+  /* Theme toggle button aligned to the right */
+  .theme-toggle-btn {
+    flex: 0 0 auto;
+    order: 3;
+    margin-left: auto;
+  }
+
+  /* Adjust spacing for better tablet layout */
+  .container {
+    padding: 70px 20px 20px 20px;
+  }
+
+  main {
+    padding: 16px;
+  }
+
+  .navbar-content {
+    padding: 0 30px;
+  }
+}
+
+/* Tablet portrait mode - narrower tablets */
+@media (min-width: 769px) and (max-width: 900px) {
+  .top-section {
+    flex-wrap: wrap;
+  }
+
+  .button-group {
+    flex: 1 1 100%;
+    order: 3;
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+
+  #jsonExampleBtn {
+    order: 2;
+    margin-right: 8px;
+  }
+
+  .theme-toggle-btn {
+    order: 1;
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-content {
     padding: 0 20px;
@@ -1466,20 +1490,6 @@ main {
     display: none;
   }
 
-  .editor-theme-wrapper {
-    width: 100%;
-    padding: 4px 10px;
-  }
-
-  .theme-select-label {
-    font-size: 12px;
-  }
-
-  .theme-select {
-    flex: 1;
-    font-size: 12px;
-    min-width: 100px;
-  }
 
   .container {
     padding: 68px 15px 15px 15px;
@@ -1665,6 +1675,33 @@ main {
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+/* Loading placeholder for Monaco Editor */
+.monaco-editor-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.monaco-editor-loading::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 16px;
+  border: 3px solid var(--border-color);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 [data-theme="dark"] .monaco-editor-container {
@@ -2401,19 +2438,6 @@ main {
     height: 14px;
   }
 
-  .editor-theme-wrapper {
-    padding: 4px 8px;
-  }
-
-  .theme-select-label {
-    display: none;
-  }
-
-  .theme-select {
-    font-size: 12px;
-    padding: 6px 10px;
-    min-width: 120px;
-  }
 
   .mobile-github-text {
     display: none;

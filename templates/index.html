@@ -271,17 +271,26 @@
     </noscript>
 
     {% if ga_tracking_id %}
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_tracking_id }}"></script>
+    <!-- Google tag (gtag.js) - lazy loaded after page load -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-
-      gtag("js", new Date());
-      gtag("config", "{{ ga_tracking_id }}");
+      window.addEventListener("load", function () {
+        // Initialize dataLayer early to queue events
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          dataLayer.push(arguments);
+        };
+        
+        // Load the Google Tag Manager script
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id={{ ga_tracking_id }}";
+        script.onload = function () {
+          // Configure gtag after script loads
+          gtag("js", new Date());
+          gtag("config", "{{ ga_tracking_id }}");
+        };
+        document.head.appendChild(script);
+      });
     </script>
     {% endif %}
 
@@ -509,19 +518,6 @@
             <span class="json-example-text">Use a JSON example</span>
             <span class="json-example-badge">NEW</span>
           </button>
-          <div class="editor-theme-wrapper">
-            <label for="editorThemeSelect" class="theme-select-label">Editor Theme:</label>
-            <select id="editorThemeSelect" class="theme-select" aria-label="Select editor theme">
-              <option value="default">Default</option>
-              <option value="vs">Light</option>
-              <option value="vs-dark">Dark</option>
-              <option value="hc-black">High Contrast</option>
-              <option value="github-light">GitHub Light</option>
-              <option value="github-dark">GitHub Dark</option>
-              <option value="monokai">Monokai</option>
-              <option value="dracula">Dracula</option>
-            </select>
-          </div>
           <button id="themeBtn" class="btn btn-secondary theme-toggle-btn" aria-label="Toggle theme">
             <svg
               class="btn-icon theme-icon sun-icon"
@@ -597,7 +593,9 @@
 
         <div class="output-section">
           <div id="formatted-tab" class="tab-content active" role="tabpanel" aria-labelledby="formatBtn">
-            <div id="monaco-editor" class="monaco-editor-container"></div>
+            <div id="monaco-editor" class="monaco-editor-container">
+              <div class="monaco-editor-loading">Loading editor...</div>
+            </div>
           </div>
           <div id="tree-tab" class="tab-content" role="tabpanel" aria-labelledby="treeBtn">
             <div class="tree-controls">
@@ -833,7 +831,6 @@
 
     <!-- Load JavaScript libraries with defer to prevent render blocking -->
     <script defer src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
     <!-- Load modal handler separately for better code organization -->
     <script type="module" src="{{ url_for('static', path='/js/modal-loader.js') }}?v={{ version }}"></script>
 
@@ -847,7 +844,7 @@
             const maxAttempts = 100; // 10 seconds max
 
             while (attempts < maxAttempts) {
-              const librariesReady = window.Notyf && window.require;
+              const librariesReady = window.Notyf;
 
               if (librariesReady) {
                 // Initialize Notyf globally before loading the app

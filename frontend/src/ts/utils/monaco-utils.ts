@@ -16,24 +16,47 @@ export function initializeMonacoEditor(config: MonacoEditorConfig): Promise<any>
       return;
     }
 
-    // Only configure require once
-    if (!(window as any).monacoRequireConfigured) {
-      require.config({
-        paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" },
-      });
-      (window as any).monacoRequireConfigured = true;
+    // Load Monaco Editor loader script dynamically
+    if (!(window as any).require) {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+      script.onload = () => {
+        loadMonacoEditor(config, resolve, reject);
+      };
+      script.onerror = () => {
+        reject(new Error('Failed to load Monaco Editor loader'));
+      };
+      document.head.appendChild(script);
+    } else {
+      loadMonacoEditor(config, resolve, reject);
     }
+  });
+}
 
-    require(["vs/editor/editor.main"], () => {
-      defineCustomThemes();
-      const editor = createEditor(config);
-      setupJSONValidation();
-      resolve(editor);
+function loadMonacoEditor(config: MonacoEditorConfig, resolve: Function, reject: Function): void {
+  // Only configure require once
+  if (!(window as any).monacoRequireConfigured) {
+    require.config({
+      paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" },
     });
+    (window as any).monacoRequireConfigured = true;
+  }
+
+  require(["vs/editor/editor.main"], () => {
+    defineCustomThemes();
+    const editor = createEditor(config);
+    setupJSONValidation();
+    resolve(editor);
   });
 }
 
 function createEditor(config: MonacoEditorConfig): any {
+  // Remove loading placeholder
+  const loadingElement = config.container.querySelector('.monaco-editor-loading');
+  if (loadingElement) {
+    loadingElement.remove();
+  }
+  
   // Create editor with automaticLayout disabled initially to prevent reflows
   const editor = monaco.editor.create(config.container, {
     value: "",
