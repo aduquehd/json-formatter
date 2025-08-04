@@ -184,7 +184,6 @@ class JSONViewer {
       this.elements.mobileThemeBtn.addEventListener("click", () => this.toggleTheme());
     }
 
-
     this.elements.tabBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const target = e.currentTarget as HTMLElement;

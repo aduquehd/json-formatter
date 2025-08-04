@@ -415,7 +415,6 @@ main {
   flex: 1;
 }
 
-
 /* Theme Toggle Button */
 .theme-toggle-btn {
   margin-left: auto;
@@ -507,6 +506,10 @@ main {
 }
 
 .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   padding: 12px 24px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -528,9 +531,6 @@ main {
   overflow: hidden;
   backdrop-filter: blur(10px);
   box-shadow: var(--btn-shadow);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .btn:hover {
@@ -1423,6 +1423,25 @@ main {
     flex: 0 0 auto;
     order: 3;
     margin-left: auto;
+    margin-right: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: var(--btn-secondary-bg);
+    color: var(--text-primary);
+  }
+
+  .theme-toggle-btn:hover {
+    background: var(--btn-secondary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px var(--shadow-light);
+  }
+
+  /* Hide theme text in tablet view to match mobile */
+  .theme-toggle-btn .theme-text {
+    display: none;
   }
 
   /* Adjust spacing for better tablet layout */
@@ -1489,7 +1508,6 @@ main {
   #themeBtn {
     display: none;
   }
-
 
   .container {
     padding: 68px 15px 15px 15px;
@@ -1701,7 +1719,9 @@ main {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 [data-theme="dark"] .monaco-editor-container {
@@ -2437,7 +2457,6 @@ main {
     width: 14px;
     height: 14px;
   }
-
 
   .mobile-github-text {
     display: none;

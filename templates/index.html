@@ -279,7 +279,7 @@
         window.gtag = function () {
           dataLayer.push(arguments);
         };
-        
+
         // Load the Google Tag Manager script
         const script = document.createElement("script");
         script.async = true;
@@ -512,11 +512,12 @@
               stroke="currentColor"
               stroke-width="2"
             >
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 6v6l4 2"></path>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="13" x2="12" y2="17"></line>
+              <polyline points="10 15 12 13 14 15"></polyline>
             </svg>
-            <span class="json-example-text">Use a JSON example</span>
-            <span class="json-example-badge">NEW</span>
+            <span class="json-example-text">Load example JSON</span>
           </button>
           <button id="themeBtn" class="btn btn-secondary theme-toggle-btn" aria-label="Toggle theme">
             <svg

@@ -18,13 +18,14 @@ export function initializeMonacoEditor(config: MonacoEditorConfig): Promise<any>
 
     // Load Monaco Editor loader script dynamically
     if (!(window as any).require) {
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js';
+      const script = document.createElement("script");
+      script.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js";
       script.onload = () => {
         loadMonacoEditor(config, resolve, reject);
       };
       script.onerror = () => {
-        reject(new Error('Failed to load Monaco Editor loader'));
+        reject(new Error("Failed to load Monaco Editor loader"));
       };
       document.head.appendChild(script);
     } else {
@@ -52,11 +53,11 @@ function loadMonacoEditor(config: MonacoEditorConfig, resolve: Function, reject:
 
 function createEditor(config: MonacoEditorConfig): any {
   // Remove loading placeholder
-  const loadingElement = config.container.querySelector('.monaco-editor-loading');
+  const loadingElement = config.container.querySelector(".monaco-editor-loading");
   if (loadingElement) {
     loadingElement.remove();
   }
-  
+
   // Create editor with automaticLayout disabled initially to prevent reflows
   const editor = monaco.editor.create(config.container, {
     value: "",
