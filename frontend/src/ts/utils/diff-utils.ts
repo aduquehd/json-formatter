@@ -118,7 +118,11 @@ function createDiffPanel(title: string, side: string): HTMLElement {
   return panel;
 }
 
-function initializeDiffEditors(leftPanel: HTMLElement, rightPanel: HTMLElement, initialData?: any): void {
+function initializeDiffEditors(
+  leftPanel: HTMLElement,
+  rightPanel: HTMLElement,
+  initialData?: any
+): void {
   // Check if Monaco is available
   if (typeof monaco === "undefined" || !monaco) {
     console.error("Monaco editor is not loaded");
@@ -128,7 +132,7 @@ function initializeDiffEditors(leftPanel: HTMLElement, rightPanel: HTMLElement, 
   // Get the current theme from localStorage or default
   const savedTheme = localStorage.getItem("editorTheme") || "vs-dark";
   const isDarkTheme = document.documentElement.classList.contains("dark");
-  
+
   // Determine which Monaco theme to use
   let monacoTheme = savedTheme;
   if (savedTheme === "default") {
@@ -237,7 +241,7 @@ function initializeDiffEditors(leftPanel: HTMLElement, rightPanel: HTMLElement, 
       const side = target.getAttribute("data-side");
       const action = target.getAttribute("data-action");
       const editor = side === "left" ? leftEditor : rightEditor;
-      
+
       if (editor) {
         try {
           const data = JSON.parse(editor.getValue() || "{}");

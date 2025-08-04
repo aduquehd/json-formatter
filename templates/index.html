@@ -29,11 +29,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Modern Fonts -->
+    <!-- Modern Fonts - Non-blocking with preload and font-display:swap -->
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- SEO Meta Tags -->
     <meta
@@ -129,8 +137,98 @@
     <meta name="msapplication-TileColor" content="#2563eb" />
     <link rel="canonical" href="{{ request.url if request else '' }}" />
 
-    <!-- Critical CSS for above-the-fold content -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/critical.css') }}?v={{ version }}" />
+    <!-- Inline Critical CSS for above-the-fold content to eliminate render-blocking -->
+    <style>
+      /* Critical CSS inlined for performance */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg-primary: #fafafa;
+        --bg-secondary: #f5f5f5;
+        --text-primary: #1a1a1a;
+        --text-secondary: #666;
+        --border-color: #e0e0e0;
+        --navbar-bg: #fff;
+        --navbar-border: #e0e0e0;
+        --navbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      [data-theme="dark"] {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #2d2d2d;
+        --text-primary: #fff;
+        --text-secondary: #b0b0b0;
+        --border-color: hsla(0, 0%, 100%, 0.1);
+        --navbar-bg: linear-gradient(135deg, hsla(0, 0%, 9%, 0.98), rgba(31, 31, 31, 0.98));
+      }
+      .dark {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+      }
+      body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          Segoe UI,
+          Roboto,
+          Helvetica Neue,
+          Arial,
+          sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      .navbar {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        background: var(--navbar-bg);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .navbar-content {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: 1400px;
+        padding: 1rem 2rem;
+      }
+      .navbar-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      .highlight {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .btn,
+      .output-section,
+      .tabs {
+        opacity: 1;
+      }
+      .skip-link {
+        background: var(--bg-primary);
+        border-radius: 0 0 4px 0;
+        color: var(--text-primary);
+        left: 0;
+        padding: 8px 16px;
+        position: absolute;
+        text-decoration: none;
+        top: -40px;
+        z-index: 10000;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+    </style>
 
     <!-- Immediate theme initialization script -->
     <script>
@@ -161,8 +259,16 @@
 
     <!-- Load CSS synchronously to prevent rendering issues -->
     <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}?v={{ version }}" />
-    <!-- Load Notyf CSS for notifications -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    <!-- Notyf CSS - Non-blocking for notifications -->
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" />
+    </noscript>
 
     {% if ga_tracking_id %}
     <!-- Google tag (gtag.js) -->

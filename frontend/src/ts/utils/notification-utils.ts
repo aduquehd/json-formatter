@@ -24,29 +24,29 @@ function initializeNotyf(): void {
     notyfInstance = new Notyf({
       duration: 5000,
       position: {
-        x: 'right',
-        y: 'top',
+        x: "right",
+        y: "top",
       },
       types: [
         {
-          type: 'success',
-          background: 'green',
+          type: "success",
+          background: "green",
         },
         {
-          type: 'error',
-          background: 'indianred',
+          type: "error",
+          background: "indianred",
         },
         {
-          type: 'warning',
-          background: 'orange',
-          icon: false
+          type: "warning",
+          background: "orange",
+          icon: false,
         },
         {
-          type: 'info',
-          background: '#3498db',
-          icon: false
-        }
-      ]
+          type: "info",
+          background: "#3498db",
+          icon: false,
+        },
+      ],
     });
     (window as any).notyf = notyfInstance;
 
@@ -77,18 +77,18 @@ function showNotification(type: string, message: string): void {
     try {
       // Notyf uses different method names
       switch (type) {
-        case 'success':
+        case "success":
           notyfInstance.success(message);
           break;
-        case 'error':
+        case "error":
           notyfInstance.error(message);
           break;
-        case 'warning':
-        case 'info':
+        case "warning":
+        case "info":
           // For custom types, use open method
           notyfInstance.open({
             type: type,
-            message: message
+            message: message,
           });
           break;
         default:

@@ -34,11 +34,12 @@ export function initializeMonacoEditor(config: MonacoEditorConfig): Promise<any>
 }
 
 function createEditor(config: MonacoEditorConfig): any {
-  return monaco.editor.create(config.container, {
+  // Create editor with automaticLayout disabled initially to prevent reflows
+  const editor = monaco.editor.create(config.container, {
     value: "",
     language: "json",
     theme: "vs-dark",
-    automaticLayout: true,
+    automaticLayout: false,
     fontSize: 14,
     fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, monospace',
     fontLigatures: true,
@@ -83,6 +84,13 @@ function createEditor(config: MonacoEditorConfig): any {
     hideCursorInOverviewRuler: true,
     overviewRulerBorder: false,
   });
+
+  // Enable automatic layout after initial render to avoid reflows
+  requestAnimationFrame(() => {
+    editor.updateOptions({ automaticLayout: true });
+  });
+
+  return editor;
 }
 
 function defineCustomThemes(): void {

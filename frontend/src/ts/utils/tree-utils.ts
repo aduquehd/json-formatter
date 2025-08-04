@@ -61,7 +61,7 @@ export function createTreeNode(
       }
       return false;
     };
-    
+
     const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : shouldExpandByDefault();
     toggle.textContent = shouldExpand ? "▼" : "▶";
 
@@ -80,7 +80,7 @@ export function createTreeNode(
       }
       toggleNode(container, toggle, nodeKey);
     });
-    
+
     header.appendChild(toggle);
   } else {
     const spacer = document.createElement("span");
@@ -142,7 +142,7 @@ export function createTreeNode(
       }
       return false;
     };
-    
+
     const shouldExpand = preserveState ? expandedNodes.has(nodeKey) : shouldExpandByDefault();
 
     if (!shouldExpand) {

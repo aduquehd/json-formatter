@@ -19,7 +19,6 @@ import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
 import { showSuccess } from "./utils/notification-utils.js";
 
-
 interface AppState {
   editor: any | null;
   currentTab: string;
@@ -92,10 +91,12 @@ class JSONViewer {
     this.initializeTheme();
     this.bindEvents();
 
-    // Delay Monaco initialization to avoid conflicts
-    setTimeout(() => {
-      this.initializeMonacoEditor();
-    }, 50);
+    // Use requestAnimationFrame to avoid forced reflows during initialization
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.initializeMonacoEditor();
+      });
+    });
   }
 
   private initializeTheme(): void {
@@ -110,6 +111,12 @@ class JSONViewer {
     }
 
     const container = document.getElementById("monaco-editor")!;
+
+    // Pre-calculate dimensions to avoid reflows
+    const containerRect = container.getBoundingClientRect();
+    container.style.width = `${containerRect.width}px`;
+    container.style.height = `${containerRect.height}px`;
+
     this.state.editor = await initializeMonacoEditor({
       container,
       isDarkTheme: this.state.isDarkTheme,
@@ -361,7 +368,8 @@ class JSONViewer {
                   })
                   .catch((error) => {
                     console.error("Failed to load graph dependencies:", error);
-                    this.elements.graphOutput.innerHTML = '<div class="error-message">Failed to load graph visualization. Please try again.</div>';
+                    this.elements.graphOutput.innerHTML =
+                      '<div class="error-message">Failed to load graph visualization. Please try again.</div>';
                   });
                 break;
               case "diff":

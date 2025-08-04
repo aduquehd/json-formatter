@@ -89,7 +89,7 @@ export function generateGraphView(data: any, container: HTMLElement): void {
       '<div style="padding: 20px; color: red;">Error: D3.js library not loaded</div>';
     return;
   }
-  
+
   // Use d3 from window
   const d3 = (window as any).d3;
 
