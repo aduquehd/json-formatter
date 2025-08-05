@@ -36,6 +36,8 @@
 - 🚀 **No Database**: Simple, stateless application
 - 🔀 **JSON Diff View**: Compare two JSON objects side-by-side with highlighted differences (additions, deletions, modifications)
 - 🏷️ **JavaScript Object Literal Support**: Parse and format JavaScript object literal syntax in addition to standard JSON
+- 📊 **Graph View**: Visualize JSON structure as an interactive network graph with collapsible nodes
+- 🗺️ **Map View**: Display geographical data on an interactive map (supports GeoJSON and coordinate arrays)
 
 ## 📋 Requirements
 
