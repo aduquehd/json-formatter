@@ -34,6 +34,8 @@
 - 🔧 **URL Parameter Support**: Load JSON from URL parameters
 - 📱 **Modern UI**: Clean, responsive design that works on all devices
 - 🚀 **No Database**: Simple, stateless application
+- 🔀 **JSON Diff View**: Compare two JSON objects side-by-side with highlighted differences (additions, deletions, modifications)
+- 🏷️ **JavaScript Object Literal Support**: Parse and format JavaScript object literal syntax in addition to standard JSON
 
 ## 📋 Requirements
 
