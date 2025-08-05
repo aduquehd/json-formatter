@@ -1,5 +1,6 @@
 import { JSONValue, JSONObject, JSONArray, TreeNodeData } from "./types.js";
 import { getValueType, isExpandableType, getValueDisplay } from "./json-utils.js";
+import { JSONFixer } from "../jsonFixer.js";
 
 let treeUpdateCallback: ((newData: JSONValue) => void) | null = null;
 let currentJsonData: JSONValue | null = null;
@@ -335,7 +336,7 @@ function parseInputValue(inputValue: string, originalType: string): JSONValue | 
 
   // Try to parse as JSON (for objects/arrays)
   try {
-    const parsed = JSON.parse(trimmed);
+    const parsed = JSONFixer.parseWithFix(trimmed);
     return parsed;
   } catch {
     // If all else fails, treat as string

@@ -1,5 +1,8 @@
 import { JSONValue } from "./types.js";
 import { loadTreeUtils, loadGraphUtils } from "./lazy-loader.js";
+import { JSONFixer } from "../jsonFixer.js";
+import { showWarning } from "./notification-utils.js";
+import { NotificationManager } from "./notification-manager.js";
 
 export interface ViewElements {
   treeOutput: HTMLElement;
@@ -70,7 +73,12 @@ export async function validateAndUpdateViews(
       return;
     }
 
-    const parsed = JSON.parse(content);
+    const result = JSONFixer.parseWithFixInfo(content);
+    if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+      const description = NotificationManager.getFixDescription(result.fixes);
+      showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+    }
+    const parsed = result.data;
     const treeUtils = await loadTreeUtils();
     treeUtils.generateTreeView(
       parsed,

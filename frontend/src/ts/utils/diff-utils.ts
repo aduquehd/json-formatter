@@ -1,6 +1,10 @@
 declare var monaco: any;
 declare var require: any;
 
+import { JSONFixer } from "../jsonFixer.js";
+import { showWarning } from "./notification-utils.js";
+import { NotificationManager } from "./notification-manager.js";
+
 let leftEditor: any = null;
 let rightEditor: any = null;
 
@@ -53,10 +57,35 @@ export function generateDiffView(data: any, container: HTMLElement): void {
     }
 
     try {
-      const leftData = JSON.parse(leftEditor.getValue() || "{}");
-      const rightData = JSON.parse(rightEditor.getValue() || "{}");
+      const leftResult = JSONFixer.parseWithFixInfo(leftEditor.getValue() || "{}");
+      const rightResult = JSONFixer.parseWithFixInfo(rightEditor.getValue() || "{}");
+      
+      // Show warnings if JSON was fixed
+      const allFixes: string[] = [];
+      if (leftResult.wasFixed && leftResult.fixes) {
+        allFixes.push(...leftResult.fixes.map(f => `Left JSON: ${f}`));
+      }
+      if (rightResult.wasFixed && rightResult.fixes) {
+        allFixes.push(...rightResult.fixes.map(f => `Right JSON: ${f}`));
+      }
+      
+      if (allFixes.length > 0 && NotificationManager.shouldShowFixNotification(allFixes)) {
+        const leftDesc = leftResult.fixes ? NotificationManager.getFixDescription(leftResult.fixes) : '';
+        const rightDesc = rightResult.fixes ? NotificationManager.getFixDescription(rightResult.fixes) : '';
+        
+        let message = "The JSON has a wrong structure, it has been repaired automatically: ";
+        if (leftResult.wasFixed && rightResult.wasFixed) {
+          message += `Left JSON - ${leftDesc}; Right JSON - ${rightDesc}`;
+        } else if (leftResult.wasFixed) {
+          message += `Left JSON - ${leftDesc}`;
+        } else {
+          message += `Right JSON - ${rightDesc}`;
+        }
+        
+        showWarning(message);
+      }
 
-      const differences = compareJSON(leftData, rightData);
+      const differences = compareJSON(leftResult.data, rightResult.data);
       displayDifferences(differences, resultsSection);
       resultsSection.style.display = "block";
     } catch (error) {
@@ -244,11 +273,19 @@ function initializeDiffEditors(
 
       if (editor) {
         try {
-          const data = JSON.parse(editor.getValue() || "{}");
+          const result = JSONFixer.parseWithFixInfo(editor.getValue() || "{}");
+          
+          // Show warning if JSON was fixed
+          if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+            const description = NotificationManager.getFixDescription(result.fixes);
+            const panelName = side === "left" ? "Left JSON" : "Right JSON";
+            showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${panelName} - ${description}`);
+          }
+          
           if (action === "format") {
-            editor.setValue(JSON.stringify(data, null, 2));
+            editor.setValue(JSON.stringify(result.data, null, 2));
           } else if (action === "compact") {
-            editor.setValue(JSON.stringify(data));
+            editor.setValue(JSON.stringify(result.data));
           }
         } catch (error) {
           // Invalid JSON, show error using notyf if available

@@ -1,5 +1,7 @@
 import { JSONValue, ValueType, ParseResult } from "./types.js";
-import { showError } from "./notification-utils.js";
+import { showError, showWarning } from "./notification-utils.js";
+import { JSONFixer } from "../jsonFixer.js";
+import { NotificationManager } from "./notification-manager.js";
 
 export function parseJSON(input: string): ParseResult {
   if (!input.trim()) {
@@ -7,13 +9,21 @@ export function parseJSON(input: string): ParseResult {
   }
 
   try {
-    const parsedJSON = JSON.parse(input);
-    return { success: true, data: parsedJSON };
+    const result = JSONFixer.parseWithFixInfo(input);
+    if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+      const description = NotificationManager.getFixDescription(result.fixes);
+      showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+    }
+    return { success: true, data: result.data };
   } catch {
     try {
       const decodedInput = decodeURIComponent(input);
-      const parsedJSON = JSON.parse(decodedInput);
-      return { success: true, data: parsedJSON };
+      const result = JSONFixer.parseWithFixInfo(decodedInput);
+      if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+        const description = NotificationManager.getFixDescription(result.fixes);
+        showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+      }
+      return { success: true, data: result.data };
     } catch (error) {
       return {
         success: false,
@@ -36,8 +46,12 @@ export function formatJSONInEditor(editor: any): ParseResult {
 
   try {
     const content = editor.getValue();
-    const parsed = JSON.parse(content);
-    const formatted = JSON.stringify(parsed, null, 2);
+    const result = JSONFixer.parseWithFixInfo(content);
+    if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+      const description = NotificationManager.getFixDescription(result.fixes);
+      showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+    }
+    const formatted = JSON.stringify(result.data, null, 2);
     editor.setValue(formatted);
 
     // Add pulse animation to format button
@@ -47,7 +61,7 @@ export function formatJSONInEditor(editor: any): ParseResult {
       setTimeout(() => formatBtn.classList.remove("formatted"), 400);
     }
 
-    return { success: true, data: parsed };
+    return { success: true, data: result.data };
   } catch (e: any) {
     showError(`Invalid JSON: ${e.message}`);
     return { success: false, error: e.message };
@@ -59,8 +73,12 @@ export function compactJSONInEditor(editor: any): ParseResult {
 
   try {
     const content = editor.getValue();
-    const parsed = JSON.parse(content);
-    const compacted = JSON.stringify(parsed);
+    const result = JSONFixer.parseWithFixInfo(content);
+    if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+      const description = NotificationManager.getFixDescription(result.fixes);
+      showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+    }
+    const compacted = JSON.stringify(result.data);
     editor.setValue(compacted);
 
     // Add pulse animation to compact button
@@ -70,7 +88,7 @@ export function compactJSONInEditor(editor: any): ParseResult {
       setTimeout(() => compactBtn.classList.remove("compacted"), 400);
     }
 
-    return { success: true, data: parsed };
+    return { success: true, data: result.data };
   } catch (e: any) {
     showError(`Invalid JSON: ${e.message}`);
     return { success: false, error: e.message };

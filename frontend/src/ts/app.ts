@@ -17,7 +17,9 @@ import { initializeMonacoEditor, setMonacoTheme } from "./utils/monaco-utils.js"
 import { formatJSONInEditor, compactJSONInEditor, clearEditor } from "./utils/json-utils.js";
 import { copyEditorContent, pasteIntoEditor } from "./utils/clipboard-utils.js";
 import { updateViews, clearViews, validateAndUpdateViews } from "./utils/view-utils.js";
-import { showSuccess } from "./utils/notification-utils.js";
+import { showSuccess, showWarning } from "./utils/notification-utils.js";
+import { JSONFixer } from "./jsonFixer.js";
+import { NotificationManager } from "./utils/notification-manager.js";
 
 interface AppState {
   editor: any | null;
@@ -335,7 +337,12 @@ class JSONViewer {
       try {
         const content = this.state.editor.getValue();
         if (content.trim()) {
-          const parsed = JSON.parse(content);
+          const result = JSONFixer.parseWithFixInfo(content);
+          if (result.wasFixed && result.fixes && NotificationManager.shouldShowFixNotification(result.fixes)) {
+            const description = NotificationManager.getFixDescription(result.fixes);
+            showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${description}`);
+          }
+          const parsed = result.data;
           const currentHash = this.hashJSON(content);
 
           // Check if JSON has changed
