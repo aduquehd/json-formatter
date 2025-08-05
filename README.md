@@ -38,6 +38,7 @@
 - 🏷️ **JavaScript Object Literal Support**: Parse and format JavaScript object literal syntax in addition to standard JSON
 - 📊 **Graph View**: Visualize JSON structure as an interactive network graph with collapsible nodes
 - 🗺️ **Map View**: Display geographical data on an interactive map (supports GeoJSON and coordinate arrays)
+- 🔒 **100% Local Processing**: All data processing happens in your browser—no data is ever sent to any server
 
 ## 📋 Requirements
 
