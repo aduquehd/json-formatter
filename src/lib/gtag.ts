@@ -3,15 +3,6 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 // Check if Google Analytics is enabled
 export const isGAEnabled = Boolean(GA_MEASUREMENT_ID);
 
-// Log page views
-export const pageview = (url: string) => {
-  if (!isGAEnabled || typeof window === 'undefined') return;
-  
-  (window as any).gtag('config', GA_MEASUREMENT_ID, {
-    page_path: url,
-  });
-};
-
 // Log specific events
 export const event = ({
   action,

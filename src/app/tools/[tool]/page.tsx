@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 interface ToolPageProps {
-  params: {
+  params: Promise<{
     tool: string;
-  };
+  }>;
 }
 
 const toolMetadata: Record<string, Metadata> = {
@@ -41,7 +41,8 @@ const toolMetadata: Record<string, Metadata> = {
 };
 
 export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
-  const metadata = toolMetadata[params.tool];
+  const { tool } = await params;
+  const metadata = toolMetadata[tool];
   
   if (!metadata) {
     return {
@@ -56,10 +57,10 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       title: metadata.title || undefined,
       description: metadata.description || undefined,
       type: 'website',
-      url: `https://jsonformatter.me/tools/${params.tool}`,
+      url: `https://jsonformatter.me/tools/${tool}`,
     },
     alternates: {
-      canonical: `https://jsonformatter.me/tools/${params.tool}`,
+      canonical: `https://jsonformatter.me/tools/${tool}`,
     },
   };
 }
@@ -70,7 +71,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ToolPage({ params }: ToolPageProps) {
+export default async function ToolPage({ params }: ToolPageProps) {
   // All tool pages redirect to the main page
   // This is for SEO purposes - we want these URLs indexed
   // but the actual functionality is on the main page
