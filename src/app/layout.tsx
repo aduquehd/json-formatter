@@ -114,10 +114,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <GoogleAnalytics />
-        <Hotjar />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+        <GoogleAnalytics />
+        <Hotjar />
         <ThemeProvider>
           <a href="#main-content" className="skip-link">
             Skip to main content
