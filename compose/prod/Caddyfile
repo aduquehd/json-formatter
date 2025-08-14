@@ -1,3 +1,0 @@
-jsonviewer.me {
-    reverse_proxy backend:8000
-}
