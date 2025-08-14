@@ -440,7 +440,7 @@ export default function HelpPage() {
                   What file size limits are there?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  There are no strict file size limits since processing happens in your browser. However, extremely large files (>10MB) may impact performance depending on your device's capabilities.
+                  There are no strict file size limits since processing happens in your browser. However, extremely large files (&gt;10MB) may impact performance depending on your device's capabilities.
                 </p>
               </div>
 

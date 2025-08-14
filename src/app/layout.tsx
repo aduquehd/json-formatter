@@ -18,6 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://jsonformatter.me'),
   title: 'JSON Formatter & Viewer - Free Online JSON Validator, Beautifier & Editor',
   description: 'Best free online JSON formatter, JSON viewer, and JSON validator. Format JSON, beautify JSON, validate JSON, and view JSON online instantly. Features include JSON editor, JSON parser, JSON tree view, syntax highlighting, JSON pretty print, and real-time JSON validation. No ads, no signup required.',
   keywords: 'json formatter, json viewer, online json formatter, online json viewer, json beautifier, json validator, json pretty print, json editor online, format json online, view json online, json parser, json syntax highlighter, json tree view, json visualization, json formatting tool, best json formatter, free json formatter, json lint, jsonlint, json online, json format online, beautify json, validate json, json editor, json prettify, json minify, json compact, json fix, json fixer, json tool, json tools online, json formatter online free, json viewer online free, json beautifier online, json validator online, json pretty print online',

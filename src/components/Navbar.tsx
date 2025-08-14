@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, HelpCircle, Heart } from 'lucide-react';
+import { Github, HelpCircle, Heart, User, ExternalLink } from 'lucide-react';
 
 interface NavbarProps {
   theme: 'light' | 'dark';

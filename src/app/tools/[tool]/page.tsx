@@ -53,8 +53,8 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   return {
     ...metadata,
     openGraph: {
-      title: metadata.title,
-      description: metadata.description,
+      title: metadata.title || undefined,
+      description: metadata.description || undefined,
       type: 'website',
       url: `https://jsonformatter.me/tools/${params.tool}`,
     },
