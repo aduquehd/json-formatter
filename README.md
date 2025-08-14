@@ -6,7 +6,7 @@
 
   <!-- Badges -->
   <p>
-    <a href="https://jsonviewer.me/">
+    <a href="https://jsonformatter.me/">
       <img src="https://img.shields.io/badge/🔗%20Live%20Demo-Visit%20Site-blue?style=for-the-badge" alt="Live Demo">
     </a>
    </p>
@@ -262,8 +262,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
     Made with ❤️ by <a href="https://github.com/aduquehd">aduquehd</a>
   </p>
   <p>
-    <a href="https://jsonviewer.me/">🌐 Live Demo</a> • 
-    <a href="https://github.com/aduquehd/json-viewer/issues">🐛 Report Bug</a> • 
-    <a href="https://github.com/aduquehd/json-viewer/pulls">🚀 Request Feature</a>
+    <a href="https://jsonformatter.me/">🌐 Live Demo</a> • 
+    <a href="https://github.com/aduquehd/json-formatter/issues">🐛 Report Bug</a> • 
+    <a href="https://github.com/aduquehd/json-formatter/pulls">🚀 Request Feature</a>
   </p>
 </div>

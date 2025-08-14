@@ -35,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
           </Link>
           
           <Link
-            href="https://github.com/aduquehd/json-viewer"
+            href="https://github.com/aduquehd/json-formatter"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-black text-white text-sm font-medium hover:bg-gray-800 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"

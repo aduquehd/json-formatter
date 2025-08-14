@@ -41,10 +41,10 @@ export const metadata: Metadata = {
     apple: '/img/optimized-size-logo.png',
   },
   alternates: {
-    canonical: 'https://jsonviewer.me/',
+    canonical: 'https://jsonformatter.me/',
     languages: {
-      'en': 'https://jsonviewer.me/',
-      'x-default': 'https://jsonviewer.me/',
+      'en': 'https://jsonformatter.me/',
+      'x-default': 'https://jsonformatter.me/',
     }
   },
   other: {
