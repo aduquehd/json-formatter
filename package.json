@@ -13,10 +13,10 @@
     "copy-css": "cp -r frontend/src/css/* static/css/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": ["json", "viewer", "formatter", "editor", "monaco"],
+  "author": "aduquehd",
+  "license": "MIT",
+  "description": "A modern web application for viewing and formatting JSON data with a VS Code-style editor interface",
   "devDependencies": {
     "cssnano": "^7.0.6",
     "esbuild": "^0.24.2",

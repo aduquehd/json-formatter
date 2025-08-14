@@ -1,8 +1,10 @@
 [project]
 name = "json-viewer"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "A modern web application for viewing and formatting JSON data with a VS Code-style editor interface"
 readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "aduquehd"}]
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.116.1",
