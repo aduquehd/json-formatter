@@ -105,7 +105,7 @@ const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => 
           
           // Show warning about fixes
           setTimeout(() => {
-            showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+            showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
           }, 100);
         }
         

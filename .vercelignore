@@ -1,0 +1,75 @@
+# Git files
+.git
+.gitignore
+
+# Development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test files
+__tests__
+*.test.js
+*.test.tsx
+*.spec.js
+*.spec.tsx
+*.test.ts
+*.spec.ts
+coverage/
+.nyc_output
+
+# Documentation (keep README.md for Vercel)
+docs/
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Development tools
+.eslintrc*
+.prettierrc*
+.stylelintrc*
+jest.config.*
+*.log
+
+# TypeScript
+*.tsbuildinfo
+
+# Package manager files (keep package.json and lock files)
+.npmrc
+.yarnrc
+.pnpm-debug.log*
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+# Miscellaneous
+.cache/
+.parcel-cache/
+.turbo/
+tmp/
+temp/

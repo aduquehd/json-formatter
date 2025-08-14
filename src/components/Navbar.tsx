@@ -14,10 +14,10 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
     <nav className="fixed top-0 left-0 right-0 h-14 bg-[var(--navbar-bg)] backdrop-blur-xl border-b border-[var(--navbar-border)] z-[1000] shadow-[var(--navbar-shadow)]">
       <div className="max-w-[1400px] mx-auto px-14 h-full flex items-center justify-between">
         <div className="flex flex-col items-start gap-1">
-          <h1 className="text-lg font-bold text-gray-600 dark:text-gray-400 tracking-tight m-0 leading-tight">
-            JSON <span className="glitch-text text-blue-600 dark:text-cyan-400" data-text="Formatter">Formatter</span> & <span className="glitch-text text-purple-600 dark:text-purple-400" data-text="Viewer">Viewer</span> - Free, secure, and Open Source
+          <h1 className="text-lg font-bold text-gray-800 dark:text-gray-200 tracking-tight m-0 leading-tight">
+            JSON <span className="glitch-text text-blue-600 dark:text-cyan-400" data-text="Formatter">Formatter</span> & <span className="glitch-text text-purple-600 dark:text-purple-400" data-text="Viewer">Viewer</span> - Online JSON Tools
           </h1>
-          <p className="text-xs text-gray-600 dark:text-gray-300 m-0 font-medium tracking-tight leading-tight">
+          <p className="text-xs text-gray-600 dark:text-gray-400 m-0 font-normal tracking-tight leading-tight">
             Free JSON formatter, validator, and viewer. All processing happens
             locally in your browser—100% secure and private.
           </p>

@@ -31,7 +31,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
       const result = JSONFixer.parseWithFixInfo(content || '{}');
       
       if (result.wasFixed && result.fixes) {
-        const description = result.fixes.join(', ');
+        const description = result.fixes!.join(', ');
         const panelName = side === 'left' ? 'Left JSON' : 'Right JSON';
         showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${panelName} - ${description}`);
       }
@@ -52,7 +52,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
       const result = JSONFixer.parseWithFixInfo(content || '{}');
       
       if (result.wasFixed && result.fixes) {
-        const description = result.fixes.join(', ');
+        const description = result.fixes!.join(', ');
         const panelName = side === 'left' ? 'Left JSON' : 'Right JSON';
         showWarning(`The JSON has a wrong structure, it has been repaired automatically: ${panelName} - ${description}`);
       }

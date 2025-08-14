@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "react-app/node_modules/.bin/next dev",
-    "build": "react-app/node_modules/.bin/next build",
-    "start": "react-app/node_modules/.bin/next start",
-    "lint": "react-app/node_modules/.bin/next lint"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",

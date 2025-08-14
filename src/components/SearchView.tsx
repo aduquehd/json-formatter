@@ -544,7 +544,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
       .slice(0, 5)
       .map(w => w.word);
     
-    return [...new Set([...pathSuggestions, ...wordSuggestions])].slice(0, 8);
+    return Array.from(new Set([...pathSuggestions, ...wordSuggestions])).slice(0, 8);
   }, [searchQuery, allPaths, wordFrequencies]);
 
   const clearSearch = () => {
