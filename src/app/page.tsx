@@ -199,9 +199,9 @@ export default function Home() {
   return (
     <>
       <Navbar theme={theme} onThemeToggle={toggleTheme} />
-      <div className="container mx-auto px-5 pt-20 pb-5">
-        <main id="main-content" className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-2xl p-5 shadow-lg h-[calc(100vh-88px)] flex flex-col backdrop-blur-xl">
-          <div className="flex justify-between items-center mb-2 gap-3">
+      <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
+        <main id="main-content" className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100vh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-88px)] flex flex-col backdrop-blur-xl">
+          <div className="mb-2 sm:mb-3">
             <ControlButtons
               onFormat={handleFormat}
               onCompact={handleCompact}
