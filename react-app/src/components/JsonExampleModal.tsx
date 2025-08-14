@@ -25,11 +25,11 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
 ]`,
     },
     {
-      id: 'financialReport',
+      id: 'financialSales',
       title: 'Financial Sales',
       icon: DollarSign,
-      preview: `"company": "Tech Corp",
-"fiscal_year": 2024,
+      preview: `"company": "TechCorp Solutions",
+"totalRevenue": 45670000.5,
 "quarters": [
   {
     "quarter": "Q1",
@@ -88,26 +88,30 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
             return (
               <div
                 key={example.id}
-                className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] hover:border-blue-500 transition-all overflow-hidden group"
+                onClick={() => onSelect(exampleJsonData[example.id])}
+                className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] hover:border-purple-500 hover:bg-[var(--bg-tertiary)] transition-all duration-300 overflow-hidden group cursor-pointer hover:shadow-xl hover:shadow-purple-500/20 hover:scale-[1.02]"
               >
                 <div className="p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <IconComponent className="w-7 h-7 text-blue-500" />
-                    <h3 className="font-semibold text-lg text-white">{example.title}</h3>
+                    <IconComponent className="w-7 h-7 text-purple-500 group-hover:text-purple-400 transition-colors" />
+                    <h3 className="font-semibold text-lg text-white group-hover:text-purple-100 transition-colors">{example.title}</h3>
                   </div>
                   
-                  <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[#1a1a2e]">
-                    <pre className="absolute inset-0 p-3 text-xs text-gray-400 font-mono blur-example-code">
+                  <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[#1a1a2e] group-hover:bg-[#1e1e3a] transition-colors">
+                    <pre className="absolute inset-0 p-3 text-xs text-gray-400 font-mono blur-example-code group-hover:text-gray-300 transition-colors">
                       {`{
   ${example.preview}
 }`}
                     </pre>
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a2e]"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a2e] group-hover:to-[#1e1e3a] transition-colors"></div>
                   </div>
                   
                   <button
-                    onClick={() => onSelect(exampleJsonData[example.id])}
-                    className="w-full py-2.5 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelect(exampleJsonData[example.id]);
+                    }}
+                    className="w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group-hover:bg-purple-500 group-hover:hover:bg-purple-600"
                   >
                     Use this example
                   </button>

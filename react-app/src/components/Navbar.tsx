@@ -18,7 +18,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
             JSON Formatter & Viewer - Online JSON Tools
           </h1>
           <p className="text-xs text-gray-500 dark:text-gray-600 m-0 font-normal tracking-tight leading-tight">
-            Free JSON formatter, validator, and viewer. Format, beautify, validate JSON online. All processing happens
+            Free JSON formatter, validator, and viewer. All processing happens
             locally in your browser—100% secure and private.
           </p>
         </div>

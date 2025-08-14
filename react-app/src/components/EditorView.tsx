@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
+import { JSONFixer } from '@/utils/jsonFixer';
+import { useNotification } from '@/hooks/useNotification';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -14,6 +16,8 @@ interface EditorViewProps {
 const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => {
   const editorRef = useRef<any>(null);
   const monacoRef = useRef<any>(null);
+  const { showWarning } = useNotification();
+  const isPastingRef = useRef(false);
 
   useEffect(() => {
     // Update theme when it changes
@@ -82,6 +86,32 @@ const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => 
     
     // Set the theme
     monaco.editor.setTheme(theme === 'dark' ? 'customDark' : 'customLight');
+    
+    // Add paste event handler to fix JSON automatically
+    editor.onDidPaste((e: any) => {
+      isPastingRef.current = true;
+      
+      // Get the current content after paste
+      setTimeout(() => {
+        const currentContent = editor.getValue();
+        
+        // Try to parse and fix the JSON
+        const result = JSONFixer.parseWithFixInfo(currentContent);
+        
+        if (result.wasFixed && result.data && result.fixes && result.fixes.length > 0) {
+          // JSON was fixed - update the editor with the fixed version
+          const formatted = JSON.stringify(result.data, null, 2);
+          editor.setValue(formatted);
+          
+          // Show warning about fixes
+          setTimeout(() => {
+            showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+          }, 100);
+        }
+        
+        isPastingRef.current = false;
+      }, 10);
+    });
     
     // Configure editor options
     editor.updateOptions({

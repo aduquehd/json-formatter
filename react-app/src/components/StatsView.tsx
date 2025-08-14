@@ -6,55 +6,108 @@ interface StatsViewProps {
   json: any;
 }
 
+interface JSONStats {
+  totalKeys: number;
+  totalValues: number;
+  maxDepth: number;
+  estimatedSize: number;
+  typeDistribution: Map<string, number>;
+  arrayStats: {
+    count: number;
+    minLength: number;
+    maxLength: number;
+    avgLength: number;
+  };
+  keyAnalysis: {
+    uniqueKeys: Set<string>;
+    keyFrequency: Map<string, number>;
+    longestKey: string;
+  };
+  depthMap: Map<number, number>;
+}
+
 const StatsView: React.FC<StatsViewProps> = ({ json }) => {
-  const calculateStats = () => {
-    if (!json) return null;
+  const analyzeJSON = (data: any, depth: number = 0, stats?: JSONStats): JSONStats => {
+    if (!stats) {
+      stats = {
+        totalKeys: 0,
+        totalValues: 0,
+        maxDepth: 0,
+        estimatedSize: 0,
+        typeDistribution: new Map(),
+        arrayStats: {
+          count: 0,
+          minLength: Infinity,
+          maxLength: 0,
+          avgLength: 0,
+        },
+        keyAnalysis: {
+          uniqueKeys: new Set(),
+          keyFrequency: new Map(),
+          longestKey: "",
+        },
+        depthMap: new Map(),
+      };
+    }
 
-    const stats = {
-      totalKeys: 0,
-      totalValues: 0,
-      stringCount: 0,
-      numberCount: 0,
-      booleanCount: 0,
-      nullCount: 0,
-      arrayCount: 0,
-      objectCount: 0,
-      maxDepth: 0,
-      totalSize: JSON.stringify(json).length,
-    };
+    stats.maxDepth = Math.max(stats.maxDepth, depth);
+    stats.depthMap.set(depth, (stats.depthMap.get(depth) || 0) + 1);
 
-    const analyze = (obj: any, depth: number = 0) => {
-      if (depth > stats.maxDepth) stats.maxDepth = depth;
+    const type = data === null ? "null" : Array.isArray(data) ? "array" : typeof data;
+    stats.typeDistribution.set(type, (stats.typeDistribution.get(type) || 0) + 1);
+    stats.totalValues++;
 
-      if (Array.isArray(obj)) {
-        stats.arrayCount++;
-        obj.forEach(item => analyze(item, depth + 1));
-      } else if (obj && typeof obj === 'object') {
-        stats.objectCount++;
-        Object.entries(obj).forEach(([key, value]) => {
-          stats.totalKeys++;
-          stats.totalValues++;
-          
-          if (value === null) {
-            stats.nullCount++;
-          } else if (typeof value === 'string') {
-            stats.stringCount++;
-          } else if (typeof value === 'number') {
-            stats.numberCount++;
-          } else if (typeof value === 'boolean') {
-            stats.booleanCount++;
-          } else if (typeof value === 'object') {
-            analyze(value, depth + 1);
-          }
-        });
-      }
-    };
+    // Estimate size
+    stats.estimatedSize += estimateSize(data);
 
-    analyze(json);
+    if (Array.isArray(data)) {
+      stats.arrayStats.count++;
+      stats.arrayStats.minLength = Math.min(stats.arrayStats.minLength, data.length);
+      stats.arrayStats.maxLength = Math.max(stats.arrayStats.maxLength, data.length);
+
+      data.forEach((item) => analyzeJSON(item, depth + 1, stats));
+    } else if (typeof data === "object" && data !== null) {
+      Object.entries(data).forEach(([key, value]) => {
+        stats!.totalKeys++;
+        stats!.keyAnalysis.uniqueKeys.add(key);
+        stats!.keyAnalysis.keyFrequency.set(key, (stats!.keyAnalysis.keyFrequency.get(key) || 0) + 1);
+
+        if (key.length > stats!.keyAnalysis.longestKey.length) {
+          stats!.keyAnalysis.longestKey = key;
+        }
+
+        analyzeJSON(value, depth + 1, stats);
+      });
+    }
+
+    // Calculate array average
+    if (stats.arrayStats.count > 0 && stats.arrayStats.minLength !== Infinity) {
+      const totalArrayLength = Array.from(stats.typeDistribution.entries())
+        .filter(([type]) => type === "array")
+        .reduce((sum, [_, count]) => sum + count, 0);
+      stats.arrayStats.avgLength = totalArrayLength / stats.arrayStats.count;
+    }
+
     return stats;
   };
 
-  const stats = calculateStats();
+  const estimateSize = (data: any): number => {
+    if (data === null) return 4;
+    if (typeof data === "boolean") return 5;
+    if (typeof data === "number") return 8;
+    if (typeof data === "string") return data.length * 2;
+    if (Array.isArray(data)) return 2; // Just brackets
+    if (typeof data === "object") return 2; // Just braces
+    return 0;
+  };
+
+  const formatBytes = (bytes: number): string => {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  };
+
+  const stats = json ? analyzeJSON(json) : null;
 
   if (!stats) {
     return (
@@ -64,56 +117,125 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
     );
   }
 
+  const total = Array.from(stats.typeDistribution.values()).reduce((sum, count) => sum + count, 0);
+  const typeEntries = Array.from(stats.typeDistribution.entries()).sort((a, b) => b[1] - a[1]);
+  const topKeys = Array.from(stats.keyAnalysis.keyFrequency.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const maxDepthCount = Math.max(...Array.from(stats.depthMap.values()));
+
   return (
-    <div className="h-full overflow-auto p-6">
-      <h2 className="text-xl font-bold mb-6">JSON Statistics</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Total Size</div>
-          <div className="text-2xl font-bold text-[var(--text-primary)]">
-            {(stats.totalSize / 1024).toFixed(2)} KB
+    <div className="stats-output">
+      <div className="stats-container">
+        {/* Overview Section */}
+        <div className="stats-section">
+          <h4>Overview</h4>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-value">{stats.totalKeys}</div>
+              <div className="stat-label">Total Keys</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">{stats.totalValues}</div>
+              <div className="stat-label">Total Values</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">{stats.maxDepth}</div>
+              <div className="stat-label">Nesting Depth</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">{formatBytes(stats.estimatedSize)}</div>
+              <div className="stat-label">Estimated Size</div>
+            </div>
           </div>
         </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Total Keys</div>
-          <div className="text-2xl font-bold text-[var(--text-primary)]">{stats.totalKeys}</div>
+
+        {/* Type Distribution */}
+        <div className="stats-section">
+          <h4>Type Distribution</h4>
+          <div className="type-chart">
+            {typeEntries.map(([type, count]) => {
+              const percentage = ((count / total) * 100).toFixed(1);
+              return (
+                <div key={type} className="type-bar">
+                  <div className="type-bar-label">{type}</div>
+                  <div className="type-bar-container">
+                    <div 
+                      className={`type-bar-fill type-${type}`} 
+                      style={{ width: `${percentage}%` }}
+                    ></div>
+                    <span className="type-bar-value">{count} ({percentage}%)</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Max Depth</div>
-          <div className="text-2xl font-bold text-[var(--text-primary)]">{stats.maxDepth}</div>
+
+        {/* Array Statistics */}
+        <div className="stats-section">
+          <h4>Array Statistics</h4>
+          {stats.arrayStats.count === 0 ? (
+            <p className="stats-empty">No arrays found</p>
+          ) : (
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-value">{stats.arrayStats.count}</div>
+                <div className="stat-label">Total Arrays</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">
+                  {stats.arrayStats.minLength === Infinity ? 0 : stats.arrayStats.minLength}
+                </div>
+                <div className="stat-label">Min Length</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">{stats.arrayStats.maxLength}</div>
+                <div className="stat-label">Max Length</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-value">{stats.arrayStats.avgLength.toFixed(1)}</div>
+                <div className="stat-label">Avg Length</div>
+              </div>
+            </div>
+          )}
         </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Strings</div>
-          <div className="text-2xl font-bold text-[var(--tree-string)]">{stats.stringCount}</div>
+
+        {/* Key Analysis */}
+        <div className="stats-section">
+          <h4>Key Analysis</h4>
+          <div className="key-analysis-content">
+            <p><strong>Unique Keys:</strong> {stats.keyAnalysis.uniqueKeys.size}</p>
+            <p><strong>Longest Key:</strong> "{stats.keyAnalysis.longestKey}" ({stats.keyAnalysis.longestKey.length} chars)</p>
+            
+            {topKeys.length > 0 && (
+              <div className="top-keys">
+                <p><strong>Most Frequent Keys:</strong></p>
+                <ol>
+                  {topKeys.map(([key, count]) => (
+                    <li key={key}>"{key}" ({count} times)</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
         </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Numbers</div>
-          <div className="text-2xl font-bold text-[var(--tree-number)]">{stats.numberCount}</div>
-        </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Booleans</div>
-          <div className="text-2xl font-bold text-[var(--tree-boolean)]">{stats.booleanCount}</div>
-        </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Null Values</div>
-          <div className="text-2xl font-bold text-[var(--tree-null)]">{stats.nullCount}</div>
-        </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Arrays</div>
-          <div className="text-2xl font-bold text-[var(--tree-array)]">{stats.arrayCount}</div>
-        </div>
-        
-        <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
-          <div className="text-sm text-[var(--text-secondary)] mb-1">Objects</div>
-          <div className="text-2xl font-bold text-[var(--tree-object)]">{stats.objectCount}</div>
+
+        {/* Depth Visualization */}
+        <div className="stats-section">
+          <h4>Nesting Depth Distribution</h4>
+          <div className="depth-chart">
+            {Array.from(stats.depthMap.entries())
+              .sort((a, b) => a[0] - b[0])
+              .map(([depth, count]) => {
+                const height = (count / maxDepthCount) * 100;
+                return (
+                  <div key={depth} className="depth-bar">
+                    <div className="depth-bar-fill" style={{ height: `${height}%` }}></div>
+                    <div className="depth-bar-label">L{depth}</div>
+                    <div className="depth-bar-count">{count}</div>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </div>
     </div>

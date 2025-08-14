@@ -24,25 +24,28 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('formatted');
   const [showExampleModal, setShowExampleModal] = useState(false);
   const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
+  const [skipValidation, setSkipValidation] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const { showSuccess, showError, showWarning } = useNotification();
 
   useEffect(() => {
-    if (!isUpdatingFromTree && editorContent) {
+    if (!isUpdatingFromTree && !skipValidation && editorContent) {
       const result = JSONFixer.parseWithFixInfo(editorContent);
       if (result.error) {
         setParsedJson(null);
       } else {
-        if (result.wasFixed && result.fixes) {
-          showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
-        }
         setParsedJson(result.data);
       }
     } else if (!editorContent) {
       setParsedJson(null);
     }
+    
+    // Reset skip validation flag
+    if (skipValidation) {
+      setSkipValidation(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorContent, isUpdatingFromTree]);
+  }, [editorContent, isUpdatingFromTree, skipValidation]);
 
   const handleFormat = () => {
     if (!editorContent || editorContent.trim() === '') {
@@ -50,11 +53,26 @@ export default function Home() {
       return;
     }
     
-    try {
-      const formatted = formatJSON(editorContent);
+    // Try to parse and potentially fix the JSON
+    const result = JSONFixer.parseWithFixInfo(editorContent);
+    
+    if (result.data) {
+      const formatted = JSON.stringify(result.data, null, 2);
+      
+      // Set skip validation flag to prevent useEffect from running
+      setSkipValidation(true);
       setEditorContent(formatted);
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Invalid JSON format');
+      setParsedJson(result.data);
+      
+      if (result.wasFixed && result.fixes && result.fixes.length > 0) {
+        setTimeout(() => {
+          showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+        }, 100);
+      } else {
+        showSuccess('JSON formatted successfully');
+      }
+    } else {
+      showError(result.error || 'Invalid JSON format');
     }
   };
 
@@ -64,11 +82,26 @@ export default function Home() {
       return;
     }
     
-    try {
-      const compacted = compactJSON(editorContent);
+    // Try to parse and potentially fix the JSON
+    const result = JSONFixer.parseWithFixInfo(editorContent);
+    
+    if (result.data) {
+      const compacted = JSON.stringify(result.data);
+      
+      // Set skip validation flag to prevent useEffect from running
+      setSkipValidation(true);
       setEditorContent(compacted);
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Invalid JSON format');
+      setParsedJson(result.data);
+      
+      if (result.wasFixed && result.fixes && result.fixes.length > 0) {
+        setTimeout(() => {
+          showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+        }, 100);
+      } else {
+        showSuccess('JSON compacted successfully');
+      }
+    } else {
+      showError(result.error || 'Invalid JSON format');
     }
   };
 
@@ -78,10 +111,23 @@ export default function Home() {
   };
 
   const handleCopy = async () => {
+    if (!editorContent || editorContent.trim() === '') {
+      showError('Nothing to copy');
+      return;
+    }
+    
     try {
       await navigator.clipboard.writeText(editorContent);
+      
+      // Check if the content is valid JSON
+      try {
+        JSON.parse(editorContent);
+        showSuccess('JSON copied to clipboard');
+      } catch {
+        showWarning('Content copied (Note: Invalid JSON)');
+      }
     } catch (error) {
-      showError('Failed to copy');
+      showError('Failed to copy to clipboard');
     }
   };
 
@@ -93,18 +139,38 @@ export default function Home() {
         return;
       }
       
-      setEditorContent(text);
-      setActiveTab('formatted');
+      // Try to parse and potentially fix the JSON
+      const result = JSONFixer.parseWithFixInfo(text);
       
-      // Try to format the pasted content
-      try {
-        const formatted = formatJSON(text);
-        // Use setTimeout to ensure state update happens after setEditorContent
-        setTimeout(() => {
-          setEditorContent(formatted);
-        }, 10);
-      } catch (error) {
-        // If formatting fails, just show the pasted content
+      if (result.data) {
+        // JSON was successfully parsed (possibly after fixing)
+        const formatted = JSON.stringify(result.data, null, 2);
+        
+        // Set skip validation flag to prevent useEffect from running
+        setSkipValidation(true);
+        
+        // Update editor content with fixed JSON
+        setEditorContent(formatted);
+        
+        // Update parsed JSON directly
+        setParsedJson(result.data);
+        
+        setActiveTab('formatted');
+        
+        if (result.wasFixed && result.fixes && result.fixes.length > 0) {
+          // JSON was fixed - show warning after a brief delay to ensure UI updates
+          setTimeout(() => {
+            showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+          }, 100);
+        } else {
+          // JSON was valid
+          showSuccess('JSON pasted and formatted successfully');
+        }
+      } else {
+        // Could not parse or fix the JSON
+        setEditorContent(text);
+        setActiveTab('formatted');
+        showError(result.error || 'Invalid JSON: Please check the syntax and try again');
       }
     } catch (error) {
       showError('Failed to paste - please check clipboard permissions');
