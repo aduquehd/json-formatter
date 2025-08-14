@@ -1,22 +1,67 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ControlButtons from '@/components/ControlButtons';
 import TabsContainer from '@/components/TabsContainer';
 import EditorView from '@/components/EditorView';
 import TreeView from '@/components/TreeView';
-import GraphView from '@/components/GraphView';
-import DiffView from '@/components/DiffView';
-import StatsView from '@/components/StatsView';
-import MapView from '@/components/MapView';
-import ChartView from '@/components/ChartView';
-import SearchView from '@/components/SearchView';
 import JsonExampleModal from '@/components/JsonExampleModal';
 import { useTheme } from '@/hooks/useTheme';
 import { useNotification } from '@/hooks/useNotification';
 import { JSONFixer } from '@/utils/jsonFixer';
 import { formatJSON, compactJSON } from '@/utils/jsonUtils';
+import * as gtag from '@/lib/gtag';
+
+// Lazy load heavy components for better performance
+const GraphView = dynamic(
+  () => import('@/components/GraphView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Graph View...</div>,
+    ssr: false
+  }
+);
+
+const DiffView = dynamic(
+  () => import('@/components/DiffView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Diff View...</div>,
+    ssr: false
+  }
+);
+
+const StatsView = dynamic(
+  () => import('@/components/StatsView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Stats View...</div>,
+    ssr: false
+  }
+);
+
+const MapView = dynamic(
+  () => import('@/components/MapView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Map View...</div>,
+    ssr: false
+  }
+);
+
+const ChartView = dynamic(
+  () => import('@/components/ChartView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Chart View...</div>,
+    ssr: false
+  }
+);
+
+const SearchView = dynamic(
+  () => import('@/components/SearchView'),
+  {
+    loading: () => <div className="flex items-center justify-center h-full">Loading Search View...</div>,
+    ssr: false
+  }
+);
 
 export default function Home() {
   const [editorContent, setEditorContent] = useState('');
@@ -53,6 +98,9 @@ export default function Home() {
       return;
     }
     
+    // Track format action
+    gtag.trackJsonFormat();
+    
     // Try to parse and potentially fix the JSON
     const result = JSONFixer.parseWithFixInfo(editorContent);
     
@@ -68,8 +116,6 @@ export default function Home() {
         setTimeout(() => {
           showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
         }, 100);
-      } else {
-        showSuccess('JSON formatted successfully');
       }
     } else {
       showError(result.error || 'Invalid JSON format');
@@ -81,6 +127,9 @@ export default function Home() {
       showError('Please enter some JSON to compact');
       return;
     }
+    
+    // Track compact action
+    gtag.trackJsonCompact();
     
     // Try to parse and potentially fix the JSON
     const result = JSONFixer.parseWithFixInfo(editorContent);
@@ -97,8 +146,6 @@ export default function Home() {
         setTimeout(() => {
           showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
         }, 100);
-      } else {
-        showSuccess('JSON compacted successfully');
       }
     } else {
       showError(result.error || 'Invalid JSON format');
@@ -106,6 +153,7 @@ export default function Home() {
   };
 
   const handleClear = () => {
+    gtag.trackJsonClear();
     setEditorContent('');
     setParsedJson(null);
   };
@@ -116,13 +164,15 @@ export default function Home() {
       return;
     }
     
+    gtag.trackJsonCopy();
+    
     try {
       await navigator.clipboard.writeText(editorContent);
       
       // Check if the content is valid JSON
       try {
         JSON.parse(editorContent);
-        showSuccess('JSON copied to clipboard');
+        // Success - no notification needed
       } catch {
         showWarning('Content copied (Note: Invalid JSON)');
       }
@@ -132,6 +182,8 @@ export default function Home() {
   };
 
   const handlePaste = async () => {
+    gtag.trackJsonPaste();
+    
     try {
       const text = await navigator.clipboard.readText();
       if (!text || text.trim() === '') {
@@ -163,8 +215,7 @@ export default function Home() {
             showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
           }, 100);
         } else {
-          // JSON was valid
-          showSuccess('JSON pasted and formatted successfully');
+          // JSON was valid - no notification needed
         }
       } else {
         // Could not parse or fix the JSON
@@ -178,6 +229,13 @@ export default function Home() {
   };
 
   const handleExampleSelect = (exampleContent: string) => {
+    // Track example usage
+    const exampleName = exampleContent.includes('products') ? 'ecommerce' : 
+                       exampleContent.includes('sales') ? 'financial' :
+                       exampleContent.includes('database') ? 'configuration' :
+                       exampleContent.includes('coordinates') ? 'geographic' : 'unknown';
+    gtag.trackExampleUsed(exampleName);
+    
     try {
       // Format the example content immediately
       const formatted = formatJSON(exampleContent);
@@ -198,6 +256,7 @@ export default function Home() {
 
   return (
     <>
+      <h1 className="sr-only">JSON Formatter, JSON Viewer, JSON Validator - Free Online JSON Tools for Developers</h1>
       <Navbar theme={theme} onThemeToggle={toggleTheme} />
       <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
         <main id="main-content" className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100vh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-88px)] flex flex-col backdrop-blur-xl">
@@ -214,7 +273,13 @@ export default function Home() {
             />
           </div>
           
-          <TabsContainer activeTab={activeTab} onTabChange={setActiveTab} />
+          <TabsContainer 
+            activeTab={activeTab} 
+            onTabChange={(tab) => {
+              setActiveTab(tab);
+              gtag.trackTabSwitch(tab);
+            }} 
+          />
           
           <div className="flex-1 overflow-hidden">
             {activeTab === 'formatted' && (

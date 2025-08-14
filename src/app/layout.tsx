@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
+import Hotjar from '@/components/Hotjar';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -40,6 +42,7 @@ export const metadata: Metadata = {
     icon: '/img/logo-favicon.png',
     apple: '/img/optimized-size-logo.png',
   },
+  manifest: '/manifest.json',
   alternates: {
     canonical: 'https://jsonformatter.me/',
     languages: {
@@ -98,10 +101,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="JSON Tools" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <GoogleAnalytics />
+        <Hotjar />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <ThemeProvider>

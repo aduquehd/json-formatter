@@ -64,14 +64,28 @@
    npm install
    ```
 
-3. Run the development server:
+3. Set up environment variables (optional):
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Edit `.env.local` and add your analytics IDs if you want tracking:
+   ```
+   # Google Analytics (optional)
+   NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+   
+   # Hotjar (optional)
+   NEXT_PUBLIC_HOTJAR_ID=1234567
+   ```
+
+4. Run the development server:
    ```bash
    pnpm dev
    # or
    npm run dev
    ```
 
-4. Open your browser and go to `http://localhost:3000`
+5. Open your browser and go to `http://localhost:3000`
 
 ## 💻 Development
 
@@ -213,6 +227,15 @@ Professional-grade code editor with VS Code features including:
 - Deep object comparison with diff highlighting
 
 ## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (format: G-XXXXXXXXXX) | No | - |
+| `NEXT_PUBLIC_HOTJAR_ID` | Hotjar Site ID for heatmaps and session recordings (numeric) | No | - |
+
+If analytics IDs are not provided, the respective tracking scripts will not be loaded, ensuring complete privacy for users who prefer not to use tracking.
 
 ### Theme Customization
 Themes are configured in `src/app/globals.css` using CSS custom properties. The application supports automatic theme switching based on system preferences.

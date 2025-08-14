@@ -260,11 +260,11 @@ const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
           <p className="text-sm text-[var(--text-secondary)] mb-4">
             Map view supports the following formats:
           </p>
-          <ul className="text-left text-sm text-[var(--text-muted)] space-y-1 max-w-md mx-auto">
-            <li>• GeoJSON FeatureCollection or Feature</li>
-            <li>• Objects with lat/lng or latitude/longitude</li>
-            <li>• Objects with coordinates array [lng, lat]</li>
-            <li>• Objects with location.lat/location.lng</li>
+          <ul className="text-sm text-[var(--text-muted)] space-y-1 max-w-md mx-auto">
+            <li className="text-center">• GeoJSON FeatureCollection or Feature</li>
+            <li className="text-center">• Objects with lat/lng or latitude/longitude</li>
+            <li className="text-center">• Objects with coordinates array [lng, lat]</li>
+            <li className="text-center">• Objects with location.lat/location.lng</li>
           </ul>
           <div className="mt-4 p-3 bg-[var(--bg-secondary)] rounded-lg">
             <p className="text-xs text-[var(--text-muted)]">
