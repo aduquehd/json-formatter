@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Github, HelpCircle, User } from 'lucide-react';
+import { Github, HelpCircle, Heart } from 'lucide-react';
 
 interface NavbarProps {
   theme: 'light' | 'dark';
@@ -55,11 +55,13 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
             href="https://aduquehd.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-[10px] sm:text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-cyan-400 transition-all duration-300 group"
+            className="group relative flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2.5 py-0.5 sm:py-1 text-[9px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-950/30 dark:to-red-950/30 hover:from-pink-100 hover:to-red-100 dark:hover:from-pink-900/40 dark:hover:to-red-900/40 rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105 border border-pink-200/50 dark:border-pink-800/50 hover:border-pink-400 dark:hover:border-pink-600"
           >
-            <User className="w-3 h-3 sm:w-3.5 sm:h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
-            <span>by</span>
-            <span className="hover:underline">@aduquehd</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-400 to-red-400 opacity-0 group-hover:opacity-10 rounded-full transition-opacity duration-300" />
+            <span className="hidden sm:inline relative">Made with</span>
+            <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-500 dark:text-red-400 fill-current group-hover:scale-110 transition-transform relative" />
+            <span className="relative">by</span>
+            <span className="relative font-semibold bg-gradient-to-r from-pink-600 to-red-600 dark:from-pink-400 dark:to-red-400 bg-clip-text text-transparent group-hover:from-pink-700 group-hover:to-red-700 dark:group-hover:from-pink-300 dark:group-hover:to-red-300">@aduquehd</span>
           </Link>
         </div>
       </div>
