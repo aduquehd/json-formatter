@@ -72,13 +72,13 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-white">Choose a JSON Example</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Choose a JSON Example</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
             aria-label="Close modal"
           >
-            <X className="w-6 h-6" />
+            <X className="w-6 h-6 text-[var(--text-primary)]" />
           </button>
         </div>
         
@@ -94,16 +94,16 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
                 <div className="p-5">
                   <div className="flex items-center gap-3 mb-4">
                     <IconComponent className="w-7 h-7 text-purple-500 group-hover:text-purple-400 transition-colors" />
-                    <h3 className="font-semibold text-lg text-white group-hover:text-purple-100 transition-colors">{example.title}</h3>
+                    <h3 className="font-semibold text-lg text-[var(--text-primary)] group-hover:text-purple-600 dark:text-white dark:group-hover:text-purple-100 transition-colors">{example.title}</h3>
                   </div>
                   
-                  <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[#1a1a2e] group-hover:bg-[#1e1e3a] transition-colors">
-                    <pre className="absolute inset-0 p-3 text-xs text-gray-400 font-mono blur-example-code group-hover:text-gray-300 transition-colors">
+                  <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[var(--bg-secondary)] group-hover:bg-[var(--bg-primary)] transition-colors">
+                    <pre className="absolute inset-0 p-3 text-xs text-[var(--text-secondary)] font-mono blur-example-code group-hover:text-[var(--text-primary)] transition-colors">
                       {`{
   ${example.preview}
 }`}
                     </pre>
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1a1a2e] group-hover:to-[#1e1e3a] transition-colors"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-secondary)] group-hover:to-[var(--bg-primary)] transition-colors"></div>
                   </div>
                   
                   <button
