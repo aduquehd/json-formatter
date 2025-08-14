@@ -225,7 +225,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
           }
           
           // If updating a value in an object, preserve key order
-          if (parent && !Array.isArray(current)) {
+          if (parent && parentKey !== null && !Array.isArray(current)) {
             const orderedObj: any = {};
             Object.keys(current).forEach(k => {
               if (k === lastKey) {

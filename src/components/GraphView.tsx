@@ -330,8 +330,8 @@ function generateGraphView(
   setupControls(svg, zoom);
 
   // Setup display mode selector
-  setupDisplayModeSelector((mode: NodeDisplayMode) => {
-    updateNodeLabels(graphData.nodes, mode, calculatedStats);
+  setupDisplayModeSelector((mode: string) => {
+    updateNodeLabels(graphData.nodes, mode as NodeDisplayMode, calculatedStats);
     nodeText.text((d) => d.displayLabel || d.name);
   });
 }

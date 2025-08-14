@@ -103,7 +103,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
     `;
   }
 
-  const topKeys = Array.from(stats.keyFrequency.entries())
+  const topKeys = Array.from((stats.keyFrequency as Map<string, number>).entries())
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
 
@@ -122,10 +122,10 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
 
   if (ba.enumerations.size > 0) {
     html += '<div class="stat-group"><h4>Enumerations</h4>';
-    Array.from(ba.enumerations.entries())
+    (Array.from(ba.enumerations.entries()) as [string, any][])
       .slice(0, 3)
       .forEach(([key, enumInfo]) => {
-        const topValues = Array.from(enumInfo.values.entries())
+        const topValues = (Array.from(enumInfo.values.entries()) as [string, number][])
           .sort((a, b) => b[1] - a[1])
           .slice(0, 3)
           .map(
@@ -145,15 +145,15 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
 
   if (ba.potentialIds.size > 0) {
     html += '<div class="stat-group"><h4>Potential IDs 🔑</h4>';
-    Array.from(ba.potentialIds)
+    (Array.from(ba.potentialIds) as string[])
       .slice(0, 5)
-      .forEach((id: string) => {
+      .forEach((id) => {
         html += `<div class="id-item">${id}</div>`;
       });
     html += "</div>";
   }
 
-  const incompleteFields = Array.from(ba.dataCompleteness.entries())
+  const incompleteFields = (Array.from(ba.dataCompleteness.entries()) as [string, number][])
     .filter(([_, completeness]) => completeness < 100)
     .sort((a, b) => a[1] - b[1])
     .slice(0, 5);
@@ -423,7 +423,7 @@ export function analyzeBusinessLogic(data: any, nodes: any[], stats: any): void 
   });
 
   stats.businessAnalytics.enumerations.forEach((enumInfo: any, key: string) => {
-    const values = Array.from(enumInfo.values.entries());
+    const values = Array.from(enumInfo.values.entries()) as [string, number][];
     values.forEach(([value, count]) => {
       if (count === 1 && enumInfo.totalCount > 10) {
         if (!stats.businessAnalytics.anomalies.has(key)) {

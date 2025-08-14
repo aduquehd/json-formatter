@@ -1,0 +1,56 @@
+# Git files
+.git
+.gitignore
+README.md
+
+# Development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+__tests__
+*.test.js
+*.test.tsx
+*.spec.js
+*.spec.tsx
+coverage
+
+# Documentation
+docs
+*.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Docker files (if not needed for deployment)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Python files (from old setup)
+*.py
+*.pyc
+__pycache__
+pyproject.toml
+uv.lock
+
+# Old directories
+frontend/
+static/
+templates/
+compose/
+react-app/

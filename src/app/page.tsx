@@ -66,7 +66,7 @@ export default function Home() {
       
       if (result.wasFixed && result.fixes && result.fixes.length > 0) {
         setTimeout(() => {
-          showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+          showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
         }, 100);
       } else {
         showSuccess('JSON formatted successfully');
@@ -95,7 +95,7 @@ export default function Home() {
       
       if (result.wasFixed && result.fixes && result.fixes.length > 0) {
         setTimeout(() => {
-          showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+          showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
         }, 100);
       } else {
         showSuccess('JSON compacted successfully');
@@ -160,7 +160,7 @@ export default function Home() {
         if (result.wasFixed && result.fixes && result.fixes.length > 0) {
           // JSON was fixed - show warning after a brief delay to ensure UI updates
           setTimeout(() => {
-            showWarning(`JSON was automatically fixed: ${result.fixes.join(', ')}`);
+            showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
           }, 100);
         } else {
           // JSON was valid
