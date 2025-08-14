@@ -1,0 +1,384 @@
+.graphContainer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Graph Layout */
+.graphContainer :global(.graph-layout) {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+}
+
+.graphContainer :global(.graph-sidebar) {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+}
+
+.graphContainer :global(.graph-container) {
+  flex: 1;
+  position: relative;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* Stats and Details Panels */
+.graphContainer :global(.stats-panel),
+.graphContainer :global(.details-panel) {
+  margin-bottom: 20px;
+}
+
+.graphContainer :global(.stats-panel h3),
+.graphContainer :global(.details-panel h3) {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.graphContainer :global(.stats-content),
+.graphContainer :global(.details-content) {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.graphContainer :global(.stat-group) {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+}
+
+.graphContainer :global(.stat-group h4) {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.graphContainer :global(.stat-item) {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.graphContainer :global(.stat-label) {
+  color: var(--text-secondary);
+}
+
+.graphContainer :global(.stat-value) {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Graph Controls */
+.graphContainer :global(.graph-controls) {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.graphContainer :global(.graph-controls-container) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.graphContainer :global(.graph-control-btn) {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.graphContainer :global(.graph-control-btn:hover) {
+  background: var(--btn-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.graphContainer :global(.graph-control-btn.futuristic) {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.graphContainer :global([data-theme="dark"] .graph-control-btn.futuristic) {
+  background: linear-gradient(135deg, rgba(122, 162, 247, 0.1) 0%, rgba(187, 154, 247, 0.1) 100%);
+  border: 1px solid rgba(122, 162, 247, 0.3);
+}
+
+.graphContainer :global(.btn-glow) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(122, 162, 247, 0.4) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.graphContainer :global(.graph-control-btn:hover .btn-glow) {
+  opacity: 1;
+}
+
+.graphContainer :global(.btn-content) {
+  position: relative;
+  z-index: 2;
+}
+
+.graphContainer :global(.btn-border) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, transparent, rgba(122, 162, 247, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.graphContainer :global(.graph-control-btn:hover .btn-border) {
+  opacity: 1;
+}
+
+/* Display Mode Selector */
+.graphContainer :global(.display-mode-selector) {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.graphContainer :global(.display-mode-selector label) {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.graphContainer :global(.display-mode-select) {
+  padding: 4px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.graphContainer :global(.display-mode-select:focus) {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Graph Tooltip */
+.graphContainer :global(.graph-tooltip) {
+  position: absolute;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-primary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.graphContainer :global(.graph-tooltip.visible) {
+  opacity: 1;
+}
+
+/* Node and Link Styles */
+.graphContainer :global(.graph-node) {
+  cursor: pointer;
+}
+
+.graphContainer :global(.graph-node circle) {
+  transition: all 0.3s ease;
+}
+
+.graphContainer :global(.graph-node:hover circle) {
+  stroke-width: 3;
+  filter: brightness(1.2);
+}
+
+.graphContainer :global(.node-label) {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  user-select: none;
+}
+
+.graphContainer :global(.graph-link) {
+  pointer-events: none;
+}
+
+/* Business Analytics Styles */
+.graphContainer :global(.enum-item) {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.graphContainer :global(.enum-key) {
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.graphContainer :global(.enum-values) {
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding-left: 12px;
+  font-family: "SF Mono", Monaco, monospace;
+}
+
+.graphContainer :global(.id-item) {
+  padding: 4px 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 12px;
+  margin: 4px 0;
+  font-family: "SF Mono", Monaco, monospace;
+  color: #0066ff;
+}
+
+.graphContainer :global([data-theme="dark"] .id-item) {
+  color: #79b8ff;
+}
+
+.graphContainer :global(.sensitive-item) {
+  padding: 6px 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+  margin: 4px 0;
+  color: #dc2626;
+}
+
+.graphContainer :global([data-theme="dark"] .sensitive-item) {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.graphContainer :global(.low-completeness) {
+  color: #dc2626 !important;
+  font-weight: 600;
+}
+
+.graphContainer :global([data-theme="dark"] .low-completeness) {
+  color: #f87171 !important;
+}
+
+/* Pattern Items */
+.graphContainer :global(.pattern-item) {
+  margin: 6px 0;
+  padding: 6px 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.graphContainer :global(.pattern-name) {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.graphContainer :global(.pattern-count) {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Detail Items */
+.graphContainer :global(.detail-item) {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.graphContainer :global(.detail-item strong) {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.graphContainer :global(.detail-item code) {
+  background: var(--tree-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "SF Mono", Monaco, monospace;
+  font-size: 12px;
+}
+
+.graphContainer :global(.detail-group) {
+  margin-top: 16px;
+}
+
+.graphContainer :global(.detail-group h4) {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.graphContainer :global(.pattern-reference) {
+  padding: 4px 8px;
+  background: var(--tree-bg);
+  border-radius: 4px;
+  font-size: 11px;
+  margin: 4px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .graphContainer :global(.graph-sidebar) {
+    width: 280px;
+  }
+  
+  .graphContainer :global(.graph-layout) {
+    flex-direction: column;
+  }
+  
+  .graphContainer :global(.graph-sidebar) {
+    width: 100%;
+    max-height: 300px;
+  }
+}
