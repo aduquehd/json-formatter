@@ -15,9 +15,9 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
       <div className="max-w-[1400px] mx-auto px-14 h-full flex items-center justify-between">
         <div className="flex flex-col items-start gap-1">
           <h1 className="text-lg font-bold text-gray-600 dark:text-gray-400 tracking-tight m-0 leading-tight">
-            JSON Formatter & Viewer - Online JSON Tools
+            JSON <span className="glitch-text text-blue-600 dark:text-cyan-400" data-text="Formatter">Formatter</span> & <span className="glitch-text text-purple-600 dark:text-purple-400" data-text="Viewer">Viewer</span> - Free, secure, and Open Source
           </h1>
-          <p className="text-xs text-gray-500 dark:text-gray-600 m-0 font-normal tracking-tight leading-tight">
+          <p className="text-xs text-gray-600 dark:text-gray-300 m-0 font-medium tracking-tight leading-tight">
             Free JSON formatter, validator, and viewer. All processing happens
             locally in your browser—100% secure and private.
           </p>
@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ theme, onThemeToggle }) => {
             href="https://aduquehd.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-blue-600 transition-all duration-300"
+            className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-cyan-400 transition-all duration-300 hover:underline"
           >
             <Link2 className="w-4 h-4" />
             <span>Created by @aduquehd</span>

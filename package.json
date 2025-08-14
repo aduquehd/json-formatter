@@ -1,28 +1,38 @@
 {
-  "name": "json-viewer",
+  "name": "json-viewer-react",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "build": "npm run build:js && npm run build:css",
-    "build:js": "tsc && npm run minify:js",
-    "minify:js": "find static/js -name '*.js' -type f | while read file; do npx esbuild \"$file\" --minify --sourcemap --target=es2020 --format=esm --outfile=\"$file\" --allow-overwrite; done",
-    "build:css": "cp -r frontend/src/css/* static/css/ && npm run minify:css",
-    "minify:css": "find static/css -name '*.css' -type f | while read file; do postcss \"$file\" -o \"$file\" --use cssnano --no-map; done",
-    "watch": "tsc --watch",
-    "dev": "npm run watch",
-    "copy-css": "cp -r frontend/src/css/* static/css/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "react-app/node_modules/.bin/next dev",
+    "build": "react-app/node_modules/.bin/next build",
+    "start": "react-app/node_modules/.bin/next start",
+    "lint": "react-app/node_modules/.bin/next lint"
   },
-  "keywords": ["json", "viewer", "formatter", "editor", "monaco"],
-  "author": "aduquehd",
-  "license": "MIT",
-  "description": "A modern web application for viewing and formatting JSON data with a VS Code-style editor interface",
+  "dependencies": {
+    "@monaco-editor/react": "^4.6.0",
+    "chart.js": "^4.4.1",
+    "d3": "^7.8.5",
+    "framer-motion": "^11.0.3",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.539.0",
+    "next": "14.1.0",
+    "notyf": "^3.10.0",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1"
+  },
   "devDependencies": {
-    "cssnano": "^7.0.6",
-    "esbuild": "^0.24.2",
-    "postcss": "^8.5.2",
-    "postcss-cli": "^11.0.0",
-    "prettier": "^3.6.2",
-    "typescript": "^5.8.3"
+    "@types/d3": "^7.4.3",
+    "@types/leaflet": "^1.9.8",
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.17",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
   }
 }

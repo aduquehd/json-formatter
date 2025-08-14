@@ -1,9 +1,0 @@
-# Robots.txt for jsonviewer.me
-User-agent: *
-Allow: /
-
-# Block compiled/minified JavaScript
-Disallow: /static/js/
-
-# Sitemap location (if available)
-Sitemap: https://jsonviewer.me/sitemap.xml

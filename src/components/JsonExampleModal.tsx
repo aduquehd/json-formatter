@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { X, ShoppingCart, DollarSign, Settings, Globe } from 'lucide-react';
-import { exampleJsonData } from '@/utils/exampleData';
+import { exampleJsonData } from 'src/utils/exampleData';
 
 interface JsonExampleModalProps {
   onSelect: (content: string) => void;

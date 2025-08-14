@@ -1,22 +1,22 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import ControlButtons from '@/components/ControlButtons';
-import TabsContainer from '@/components/TabsContainer';
-import EditorView from '@/components/EditorView';
-import TreeView from '@/components/TreeView';
-import GraphView from '@/components/GraphView';
-import DiffView from '@/components/DiffView';
-import StatsView from '@/components/StatsView';
-import MapView from '@/components/MapView';
-import ChartView from '@/components/ChartView';
-import SearchView from '@/components/SearchView';
-import JsonExampleModal from '@/components/JsonExampleModal';
-import { useTheme } from '@/hooks/useTheme';
-import { useNotification } from '@/hooks/useNotification';
-import { JSONFixer } from '@/utils/jsonFixer';
-import { formatJSON, compactJSON } from '@/utils/jsonUtils';
+import Navbar from 'src/components/Navbar';
+import ControlButtons from 'src/components/ControlButtons';
+import TabsContainer from 'src/components/TabsContainer';
+import EditorView from 'src/components/EditorView';
+import TreeView from 'src/components/TreeView';
+import GraphView from 'src/components/GraphView';
+import DiffView from 'src/components/DiffView';
+import StatsView from 'src/components/StatsView';
+import MapView from 'src/components/MapView';
+import ChartView from 'src/components/ChartView';
+import SearchView from 'src/components/SearchView';
+import JsonExampleModal from 'src/components/JsonExampleModal';
+import { useTheme } from 'src/hooks/useTheme';
+import { useNotification } from 'src/hooks/useNotification';
+import { JSONFixer } from 'src/utils/jsonFixer';
+import { formatJSON, compactJSON } from 'src/utils/jsonUtils';
 
 export default function Home() {
   const [editorContent, setEditorContent] = useState('');

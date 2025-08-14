@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { JSONFixer } from '@/utils/jsonFixer';
-import { useNotification } from '@/hooks/useNotification';
+import { JSONFixer } from 'src/utils/jsonFixer';
+import { useNotification } from 'src/hooks/useNotification';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
