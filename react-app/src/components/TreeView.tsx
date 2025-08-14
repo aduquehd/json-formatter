@@ -13,6 +13,8 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   const [editingNode, setEditingNode] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
+  const [preservedExpandedState, setPreservedExpandedState] = useState<Set<string> | null>(null);
   const prevJsonRef = useRef<string>('');
 
   useEffect(() => {
@@ -24,7 +26,18 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       return;
     }
     
-    // Only auto-expand when JSON actually changes
+    // Skip auto-expand if this is an update from the tree itself
+    if (isUpdatingFromTree) {
+      // Restore preserved expanded state if available
+      if (preservedExpandedState) {
+        setExpandedNodes(preservedExpandedState);
+        setPreservedExpandedState(null);
+      }
+      setIsUpdatingFromTree(false);
+      return;
+    }
+    
+    // Only auto-expand when JSON actually changes from external source
     const jsonString = JSON.stringify(json);
     if (jsonString !== prevJsonRef.current) {
       prevJsonRef.current = jsonString;
@@ -61,7 +74,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [json]);
+  }, [json, isUpdatingFromTree, preservedExpandedState]);
 
   const toggleNode = (path: string) => {
     const newExpanded = new Set(expandedNodes);
@@ -114,30 +127,137 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
     setEditValue(typeof value === 'object' ? JSON.stringify(value) : String(value));
   };
 
+  const startKeyEdit = (path: string, key: string) => {
+    setEditingNode(`${path}_key`);
+    setEditValue(key);
+  };
+
   const saveEdit = () => {
     if (editingNode && json) {
       try {
+        // Save current expanded state before any modifications
+        const currentExpandedNodes = new Set(expandedNodes);
+        
+        // Deep clone to ensure no mutations to original
         const newJson = JSON.parse(JSON.stringify(json));
-        const pathParts = editingNode.split(/\.|\[|\]/).filter(Boolean).slice(1);
-        let current = newJson;
         
-        for (let i = 0; i < pathParts.length - 1; i++) {
-          current = current[pathParts[i]];
+        if (editingNode.endsWith('_key')) {
+          // Handle key editing
+          const path = editingNode.replace('_key', '');
+          const pathParts = path.split(/\.|\[|\]/).filter(Boolean).slice(1);
+          
+          // Navigate to parent object
+          let parent = newJson;
+          let grandParent = null;
+          let grandParentKey = null;
+          
+          for (let i = 0; i < pathParts.length - 1; i++) {
+            grandParent = parent;
+            grandParentKey = pathParts[i];
+            parent = parent[pathParts[i]];
+          }
+          
+          const oldKey = pathParts[pathParts.length - 1];
+          if (editValue !== oldKey && !Array.isArray(parent)) {
+            // Create new object with preserved key order
+            const orderedObj: any = {};
+            const keys = Object.keys(parent);
+            
+            keys.forEach(k => {
+              if (k === oldKey) {
+                orderedObj[editValue] = parent[oldKey];
+              } else {
+                orderedObj[k] = parent[k];
+              }
+            });
+            
+            // Replace the parent object in the tree
+            if (grandParent && grandParentKey) {
+              grandParent[grandParentKey] = orderedObj;
+            } else {
+              // If we're at the root level
+              Object.keys(newJson).forEach(k => delete newJson[k]);
+              Object.assign(newJson, orderedObj);
+            }
+            
+            // Update expanded node paths for renamed keys
+            const updatedExpandedNodes = new Set<string>();
+            currentExpandedNodes.forEach(nodePath => {
+              if (nodePath.includes(path)) {
+                const newPath = nodePath.replace(
+                  new RegExp(`\\.${oldKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|\\.|\\[)`),
+                  `.${editValue}$1`
+                );
+                updatedExpandedNodes.add(newPath);
+              } else {
+                updatedExpandedNodes.add(nodePath);
+              }
+            });
+            setPreservedExpandedState(updatedExpandedNodes);
+          } else {
+            // Key didn't change, preserve current state
+            setPreservedExpandedState(currentExpandedNodes);
+          }
+        } else {
+          // Handle value editing
+          const pathParts = editingNode.split(/\.|\[|\]/).filter(Boolean).slice(1);
+          
+          // Navigate to the target location
+          let current = newJson;
+          let parent = null;
+          let parentKey = null;
+          
+          for (let i = 0; i < pathParts.length - 1; i++) {
+            parent = current;
+            parentKey = pathParts[i];
+            current = current[pathParts[i]];
+          }
+          
+          const lastKey = pathParts[pathParts.length - 1];
+          const oldValue = current[lastKey];
+          
+          // Parse new value
+          let newValue;
+          try {
+            newValue = JSON.parse(editValue);
+          } catch {
+            newValue = editValue;
+          }
+          
+          // If updating a value in an object, preserve key order
+          if (parent && !Array.isArray(current)) {
+            const orderedObj: any = {};
+            Object.keys(current).forEach(k => {
+              if (k === lastKey) {
+                orderedObj[k] = newValue;
+              } else {
+                orderedObj[k] = current[k];
+              }
+            });
+            parent[parentKey] = orderedObj;
+          } else {
+            // Direct assignment for arrays or root level
+            current[lastKey] = newValue;
+          }
+          
+          // Always preserve expanded state for value edits
+          setPreservedExpandedState(currentExpandedNodes);
         }
         
-        const lastKey = pathParts[pathParts.length - 1];
-        try {
-          current[lastKey] = JSON.parse(editValue);
-        } catch {
-          current[lastKey] = editValue;
-        }
-        
+        // Mark update as coming from tree and trigger update
+        setIsUpdatingFromTree(true);
         onUpdate(JSON.stringify(newJson, null, 2));
         setEditingNode(null);
       } catch (error) {
         console.error('Failed to save edit:', error);
+        setEditingNode(null);
       }
     }
+  };
+
+  const cancelEdit = () => {
+    setEditingNode(null);
+    setEditValue('');
   };
 
   const getValueColor = (val: any) => {
@@ -159,9 +279,16 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
           onChange={(e) => setEditValue(e.target.value)}
           onBlur={saveEdit}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') saveEdit();
-            if (e.key === 'Escape') setEditingNode(null);
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              saveEdit();
+            }
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              cancelEdit();
+            }
           }}
+          onClick={(e) => e.stopPropagation()}
           className="tree-edit-input"
           autoFocus
         />
@@ -239,17 +366,25 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
               className="tree-key"
               onClick={(e) => {
                 e.stopPropagation();
-                editingNode !== `${path}_key` && setEditingNode(`${path}_key`);
+                startKeyEdit(path, key);
               }}
+              style={{ cursor: 'pointer' }}
             >
               {editingNode === `${path}_key` ? (
                 <input
                   type="text"
-                  value={editValue || key}
+                  value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
-                  onBlur={() => setEditingNode(null)}
+                  onBlur={saveEdit}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === 'Escape') setEditingNode(null);
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      saveEdit();
+                    }
+                    if (e.key === 'Escape') {
+                      e.preventDefault();
+                      cancelEdit();
+                    }
                   }}
                   onClick={(e) => e.stopPropagation()}
                   className="tree-edit-input tree-edit-key"
@@ -296,12 +431,12 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   return (
     <div className="tree-view-container">
       <div className="tree-controls">
-        <div className="tree-controls-left">
+        <div className="tree-controls-left" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div className="edit-hint">
             <Pencil className="w-4 h-4 inline-block mr-1" />
             <span className="edit-text">Click on any value or key to edit directly</span>
           </div>
-          <div className="tree-buttons">
+          <div className="tree-buttons" style={{ display: 'flex', gap: '8px' }}>
             <button
               onClick={expandAll}
               className="tree-control-btn"

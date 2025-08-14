@@ -112,10 +112,16 @@ export default function Home() {
   };
 
   const handleExampleSelect = (exampleContent: string) => {
-    setEditorContent(exampleContent);
+    try {
+      // Format the example content immediately
+      const formatted = formatJSON(exampleContent);
+      setEditorContent(formatted);
+    } catch {
+      // If formatting fails, just use the original content
+      setEditorContent(exampleContent);
+    }
     setShowExampleModal(false);
     setActiveTab('formatted');
-    setTimeout(handleFormat, 10);
   };
 
   const handleTreeUpdate = (newContent: string) => {
