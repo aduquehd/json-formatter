@@ -111,7 +111,7 @@ const TreeResultView: React.FC<{
     }
   };
 
-  const renderTreeNode = (node: TreeNode, key: string, level: number = 0): JSX.Element => {
+  const renderTreeNode = (node: TreeNode, key: string, level: number = 0): React.ReactElement => {
     const hasChildren = node.children.size > 0;
     const isExpanded = expandedNodes.has(node.path);
     const indent = level * 24;
