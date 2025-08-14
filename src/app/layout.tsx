@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
-import Hotjar from '@/components/Hotjar';
+import Analytics from '@/components/Analytics';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -116,8 +115,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
-        <GoogleAnalytics />
-        <Hotjar />
+        <Analytics />
         <ThemeProvider>
           <a href="#main-content" className="skip-link">
             Skip to main content
