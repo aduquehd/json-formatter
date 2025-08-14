@@ -152,6 +152,96 @@
 }
 
 @layer components {
+  /* Glitch effect for text */
+  .glitch-text {
+    position: relative;
+    display: inline-block;
+    font-weight: 700;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+
+  .glitch-text::before {
+    animation: glitch-anim-1 0.6s infinite linear alternate-reverse;
+    color: #00fffc;
+    z-index: -1;
+  }
+
+  .glitch-text::after {
+    animation: glitch-anim-2 0.6s infinite linear alternate-reverse;
+    color: #fc00ff;
+    z-index: -2;
+  }
+
+  @keyframes glitch-anim-1 {
+    0% {
+      clip-path: inset(40% 0 61% 0);
+      transform: translate(-2px, -2px);
+    }
+    20% {
+      clip-path: inset(92% 0 1% 0);
+      transform: translate(2px, 2px);
+    }
+    40% {
+      clip-path: inset(43% 0 1% 0);
+      transform: translate(-2px, -2px);
+    }
+    60% {
+      clip-path: inset(25% 0 58% 0);
+      transform: translate(2px, 2px);
+    }
+    80% {
+      clip-path: inset(54% 0 7% 0);
+      transform: translate(-2px, -2px);
+    }
+    100% {
+      clip-path: inset(58% 0 43% 0);
+      transform: translate(2px, 2px);
+    }
+  }
+
+  @keyframes glitch-anim-2 {
+    0% {
+      clip-path: inset(50% 0 30% 0);
+      transform: translate(2px, -2px);
+    }
+    20% {
+      clip-path: inset(79% 0 3% 0);
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      clip-path: inset(20% 0 60% 0);
+      transform: translate(2px, -2px);
+    }
+    60% {
+      clip-path: inset(65% 0 15% 0);
+      transform: translate(-2px, 2px);
+    }
+    80% {
+      clip-path: inset(30% 0 45% 0);
+      transform: translate(2px, -2px);
+    }
+    100% {
+      clip-path: inset(85% 0 5% 0);
+      transform: translate(-2px, 2px);
+    }
+  }
+
+  /* Reduce glitch effect on hover for better readability */
+  .glitch-text:hover::before,
+  .glitch-text:hover::after {
+    animation-duration: 2s;
+    opacity: 0.4;
+  }
   .skip-link {
     @apply absolute left-0 top-[-40px] z-[10000] rounded-br px-4 py-2 text-[var(--text-primary)] no-underline;
     background: var(--bg-primary);
