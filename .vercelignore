@@ -1,23 +1,26 @@
 # Git files
 .git
 .gitignore
-README.md
 
 # Development files
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env*.local
 
 # IDE
 .idea
 .vscode
 *.swp
 *.swo
+*~
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Test files
 __tests__
@@ -25,32 +28,48 @@ __tests__
 *.test.tsx
 *.spec.js
 *.spec.tsx
-coverage
+*.test.ts
+*.spec.ts
+coverage/
+.nyc_output
 
-# Documentation
-docs
-*.md
+# Documentation (keep README.md for Vercel)
+docs/
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
 
 # CI/CD
-.github
+.github/
 .gitlab-ci.yml
 .travis.yml
+.circleci/
 
-# Docker files (if not needed for deployment)
-Dockerfile
-docker-compose.yml
-.dockerignore
+# Development tools
+.eslintrc*
+.prettierrc*
+.stylelintrc*
+jest.config.*
+*.log
 
-# Python files (from old setup)
-*.py
-*.pyc
-__pycache__
-pyproject.toml
-uv.lock
+# TypeScript
+*.tsbuildinfo
 
-# Old directories
-frontend/
-static/
-templates/
-compose/
-react-app/
+# Package manager files (keep package.json and lock files)
+.npmrc
+.yarnrc
+.pnpm-debug.log*
+
+# Editor temporary files
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+# Miscellaneous
+.cache/
+.parcel-cache/
+.turbo/
+tmp/
+temp/
