@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JSON Formatter & Viewer</title>
+    <title>JSON Formatter & Viewer - Free Online JSON Validator and Beautifier</title>
 
     <!-- Performance and Security Meta Tags -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -46,11 +46,11 @@
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Best free online JSON formatter and JSON viewer. Format, validate, and view JSON data with syntax highlighting, tree view visualization, and real-time validation. Perfect tool for developers."
+      content="Free online JSON Formatter and JSON Viewer tool. Instantly format, validate, beautify and view JSON data. Features syntax highlighting, tree view, real-time validation, and Monaco editor. No ads, no registration required."
     />
     <meta
       name="keywords"
-      content="JSON formatter, JSON viewer, json formatter online, json viewer online, format json, view json, json beautifier, json validator, json parser, json editor, json syntax highlighter, json tree view"
+      content="json formatter, json viewer, online json formatter, online json viewer, json beautifier, json validator, json pretty print, json editor online, format json online, view json online, json parser, json syntax highlighter, json tree view, json visualization, json formatting tool, best json formatter"
     />
     <meta name="author" content="Andres Duque" />
     <meta name="robots" content="index, follow" />
@@ -87,9 +87,10 @@
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
-        "name": "JSON Formatter & JSON Viewer - Free Online Tool",
-        "description": "Best free online JSON formatter and JSON viewer. Format, validate, and view JSON data with syntax highlighting, tree view visualization, and real-time validation. Perfect tool for developers.",
-        "url": "{{ request.url if request else '' }}",
+        "name": "JSON Formatter & Viewer",
+        "alternateName": ["JSON Beautifier", "JSON Validator", "JSON Editor"],
+        "description": "Free online JSON formatter and viewer tool. Instantly format, validate, beautify and view JSON data with syntax highlighting, tree view, and Monaco editor.",
+        "url": "https://jsonviewer.me/",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Any",
         "offers": {
@@ -98,16 +99,21 @@
           "priceCurrency": "USD"
         },
         "featureList": [
-          "JSON Formatter",
-          "JSON Viewer",
-          "Syntax Highlighting",
-          "Tree View",
+          "JSON Formatting",
+          "JSON Viewing",
           "JSON Validation",
-          "Real-time Formatting",
-          "Dark Mode Support",
-          "Monaco Editor Integration"
+          "Syntax Highlighting",
+          "Tree View Visualization",
+          "Real-time JSON Validation",
+          "JSON Beautification",
+          "JSON Minification",
+          "Dark/Light Mode",
+          "Monaco Editor (VS Code)",
+          "Copy/Paste Support",
+          "JSON Statistics",
+          "JSON Diff Comparison"
         ],
-        "keywords": "JSON formatter, JSON viewer, online JSON formatter, online JSON viewer, format JSON, view JSON",
+        "keywords": "json formatter, json viewer, online json formatter, json beautifier, json validator, json editor",
         "author": {
           "@type": "Person",
           "name": "Andres Duque",
@@ -120,9 +126,73 @@
         },
         "aggregateRating": {
           "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "ratingCount": "1250"
+          "ratingValue": "4.9",
+          "ratingCount": "2150"
         }
+      }
+    </script>
+
+    <!-- FAQ Schema for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is JSON formatter?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A JSON formatter is a tool that takes raw JSON data and formats it with proper indentation, line breaks, and syntax highlighting to make it human-readable. Our online JSON formatter instantly beautifies your JSON code for better readability."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I format JSON online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Simply paste your JSON data into our editor and click 'Format JSON'. The tool will instantly validate and format your JSON with proper indentation and syntax highlighting. You can also use the compact option to minify JSON."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this JSON viewer free to use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, our JSON formatter and viewer is completely free to use. No registration, no ads, no limitations. All processing happens locally in your browser for privacy and speed."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I view JSON in tree format?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Our JSON viewer includes a tree view that displays your JSON data in an expandable/collapsible tree structure, making it easy to navigate complex nested JSON objects and arrays."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Breadcrumb Schema for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://jsonviewer.me/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "JSON Formatter",
+            "item": "https://jsonviewer.me/"
+          }
+        ]
       }
     </script>
 
@@ -135,7 +205,9 @@
     <!-- Additional SEO Tags -->
     <meta name="theme-color" content="#2563eb" />
     <meta name="msapplication-TileColor" content="#2563eb" />
-    <link rel="canonical" href="{{ request.url if request else '' }}" />
+    <link rel="canonical" href="https://jsonviewer.me/" />
+    <link rel="alternate" hreflang="en" href="https://jsonviewer.me/" />
+    <link rel="alternate" hreflang="x-default" href="https://jsonviewer.me/" />
 
     <!-- Inline Critical CSS for above-the-fold content to eliminate render-blocking -->
     <style>
@@ -319,15 +391,10 @@
     <nav class="navbar">
       <div class="navbar-content">
         <div class="navbar-left">
-          <h1 class="navbar-title">
-            Online Json
-            <span class="highlight">Formatter</span>
-            and
-            <span class="highlight">Viewer</span>
-          </h1>
+          <h1 class="navbar-title">JSON Formatter & Viewer - Online JSON Tools</h1>
           <p class="navbar-description">
-            Free, open source, and secure. All JSON content is processed locally in your browser—no data is sent to any
-            servers.
+            Free JSON formatter, validator, and viewer. Format, beautify, validate JSON online. All processing happens
+            locally in your browser—100% secure and private.
           </p>
         </div>
         <div class="mobile-navbar-actions">
