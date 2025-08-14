@@ -171,13 +171,13 @@
   }
 
   .glitch-text::before {
-    animation: glitch-anim-1 0.6s infinite linear alternate-reverse;
+    animation: glitch-anim-1 3s infinite linear alternate-reverse;
     color: #00fffc;
     z-index: -1;
   }
 
   .glitch-text::after {
-    animation: glitch-anim-2 0.6s infinite linear alternate-reverse;
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
     color: #fc00ff;
     z-index: -2;
   }
@@ -239,7 +239,7 @@
   /* Reduce glitch effect on hover for better readability */
   .glitch-text:hover::before,
   .glitch-text:hover::after {
-    animation-duration: 2s;
+    animation-duration: 5s;
     opacity: 0.4;
   }
   .skip-link {
