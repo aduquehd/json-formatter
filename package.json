@@ -14,14 +14,17 @@
     "chart.js": "^4.4.1",
     "d3": "^7.8.5",
     "framer-motion": "^11.0.3",
+    "import-in-the-middle": "^1.14.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.539.0",
+    "monaco-editor": "^0.52.2",
     "next": "15.4.6",
     "notyf": "^3.10.0",
     "react": "^19.1.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^19.1.1",
-    "react-leaflet": "^5.0.0"
+    "react-leaflet": "^5.0.0",
+    "require-in-the-middle": "^7.5.2"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",

@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Analytics from '@/components/Analytics';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -116,6 +117,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
+        <script src="/suppress-monaco-warnings.js" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -123,12 +125,14 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <Analytics />
-        <ThemeProvider>
-          <a href="#main-content" className="skip-link">
-            Skip to main content
-          </a>
-          {children}
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider>
+            <a href="#main-content" className="skip-link">
+              Skip to main content
+            </a>
+            {children}
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

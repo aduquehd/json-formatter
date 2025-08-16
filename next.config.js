@@ -98,6 +98,13 @@ const nextConfig = {
     if (!isServer) {
       config.resolve.fallback = { fs: false, path: false };
     }
+    
+    // Ignore Monaco Editor warnings
+    config.ignoreWarnings = [
+      { module: /node_modules\/monaco-editor/ },
+      { module: /@monaco-editor\/react/ },
+    ];
+    
     return config;
   },
 }

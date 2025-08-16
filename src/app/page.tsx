@@ -8,6 +8,8 @@ import TabsContainer from '@/components/TabsContainer';
 import EditorView from '@/components/EditorView';
 import TreeView from '@/components/TreeView';
 import JsonExampleModal from '@/components/JsonExampleModal';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import EditorErrorBoundary from '@/components/EditorErrorBoundary';
 import { useTheme } from '@/hooks/useTheme';
 import { useNotification } from '@/hooks/useNotification';
 import { JSONFixer } from '@/utils/jsonFixer';
@@ -283,35 +285,51 @@ export default function Home() {
           
           <div className="flex-1 overflow-hidden">
             {activeTab === 'formatted' && (
-              <EditorView
-                content={editorContent}
-                onChange={setEditorContent}
-                theme={theme}
-              />
+              <EditorErrorBoundary>
+                <EditorView
+                  content={editorContent}
+                  onChange={setEditorContent}
+                  theme={theme}
+                />
+              </EditorErrorBoundary>
             )}
             {activeTab === 'tree' && (
-              <TreeView
-                json={parsedJson}
-                onUpdate={handleTreeUpdate}
-              />
+              <ErrorBoundary>
+                <TreeView
+                  json={parsedJson}
+                  onUpdate={handleTreeUpdate}
+                />
+              </ErrorBoundary>
             )}
             {activeTab === 'graph' && (
-              <GraphView json={parsedJson} />
+              <ErrorBoundary>
+                <GraphView json={parsedJson} />
+              </ErrorBoundary>
             )}
             {activeTab === 'diff' && (
-              <DiffView json={parsedJson} />
+              <ErrorBoundary>
+                <DiffView json={parsedJson} />
+              </ErrorBoundary>
             )}
             {activeTab === 'stats' && (
-              <StatsView json={parsedJson} />
+              <ErrorBoundary>
+                <StatsView json={parsedJson} />
+              </ErrorBoundary>
             )}
             {activeTab === 'map' && (
-              <MapView json={parsedJson} />
+              <ErrorBoundary>
+                <MapView json={parsedJson} />
+              </ErrorBoundary>
             )}
             {activeTab === 'chart' && (
-              <ChartView json={parsedJson} />
+              <ErrorBoundary>
+                <ChartView json={parsedJson} />
+              </ErrorBoundary>
             )}
             {activeTab === 'search' && (
-              <SearchView json={parsedJson} />
+              <ErrorBoundary>
+                <SearchView json={parsedJson} />
+              </ErrorBoundary>
             )}
           </div>
         </main>
