@@ -64,7 +64,6 @@ if (!i18n.isInitialized) {
         lookupLocalStorage: 'i18nextLng',
         lookupFromPathIndex: 0,
         lookupFromSubdomainIndex: 0,
-        checkWhitelist: true,
       },
       supportedLngs: ['en', 'es', 'hi', 'tr', 'nl', 'ms', 'zh-CN', 'zh', 'ta', 'fy', 'nds', 'li'],
       load: 'languageOnly', // This will treat 'zh-CN' as 'zh'
