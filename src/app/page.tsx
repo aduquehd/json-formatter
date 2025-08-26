@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'react-i18next';
 import Navbar from '@/components/Navbar';
 import ControlButtons from '@/components/ControlButtons';
 import TabsContainer from '@/components/TabsContainer';
@@ -66,6 +67,12 @@ const SearchView = dynamic(
 );
 
 export default function Home() {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [editorContent, setEditorContent] = useState('');
   const [parsedJson, setParsedJson] = useState<any>(null);
   const [activeTab, setActiveTab] = useState('formatted');
@@ -96,7 +103,7 @@ export default function Home() {
 
   const handleFormat = () => {
     if (!editorContent || editorContent.trim() === '') {
-      showError('Please enter some JSON to format');
+      showError(mounted ? t('messages.errorEmpty') : 'Please enter some JSON to format');
       return;
     }
     
@@ -120,13 +127,13 @@ export default function Home() {
         }, 100);
       }
     } else {
-      showError(result.error || 'Invalid JSON format');
+      showError(result.error || (mounted ? t('messages.errorInvalid') : 'Invalid JSON format'));
     }
   };
 
   const handleCompact = () => {
     if (!editorContent || editorContent.trim() === '') {
-      showError('Please enter some JSON to compact');
+      showError(mounted ? t('messages.errorEmpty') : 'Please enter some JSON to format');
       return;
     }
     
@@ -150,7 +157,7 @@ export default function Home() {
         }, 100);
       }
     } else {
-      showError(result.error || 'Invalid JSON format');
+      showError(result.error || (mounted ? t('messages.errorInvalid') : 'Invalid JSON format'));
     }
   };
 
@@ -162,7 +169,7 @@ export default function Home() {
 
   const handleCopy = async () => {
     if (!editorContent || editorContent.trim() === '') {
-      showError('Nothing to copy');
+      showError(mounted ? t('messages.errorEmpty') : 'Please enter some JSON to format');
       return;
     }
     
@@ -176,10 +183,10 @@ export default function Home() {
         JSON.parse(editorContent);
         // Success - no notification needed
       } catch {
-        showWarning('Content copied (Note: Invalid JSON)');
+        showWarning((mounted ? t('messages.copySuccess') : 'Copied to clipboard') + ' (Note: Invalid JSON)');
       }
     } catch (error) {
-      showError('Failed to copy to clipboard');
+      showError(mounted ? t('messages.errorCopy') : 'Failed to copy to clipboard');
     }
   };
 
@@ -189,7 +196,7 @@ export default function Home() {
     try {
       const text = await navigator.clipboard.readText();
       if (!text || text.trim() === '') {
-        showError('Clipboard is empty');
+        showError(mounted ? t('messages.errorEmpty') : 'Please enter some JSON to format');
         return;
       }
       
@@ -214,7 +221,7 @@ export default function Home() {
         if (result.wasFixed && result.fixes && result.fixes.length > 0) {
           // JSON was fixed - show warning after a brief delay to ensure UI updates
           setTimeout(() => {
-            showWarning(`JSON was automatically fixed: ${result.fixes!.join(', ')}`);
+            showWarning(mounted ? t('messages.warningFixed') : `JSON was automatically fixed: ${result.fixes!.join(', ')}`);
           }, 100);
         } else {
           // JSON was valid - no notification needed
@@ -223,10 +230,10 @@ export default function Home() {
         // Could not parse or fix the JSON
         setEditorContent(text);
         setActiveTab('formatted');
-        showError(result.error || 'Invalid JSON: Please check the syntax and try again');
+        showError(result.error || (mounted ? t('messages.errorInvalid') : 'Invalid JSON format'));
       }
     } catch (error) {
-      showError('Failed to paste - please check clipboard permissions');
+      showError(mounted ? t('messages.errorPaste') : 'Failed to paste from clipboard');
     }
   };
 

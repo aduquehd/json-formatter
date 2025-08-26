@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface StatsViewProps {
   json: any;
@@ -27,6 +28,12 @@ interface JSONStats {
 }
 
 const StatsView: React.FC<StatsViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const analyzeJSON = (data: any, depth: number = 0, stats?: JSONStats): JSONStats => {
     if (!stats) {
       stats = {
@@ -127,19 +134,19 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
       <div className="stats-container">
         {/* Overview Section */}
         <div className="stats-section">
-          <h4>Overview</h4>
+          <h4>{mounted ? t('stats.title') : 'JSON Statistics'}</h4>
           <div className="stats-grid">
             <div className="stat-item">
               <div className="stat-value">{stats.totalKeys}</div>
-              <div className="stat-label">Total Keys</div>
+              <div className="stat-label">{mounted ? t('stats.totalKeys') : 'Total Keys'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">{stats.totalValues}</div>
-              <div className="stat-label">Total Values</div>
+              <div className="stat-label">{mounted ? t('stats.totalValues') : 'Total Values'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">{stats.maxDepth}</div>
-              <div className="stat-label">Nesting Depth</div>
+              <div className="stat-label">{mounted ? t('stats.depth') : 'Max Depth'}</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">{formatBytes(stats.estimatedSize)}</div>
@@ -150,7 +157,7 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
 
         {/* Type Distribution */}
         <div className="stats-section">
-          <h4>Type Distribution</h4>
+          <h4>{mounted ? t('stats.distribution') : 'Type Distribution'}</h4>
           <div className="type-chart">
             {typeEntries.map(([type, count]) => {
               const percentage = ((count / total) * 100).toFixed(1);
@@ -172,9 +179,9 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
 
         {/* Array Statistics */}
         <div className="stats-section">
-          <h4>Array Statistics</h4>
+          <h4>{mounted ? t('stats.arrays') : 'Arrays'}</h4>
           {stats.arrayStats.count === 0 ? (
-            <p className="stats-empty">No arrays found</p>
+            <p className="stats-empty">{mounted ? t('stats.noData') : 'No arrays found'}</p>
           ) : (
             <div className="stats-grid">
               <div className="stat-item">
@@ -201,7 +208,7 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
 
         {/* Key Analysis */}
         <div className="stats-section">
-          <h4>Key Analysis</h4>
+          <h4>{mounted ? t('stats.keyFrequency') : 'Key Analysis'}</h4>
           <div className="key-analysis-content">
             <p><strong>Unique Keys:</strong> {stats.keyAnalysis.uniqueKeys.size}</p>
             <p><strong>Longest Key:</strong> "{stats.keyAnalysis.longestKey}" ({stats.keyAnalysis.longestKey.length} chars)</p>

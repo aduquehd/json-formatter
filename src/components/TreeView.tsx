@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Pencil, Plus, Minus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface TreeViewProps {
   json: any;
@@ -9,6 +10,8 @@ interface TreeViewProps {
 }
 
 const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [editingNode, setEditingNode] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
@@ -16,6 +19,10 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
   const [preservedExpandedState, setPreservedExpandedState] = useState<Set<string> | null>(null);
   const prevJsonRef = useRef<string>('');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Handle null/undefined json
@@ -434,7 +441,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
         <div className="tree-controls-left" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div className="edit-hint">
             <Pencil className="w-4 h-4 inline-block mr-1" />
-            <span className="edit-text">Click on any value or key to edit directly</span>
+            <span className="edit-text">{mounted ? t('tree.editHint') : 'Click on any value or key to edit directly'}</span>
           </div>
           <div className="tree-buttons" style={{ display: 'flex', gap: '8px' }}>
             <button
@@ -443,7 +450,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
               aria-label="Expand all tree nodes"
             >
               <Plus className="w-4 h-4 inline-block mr-1" />
-              Expand All
+              {mounted ? t('tree.expand') : 'Expand All'}
             </button>
             <button
               onClick={collapseAll}
@@ -451,7 +458,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
               aria-label="Collapse all tree nodes"
             >
               <Minus className="w-4 h-4 inline-block mr-1" />
-              Collapse All
+              {mounted ? t('tree.collapse') : 'Collapse All'}
             </button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -72,9 +73,15 @@ const mapStyles: Record<MapStyle, { url: string; attribution: string; name: stri
 };
 
 const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [locations, setLocations] = useState<LocationData[]>([]);
   const [isGeoJSON, setIsGeoJSON] = useState(false);
   const [mapStyle, setMapStyle] = useState<MapStyle>('dark');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Check if dark theme is active
@@ -245,7 +252,7 @@ const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
   if (!json) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-[var(--text-secondary)]">No JSON data available</p>
+        <p className="text-[var(--text-secondary)]">{mounted ? t('map.noData') || 'No JSON data available' : 'No JSON data available'}</p>
       </div>
     );
   }
@@ -255,10 +262,10 @@ const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
       <div className="h-full flex items-center justify-center">
         <div className="text-center p-6">
           <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-            No geographic data found
+            {mounted ? t('map.noGeoData') : 'No geographic data found'}
           </h3>
           <p className="text-sm text-[var(--text-secondary)] mb-4">
-            Map view supports the following formats:
+            {mounted ? t('map.supportedFormats') || 'Map view supports the following formats:' : 'Map view supports the following formats:'}
           </p>
           <ul className="text-sm text-[var(--text-muted)] space-y-1 max-w-md mx-auto">
             <li className="text-center">• GeoJSON FeatureCollection or Feature</li>
@@ -268,7 +275,7 @@ const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
           </ul>
           <div className="mt-4 p-3 bg-[var(--bg-secondary)] rounded-lg">
             <p className="text-xs text-[var(--text-muted)]">
-              Tip: For GeoJSON, ensure geometry.type is "Point" and coordinates are [longitude, latitude]
+              {mounted ? t('map.tip') || 'Tip: For GeoJSON, ensure geometry.type is "Point" and coordinates are [longitude, latitude]' : 'Tip: For GeoJSON, ensure geometry.type is "Point" and coordinates are [longitude, latitude]'}
             </p>
           </div>
         </div>
@@ -281,16 +288,16 @@ const MapViewDynamic: React.FC<MapViewProps> = ({ json }) => {
       {/* Location counter */}
       <div className="absolute top-4 right-4 z-[1000] bg-white dark:bg-[var(--bg-secondary)] p-2 rounded-lg shadow-lg border border-[var(--border-color)]">
         <p className="text-sm font-semibold text-[var(--text-primary)]">
-          {locations.length} location{locations.length !== 1 ? 's' : ''} found
+          {locations.length} {mounted ? (locations.length === 1 ? t('map.locationSingular') || 'location found' : t('map.locationPlural') || 'locations found') : `location${locations.length !== 1 ? 's' : ''} found`}
         </p>
         {isGeoJSON && (
-          <p className="text-xs text-[var(--text-secondary)]">GeoJSON format detected</p>
+          <p className="text-xs text-[var(--text-secondary)]">{mounted ? t('map.geoJSONDetected') || 'GeoJSON format detected' : 'GeoJSON format detected'}</p>
         )}
       </div>
 
       {/* Map style switcher - positioned below zoom controls */}
       <div className="absolute top-28 left-3 z-[1000] bg-white dark:bg-[var(--bg-secondary)] p-2 rounded-lg shadow-lg border border-[var(--border-color)]">
-        <label className="text-xs font-semibold text-[var(--text-primary)] block mb-1">Map Style</label>
+        <label className="text-xs font-semibold text-[var(--text-primary)] block mb-1">{mounted ? t('map.mapStyle') || 'Map Style' : 'Map Style'}</label>
         <select 
           value={mapStyle}
           onChange={(e) => setMapStyle(e.target.value as MapStyle)}

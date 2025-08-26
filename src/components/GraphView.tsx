@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as d3 from 'd3';
 import styles from './GraphView.module.css';
 import {
@@ -104,10 +105,16 @@ interface GraphViewProps {
 }
 
 const GraphView: React.FC<GraphViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [displayMode, setDisplayMode] = useState<NodeDisplayMode>('values');
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [stats, setStats] = useState<JSONStats | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!json || !containerRef.current) return;
@@ -117,7 +124,15 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
 
     // Show loading indicator
     containerRef.current.innerHTML = 
-      '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);"><div>Generating graph visualization...</div></div>';
+      '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text-secondary);"><div id="loading-text">Generating graph visualization...</div></div>';
+    
+    // Update loading text with translation
+    setTimeout(() => {
+      const loadingText = containerRef.current?.querySelector('#loading-text');
+      if (loadingText && window.i18n) {
+        loadingText.textContent = window.i18n.t('graph.generating') || 'Generating graph visualization...';
+      }
+    }, 0);
 
     // Small delay to show loading indicator
     setTimeout(() => {
@@ -143,7 +158,7 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
   if (!json) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-[var(--text-secondary)]">No valid JSON to visualize</p>
+        <p className="text-[var(--text-secondary)]">{mounted ? t('graph.noData') : 'No valid JSON to visualize'}</p>
       </div>
     );
   }
@@ -466,7 +481,7 @@ function createDisplayModeSelector(currentMode: NodeDisplayMode): HTMLElement {
   const selector = document.createElement("div");
   selector.className = "display-mode-selector";
   selector.innerHTML = `
-    <label for="nodeDisplayMode">Node Display:</label>
+    <label for="nodeDisplayMode" id="node-display-label">Node Display:</label>
     <select id="nodeDisplayMode" class="display-mode-select">
       <option value="keys" ${currentMode === 'keys' ? 'selected' : ''}>Property Keys</option>
       <option value="values" ${currentMode === 'values' ? 'selected' : ''}>Value Preview</option>
@@ -476,6 +491,35 @@ function createDisplayModeSelector(currentMode: NodeDisplayMode): HTMLElement {
       <option value="path" ${currentMode === 'path' ? 'selected' : ''}>Path Info</option>
     </select>
   `;
+  
+  // Update display mode selector with translations
+  setTimeout(() => {
+    const label = selector.querySelector('#node-display-label');
+    const select = selector.querySelector('#nodeDisplayMode') as HTMLSelectElement;
+    
+    if (label && window.i18n) {
+      label.textContent = window.i18n.t('graph.nodeDisplay') || 'Node Display:';
+    }
+    
+    if (select && window.i18n) {
+      const options = select.querySelectorAll('option');
+      const translations: Record<string, string> = {
+        'keys': window.i18n.t('graph.propertyKeys') || 'Property Keys',
+        'values': window.i18n.t('graph.valuePreview') || 'Value Preview',
+        'types': window.i18n.t('graph.dataTypes') || 'Data Types',
+        'analytics': window.i18n.t('graph.structureAnalytics') || 'Structure Analytics',
+        'business': window.i18n.t('graph.businessLogic') || 'Business Logic',
+        'path': window.i18n.t('graph.pathInfo') || 'Path Info'
+      };
+      
+      options.forEach(option => {
+        const value = option.value;
+        if (translations[value]) {
+          option.textContent = translations[value];
+        }
+      });
+    }
+  }, 0);
   return selector;
 }
 
@@ -552,18 +596,35 @@ function createLayout(): {
   container.innerHTML = `
     <div class="graph-sidebar">
       <div class="stats-panel">
-        <h3>JSON Statistics</h3>
+        <h3 id="stats-title">JSON Statistics</h3>
         <div class="stats-content"></div>
       </div>
       <div class="details-panel">
-        <h3>Node Details</h3>
+        <h3 id="details-title">Node Details</h3>
         <div class="details-content">
-          <p style="color: var(--text-secondary);">Click a node to see details</p>
+          <p id="details-placeholder" style="color: var(--text-secondary);">Click a node to see details</p>
         </div>
       </div>
     </div>
     <div class="graph-container"></div>
   `;
+  
+  // Update text with translations after DOM is ready
+  setTimeout(() => {
+    const statsTitle = container.querySelector('#stats-title');
+    const detailsTitle = container.querySelector('#details-title');
+    const detailsPlaceholder = container.querySelector('#details-placeholder');
+    
+    if (statsTitle && window.i18n) {
+      statsTitle.textContent = window.i18n.t('graph.statistics') || 'JSON Statistics';
+    }
+    if (detailsTitle && window.i18n) {
+      detailsTitle.textContent = window.i18n.t('graph.nodeDetails') || 'Node Details';
+    }
+    if (detailsPlaceholder && window.i18n) {
+      detailsPlaceholder.textContent = window.i18n.t('graph.clickNode') || 'Click a node to see details';
+    }
+  }, 0);
 
   return {
     container,

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
 import { JSONFixer } from '../utils/jsonFixer';
 import { useNotification } from '../hooks/useNotification';
@@ -20,11 +21,17 @@ interface DiffResult {
 }
 
 const DiffView: React.FC<DiffViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [leftContent, setLeftContent] = useState(json ? JSON.stringify(json, null, 2) : '');
   const [rightContent, setRightContent] = useState('');
   const [differences, setDifferences] = useState<DiffResult[]>([]);
   const [showResults, setShowResults] = useState(false);
   const { showWarning, showError } = useNotification();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const formatJSON = useCallback((content: string, side: 'left' | 'right') => {
     try {
@@ -189,7 +196,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
     <div className={styles.diffContainer}>
       <div className={styles.diffInputSection}>
         <div className={styles.diffPanel}>
-          <h4>Left JSON</h4>
+          <h4>{mounted ? t('diff.original') : 'Original JSON'}</h4>
           <div className={styles.diffEditorContainer}>
             <MonacoEditor
               height="300px"
@@ -244,7 +251,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
                 <polyline points="16,18 22,12 16,6"></polyline>
                 <polyline points="8,6 2,12 8,18"></polyline>
               </svg>
-              Format JSON
+              {mounted ? t('buttons.format') : 'Format JSON'}
             </button>
             <button
               className={`${styles.diffActionButton} ${styles.diffCompactButton}`}
@@ -256,13 +263,13 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
                 <line x1="14" y1="10" x2="21" y2="3"></line>
                 <line x1="3" y1="21" x2="10" y2="14"></line>
               </svg>
-              Compact JSON
+              {mounted ? t('buttons.compact') : 'Compact JSON'}
             </button>
           </div>
         </div>
 
         <div className={styles.diffPanel}>
-          <h4>Right JSON</h4>
+          <h4>{mounted ? t('diff.modified') : 'Modified JSON'}</h4>
           <div className={styles.diffEditorContainer}>
             <MonacoEditor
               height="300px"
@@ -317,7 +324,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
                 <polyline points="16,18 22,12 16,6"></polyline>
                 <polyline points="8,6 2,12 8,18"></polyline>
               </svg>
-              Format JSON
+              {mounted ? t('buttons.format') : 'Format JSON'}
             </button>
             <button
               className={`${styles.diffActionButton} ${styles.diffCompactButton}`}
@@ -329,7 +336,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
                 <line x1="14" y1="10" x2="21" y2="3"></line>
                 <line x1="3" y1="21" x2="10" y2="14"></line>
               </svg>
-              Compact JSON
+              {mounted ? t('buttons.compact') : 'Compact JSON'}
             </button>
           </div>
         </div>
@@ -337,14 +344,14 @@ const DiffView: React.FC<DiffViewProps> = ({ json }) => {
 
       <div className={styles.diffCompareSection}>
         <button className={styles.diffCompareButton} onClick={handleCompare}>
-          Compare JSONs
+          {mounted ? t('diff.compare') : 'Compare JSONs'}
         </button>
       </div>
 
       {showResults && (
         <div className={styles.diffResultsSection}>
           {differences.length === 0 ? (
-            <div className={styles.diffNoChanges}>No differences found</div>
+            <div className={styles.diffNoChanges}>{mounted ? t('diff.noDifference') : 'No differences found'}</div>
           ) : (
             <>
               <div className={styles.diffSummary}>

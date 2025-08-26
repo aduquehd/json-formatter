@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { X, ShoppingCart, DollarSign, Settings, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { exampleJsonData } from '@/utils/exampleData';
 
 interface JsonExampleModalProps {
@@ -10,10 +11,16 @@ interface JsonExampleModalProps {
 }
 
 const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   const examples = [
     {
       id: 'ecommerce',
-      title: 'E-commerce Catalog',
+      title: mounted ? t('examples.ecommerce') : 'E-commerce Catalog',
       icon: ShoppingCart,
       preview: `"products": [
   {
@@ -26,7 +33,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
     },
     {
       id: 'financialSales',
-      title: 'Financial Sales',
+      title: mounted ? t('examples.financial') : 'Financial Sales',
       icon: DollarSign,
       preview: `"company": "TechCorp Solutions",
 "totalRevenue": 45670000.5,
@@ -39,7 +46,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
     },
     {
       id: 'configuration',
-      title: 'Application Configuration',
+      title: mounted ? t('examples.configuration') : 'Application Configuration',
       icon: Settings,
       preview: `"app": {
   "name": "MyApp",
@@ -51,7 +58,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
     },
     {
       id: 'geographicData',
-      title: 'Geographic Data',
+      title: mounted ? t('examples.geographic') : 'Geographic Data',
       icon: Globe,
       preview: `"type": "FeatureCollection",
 "features": [
@@ -72,11 +79,11 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Choose a JSON Example</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">{mounted ? t('modal.selectExample') : 'Select a JSON Example'}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
-            aria-label="Close modal"
+            aria-label={mounted ? t('modal.close') : 'Close'}
           >
             <X className="w-6 h-6 text-[var(--text-primary)]" />
           </button>
@@ -113,7 +120,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
                     }}
                     className="w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group-hover:bg-purple-500 group-hover:hover:bg-purple-600"
                   >
-                    Use this example
+                    {mounted ? t('modal.useExample') : 'Use this example'}
                   </button>
                 </div>
               </div>

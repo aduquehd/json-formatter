@@ -35,10 +35,17 @@ export function detectPatterns(nodes: any[], stats: any): void {
 
 export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void {
   const ba = stats.businessAnalytics;
+  const t = (key: string, fallback: string) => {
+    if (typeof window !== 'undefined' && (window as any).i18n) {
+      return (window as any).i18n.t(key) || fallback;
+    }
+    return fallback;
+  };
+  
   let html = "";
 
   if (ba.sensitiveData.size > 0) {
-    html += '<div class="stat-group"><h4>Sensitive Data ⚠️</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.sensitiveData', 'Sensitive Data')} ⚠️</h4>`;
     ba.sensitiveData.forEach((type: string, key: string) => {
       const icon = type === "email" ? "📧" : "📱";
       html += `<div class="sensitive-item">${icon} ${key}</div>`;
@@ -48,36 +55,38 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
 
   html += `
     <div class="stat-item">
-      <span class="stat-label">Total Nodes:</span>
+      <span class="stat-label">${t('graph.totalNodes', 'Total Nodes')}:</span>
       <span class="stat-value">${stats.totalNodes}</span>
     </div>
     <div class="stat-item">
-      <span class="stat-label">Max Depth:</span>
+      <span class="stat-label">${t('graph.maxDepth', 'Max Depth')}:</span>
       <span class="stat-value">${stats.maxDepth}</span>
     </div>
     <div class="stat-group">
-      <h4>Node Types</h4>
+      <h4>${t('graph.nodeTypes', 'Node Types')}</h4>
       <div class="stat-item">
-        <span class="stat-label">Objects:</span>
+        <span class="stat-label">${t('graph.objects', 'Objects')}:</span>
         <span class="stat-value">${stats.objectCount}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">Arrays:</span>
+        <span class="stat-label">${t('graph.arrays', 'Arrays')}:</span>
         <span class="stat-value">${stats.arrayCount}</span>
       </div>
       <div class="stat-item">
-        <span class="stat-label">Values:</span>
+        <span class="stat-label">${t('graph.values', 'Values')}:</span>
         <span class="stat-value">${stats.valueCount}</span>
       </div>
     </div>
   `;
 
   if (stats.typeDistribution.size > 0) {
-    html += '<div class="stat-group"><h4>Value Types</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.valueTypes', 'Value Types')}</h4>`;
     stats.typeDistribution.forEach((count: number, type: string) => {
+      // Translate the type labels
+      const typeLabel = t(`graph.type_${type}`, type);
       html += `
         <div class="stat-item">
-          <span class="stat-label">${type}:</span>
+          <span class="stat-label">${typeLabel}:</span>
           <span class="stat-value">${count}</span>
         </div>
       `;
@@ -90,13 +99,13 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
     const maxLength = Math.max(...stats.arrayLengths);
     html += `
       <div class="stat-group">
-        <h4>Array Statistics</h4>
+        <h4>${t('graph.arrayStatistics', 'Array Statistics')}</h4>
         <div class="stat-item">
-          <span class="stat-label">Avg Length:</span>
+          <span class="stat-label">${t('graph.avgLength', 'Avg Length')}:</span>
           <span class="stat-value">${avgLength.toFixed(1)}</span>
         </div>
         <div class="stat-item">
-          <span class="stat-label">Max Length:</span>
+          <span class="stat-label">${t('graph.maxLength', 'Max Length')}:</span>
           <span class="stat-value">${maxLength}</span>
         </div>
       </div>
@@ -108,7 +117,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
     .slice(0, 5);
 
   if (topKeys.length > 0) {
-    html += '<div class="stat-group"><h4>Top Keys</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.topKeys', 'Top Keys')}</h4>`;
     topKeys.forEach(([key, count]) => {
       html += `
         <div class="stat-item">
@@ -121,7 +130,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
   }
 
   if (ba.enumerations.size > 0) {
-    html += '<div class="stat-group"><h4>Enumerations</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.enumerations', 'Enumerations')}</h4>`;
     (Array.from(ba.enumerations.entries()) as [string, any][])
       .slice(0, 3)
       .forEach(([key, enumInfo]) => {
@@ -144,7 +153,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
   }
 
   if (ba.potentialIds.size > 0) {
-    html += '<div class="stat-group"><h4>Potential IDs 🔑</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.potentialIds', 'Potential IDs')} 🔑</h4>`;
     (Array.from(ba.potentialIds) as string[])
       .slice(0, 5)
       .forEach((id) => {
@@ -159,7 +168,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
     .slice(0, 5);
 
   if (incompleteFields.length > 0) {
-    html += '<div class="stat-group"><h4>Data Completeness</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.dataCompleteness', 'Data Completeness')}</h4>`;
     incompleteFields.forEach(([key, completeness]) => {
       html += `
         <div class="stat-item">
@@ -172,7 +181,7 @@ export function displayStats(panel: HTMLElement, stats: any, nodes: any[]): void
   }
 
   if (stats.patterns.length > 0) {
-    html += '<div class="stat-group"><h4>Patterns Found</h4>';
+    html += `<div class="stat-group"><h4>${t('graph.patternsFound', 'Patterns Found')}</h4>`;
     stats.patterns.slice(0, 3).forEach((pattern: any) => {
       html += `
         <div class="pattern-item">

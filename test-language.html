@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Detection Test</title>
+</head>
+<body>
+    <h1>Browser Language Detection Test</h1>
+    <p>Open Chrome DevTools and follow these steps:</p>
+    <ol>
+        <li>Press F12 or right-click → Inspect</li>
+        <li>Press Ctrl/Cmd + Shift + P to open Command Menu</li>
+        <li>Type "Show Sensors" and select it</li>
+        <li>In the Sensors tab, find "Locale" dropdown</li>
+        <li>Select "zh-CN" for Mandarin Chinese</li>
+        <li>Refresh your JSON viewer site</li>
+    </ol>
+    
+    <h2>Current Browser Settings:</h2>
+    <p><strong>navigator.language:</strong> <span id="lang"></span></p>
+    <p><strong>navigator.languages:</strong> <span id="langs"></span></p>
+    
+    <script>
+        document.getElementById('lang').textContent = navigator.language;
+        document.getElementById('langs').textContent = navigator.languages.join(', ');
+    </script>
+</body>
+</html>

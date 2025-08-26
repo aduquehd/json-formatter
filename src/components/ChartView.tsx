@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,6 +36,8 @@ type ChartType = 'bar' | 'pie' | 'line' | 'doughnut';
 type DataMode = 'types' | 'array' | 'object' | 'custom';
 
 const ChartView: React.FC<ChartViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
   const [leftChartType, setLeftChartType] = useState<ChartType>('bar');
   const [rightChartType, setRightChartType] = useState<ChartType>('pie');
   const [leftDataMode, setLeftDataMode] = useState<DataMode>('types');
@@ -42,6 +45,10 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
   const [leftDataPath, setLeftDataPath] = useState<string>('');
   const [rightDataPath, setRightDataPath] = useState<string>('');
   const [availablePaths, setAvailablePaths] = useState<string[]>([]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (json) {
@@ -129,7 +136,7 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
       labels: Object.keys(typeCount).filter(k => typeCount[k] > 0),
       datasets: [
         {
-          label: 'Data Types',
+          label: mounted ? t('chart.dataTypes') || 'Data Types' : 'Data Types',
           data: Object.values(typeCount).filter(v => v > 0),
           backgroundColor: [
             'rgba(75, 192, 192, 0.6)',
@@ -318,14 +325,14 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
   if (!leftChartData && !rightChartData) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-[var(--text-secondary)]">No data available for charts</p>
+        <p className="text-[var(--text-secondary)]">{mounted ? t('chart.noData') : 'No data available for charts'}</p>
       </div>
     );
   }
 
   return (
     <div className="h-full overflow-auto p-6">
-      <h2 className="text-xl font-bold mb-6">Data Visualization</h2>
+      <h2 className="text-xl font-bold mb-6">{mounted ? t('chart.title') || 'Data Visualization' : 'Data Visualization'}</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-[var(--bg-secondary)] rounded-lg p-4 border border-[var(--border-color)]">
@@ -336,10 +343,10 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setLeftChartType(e.target.value as ChartType)}
                 className="flex-1 px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="bar">Bar Chart</option>
-                <option value="pie">Pie Chart</option>
-                <option value="line">Line Chart</option>
-                <option value="doughnut">Doughnut Chart</option>
+                <option value="bar">{mounted ? t('chart.barChart') || 'Bar Chart' : 'Bar Chart'}</option>
+                <option value="pie">{mounted ? t('chart.pieChart') || 'Pie Chart' : 'Pie Chart'}</option>
+                <option value="line">{mounted ? t('chart.lineChart') || 'Line Chart' : 'Line Chart'}</option>
+                <option value="doughnut">{mounted ? t('chart.doughnutChart') || 'Doughnut Chart' : 'Doughnut Chart'}</option>
               </select>
               
               <select
@@ -347,10 +354,10 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setLeftDataMode(e.target.value as DataMode)}
                 className="flex-1 px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="types">Data Types</option>
-                <option value="array">Array Data</option>
-                <option value="object">Object Data</option>
-                <option value="custom">Custom Path</option>
+                <option value="types">{mounted ? t('chart.dataTypes') || 'Data Types' : 'Data Types'}</option>
+                <option value="array">{mounted ? t('chart.arrayData') || 'Array Data' : 'Array Data'}</option>
+                <option value="object">{mounted ? t('chart.objectData') || 'Object Data' : 'Object Data'}</option>
+                <option value="custom">{mounted ? t('chart.customPath') || 'Custom Path' : 'Custom Path'}</option>
               </select>
             </div>
             
@@ -360,7 +367,7 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setLeftDataPath(e.target.value)}
                 className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="">Select data path...</option>
+                <option value="">{mounted ? t('chart.selectPath') || 'Select data path...' : 'Select data path...'}</option>
                 {availablePaths.map(path => (
                   <option key={path} value={path}>{path}</option>
                 ))}
@@ -381,10 +388,10 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setRightChartType(e.target.value as ChartType)}
                 className="flex-1 px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="bar">Bar Chart</option>
-                <option value="pie">Pie Chart</option>
-                <option value="line">Line Chart</option>
-                <option value="doughnut">Doughnut Chart</option>
+                <option value="bar">{mounted ? t('chart.barChart') || 'Bar Chart' : 'Bar Chart'}</option>
+                <option value="pie">{mounted ? t('chart.pieChart') || 'Pie Chart' : 'Pie Chart'}</option>
+                <option value="line">{mounted ? t('chart.lineChart') || 'Line Chart' : 'Line Chart'}</option>
+                <option value="doughnut">{mounted ? t('chart.doughnutChart') || 'Doughnut Chart' : 'Doughnut Chart'}</option>
               </select>
               
               <select
@@ -392,10 +399,10 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setRightDataMode(e.target.value as DataMode)}
                 className="flex-1 px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="types">Data Types</option>
-                <option value="array">Array Data</option>
-                <option value="object">Object Data</option>
-                <option value="custom">Custom Path</option>
+                <option value="types">{mounted ? t('chart.dataTypes') || 'Data Types' : 'Data Types'}</option>
+                <option value="array">{mounted ? t('chart.arrayData') || 'Array Data' : 'Array Data'}</option>
+                <option value="object">{mounted ? t('chart.objectData') || 'Object Data' : 'Object Data'}</option>
+                <option value="custom">{mounted ? t('chart.customPath') || 'Custom Path' : 'Custom Path'}</option>
               </select>
             </div>
             
@@ -405,7 +412,7 @@ const ChartView: React.FC<ChartViewProps> = ({ json }) => {
                 onChange={(e) => setRightDataPath(e.target.value)}
                 className="w-full px-3 py-2 rounded-md border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] text-sm"
               >
-                <option value="">Select data path...</option>
+                <option value="">{mounted ? t('chart.selectPath') || 'Select data path...' : 'Select data path...'}</option>
                 {availablePaths.map(path => (
                   <option key={path} value={path}>{path}</option>
                 ))}

@@ -4,6 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Analytics from '@/components/Analytics';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import I18nProvider from '@/components/I18nProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -126,12 +127,14 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <Analytics />
         <ErrorBoundary>
-          <ThemeProvider>
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
-            {children}
-          </ThemeProvider>
+          <I18nProvider>
+            <ThemeProvider>
+              <a href="#main-content" className="skip-link">
+                Skip to main content
+              </a>
+              {children}
+            </ThemeProvider>
+          </I18nProvider>
         </ErrorBoundary>
       </body>
     </html>

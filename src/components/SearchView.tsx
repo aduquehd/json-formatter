@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface SearchViewProps {
   json: any;
@@ -241,6 +242,12 @@ const TreeResultView: React.FC<{
 };
 
 const SearchView: React.FC<SearchViewProps> = ({ json }) => {
+  const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [allPaths, setAllPaths] = useState<string[]>([]);
@@ -669,10 +676,10 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-              Smart Search & Discovery
+              {mounted ? t('search.smartSearch') : 'Smart Search & Discovery'}
             </h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              {dataInsights.totalKeys} keys • {dataInsights.totalValues} values • Depth: {dataInsights.maxDepth}
+              {dataInsights.totalKeys} {mounted ? t('search.keys') : 'keys'} • {dataInsights.totalValues} {mounted ? t('search.values') : 'values'} • {mounted ? t('search.depth') : 'Depth'}: {dataInsights.maxDepth}
             </p>
           </div>
           <div className="flex gap-2">
@@ -709,7 +716,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               }}
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              placeholder={searchMode === 'regex' ? "Enter regex pattern..." : "Search keys, values, or use patterns..."}
+              placeholder={mounted ? t('search.placeholder') : 'Search keys or values...'}
               className="w-full pl-12 pr-24 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
             />
             {searchQuery && (
@@ -863,7 +870,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       onChange={(e) => setCaseSensitive(e.target.checked)}
                       className="rounded border-[var(--border-color)]"
                     />
-                    <span className="text-sm text-[var(--text-primary)]">Case Sensitive</span>
+                    <span className="text-sm text-[var(--text-primary)]">{mounted ? t('search.caseSensitive') : 'Case Sensitive'}</span>
                   </label>
                 </div>
               </div>
@@ -933,7 +940,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                 )}
                 {caseSensitive && (
                   <span className="px-2 py-1 rounded-lg bg-purple-500/10 text-purple-500 text-xs">
-                    Case Sensitive
+                    {mounted ? t('search.caseSensitive') : 'Case Sensitive'}
                   </span>
                 )}
                 {maxDepth !== -1 && (
@@ -1209,11 +1216,11 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         {/* Side Panel - Insights */}
         {viewMode === 'list' && wordFrequencies.length > 0 && (
           <div className="w-80 border-l border-[var(--border-color)] bg-[var(--bg-tertiary)]/30 p-6 overflow-auto">
-            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Quick Insights</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">{mounted ? t('search.quickInsights') : 'Quick Insights'}</h3>
             
             {/* Top Words */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">Top Words</h4>
+              <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">{mounted ? t('search.topWords') : 'Top Words'}</h4>
               <div className="space-y-2">
                 {wordFrequencies.slice(0, 10).map((word, i) => (
                   <button
@@ -1233,7 +1240,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             {/* Recent Paths */}
             {allPaths.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">Sample Paths</h4>
+                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">{mounted ? t('search.samplePaths') : 'Sample Paths'}</h4>
                 <div className="space-y-1">
                   {allPaths.slice(0, 8).map((path, i) => (
                     <button
