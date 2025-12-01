@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON व्यूअर और फॉर्मेटर",
+    "title": "JSON Formatter",
     "help": "सहायता"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "भौगोलिक डेटा"
   },
   "stats": {
-    "title": "JSON सांख्यिकी",
+    "title": "JSON Formatter",
     "totalKeys": "कुल कुंजियाँ",
     "totalValues": "कुल मान",
     "depth": "अधिकतम गहराई",
@@ -120,7 +120,7 @@
     "editHint": "सीधे संपादित करने के लिए किसी भी मान या कुंजी पर क्लिक करें"
   },
   "chart": {
-    "title": "डेटा विज़ुअलाइज़ेशन",
+    "title": "JSON Formatter",
     "typeDistribution": "डेटा प्रकार वितरण",
     "keyFrequency": "कुंजी आवृत्ति विश्लेषण",
     "dataTypes": "डेटा प्रकार",
@@ -185,7 +185,7 @@
     "type_undefined": "अनिर्धारित"
   },
   "error": {
-    "title": "कुछ गलत हो गया!",
+    "title": "JSON Formatter",
     "message": "आपके अनुरोध को प्रोसेस करते समय एक त्रुटि हुई।",
     "reload": "पेज रीलोड करें"
   },

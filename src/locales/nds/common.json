@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON Kieker un Formatierer",
+    "title": "JSON Formatter",
     "help": "Hölp"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Geografische Daten"
   },
   "stats": {
-    "title": "JSON Statistiken",
+    "title": "JSON Formatter",
     "totalKeys": "Gesamt Slötels",
     "totalValues": "Gesamt Weerten",
     "depth": "Maximale Deep",
@@ -120,7 +120,7 @@
     "editHint": "Klik op elke Weert oder Slötel to direkt bearbeiten"
   },
   "chart": {
-    "title": "Daten Visualisierung",
+    "title": "JSON Formatter",
     "typeDistribution": "Datentyp Verdelung",
     "keyFrequency": "Slötel Frequenz Analyse",
     "dataTypes": "Daten Types",
@@ -185,7 +185,7 @@
     "type_undefined": "undefineert"
   },
   "error": {
-    "title": "Wat is scheef gahn!",
+    "title": "JSON Formatter",
     "message": "Bi't Verarbeiten vun ehr Anfraag is en Fehler passeert.",
     "reload": "Siet ne'e laden"
   },

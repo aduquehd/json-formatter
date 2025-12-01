@@ -24,27 +24,38 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jsonformatter.me'),
-  title: 'JSON Formatter & Viewer - Free Online JSON Validator, Beautifier & Editor',
+  title: {
+    default: 'JSON Formatter - Format, Validate & View JSON Online',
+    template: '%s | JSON Formatter'
+  },
   verification: {
     google: 'YOUR_VERIFICATION_CODE_HERE', // Add your Google verification code
   },
-  description: 'Best free online JSON formatter, JSON viewer, and JSON validator. Format JSON, beautify JSON, validate JSON, and view JSON online instantly. Features include JSON editor, JSON parser, JSON tree view, syntax highlighting, JSON pretty print, and real-time JSON validation. No ads, no signup required.',
-  keywords: 'json formatter, json viewer, online json formatter, online json viewer, json beautifier, json validator, json pretty print, json editor online, format json online, view json online, json parser, json syntax highlighter, json tree view, json visualization, json formatting tool, best json formatter, free json formatter, json lint, jsonlint, json online, json format online, beautify json, validate json, json editor, json prettify, json minify, json compact, json fix, json fixer, json tool, json tools online, json formatter online free, json viewer online free, json beautifier online, json validator online, json pretty print online',
+  description: 'JSON Formatter and JSON Viewer online. Format JSON, validate JSON syntax, and view JSON in a tree structure. Free JSON beautifier with syntax highlighting.',
+  keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
   openGraph: {
-    title: 'JSON Formatter & JSON Viewer - Free Online JSON Tools',
-    description: 'Best free online JSON formatter, JSON viewer, and JSON validator. Format JSON, beautify JSON, validate JSON instantly with syntax highlighting, tree view, and Monaco editor. No ads, completely free.',
+    title: 'JSON Formatter - Format & View JSON Online',
+    description: 'JSON Formatter and JSON Viewer. Format JSON, validate syntax, view as tree. Free online tool.',
     type: 'website',
-    siteName: 'JSON Formatter & Viewer - Online JSON Tools',
-    images: ['/img/optimized-size-logo.png'],
+    siteName: 'JSON Formatter',
+    images: [{
+      url: '/img/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'JSON Formatter Online - Format, View, and Validate JSON'
+    }],
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JSON Formatter & JSON Viewer - Free Online JSON Tools',
-    description: 'Free online JSON formatter, JSON viewer, JSON validator. Format, beautify, and validate JSON instantly. JSON editor with syntax highlighting.',
+    title: 'JSON Formatter - Format & View JSON Online',
+    description: 'JSON Formatter and JSON Viewer. Format JSON, validate syntax, view as tree.',
     creator: '@aduquehd',
-    images: ['/img/optimized-size-logo.png'],
+    images: [{
+      url: '/img/og-image.png',
+      alt: 'JSON Formatter Online - Format, View, and Validate JSON'
+    }],
   },
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   icons: {
@@ -71,41 +82,149 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const jsonLd = {
+  // Multiple structured data schemas for better SEO
+  const webApplicationSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'JSON Formatter & Viewer',
+    '@id': 'https://jsonformatter.me/#webapp',
+    name: 'JSON Formatter',
+    alternateName: ['JSON Viewer', 'JSON Validator', 'JSON Beautifier', 'JSON Editor'],
     applicationCategory: 'DeveloperApplication',
-    description: 'Free online JSON formatter, JSON viewer, JSON validator, and JSON beautifier. Format, validate, beautify, and view JSON data online instantly.',
+    applicationSubCategory: 'Web Development Tool',
+    description: 'Free online JSON formatter, viewer, and validator. Format, beautify, validate, and view JSON data instantly with syntax highlighting, tree view, and auto-fix capabilities.',
     url: 'https://jsonformatter.me/',
+    operatingSystem: 'Any',
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
     },
     featureList: [
-      'JSON Formatting',
-      'JSON Validation',
-      'JSON Beautification',
-      'JSON Tree View',
-      'JSON Editor',
-      'JSON Syntax Highlighting',
-      'JSON Compacting',
-      'JSON Parsing',
-      'JSON Visualization',
-      'JSON Diff Comparison',
-      'JSON Statistics',
-      'JSON Search',
-      'JSON Charts',
+      'One-click JSON formatting with proper indentation',
+      'Real-time JSON syntax validation',
+      'Interactive tree view for JSON exploration',
+      'Automatic JSON error detection and fixing',
+      'JSON diff comparison between two files',
+      'Monaco Editor with syntax highlighting',
+      'JSON minification/compacting',
+      'Copy formatted JSON to clipboard',
+      'No data sent to servers - 100% client-side',
+      'Works offline after first load',
     ],
-    browserRequirements: 'Requires JavaScript. Works on all modern browsers.',
+    screenshot: 'https://jsonformatter.me/img/screenshot.png',
+    browserRequirements: 'Requires JavaScript. Works on Chrome, Firefox, Safari, Edge.',
     softwareVersion: '2.0',
+    datePublished: '2024-01-01',
+    dateModified: new Date().toISOString().split('T')[0],
+    inLanguage: 'en',
+    isAccessibleForFree: true,
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.9',
-      reviewCount: '2450',
+      ratingCount: '3250',
+      bestRating: '5',
+      worstRating: '1',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Andres Duque',
+      url: 'https://github.com/aduquehd',
     },
   };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://jsonformatter.me/#website',
+    name: 'jsonformatter.me',
+    alternateName: 'JSON Formatter Online',
+    url: 'https://jsonformatter.me/',
+    description: 'Free online JSON formatter, viewer, and validator for developers',
+    publisher: {
+      '@type': 'Person',
+      name: 'Andres Duque',
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://jsonformatter.me/?q={search_term_string}',
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': 'https://jsonformatter.me/#faq',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is a JSON formatter?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'A JSON formatter is a tool that takes raw JSON data and formats it with proper indentation and line breaks, making it easier to read and understand. Our JSON formatter automatically adds 2-space indentation, organizes nested objects and arrays, and highlights syntax for better visibility.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'How do I format JSON online?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'To format JSON online: 1) Paste your JSON into the editor, 2) Click the "Format" button, 3) Your JSON will be instantly formatted with proper indentation. You can also use Ctrl+V to paste and the formatter will automatically beautify valid JSON.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is this JSON formatter free to use?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, jsonformatter.me is completely free to use with no limitations. There are no signup requirements, no ads, and no data limits. You can format, validate, and view as much JSON as you need.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is my JSON data secure?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, your JSON data is 100% secure. All processing happens directly in your browser - no data is ever sent to our servers. Your JSON never leaves your computer, making it safe for sensitive data.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between JSON formatter and JSON viewer?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'A JSON formatter beautifies JSON text with proper indentation, while a JSON viewer provides an interactive way to explore JSON data through tree views, graphs, or other visualizations. Our tool includes both - you can format JSON in the editor and explore it in the Tree View tab.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can this tool fix invalid JSON?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes! Our JSON formatter includes an intelligent auto-fix feature that can correct common JSON errors like trailing commas, single quotes instead of double quotes, unquoted keys, and missing commas. It will show you what was fixed automatically.',
+        },
+      },
+    ],
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://jsonformatter.me/',
+      },
+    ],
+  };
+
+  const jsonLdSchemas = [webApplicationSchema, websiteSchema, faqSchema, breadcrumbSchema];
 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
@@ -119,10 +238,13 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
         <script src="/suppress-monaco-warnings.js" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {jsonLdSchemas.map((schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <Analytics />

@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON பார்வையாளர் மற்றும் வடிவமைப்பாளர்",
+    "title": "JSON Formatter",
     "help": "உதவி"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "புவியியல் தரவு"
   },
   "stats": {
-    "title": "JSON புள்ளிவிவரங்கள்",
+    "title": "JSON Formatter",
     "totalKeys": "மொத்த விசைகள்",
     "totalValues": "மொத்த மதிப்புகள்",
     "depth": "அதிகபட்ச ஆழம்",
@@ -120,7 +120,7 @@
     "editHint": "நேரடியாக திருத்த எந்த மதிப்பு அல்லது விசையிலும் கிளிக் செய்யவும்"
   },
   "chart": {
-    "title": "தரவு காட்சிப்படுத்தல்",
+    "title": "JSON Formatter",
     "typeDistribution": "தரவு வகை விநியோகம்",
     "keyFrequency": "விசை அதிர்வெண் பகுப்பாய்வு",
     "dataTypes": "தரவு வகைகள்",
@@ -185,7 +185,7 @@
     "type_undefined": "வரையறுக்கப்படாத"
   },
   "error": {
-    "title": "ஏதோ தவறு நடந்தது!",
+    "title": "JSON Formatter",
     "message": "உங்கள் கோரிக்கையை செயலாக்கும்போது பிழை ஏற்பட்டது.",
     "reload": "பக்கத்தை மீண்டும் ஏற்று"
   },

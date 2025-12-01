@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON 檢視器與格式化工具",
+    "title": "JSON Formatter",
     "help": "說明"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "地理資料"
   },
   "stats": {
-    "title": "JSON 統計",
+    "title": "JSON Formatter",
     "totalKeys": "總鍵數",
     "totalValues": "總值數",
     "depth": "最大深度",
@@ -120,7 +120,7 @@
     "editHint": "點擊任何值或鍵可直接編輯"
   },
   "chart": {
-    "title": "資料視覺化",
+    "title": "JSON Formatter",
     "typeDistribution": "資料類型分佈",
     "keyFrequency": "鍵頻率分析",
     "dataTypes": "資料類型",
@@ -185,7 +185,7 @@
     "type_undefined": "未定義"
   },
   "error": {
-    "title": "發生錯誤！",
+    "title": "JSON Formatter",
     "message": "處理您的請求時發生錯誤。",
     "reload": "重新載入頁面"
   },

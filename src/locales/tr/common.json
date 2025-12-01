@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON Görüntüleyici ve Biçimlendirici",
+    "title": "JSON Formatter",
     "help": "Yardım"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Coğrafi Veri"
   },
   "stats": {
-    "title": "JSON İstatistikleri",
+    "title": "JSON Formatter",
     "totalKeys": "Toplam Anahtar",
     "totalValues": "Toplam Değer",
     "depth": "Maksimum Derinlik",
@@ -120,7 +120,7 @@
     "editHint": "Herhangi bir değeri veya anahtarı doğrudan düzenlemek için tıklayın"
   },
   "chart": {
-    "title": "Veri Görselleştirme",
+    "title": "JSON Formatter",
     "typeDistribution": "Veri Türü Dağılımı",
     "keyFrequency": "Anahtar Frekansı Analizi",
     "dataTypes": "Veri Türleri",
@@ -185,7 +185,7 @@
     "type_undefined": "tanımsız"
   },
   "error": {
-    "title": "Bir şeyler yanlış gitti!",
+    "title": "JSON Formatter",
     "message": "İsteğinizi işlerken bir hata oluştu.",
     "reload": "Sayfayı Yenile"
   },

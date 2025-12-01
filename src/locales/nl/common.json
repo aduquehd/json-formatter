@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON Viewer en Formatter",
+    "title": "JSON Formatter",
     "help": "Help"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Geografische Data"
   },
   "stats": {
-    "title": "JSON Statistieken",
+    "title": "JSON Formatter",
     "totalKeys": "Totaal Sleutels",
     "totalValues": "Totaal Waarden",
     "depth": "Maximale Diepte",
@@ -120,7 +120,7 @@
     "editHint": "Klik op elke waarde of sleutel om direct te bewerken"
   },
   "chart": {
-    "title": "Data Visualisatie",
+    "title": "JSON Formatter",
     "typeDistribution": "Data Type Verdeling",
     "keyFrequency": "Sleutel Frequentie Analyse",
     "dataTypes": "Data Types",
@@ -185,7 +185,7 @@
     "type_undefined": "ongedefinieerd"
   },
   "error": {
-    "title": "Er is iets misgegaan!",
+    "title": "JSON Formatter",
     "message": "Er is een fout opgetreden bij het verwerken van uw verzoek.",
     "reload": "Pagina Herladen"
   },

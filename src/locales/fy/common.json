@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON Werjouwer en Formattearder",
+    "title": "JSON Formatter",
     "help": "Help"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Geografyske Data"
   },
   "stats": {
-    "title": "JSON Statistiken",
+    "title": "JSON Formatter",
     "totalKeys": "Totaal Kaaien",
     "totalValues": "Totaal Wearden",
     "depth": "Maksimale Djipte",
@@ -120,7 +120,7 @@
     "editHint": "Klik op elke wearde of kaai om direkt te bewurkjen"
   },
   "chart": {
-    "title": "Data Fisualisaasje",
+    "title": "JSON Formatter",
     "typeDistribution": "Data Type Ferdieling",
     "keyFrequency": "Kaai Frekwinsje Analyze",
     "dataTypes": "Data Types",
@@ -185,7 +185,7 @@
     "type_undefined": "ûndefinearre"
   },
   "error": {
-    "title": "Der is wat misgien!",
+    "title": "JSON Formatter",
     "message": "Der is in flater bard by it ferwurkjen fan jo fersyk.",
     "reload": "Side Fernije"
   },

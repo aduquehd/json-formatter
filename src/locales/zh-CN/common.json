@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "JSON 查看器和格式化工具",
+    "title": "JSON Formatter",
     "help": "帮助"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "地理数据"
   },
   "stats": {
-    "title": "JSON 统计",
+    "title": "JSON Formatter",
     "totalKeys": "总键数",
     "totalValues": "总值数",
     "depth": "最大深度",
@@ -120,7 +120,7 @@
     "editHint": "点击任何值或键可直接编辑"
   },
   "chart": {
-    "title": "数据可视化",
+    "title": "JSON Formatter",
     "typeDistribution": "数据类型分布",
     "keyFrequency": "键频率分析",
     "dataTypes": "数据类型",
@@ -185,7 +185,7 @@
     "type_undefined": "未定义"
   },
   "error": {
-    "title": "出错了！",
+    "title": "JSON Formatter",
     "message": "处理您的请求时发生错误。",
     "reload": "重新加载页面"
   },

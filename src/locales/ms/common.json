@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "Pemapar dan Pemformat JSON",
+    "title": "JSON Formatter",
     "help": "Bantuan"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Data Geografi"
   },
   "stats": {
-    "title": "Statistik JSON",
+    "title": "JSON Formatter",
     "totalKeys": "Jumlah Kunci",
     "totalValues": "Jumlah Nilai",
     "depth": "Kedalaman Maksimum",
@@ -120,7 +120,7 @@
     "editHint": "Klik pada mana-mana nilai atau kunci untuk mengedit secara langsung"
   },
   "chart": {
-    "title": "Visualisasi Data",
+    "title": "JSON Formatter",
     "typeDistribution": "Agihan Jenis Data",
     "keyFrequency": "Analisis Kekerapan Kunci",
     "dataTypes": "Jenis Data",
@@ -185,7 +185,7 @@
     "type_undefined": "tidak ditakrifkan"
   },
   "error": {
-    "title": "Ada yang tidak kena!",
+    "title": "JSON Formatter",
     "message": "Ralat berlaku semasa memproses permintaan anda.",
     "reload": "Muat Semula Halaman"
   },

@@ -1,6 +1,6 @@
 {
   "nav": {
-    "title": "Visor y Formateador JSON",
+    "title": "JSON Formatter",
     "help": "Ayuda"
   },
   "buttons": {
@@ -68,7 +68,7 @@
     "geographic": "Datos Geográficos"
   },
   "stats": {
-    "title": "Estadísticas JSON",
+    "title": "JSON Formatter",
     "totalKeys": "Total de Claves",
     "totalValues": "Total de Valores",
     "depth": "Profundidad Máxima",
@@ -120,7 +120,7 @@
     "editHint": "Haz clic en cualquier valor o clave para editar directamente"
   },
   "chart": {
-    "title": "Visualización de Datos",
+    "title": "JSON Formatter",
     "typeDistribution": "Distribución de Tipos de Datos",
     "keyFrequency": "Análisis de Frecuencia de Claves",
     "dataTypes": "Tipos de Datos",
@@ -185,7 +185,7 @@
     "type_undefined": "indefinido"
   },
   "error": {
-    "title": "¡Algo salió mal!",
+    "title": "JSON Formatter",
     "message": "Ocurrió un error al procesar tu solicitud.",
     "reload": "Recargar Página"
   },
