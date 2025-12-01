@@ -61,6 +61,24 @@ export async function GET() {
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>${baseUrl}/guides/what-is-json</loc>
+    <lastmod>${lastModified}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/guides/json-syntax</loc>
+    <lastmod>${lastModified}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/guides/common-json-errors</loc>
+    <lastmod>${lastModified}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>`;
 
   return new NextResponse(sitemap.trim(), {

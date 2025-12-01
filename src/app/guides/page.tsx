@@ -22,36 +22,42 @@ const guides = [
     title: 'What is JSON? A Complete Introduction',
     description: 'Learn what JSON is, why it\'s used, and how it works. A beginner-friendly guide to JavaScript Object Notation.',
     category: 'Basics',
+    available: true,
   },
   {
     slug: 'json-syntax',
     title: 'JSON Syntax Guide: Rules and Examples',
     description: 'Master JSON syntax with this comprehensive guide. Learn about objects, arrays, data types, and proper formatting.',
     category: 'Basics',
+    available: true,
   },
   {
     slug: 'common-json-errors',
     title: 'Common JSON Errors and How to Fix Them',
     description: 'Troubleshoot JSON parsing errors. Learn about trailing commas, quote issues, and other common mistakes.',
     category: 'Troubleshooting',
+    available: true,
   },
   {
     slug: 'json-vs-xml',
     title: 'JSON vs XML: Which Should You Use?',
     description: 'Compare JSON and XML formats. Understand the pros and cons of each for different use cases.',
     category: 'Comparison',
+    available: false,
   },
   {
     slug: 'json-in-javascript',
     title: 'Working with JSON in JavaScript',
     description: 'Learn to parse, stringify, and manipulate JSON data in JavaScript with practical examples.',
     category: 'Programming',
+    available: false,
   },
   {
     slug: 'json-api-best-practices',
     title: 'JSON API Best Practices',
     description: 'Design better APIs with JSON. Best practices for structure, naming conventions, and error handling.',
     category: 'Best Practices',
+    available: false,
   },
 ];
 
@@ -111,23 +117,44 @@ export default function GuidesPage() {
           {/* Guides Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {guides.map((guide) => (
-              <article
-                key={guide.slug}
-                className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 hover:border-[var(--accent-primary)] transition-colors"
-              >
-                <span className="inline-block px-3 py-1 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] text-xs font-medium rounded-full mb-3">
-                  {guide.category}
-                </span>
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-                  {guide.title}
-                </h2>
-                <p className="text-sm text-[var(--text-secondary)] mb-4">
-                  {guide.description}
-                </p>
-                <span className="text-[var(--accent-primary)] text-sm font-medium">
-                  Coming Soon
-                </span>
-              </article>
+              guide.available ? (
+                <Link
+                  key={guide.slug}
+                  href={`/guides/${guide.slug}`}
+                  className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 hover:border-[var(--accent-primary)] transition-colors"
+                >
+                  <span className="inline-block px-3 py-1 bg-[var(--accent-primary)]/10 text-[var(--accent-primary)] text-xs font-medium rounded-full mb-3">
+                    {guide.category}
+                  </span>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+                    {guide.title}
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)] mb-4">
+                    {guide.description}
+                  </p>
+                  <span className="text-[var(--accent-primary)] text-sm font-medium">
+                    Read Guide →
+                  </span>
+                </Link>
+              ) : (
+                <article
+                  key={guide.slug}
+                  className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 opacity-60"
+                >
+                  <span className="inline-block px-3 py-1 bg-[var(--bg-tertiary)] text-[var(--text-secondary)] text-xs font-medium rounded-full mb-3">
+                    {guide.category}
+                  </span>
+                  <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+                    {guide.title}
+                  </h2>
+                  <p className="text-sm text-[var(--text-secondary)] mb-4">
+                    {guide.description}
+                  </p>
+                  <span className="text-[var(--text-secondary)] text-sm font-medium">
+                    Coming Soon
+                  </span>
+                </article>
+              )
             ))}
           </div>
 
