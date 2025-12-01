@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import ToolPageClient from './ToolPageClient';
+import ToolPageWrapper from './ToolPageWrapper';
 
 interface ToolPageProps {
   params: Promise<{
@@ -381,194 +381,204 @@ export default async function ToolPage({ params }: ToolPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        {/* Hero Section with Tool */}
-        <section className="pt-20 pb-8 px-4">
-          <div className="container mx-auto max-w-6xl">
-            {/* Breadcrumb */}
-            <nav className="mb-6" aria-label="Breadcrumb">
-              <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
-                <li>
-                  <Link href="/" className="hover:text-[var(--accent-primary)] transition-colors">
-                    Home
-                  </Link>
-                </li>
-                <li>/</li>
-                <li className="text-[var(--text-primary)] font-medium">{data.heading}</li>
-              </ol>
-            </nav>
+      <ToolPageWrapper>
+        <div className="min-h-screen bg-[var(--bg-primary)]">
+          {/* Hero Section */}
+          <section className="pt-24 pb-8 px-4">
+            <div className="container mx-auto max-w-6xl">
+              {/* Breadcrumb */}
+              <nav className="mb-6" aria-label="Breadcrumb">
+                <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
+                  <li>
+                    <Link href="/" className="hover:text-[var(--accent-primary)] transition-colors">
+                      Home
+                    </Link>
+                  </li>
+                  <li>/</li>
+                  <li className="text-[var(--text-primary)] font-medium">{data.heading}</li>
+                </ol>
+              </nav>
 
-            {/* Page Header */}
-            <header className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-4">
-                {data.heading}
-              </h1>
-              <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-                {data.subheading}
+              {/* Page Header */}
+              <header className="text-center mb-8">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] mb-4">
+                  {data.heading}
+                </h1>
+                <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
+                  {data.subheading}
+                </p>
+              </header>
+            </div>
+          </section>
+
+          {/* CTA to Main Tool */}
+          <section className="px-4 pb-12">
+            <div className="container mx-auto max-w-2xl text-center">
+              <Link
+                href="/"
+                className="inline-block bg-[var(--accent-primary)] text-white px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity shadow-lg"
+              >
+                Open {data.heading}
+              </Link>
+              <p className="mt-4 text-sm text-[var(--text-secondary)]">
+                Free, no signup required. Your data stays in your browser.
               </p>
-            </header>
-          </div>
-        </section>
-
-        {/* Tool Section */}
-        <section className="px-4 pb-12">
-          <div className="container mx-auto max-w-6xl">
-            <ToolPageClient />
-          </div>
-        </section>
-
-        {/* Description Section */}
-        <section className="py-12 px-4 bg-[var(--bg-secondary)]">
-          <div className="container mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-4 text-center">
-              About This Tool
-            </h2>
-            <p className="text-[var(--text-secondary)] text-lg leading-relaxed text-center">
-              {data.description}
-            </p>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-12 px-4">
-          <div className="container mx-auto max-w-6xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
-              Features
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6"
-                >
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-[var(--text-secondary)]">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* How To Section */}
-        <section className="py-12 px-4 bg-[var(--bg-secondary)]">
-          <div className="container mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
-              How to Use
-            </h2>
-            <div className="space-y-6">
-              {data.howTo.map((step) => (
-                <div key={step.step} className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-[var(--accent-primary)] text-white rounded-full flex items-center justify-center font-bold">
-                    {step.step}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">
-                      {step.title}
-                    </h3>
-                    <p className="text-[var(--text-secondary)]">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          {/* Description Section */}
+          <section className="py-12 px-4 bg-[var(--bg-secondary)]">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-4 text-center">
+                About This Tool
+              </h2>
+              <p className="text-[var(--text-secondary)] text-lg leading-relaxed text-center">
+                {data.description}
+              </p>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Use Cases Section */}
-        <section className="py-12 px-4">
-          <div className="container mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
-              Common Use Cases
-            </h2>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {data.useCases.map((useCase, index) => (
-                <li
-                  key={index}
-                  className="flex items-center gap-3 text-[var(--text-secondary)]"
-                >
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  {useCase}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-12 px-4 bg-[var(--bg-secondary)]">
-          <div className="container mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-6">
-              {data.faqs.map((faq, index) => (
-                <div key={index} className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-                    {faq.question}
-                  </h3>
-                  <p className="text-[var(--text-secondary)]">
-                    {faq.answer}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Related Tools Section */}
-        <section className="py-12 px-4">
-          <div className="container mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
-              Related Tools
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {data.relatedTools.map((relatedTool) => {
-                const related = toolData[relatedTool];
-                if (!related) return null;
-                return (
-                  <Link
-                    key={relatedTool}
-                    href={`/tools/${relatedTool}`}
-                    className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 hover:border-[var(--accent-primary)] transition-colors"
+          {/* Features Section */}
+          <section className="py-12 px-4">
+            <div className="container mx-auto max-w-6xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
+                Features
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data.features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6"
                   >
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-                      {related.heading}
+                      {feature.title}
                     </h3>
-                    <p className="text-sm text-[var(--text-secondary)]">
-                      {related.subheading}
+                    <p className="text-[var(--text-secondary)]">
+                      {feature.description}
                     </p>
-                  </Link>
-                );
-              })}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* CTA Section */}
-        <section className="py-12 px-4 bg-[var(--accent-primary)]">
-          <div className="container mx-auto max-w-4xl text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-              Try All Our JSON Tools
-            </h2>
-            <p className="text-white/80 mb-6">
-              Format, view, validate, compare, and analyze JSON - all in one place.
-            </p>
-            <Link
-              href="/"
-              className="inline-block bg-white text-[var(--accent-primary)] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Go to JSON Formatter
-            </Link>
-          </div>
-        </section>
-      </div>
+          {/* How To Section */}
+          <section className="py-12 px-4 bg-[var(--bg-secondary)]">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
+                How to Use
+              </h2>
+              <div className="space-y-6">
+                {data.howTo.map((step) => (
+                  <div key={step.step} className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-[var(--accent-primary)] text-white rounded-full flex items-center justify-center font-bold">
+                      {step.step}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">
+                        {step.title}
+                      </h3>
+                      <p className="text-[var(--text-secondary)]">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Use Cases Section */}
+          <section className="py-12 px-4">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
+                Common Use Cases
+              </h2>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {data.useCases.map((useCase, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center gap-3 text-[var(--text-secondary)]"
+                  >
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    {useCase}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          {/* FAQ Section */}
+          <section className="py-12 px-4 bg-[var(--bg-secondary)]">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
+                Frequently Asked Questions
+              </h2>
+              <div className="space-y-6">
+                {data.faqs.map((faq, index) => (
+                  <div key={index} className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+                      {faq.question}
+                    </h3>
+                    <p className="text-[var(--text-secondary)]">
+                      {faq.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Related Tools Section */}
+          <section className="py-12 px-4">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-8 text-center">
+                Related Tools
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {data.relatedTools.map((relatedTool) => {
+                  const related = toolData[relatedTool];
+                  if (!related) return null;
+                  return (
+                    <Link
+                      key={relatedTool}
+                      href={`/tools/${relatedTool}`}
+                      className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6 hover:border-[var(--accent-primary)] transition-colors"
+                    >
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+                        {related.heading}
+                      </h3>
+                      <p className="text-sm text-[var(--text-secondary)]">
+                        {related.subheading}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="py-12 px-4 bg-[var(--accent-primary)]">
+            <div className="container mx-auto max-w-4xl text-center">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Try All Our JSON Tools
+              </h2>
+              <p className="text-white/80 mb-6">
+                Format, view, validate, compare, and analyze JSON - all in one place.
+              </p>
+              <Link
+                href="/"
+                className="inline-block bg-white text-[var(--accent-primary)] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Go to JSON Formatter
+              </Link>
+            </div>
+          </section>
+        </div>
+      </ToolPageWrapper>
     </>
   );
 }
