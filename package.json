@@ -20,7 +20,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.539.0",
     "monaco-editor": "^0.52.2",
-    "next": "15.4.6",
+    "next": "15.4.8",
     "next-i18next": "^15.4.2",
     "notyf": "^3.10.0",
     "react": "^19.1.1",
