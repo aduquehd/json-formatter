@@ -69,13 +69,10 @@
    cp .env.example .env.local
    ```
    
-   Edit `.env.local` and add your analytics IDs if you want tracking:
+   Edit `.env.local` and add your analytics ID if you want tracking:
    ```
    # Google Analytics (optional)
    NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-   
-   # Hotjar (optional)
-   NEXT_PUBLIC_HOTJAR_ID=1234567
    ```
 
 4. Run the development server:
@@ -233,9 +230,8 @@ Professional-grade code editor with VS Code features including:
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (format: G-XXXXXXXXXX) | No | - |
-| `NEXT_PUBLIC_HOTJAR_ID` | Hotjar Site ID for heatmaps and session recordings (numeric) | No | - |
 
-If analytics IDs are not provided, the respective tracking scripts will not be loaded, ensuring complete privacy for users who prefer not to use tracking.
+If the analytics ID is not provided, the tracking script will not be loaded, ensuring complete privacy for users who prefer not to use tracking.
 
 ### Theme Customization
 Themes are configured in `src/app/globals.css` using CSS custom properties. The application supports automatic theme switching based on system preferences.

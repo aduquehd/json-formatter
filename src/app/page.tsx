@@ -267,9 +267,6 @@ export default function Home() {
     <>
       <Navbar theme={theme} onThemeToggle={toggleTheme} />
 
-      {/* Hidden H1 for SEO - visible content is in navbar */}
-      <h1 className="sr-only">JSON Formatter - Format, View and Validate JSON Online</h1>
-
       {/* Main Tool Section */}
       <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
         <main id="main-content" className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100vh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-100px)] flex flex-col backdrop-blur-xl">

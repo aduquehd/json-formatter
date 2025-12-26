@@ -25,18 +25,18 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.jsonformatter.me'),
   title: {
-    default: 'JSON Formatter - Format, Validate & View JSON Online',
+    default: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
     template: '%s | JSON Formatter'
   },
   verification: {
     google: 'YOUR_VERIFICATION_CODE_HERE', // Add your Google verification code
   },
-  description: 'JSON Formatter and JSON Viewer online. Format JSON, validate JSON syntax, and view JSON in a tree structure. Free JSON beautifier with syntax highlighting.',
+  description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting, tree view, and auto-fix. 100% client-side processing.',
   keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
   openGraph: {
-    title: 'JSON Formatter - Format & View JSON Online',
-    description: 'JSON Formatter and JSON Viewer. Format JSON, validate syntax, view as tree. Free online tool.',
+    title: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
+    description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting and tree view.',
     type: 'website',
     siteName: 'JSON Formatter',
     images: [{
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JSON Formatter - Format & View JSON Online',
-    description: 'JSON Formatter and JSON Viewer. Format JSON, validate syntax, view as tree.',
+    title: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
+    description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON.',
     creator: '@aduquehd',
     images: [{
       url: '/img/og-image.png',
