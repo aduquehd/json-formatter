@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jsonformatter.me'),
+  metadataBase: new URL('https://www.jsonformatter.me'),
   title: {
     default: 'JSON Formatter - Format, Validate & View JSON Online',
     template: '%s | JSON Formatter'
@@ -64,10 +64,10 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   alternates: {
-    canonical: 'https://jsonformatter.me/',
+    canonical: 'https://www.jsonformatter.me/',
     languages: {
-      'en': 'https://jsonformatter.me/',
-      'x-default': 'https://jsonformatter.me/',
+      'en': 'https://www.jsonformatter.me/',
+      'x-default': 'https://www.jsonformatter.me/',
     }
   },
   other: {
@@ -86,13 +86,13 @@ export default function RootLayout({
   const webApplicationSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    '@id': 'https://jsonformatter.me/#webapp',
+    '@id': 'https://www.jsonformatter.me/#webapp',
     name: 'JSON Formatter',
     alternateName: ['JSON Viewer', 'JSON Validator', 'JSON Beautifier', 'JSON Editor'],
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'Web Development Tool',
     description: 'Free online JSON formatter, viewer, and validator. Format, beautify, validate, and view JSON data instantly with syntax highlighting, tree view, and auto-fix capabilities.',
-    url: 'https://jsonformatter.me/',
+    url: 'https://www.jsonformatter.me/',
     operatingSystem: 'Any',
     offers: {
       '@type': 'Offer',
@@ -112,7 +112,7 @@ export default function RootLayout({
       'No data sent to servers - 100% client-side',
       'Works offline after first load',
     ],
-    screenshot: 'https://jsonformatter.me/img/screenshot.png',
+    screenshot: 'https://www.jsonformatter.me/img/screenshot.png',
     browserRequirements: 'Requires JavaScript. Works on Chrome, Firefox, Safari, Edge.',
     softwareVersion: '2.0',
     datePublished: '2024-01-01',
@@ -136,10 +136,10 @@ export default function RootLayout({
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': 'https://jsonformatter.me/#website',
+    '@id': 'https://www.jsonformatter.me/#website',
     name: 'jsonformatter.me',
     alternateName: 'JSON Formatter Online',
-    url: 'https://jsonformatter.me/',
+    url: 'https://www.jsonformatter.me/',
     description: 'Free online JSON formatter, viewer, and validator for developers',
     publisher: {
       '@type': 'Person',
@@ -149,7 +149,7 @@ export default function RootLayout({
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://jsonformatter.me/?q={search_term_string}',
+        urlTemplate: 'https://www.jsonformatter.me/?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -158,7 +158,7 @@ export default function RootLayout({
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    '@id': 'https://jsonformatter.me/#faq',
+    '@id': 'https://www.jsonformatter.me/#faq',
     mainEntity: [
       {
         '@type': 'Question',
@@ -219,7 +219,7 @@ export default function RootLayout({
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://jsonformatter.me/',
+        item: 'https://www.jsonformatter.me/',
       },
     ],
   };

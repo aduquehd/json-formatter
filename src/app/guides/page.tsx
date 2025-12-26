@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: 'JSON Guides & Tutorials - Learn JSON',
     description: 'Comprehensive JSON guides for developers. Learn syntax, formatting, validation, and best practices.',
     type: 'website',
-    url: 'https://jsonformatter.me/guides',
+    url: 'https://www.jsonformatter.me/guides',
   },
   alternates: {
-    canonical: 'https://jsonformatter.me/guides',
+    canonical: 'https://www.jsonformatter.me/guides',
   },
 };
 
@@ -70,13 +70,13 @@ export default function GuidesPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://jsonformatter.me/',
+        item: 'https://www.jsonformatter.me/',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Guides',
-        item: 'https://jsonformatter.me/guides',
+        item: 'https://www.jsonformatter.me/guides',
       },
     ],
   };

@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: 'Common JSON Errors and How to Fix Them',
     description: 'Learn how to fix the most common JSON errors with examples and solutions.',
     type: 'article',
-    url: 'https://jsonformatter.me/guides/common-json-errors',
+    url: 'https://www.jsonformatter.me/guides/common-json-errors',
   },
   alternates: {
-    canonical: 'https://jsonformatter.me/guides/common-json-errors',
+    canonical: 'https://www.jsonformatter.me/guides/common-json-errors',
   },
 };
 
@@ -23,7 +23,7 @@ export default function CommonJsonErrorsPage() {
     headline: 'Common JSON Errors and How to Fix Them',
     description: 'Learn how to fix the most common JSON errors with examples and solutions.',
     author: { '@type': 'Person', name: 'Andres Duque' },
-    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://jsonformatter.me' },
+    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://www.jsonformatter.me' },
     datePublished: '2024-01-01',
     dateModified: new Date().toISOString().split('T')[0],
   };
@@ -32,9 +32,9 @@ export default function CommonJsonErrorsPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'Common JSON Errors', item: 'https://jsonformatter.me/guides/common-json-errors' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
+      { '@type': 'ListItem', position: 3, name: 'Common JSON Errors', item: 'https://www.jsonformatter.me/guides/common-json-errors' },
     ],
   };
 

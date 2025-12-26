@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: 'JSON Syntax Guide - Rules, Structure & Examples',
     description: 'Master JSON syntax with this complete guide. Objects, arrays, data types, and examples.',
     type: 'article',
-    url: 'https://jsonformatter.me/guides/json-syntax',
+    url: 'https://www.jsonformatter.me/guides/json-syntax',
   },
   alternates: {
-    canonical: 'https://jsonformatter.me/guides/json-syntax',
+    canonical: 'https://www.jsonformatter.me/guides/json-syntax',
   },
 };
 
@@ -23,7 +23,7 @@ export default function JsonSyntaxPage() {
     headline: 'JSON Syntax Guide - Rules, Structure & Examples',
     description: 'Master JSON syntax with this complete guide.',
     author: { '@type': 'Person', name: 'Andres Duque' },
-    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://jsonformatter.me' },
+    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://www.jsonformatter.me' },
     datePublished: '2024-01-01',
     dateModified: new Date().toISOString().split('T')[0],
   };
@@ -32,9 +32,9 @@ export default function JsonSyntaxPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'JSON Syntax', item: 'https://jsonformatter.me/guides/json-syntax' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
+      { '@type': 'ListItem', position: 3, name: 'JSON Syntax', item: 'https://www.jsonformatter.me/guides/json-syntax' },
     ],
   };
 

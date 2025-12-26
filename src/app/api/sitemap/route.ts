@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const baseUrl = 'https://jsonformatter.me';
+  const baseUrl = 'https://www.jsonformatter.me';
   const lastModified = new Date().toISOString().split('T')[0];
 
   // Build sitemap XML with proper formatting

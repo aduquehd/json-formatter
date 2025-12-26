@@ -262,7 +262,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       title: data.metadata.title as string,
       description: data.metadata.description as string,
       type: 'website',
-      url: `https://jsonformatter.me/tools/${tool}`,
+      url: `https://www.jsonformatter.me/tools/${tool}`,
       siteName: 'jsonformatter.me',
       images: [{
         url: '/img/og-image.png',
@@ -278,7 +278,7 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
       images: ['/img/og-image.png'],
     },
     alternates: {
-      canonical: `https://jsonformatter.me/tools/${tool}`,
+      canonical: `https://www.jsonformatter.me/tools/${tool}`,
     },
   };
 }
@@ -304,7 +304,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
     name: data.heading,
     applicationCategory: 'DeveloperApplication',
     description: data.metadata.description,
-    url: `https://jsonformatter.me/tools/${tool}`,
+    url: `https://www.jsonformatter.me/tools/${tool}`,
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -349,13 +349,13 @@ export default async function ToolPage({ params }: ToolPageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://jsonformatter.me/',
+        item: 'https://www.jsonformatter.me/',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: data.heading,
-        item: `https://jsonformatter.me/tools/${tool}`,
+        item: `https://www.jsonformatter.me/tools/${tool}`,
       },
     ],
   };

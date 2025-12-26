@@ -24,10 +24,10 @@ export const metadata: Metadata = {
     title: 'JSON Formatter Help & Complete Guide',
     description: 'Learn how to format, validate, and view JSON with our comprehensive guide. JSON syntax, examples, and best practices.',
     type: 'article',
-    url: 'https://jsonformatter.me/help',
+    url: 'https://www.jsonformatter.me/help',
   },
   alternates: {
-    canonical: 'https://jsonformatter.me/help',
+    canonical: 'https://www.jsonformatter.me/help',
   }
 };
 
@@ -95,13 +95,13 @@ export default function HelpPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'JSON Formatter',
-        item: 'https://jsonformatter.me'
+        item: 'https://www.jsonformatter.me'
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Help & Guide',
-        item: 'https://jsonformatter.me/help'
+        item: 'https://www.jsonformatter.me/help'
       }
     ]
   };
@@ -124,25 +124,25 @@ export default function HelpPage() {
         '@type': 'HowToStep',
         name: 'Paste JSON Data',
         text: 'Copy your JSON data and paste it into the editor',
-        url: 'https://jsonformatter.me/help#step1'
+        url: 'https://www.jsonformatter.me/help#step1'
       },
       {
         '@type': 'HowToStep',
         name: 'Click Format Button',
         text: 'Click the "Format" button to beautify and validate your JSON',
-        url: 'https://jsonformatter.me/help#step2'
+        url: 'https://www.jsonformatter.me/help#step2'
       },
       {
         '@type': 'HowToStep',
         name: 'View Results',
         text: 'View your formatted JSON with syntax highlighting and explore different view modes',
-        url: 'https://jsonformatter.me/help#step3'
+        url: 'https://www.jsonformatter.me/help#step3'
       },
       {
         '@type': 'HowToStep',
         name: 'Copy or Download',
         text: 'Copy the formatted JSON or use it in tree view, graph view, or other visualizations',
-        url: 'https://jsonformatter.me/help#step4'
+        url: 'https://www.jsonformatter.me/help#step4'
       }
     ]
   };

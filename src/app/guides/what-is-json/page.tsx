@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     title: 'What is JSON? A Complete Guide',
     description: 'Learn what JSON is, how it works, and why it\'s the most popular data format for web APIs.',
     type: 'article',
-    url: 'https://jsonformatter.me/guides/what-is-json',
+    url: 'https://www.jsonformatter.me/guides/what-is-json',
   },
   alternates: {
-    canonical: 'https://jsonformatter.me/guides/what-is-json',
+    canonical: 'https://www.jsonformatter.me/guides/what-is-json',
   },
 };
 
@@ -29,20 +29,20 @@ export default function WhatIsJsonPage() {
     publisher: {
       '@type': 'Organization',
       name: 'jsonformatter.me',
-      url: 'https://jsonformatter.me',
+      url: 'https://www.jsonformatter.me',
     },
     datePublished: '2024-01-01',
     dateModified: new Date().toISOString().split('T')[0],
-    mainEntityOfPage: 'https://jsonformatter.me/guides/what-is-json',
+    mainEntityOfPage: 'https://www.jsonformatter.me/guides/what-is-json',
   };
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'What is JSON?', item: 'https://jsonformatter.me/guides/what-is-json' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
+      { '@type': 'ListItem', position: 3, name: 'What is JSON?', item: 'https://www.jsonformatter.me/guides/what-is-json' },
     ],
   };
 
