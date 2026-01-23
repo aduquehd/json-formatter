@@ -6,7 +6,7 @@ Disallow: /_next/
 Disallow: /static/
 
 # Sitemap location
-Sitemap: https://jsonformatter.me/sitemap.xml
+Sitemap: https://www.jsonformatter.me/sitemap.xml
 
 # Crawl delay for bots that support it
 Crawl-delay: 1

@@ -37,6 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
     description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting and tree view.',
+    url: 'https://www.jsonformatter.me/',
     type: 'website',
     siteName: 'JSON Formatter',
     images: [{
@@ -155,62 +156,6 @@ export default function RootLayout({
     },
   };
 
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    '@id': 'https://www.jsonformatter.me/#faq',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is a JSON formatter?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'A JSON formatter is a tool that takes raw JSON data and formats it with proper indentation and line breaks, making it easier to read and understand. Our JSON formatter automatically adds 2-space indentation, organizes nested objects and arrays, and highlights syntax for better visibility.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I format JSON online?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'To format JSON online: 1) Paste your JSON into the editor, 2) Click the "Format" button, 3) Your JSON will be instantly formatted with proper indentation. You can also use Ctrl+V to paste and the formatter will automatically beautify valid JSON.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is this JSON formatter free to use?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, jsonformatter.me is completely free to use with no limitations. There are no signup requirements, no ads, and no data limits. You can format, validate, and view as much JSON as you need.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is my JSON data secure?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, your JSON data is 100% secure. All processing happens directly in your browser - no data is ever sent to our servers. Your JSON never leaves your computer, making it safe for sensitive data.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the difference between JSON formatter and JSON viewer?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'A JSON formatter beautifies JSON text with proper indentation, while a JSON viewer provides an interactive way to explore JSON data through tree views, graphs, or other visualizations. Our tool includes both - you can format JSON in the editor and explore it in the Tree View tab.',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can this tool fix invalid JSON?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes! Our JSON formatter includes an intelligent auto-fix feature that can correct common JSON errors like trailing commas, single quotes instead of double quotes, unquoted keys, and missing commas. It will show you what was fixed automatically.',
-        },
-      },
-    ],
-  };
-
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -224,7 +169,7 @@ export default function RootLayout({
     ],
   };
 
-  const jsonLdSchemas = [webApplicationSchema, websiteSchema, faqSchema, breadcrumbSchema];
+  const jsonLdSchemas = [webApplicationSchema, websiteSchema, breadcrumbSchema];
 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>

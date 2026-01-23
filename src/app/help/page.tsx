@@ -35,6 +35,7 @@ export default function HelpPage() {
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    '@id': 'https://www.jsonformatter.me/help#faq',
     mainEntity: [
       {
         '@type': 'Question',

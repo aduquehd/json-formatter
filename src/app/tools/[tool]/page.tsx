@@ -331,6 +331,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
+    '@id': `https://www.jsonformatter.me/tools/${tool}#faq`,
     mainEntity: data.faqs.map((faq) => ({
       '@type': 'Question',
       name: faq.question,
