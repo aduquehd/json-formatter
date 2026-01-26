@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.jsonformatter.me'),
   title: {
-    default: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
+    default: 'Free Online JSON Viewer & Formatter',
     template: '%s | JSON Formatter'
   },
   verification: {
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
   openGraph: {
-    title: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
+    title: 'Free Online JSON Viewer & Formatter',
     description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting and tree view.',
     url: 'https://www.jsonformatter.me/',
     type: 'website',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'JSON Formatter, Viewer & Editor Online - Free JSON Tools',
+    title: 'Free Online JSON Viewer & Formatter',
     description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON.',
     creator: '@aduquehd',
     images: [{
