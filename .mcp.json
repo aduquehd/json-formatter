@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "sentry": {
-      "transport": "http",
-      "url": "https://mcp.sentry.dev/mcp",
-      "defaultProject": "json-formatter"
-    }
-  }
-}
