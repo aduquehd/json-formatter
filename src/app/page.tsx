@@ -513,8 +513,7 @@ export default function Home() {
               About JSON Formatter
             </h2>
             <p className="text-[var(--text-secondary)] mb-4">
-              jsonformatter.me is a free, open-source online tool for formatting, viewing, and validating JSON data.
-              Built for developers, it provides a fast and secure way to work with JSON without sending your data to any server.
+              JSON Formatter is a free, open-source online tool for developers. Format, validate, and view JSON data instantly with our powerful JSON formatter and viewer. All processing happens in your browser for complete privacy.
             </p>
             <p className="text-[var(--text-secondary)]">
               Whether you&apos;re debugging API responses, working with configuration files, or analyzing data, our JSON

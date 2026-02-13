@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   verification: {
     google: 'YOUR_VERIFICATION_CODE_HERE', // Add your Google verification code
   },
-  description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting, tree view, and auto-fix. 100% client-side processing.',
+  description: 'JSON Formatter & Viewer - Free, open-source tool to format, validate, and beautify JSON. Auto-fix errors, tree view, syntax highlighting. 100% client-side.',
   keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
   openGraph: {
