@@ -12,7 +12,11 @@
     "example": "उदाहरण JSON आज़माएं",
     "download": "डाउनलोड",
     "toggleTheme": "थीम बदलें",
-    "language": "भाषा"
+    "language": "भाषा",
+    "copied": "कॉपी किया गया",
+    "open": "खोलें",
+    "sortKeys": "कुंजियाँ क्रमबद्ध करें",
+    "exampleShort": "उदाहरण"
   },
   "tabs": {
     "editor": "JSON संपादक",
@@ -20,7 +24,6 @@
     "graph": "ग्राफ़ व्यू",
     "stats": "सांख्यिकी",
     "diff": "अंतर व्यू",
-    "chart": "चार्ट",
     "search": "खोजें और फ़िल्टर करें",
     "map": "मैप व्यू",
     "beta": "बीटा"
@@ -47,7 +50,6 @@
     "loadingDiff": "अंतर व्यू लोड हो रहा है...",
     "loadingStats": "सांख्यिकी व्यू लोड हो रहा है...",
     "loadingMap": "मैप व्यू लोड हो रहा है...",
-    "loadingChart": "चार्ट व्यू लोड हो रहा है...",
     "loadingSearch": "खोज व्यू लोड हो रहा है..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "मूल JSON",
-    "modified": "संशोधित JSON",
-    "compare": "JSONs की तुलना करें",
+    "modified": "संशोधित",
     "placeholder": "JSON यहाँ पेस्ट करें...",
     "noDifference": "कोई अंतर नहीं मिला",
     "added": "जोड़ा गया",
-    "removed": "हटाया गया",
-    "modified": "संशोधित"
+    "removed": "हटाया गया"
   },
   "tree": {
     "collapse": "सभी को संकुचित करें",
@@ -118,21 +118,6 @@
     "empty": "खाली",
     "null": "नल",
     "editHint": "सीधे संपादित करने के लिए किसी भी मान या कुंजी पर क्लिक करें"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "डेटा प्रकार वितरण",
-    "keyFrequency": "कुंजी आवृत्ति विश्लेषण",
-    "dataTypes": "डेटा प्रकार",
-    "arrayData": "सरणी डेटा",
-    "objectData": "ऑब्जेक्ट डेटा",
-    "customPath": "कस्टम पथ",
-    "selectPath": "डेटा पथ चुनें...",
-    "barChart": "बार चार्ट",
-    "pieChart": "पाई चार्ट",
-    "lineChart": "लाइन चार्ट",
-    "doughnutChart": "डोनट चार्ट",
-    "noData": "प्रदर्शित करने के लिए कोई डेटा नहीं"
   },
   "map": {
     "loading": "मैप लोड हो रहा है...",

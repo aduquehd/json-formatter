@@ -13,7 +13,7 @@ const ClientNavbar = dynamic(
             <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight m-0 leading-tight">
               JSON Formatter, Viewer & Editor Online
             </h1>
-            <p className="text-[9px] sm:text-xs text-gray-600 dark:text-gray-400 m-0 font-normal tracking-tight leading-tight">
+            <p className="text-[9px] sm:text-xs text-gray-600 dark:text-gray-400 m-0 font-normal tracking-tight leading-tight line-clamp-1 sm:line-clamp-none">
               Free, open source, and secure. All JSON content is processed locally in your browser—no data is sent to any servers.
             </p>
           </div>

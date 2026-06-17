@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Analytics from '@/components/Analytics';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
 
-const inter = Inter({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: false,
@@ -16,8 +16,8 @@ const inter = Inter({
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-jetbrains',
-  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: false,
 });
@@ -27,9 +27,6 @@ export const metadata: Metadata = {
   title: {
     default: 'Free Online JSON Viewer & Formatter',
     template: '%s | JSON Formatter'
-  },
-  verification: {
-    google: 'YOUR_VERIFICATION_CODE_HERE', // Add your Google verification code
   },
   description: 'JSON Formatter & Viewer - Free, open-source tool to format, validate, and beautify JSON. Auto-fix errors, tree view, syntax highlighting. 100% client-side.',
   keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
@@ -74,7 +71,6 @@ export const metadata: Metadata = {
   other: {
     'theme-color': '#2563eb',
     'msapplication-TileColor': '#2563eb',
-    'google-site-verification': '', // Add your Google verification code if you have one
   }
 };
 
@@ -120,13 +116,6 @@ export default function RootLayout({
     dateModified: new Date().toISOString().split('T')[0],
     inLanguage: 'en',
     isAccessibleForFree: true,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '3250',
-      bestRating: '5',
-      worstRating: '1',
-    },
     author: {
       '@type': 'Person',
       name: 'Andres Duque',
@@ -191,7 +180,7 @@ export default function RootLayout({
           />
         ))}
       </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body className={`${plexSans.variable} ${jetbrainsMono.variable}`}>
         <Analytics />
         <ErrorBoundary>
           <I18nProvider>

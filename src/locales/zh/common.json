@@ -4,15 +4,19 @@
     "help": "說明"
   },
   "buttons": {
-    "format": "格式化 JSON",
-    "compact": "壓縮 JSON",
+    "format": "格式化",
+    "compact": "壓縮",
     "copy": "複製",
     "paste": "貼上",
     "clear": "清除",
     "example": "試試範例 JSON",
     "download": "下載",
     "toggleTheme": "切換主題",
-    "language": "語言"
+    "language": "語言",
+    "copied": "已复制",
+    "open": "打开",
+    "sortKeys": "排序键",
+    "exampleShort": "示例"
   },
   "tabs": {
     "editor": "JSON 編輯器",
@@ -20,7 +24,6 @@
     "graph": "圖形檢視",
     "stats": "統計",
     "diff": "差異檢視",
-    "chart": "圖表",
     "search": "搜尋與篩選",
     "map": "地圖檢視",
     "beta": "測試版"
@@ -47,7 +50,6 @@
     "loadingDiff": "正在載入差異檢視...",
     "loadingStats": "正在載入統計檢視...",
     "loadingMap": "正在載入地圖檢視...",
-    "loadingChart": "正在載入圖表檢視...",
     "loadingSearch": "正在載入搜尋檢視..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "原始 JSON",
-    "modified": "修改後的 JSON",
-    "compare": "比較 JSON",
+    "modified": "已修改",
     "placeholder": "在此貼上 JSON...",
     "noDifference": "未發現差異",
     "added": "已新增",
-    "removed": "已刪除",
-    "modified": "已修改"
+    "removed": "已刪除"
   },
   "tree": {
     "collapse": "全部收合",
@@ -118,21 +118,6 @@
     "empty": "空",
     "null": "空值",
     "editHint": "點擊任何值或鍵可直接編輯"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "資料類型分佈",
-    "keyFrequency": "鍵頻率分析",
-    "dataTypes": "資料類型",
-    "arrayData": "陣列資料",
-    "objectData": "物件資料",
-    "customPath": "自訂路徑",
-    "selectPath": "選擇資料路徑...",
-    "barChart": "長條圖",
-    "pieChart": "圓餅圖",
-    "lineChart": "折線圖",
-    "doughnutChart": "環形圖",
-    "noData": "沒有要顯示的資料"
   },
   "map": {
     "loading": "正在載入地圖...",

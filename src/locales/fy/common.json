@@ -12,7 +12,11 @@
     "example": "Besykje in foarbyld JSON",
     "download": "Downloade",
     "toggleTheme": "Tema wikselje",
-    "language": "Taal"
+    "language": "Taal",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Bewurker",
@@ -20,7 +24,6 @@
     "graph": "Grafykwerjefte",
     "stats": "Statistiken",
     "diff": "Ferskilwerjefte",
-    "chart": "Grafiken",
     "search": "Sykje en Filterje",
     "map": "Kaartwerjefte",
     "beta": "Beta"
@@ -47,7 +50,6 @@
     "loadingDiff": "Ferskilwerjefte wurdt laden...",
     "loadingStats": "Statistikenwerjefte wurdt laden...",
     "loadingMap": "Kaartwerjefte wurdt laden...",
-    "loadingChart": "Grafikenwerjefte wurdt laden...",
     "loadingSearch": "Sykwerjefte wurdt laden..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "Orizjinele JSON",
-    "modified": "Wizige JSON",
-    "compare": "JSONs Ferlykje",
+    "modified": "Wizige",
     "placeholder": "Plak JSON hjir...",
     "noDifference": "Gjin ferskillen fûn",
     "added": "Tafoege",
-    "removed": "Fuorthelle",
-    "modified": "Wizige"
+    "removed": "Fuorthelle"
   },
   "tree": {
     "collapse": "Alles Ynklappe",
@@ -118,21 +118,6 @@
     "empty": "Leech",
     "null": "null",
     "editHint": "Klik op elke wearde of kaai om direkt te bewurkjen"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Data Type Ferdieling",
-    "keyFrequency": "Kaai Frekwinsje Analyze",
-    "dataTypes": "Data Types",
-    "arrayData": "Array Data",
-    "objectData": "Objekt Data",
-    "customPath": "Oanpast Paad",
-    "selectPath": "Selektearje data paad...",
-    "barChart": "Balke Diagram",
-    "pieChart": "Tierte Diagram",
-    "lineChart": "Line Diagram",
-    "doughnutChart": "Doughnut Diagram",
-    "noData": "Gjin data om wer te jaan"
   },
   "map": {
     "loading": "Kaart wurdt laden...",

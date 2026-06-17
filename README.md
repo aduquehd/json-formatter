@@ -35,7 +35,6 @@
 - 🔀 **JSON Diff View**: Compare two JSON objects side-by-side with highlighted differences
 - 🏷️ **JavaScript Object Literal Support**: Parse and format JavaScript object literal syntax
 - 📊 **Graph View**: Visualize JSON structure as an interactive network graph with D3.js
-- 📈 **Chart View**: Visual representation of data distribution with Chart.js
 - 🗺️ **Map View**: Display geographical data on an interactive Leaflet map
 - 📊 **Statistics View**: Detailed analysis of JSON data types and structure
 - 🔧 **JSON Auto-fix**: Automatic correction of common JSON errors
@@ -64,25 +63,14 @@
    npm install
    ```
 
-3. Set up environment variables (optional):
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-   Edit `.env.local` and add your analytics ID if you want tracking:
-   ```
-   # Google Analytics (optional)
-   NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-   ```
-
-4. Run the development server:
+3. Run the development server:
    ```bash
    pnpm dev
    # or
    npm run dev
    ```
 
-5. Open your browser and go to `http://localhost:3000`
+4. Open your browser and go to `http://localhost:3000`
 
 ## 💻 Development
 
@@ -149,7 +137,6 @@ json-viewer/
 │   │   ├── 📝 EditorView.tsx      # Monaco Editor integration
 │   │   ├── 🌳 TreeView.tsx        # Interactive JSON tree
 │   │   ├── 📊 GraphView.tsx       # D3.js network visualization
-│   │   ├── 📈 ChartView.tsx       # Chart.js data visualization
 │   │   ├── 🗺️ MapView.tsx         # Leaflet geographic visualization
 │   │   ├── 🔀 DiffView.tsx        # JSON comparison tool
 │   │   ├── 📊 StatsView.tsx       # JSON statistics analysis
@@ -192,7 +179,6 @@ json-viewer/
 
 ![Monaco Editor](https://img.shields.io/badge/Monaco%20Editor-0066CC?style=flat-square&logo=visualstudiocode&logoColor=white)
 ![D3.js](https://img.shields.io/badge/D3.js-F68E1E?style=flat-square&logo=d3dotjs&logoColor=white)
-![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=flat-square&logo=chartdotjs&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat-square&logo=leaflet&logoColor=white)
 
 ### Development Tools
@@ -214,7 +200,6 @@ Professional-grade code editor with VS Code features including:
 ### Interactive Visualizations
 - **Tree View**: Navigate complex JSON structures with collapsible nodes
 - **Graph View**: Network visualization using D3.js force-directed graphs
-- **Chart View**: Automatic data type detection and chart generation
 - **Map View**: GeoJSON support with interactive Leaflet maps
 
 ### Smart JSON Processing
@@ -224,14 +209,6 @@ Professional-grade code editor with VS Code features including:
 - Deep object comparison with diff highlighting
 
 ## 🔧 Configuration
-
-### Environment Variables
-
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics Measurement ID (format: G-XXXXXXXXXX) | No | - |
-
-If the analytics ID is not provided, the tracking script will not be loaded, ensuring complete privacy for users who prefer not to use tracking.
 
 ### Theme Customization
 Themes are configured in `src/app/globals.css` using CSS custom properties. The application supports automatic theme switching based on system preferences.

@@ -352,7 +352,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
     };
 
     return (
-      <div key={path} className="tree-node" style={{ marginLeft: `${level * 20}px` }}>
+      <div key={path} className="tree-node" style={{ marginLeft: `calc(${level} * var(--tree-indent, 20px))` }}>
         <div 
           className={`tree-node-header ${isExpandable ? 'expandable' : ''}`}
           onClick={handleLineClick}

@@ -4,15 +4,19 @@
     "help": "Bantuan"
   },
   "buttons": {
-    "format": "Format JSON",
-    "compact": "Padatkan JSON",
+    "format": "Format",
+    "compact": "Padatkan",
     "copy": "Salin",
     "paste": "Tampal",
     "clear": "Kosongkan",
     "example": "Cuba contoh JSON",
     "download": "Muat turun",
     "toggleTheme": "Tukar tema",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "copied": "Disalin",
+    "open": "Buka",
+    "sortKeys": "Isih kunci",
+    "exampleShort": "Contoh"
   },
   "tabs": {
     "editor": "Editor JSON",
@@ -20,7 +24,6 @@
     "graph": "Paparan Graf",
     "stats": "Statistik",
     "diff": "Paparan Beza",
-    "chart": "Carta",
     "search": "Cari dan Tapis",
     "map": "Paparan Peta",
     "beta": "Beta"
@@ -47,7 +50,6 @@
     "loadingDiff": "Memuatkan Paparan Beza...",
     "loadingStats": "Memuatkan Paparan Statistik...",
     "loadingMap": "Memuatkan Paparan Peta...",
-    "loadingChart": "Memuatkan Paparan Carta...",
     "loadingSearch": "Memuatkan Paparan Carian..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "JSON Asal",
-    "modified": "JSON Diubah Suai",
-    "compare": "Bandingkan JSON",
+    "modified": "Diubah Suai",
     "placeholder": "Tampal JSON di sini...",
     "noDifference": "Tiada perbezaan dijumpai",
     "added": "Ditambah",
-    "removed": "Dibuang",
-    "modified": "Diubah Suai"
+    "removed": "Dibuang"
   },
   "tree": {
     "collapse": "Runtuhkan Semua",
@@ -118,21 +118,6 @@
     "empty": "Kosong",
     "null": "null",
     "editHint": "Klik pada mana-mana nilai atau kunci untuk mengedit secara langsung"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Agihan Jenis Data",
-    "keyFrequency": "Analisis Kekerapan Kunci",
-    "dataTypes": "Jenis Data",
-    "arrayData": "Data Tatasusunan",
-    "objectData": "Data Objek",
-    "customPath": "Laluan Kustom",
-    "selectPath": "Pilih laluan data...",
-    "barChart": "Carta Bar",
-    "pieChart": "Carta Pai",
-    "lineChart": "Carta Garis",
-    "doughnutChart": "Carta Donat",
-    "noData": "Tiada data untuk dipaparkan"
   },
   "map": {
     "loading": "Memuatkan peta...",

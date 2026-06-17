@@ -5,10 +5,11 @@ export function configureMonacoLoader() {
   // Check if we're in a browser environment
   if (typeof window === 'undefined') return;
 
-  // Use unpkg CDN which is more reliable
+  // Load Monaco from the same origin (copied into /public/monaco at build time)
+  // rather than a third-party CDN — keeps data private and works offline.
   loader.config({
     paths: {
-      vs: 'https://unpkg.com/monaco-editor@0.52.2/min/vs'
+      vs: '/monaco/vs'
     }
   });
 }

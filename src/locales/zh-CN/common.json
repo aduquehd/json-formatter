@@ -4,15 +4,19 @@
     "help": "帮助"
   },
   "buttons": {
-    "format": "格式化 JSON",
-    "compact": "压缩 JSON",
+    "format": "格式化",
+    "compact": "压缩",
     "copy": "复制",
     "paste": "粘贴",
     "clear": "清除",
     "example": "试试示例 JSON",
     "download": "下载",
     "toggleTheme": "切换主题",
-    "language": "语言"
+    "language": "语言",
+    "copied": "已复制",
+    "open": "打开",
+    "sortKeys": "排序键",
+    "exampleShort": "示例"
   },
   "tabs": {
     "editor": "JSON 编辑器",
@@ -20,7 +24,6 @@
     "graph": "图形视图",
     "stats": "统计",
     "diff": "差异视图",
-    "chart": "图表",
     "search": "搜索和筛选",
     "map": "地图视图",
     "beta": "测试版"
@@ -47,7 +50,6 @@
     "loadingDiff": "正在加载差异视图...",
     "loadingStats": "正在加载统计视图...",
     "loadingMap": "正在加载地图视图...",
-    "loadingChart": "正在加载图表视图...",
     "loadingSearch": "正在加载搜索视图..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "原始 JSON",
-    "modified": "修改后的 JSON",
-    "compare": "比较 JSON",
+    "modified": "已修改",
     "placeholder": "在此粘贴 JSON...",
     "noDifference": "未发现差异",
     "added": "已添加",
-    "removed": "已删除",
-    "modified": "已修改"
+    "removed": "已删除"
   },
   "tree": {
     "collapse": "全部折叠",
@@ -118,21 +118,6 @@
     "empty": "空",
     "null": "空值",
     "editHint": "点击任何值或键可直接编辑"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "数据类型分布",
-    "keyFrequency": "键频率分析",
-    "dataTypes": "数据类型",
-    "arrayData": "数组数据",
-    "objectData": "对象数据",
-    "customPath": "自定义路径",
-    "selectPath": "选择数据路径...",
-    "barChart": "柱状图",
-    "pieChart": "饼图",
-    "lineChart": "折线图",
-    "doughnutChart": "环形图",
-    "noData": "没有要显示的数据"
   },
   "map": {
     "loading": "正在加载地图...",

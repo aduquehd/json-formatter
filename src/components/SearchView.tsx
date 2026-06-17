@@ -675,7 +675,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
       <div className="px-6 py-4 border-b border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold text-[var(--accent-color)]">
               {mounted ? t('search.smartSearch') : 'Smart Search & Discovery'}
             </h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
@@ -688,8 +688,8 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                 key={mode}
                 onClick={() => setViewMode(mode as any)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  viewMode === mode 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg' 
+                  viewMode === mode
+                    ? 'bg-[var(--accent-color)] text-white'
                     : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'
                 }`}
               >
@@ -732,7 +732,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             {searchResults.length > 0 && (
               <button
                 onClick={exportResults}
-                className="absolute right-3 px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-medium hover:shadow-lg transition-all"
+                className="absolute right-3 px-3 py-1.5 rounded-lg bg-[var(--accent-color)] text-white text-sm font-medium hover:opacity-90 transition-all"
               >
                 Export
               </button>
@@ -1159,7 +1159,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                               </div>
                               <div className="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
                                 <div 
-                                  className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all"
+                                  className="h-full bg-[var(--accent-color)] transition-all"
                                   style={{ width: `${percentage}%` }}
                                 />
                               </div>
@@ -1174,7 +1174,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             </div>
           ) : searchQuery ? (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-600/20 flex items-center justify-center mb-4">
+              <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
                 <svg className="w-12 h-12 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -1184,7 +1184,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 flex items-center justify-center mb-6 animate-pulse">
+              <div className="w-32 h-32 rounded-full bg-blue-500/10 flex items-center justify-center mb-6">
                 <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>

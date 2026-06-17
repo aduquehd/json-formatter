@@ -12,7 +12,11 @@
     "example": "Perbeer 'n veurbeeld JSON",
     "download": "Downloade",
     "toggleTheme": "Thema wissele",
-    "language": "Spraok"
+    "language": "Spraok",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Editor",
@@ -20,7 +24,6 @@
     "graph": "Grafiekweergaaf",
     "stats": "Statistieke",
     "diff": "Versjilweergaaf",
-    "chart": "Grafieke",
     "search": "Zeuke en Filtere",
     "map": "Kaartweergaaf",
     "beta": "Beta"
@@ -47,7 +50,6 @@
     "loadingDiff": "Versjilweergaaf weurt gelade...",
     "loadingStats": "Statistiekeweergaaf weurt gelade...",
     "loadingMap": "Kaartweergaaf weurt gelade...",
-    "loadingChart": "Grafiekeweergaaf weurt gelade...",
     "loadingSearch": "Zeukweergaaf weurt gelade..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "Originele JSON",
-    "modified": "Gewiezigde JSON",
-    "compare": "JSONs Verglieke",
+    "modified": "Gewiezig",
     "placeholder": "Plak JSON hie...",
     "noDifference": "Gein versjille gevonde",
     "added": "Toegevoog",
-    "removed": "Verwiederd",
-    "modified": "Gewiezig"
+    "removed": "Verwiederd"
   },
   "tree": {
     "collapse": "Alles Inklappe",
@@ -118,21 +118,6 @@
     "empty": "Laeg",
     "null": "null",
     "editHint": "Klik op get waerde of sleutel om direkt te bewirke"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Data Tiep Verdeling",
-    "keyFrequency": "Sleutel Frequentie Analyse",
-    "dataTypes": "Data Tiepe",
-    "arrayData": "Array Data",
-    "objectData": "Object Data",
-    "customPath": "Aangepas Pad",
-    "selectPath": "Selecteer data pad...",
-    "barChart": "Staafdiagram",
-    "pieChart": "Cirkeldiagram",
-    "lineChart": "Lijndiagram",
-    "doughnutChart": "Donutdiagram",
-    "noData": "Gein data om weer te gaeve"
   },
   "map": {
     "loading": "Kaart weurt gelade...",

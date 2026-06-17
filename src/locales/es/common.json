@@ -4,15 +4,19 @@
     "help": "Ayuda"
   },
   "buttons": {
-    "format": "Formatear JSON",
-    "compact": "Compactar JSON",
+    "format": "Formatear",
+    "compact": "Compactar",
     "copy": "Copiar",
     "paste": "Pegar",
     "clear": "Limpiar",
     "example": "Probar un JSON de ejemplo",
     "download": "Descargar",
     "toggleTheme": "Cambiar tema",
-    "language": "Idioma"
+    "language": "Idioma",
+    "copied": "Copiado",
+    "open": "Abrir",
+    "sortKeys": "Ordenar claves",
+    "exampleShort": "Ejemplo"
   },
   "tabs": {
     "editor": "Editor JSON",
@@ -20,7 +24,6 @@
     "graph": "Vista de Gráfico",
     "stats": "Estadísticas",
     "diff": "Vista de Diferencias",
-    "chart": "Gráficos",
     "search": "Buscar y Filtrar",
     "map": "Vista de Mapa",
     "beta": "Beta"
@@ -47,7 +50,6 @@
     "loadingDiff": "Cargando Vista de Diferencias...",
     "loadingStats": "Cargando Vista de Estadísticas...",
     "loadingMap": "Cargando Vista de Mapa...",
-    "loadingChart": "Cargando Vista de Gráficos...",
     "loadingSearch": "Cargando Vista de Búsqueda..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "JSON Original",
-    "modified": "JSON Modificado",
-    "compare": "Comparar JSONs",
+    "modified": "Modificado",
     "placeholder": "Pega JSON aquí...",
     "noDifference": "No se encontraron diferencias",
     "added": "Añadido",
-    "removed": "Eliminado",
-    "modified": "Modificado"
+    "removed": "Eliminado"
   },
   "tree": {
     "collapse": "Colapsar Todo",
@@ -118,21 +118,6 @@
     "empty": "Vacío",
     "null": "nulo",
     "editHint": "Haz clic en cualquier valor o clave para editar directamente"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Distribución de Tipos de Datos",
-    "keyFrequency": "Análisis de Frecuencia de Claves",
-    "dataTypes": "Tipos de Datos",
-    "arrayData": "Datos de Array",
-    "objectData": "Datos de Objeto",
-    "customPath": "Ruta Personalizada",
-    "selectPath": "Seleccionar ruta de datos...",
-    "barChart": "Gráfico de Barras",
-    "pieChart": "Gráfico Circular",
-    "lineChart": "Gráfico de Líneas",
-    "doughnutChart": "Gráfico de Dona",
-    "noData": "No hay datos para mostrar"
   },
   "map": {
     "loading": "Cargando mapa...",

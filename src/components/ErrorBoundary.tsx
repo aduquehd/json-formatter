@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import * as Sentry from '@sentry/nextjs';
 
 interface Props {
   children: ReactNode;
@@ -36,18 +35,6 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to console for debugging
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
-
-    // Report to Sentry
-    Sentry.captureException(error, {
-      contexts: {
-        react: {
-          componentStack: errorInfo.componentStack,
-        },
-      },
-      tags: {
-        component: 'ErrorBoundary',
-      },
-    });
 
     // Update state with error details
     this.setState({
@@ -99,7 +86,7 @@ class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h2>
             <p className="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">
-              An unexpected error occurred. The error has been reported and we'll look into it.
+              An unexpected error occurred. Try again or reload the page — your JSON stays in your browser.
             </p>
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="mt-4">
@@ -141,7 +128,6 @@ export default ErrorBoundary;
 export function useErrorHandler() {
   return (error: Error) => {
     console.error('Error handled by useErrorHandler:', error);
-    Sentry.captureException(error);
     throw error; // This will be caught by the nearest ErrorBoundary
   };
 }

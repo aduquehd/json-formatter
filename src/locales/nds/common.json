@@ -12,7 +12,11 @@
     "example": "Bispeel JSON utprobieren",
     "download": "Dalladen",
     "toggleTheme": "Thema wesseln",
-    "language": "Spraak"
+    "language": "Spraak",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Editor",
@@ -20,7 +24,6 @@
     "graph": "Grafikansicht",
     "stats": "Statistiken",
     "diff": "Ünnerscheedansicht",
-    "chart": "Diagramme",
     "search": "Söken un Filtern",
     "map": "Koortansicht",
     "beta": "Beta"
@@ -47,7 +50,6 @@
     "loadingDiff": "Ünnerscheedansicht ward laden...",
     "loadingStats": "Statistikansicht ward laden...",
     "loadingMap": "Koortansicht ward laden...",
-    "loadingChart": "Diagrammansicht ward laden...",
     "loadingSearch": "Sökansicht ward laden..."
   },
   "modal": {
@@ -103,13 +105,11 @@
   },
   "diff": {
     "original": "Original JSON",
-    "modified": "Ännert JSON",
-    "compare": "JSONs Verglieken",
+    "modified": "Ännert",
     "placeholder": "JSON hier infögen...",
     "noDifference": "Keen Ünnerscheed funnen",
     "added": "Toföögt",
-    "removed": "Wegnahmen",
-    "modified": "Ännert"
+    "removed": "Wegnahmen"
   },
   "tree": {
     "collapse": "All tosammenklappen",
@@ -118,21 +118,6 @@
     "empty": "Leddig",
     "null": "null",
     "editHint": "Klik op elke Weert oder Slötel to direkt bearbeiten"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Datentyp Verdelung",
-    "keyFrequency": "Slötel Frequenz Analyse",
-    "dataTypes": "Daten Types",
-    "arrayData": "Array Daten",
-    "objectData": "Objekt Daten",
-    "customPath": "Egen Padd",
-    "selectPath": "Daten padd utwählen...",
-    "barChart": "Balkendiagramm",
-    "pieChart": "Kokendiagramm",
-    "lineChart": "Liniendiagramm",
-    "doughnutChart": "Donut Diagramm",
-    "noData": "Keen Daten to wiesen"
   },
   "map": {
     "loading": "Koort ward laden...",

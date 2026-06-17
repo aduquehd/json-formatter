@@ -3,10 +3,12 @@
 import React, { useEffect } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
 
-// Configure loader to use CDN with fallback
+// Load Monaco from the same origin (copied into /public/monaco at build time)
+// instead of a third-party CDN. This keeps user data private (no request leaves
+// the browser to jsdelivr/unpkg), works offline, and removes a supply-chain risk.
 loader.config({
   paths: {
-    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs'
+    vs: '/monaco/vs'
   },
   'vs/nls': {
     availableLanguages: {}
