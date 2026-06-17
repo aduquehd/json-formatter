@@ -24,7 +24,6 @@
     "graph": "Graph View",
     "stats": "Statistics",
     "diff": "Diff View",
-    "chart": "Charts",
     "search": "Search & Filter",
     "map": "Map View",
     "beta": "Beta"
@@ -51,7 +50,6 @@
     "loadingDiff": "Loading Diff View...",
     "loadingStats": "Loading Stats View...",
     "loadingMap": "Loading Map View...",
-    "loadingChart": "Loading Chart View...",
     "loadingSearch": "Loading Search View..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "Empty",
     "null": "null",
     "editHint": "Click on any value or key to edit directly"
-  },
-  "chart": {
-    "title": "Data Visualization",
-    "typeDistribution": "Data Type Distribution",
-    "keyFrequency": "Key Frequency Analysis",
-    "dataTypes": "Data Types",
-    "arrayData": "Array Data",
-    "objectData": "Object Data",
-    "customPath": "Custom Path",
-    "selectPath": "Select data path...",
-    "barChart": "Bar Chart",
-    "pieChart": "Pie Chart",
-    "lineChart": "Line Chart",
-    "doughnutChart": "Doughnut Chart",
-    "noData": "No data to display"
   },
   "map": {
     "loading": "Loading map...",

@@ -24,7 +24,6 @@
     "graph": "Grafikansicht",
     "stats": "Statistiken",
     "diff": "Ünnerscheedansicht",
-    "chart": "Diagramme",
     "search": "Söken un Filtern",
     "map": "Koortansicht",
     "beta": "Beta"
@@ -51,7 +50,6 @@
     "loadingDiff": "Ünnerscheedansicht ward laden...",
     "loadingStats": "Statistikansicht ward laden...",
     "loadingMap": "Koortansicht ward laden...",
-    "loadingChart": "Diagrammansicht ward laden...",
     "loadingSearch": "Sökansicht ward laden..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "Leddig",
     "null": "null",
     "editHint": "Klik op elke Weert oder Slötel to direkt bearbeiten"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Datentyp Verdelung",
-    "keyFrequency": "Slötel Frequenz Analyse",
-    "dataTypes": "Daten Types",
-    "arrayData": "Array Daten",
-    "objectData": "Objekt Daten",
-    "customPath": "Egen Padd",
-    "selectPath": "Daten padd utwählen...",
-    "barChart": "Balkendiagramm",
-    "pieChart": "Kokendiagramm",
-    "lineChart": "Liniendiagramm",
-    "doughnutChart": "Donut Diagramm",
-    "noData": "Keen Daten to wiesen"
   },
   "map": {
     "loading": "Koort ward laden...",

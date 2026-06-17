@@ -24,7 +24,6 @@
     "graph": "图形视图",
     "stats": "统计",
     "diff": "差异视图",
-    "chart": "图表",
     "search": "搜索和筛选",
     "map": "地图视图",
     "beta": "测试版"
@@ -51,7 +50,6 @@
     "loadingDiff": "正在加载差异视图...",
     "loadingStats": "正在加载统计视图...",
     "loadingMap": "正在加载地图视图...",
-    "loadingChart": "正在加载图表视图...",
     "loadingSearch": "正在加载搜索视图..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "空",
     "null": "空值",
     "editHint": "点击任何值或键可直接编辑"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "数据类型分布",
-    "keyFrequency": "键频率分析",
-    "dataTypes": "数据类型",
-    "arrayData": "数组数据",
-    "objectData": "对象数据",
-    "customPath": "自定义路径",
-    "selectPath": "选择数据路径...",
-    "barChart": "柱状图",
-    "pieChart": "饼图",
-    "lineChart": "折线图",
-    "doughnutChart": "环形图",
-    "noData": "没有要显示的数据"
   },
   "map": {
     "loading": "正在加载地图...",

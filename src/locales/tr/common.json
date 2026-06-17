@@ -24,7 +24,6 @@
     "graph": "Grafik Görünümü",
     "stats": "İstatistikler",
     "diff": "Fark Görünümü",
-    "chart": "Grafikler",
     "search": "Ara ve Filtrele",
     "map": "Harita Görünümü",
     "beta": "Beta"
@@ -51,7 +50,6 @@
     "loadingDiff": "Fark Görünümü yükleniyor...",
     "loadingStats": "İstatistik Görünümü yükleniyor...",
     "loadingMap": "Harita Görünümü yükleniyor...",
-    "loadingChart": "Grafik Görünümü yükleniyor...",
     "loadingSearch": "Arama Görünümü yükleniyor..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "Boş",
     "null": "null",
     "editHint": "Herhangi bir değeri veya anahtarı doğrudan düzenlemek için tıklayın"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Veri Türü Dağılımı",
-    "keyFrequency": "Anahtar Frekansı Analizi",
-    "dataTypes": "Veri Türleri",
-    "arrayData": "Dizi Verisi",
-    "objectData": "Nesne Verisi",
-    "customPath": "Özel Yol",
-    "selectPath": "Veri yolu seçin...",
-    "barChart": "Çubuk Grafik",
-    "pieChart": "Pasta Grafik",
-    "lineChart": "Çizgi Grafik",
-    "doughnutChart": "Donut Grafik",
-    "noData": "Gösterilecek veri yok"
   },
   "map": {
     "loading": "Harita yükleniyor...",

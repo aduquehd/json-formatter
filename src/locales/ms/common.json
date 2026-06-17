@@ -24,7 +24,6 @@
     "graph": "Paparan Graf",
     "stats": "Statistik",
     "diff": "Paparan Beza",
-    "chart": "Carta",
     "search": "Cari dan Tapis",
     "map": "Paparan Peta",
     "beta": "Beta"
@@ -51,7 +50,6 @@
     "loadingDiff": "Memuatkan Paparan Beza...",
     "loadingStats": "Memuatkan Paparan Statistik...",
     "loadingMap": "Memuatkan Paparan Peta...",
-    "loadingChart": "Memuatkan Paparan Carta...",
     "loadingSearch": "Memuatkan Paparan Carian..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "Kosong",
     "null": "null",
     "editHint": "Klik pada mana-mana nilai atau kunci untuk mengedit secara langsung"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Agihan Jenis Data",
-    "keyFrequency": "Analisis Kekerapan Kunci",
-    "dataTypes": "Jenis Data",
-    "arrayData": "Data Tatasusunan",
-    "objectData": "Data Objek",
-    "customPath": "Laluan Kustom",
-    "selectPath": "Pilih laluan data...",
-    "barChart": "Carta Bar",
-    "pieChart": "Carta Pai",
-    "lineChart": "Carta Garis",
-    "doughnutChart": "Carta Donat",
-    "noData": "Tiada data untuk dipaparkan"
   },
   "map": {
     "loading": "Memuatkan peta...",

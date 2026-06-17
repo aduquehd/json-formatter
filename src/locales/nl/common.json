@@ -24,7 +24,6 @@
     "graph": "Grafiekweergave",
     "stats": "Statistieken",
     "diff": "Verschilweergave",
-    "chart": "Grafieken",
     "search": "Zoeken en Filteren",
     "map": "Kaartweergave",
     "beta": "Beta"
@@ -51,7 +50,6 @@
     "loadingDiff": "Verschilweergave wordt geladen...",
     "loadingStats": "Statistiekenweergave wordt geladen...",
     "loadingMap": "Kaartweergave wordt geladen...",
-    "loadingChart": "Grafiekenweergave wordt geladen...",
     "loadingSearch": "Zoekweergave wordt geladen..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "Leeg",
     "null": "null",
     "editHint": "Klik op elke waarde of sleutel om direct te bewerken"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "Data Type Verdeling",
-    "keyFrequency": "Sleutel Frequentie Analyse",
-    "dataTypes": "Data Types",
-    "arrayData": "Array Data",
-    "objectData": "Object Data",
-    "customPath": "Aangepast Pad",
-    "selectPath": "Selecteer data pad...",
-    "barChart": "Staafdiagram",
-    "pieChart": "Taartdiagram",
-    "lineChart": "Lijndiagram",
-    "doughnutChart": "Donutdiagram",
-    "noData": "Geen data om weer te geven"
   },
   "map": {
     "loading": "Kaart wordt geladen...",

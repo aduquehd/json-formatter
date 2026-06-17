@@ -24,7 +24,6 @@
     "graph": "圖形檢視",
     "stats": "統計",
     "diff": "差異檢視",
-    "chart": "圖表",
     "search": "搜尋與篩選",
     "map": "地圖檢視",
     "beta": "測試版"
@@ -51,7 +50,6 @@
     "loadingDiff": "正在載入差異檢視...",
     "loadingStats": "正在載入統計檢視...",
     "loadingMap": "正在載入地圖檢視...",
-    "loadingChart": "正在載入圖表檢視...",
     "loadingSearch": "正在載入搜尋檢視..."
   },
   "modal": {
@@ -120,21 +118,6 @@
     "empty": "空",
     "null": "空值",
     "editHint": "點擊任何值或鍵可直接編輯"
-  },
-  "chart": {
-    "title": "JSON Formatter",
-    "typeDistribution": "資料類型分佈",
-    "keyFrequency": "鍵頻率分析",
-    "dataTypes": "資料類型",
-    "arrayData": "陣列資料",
-    "objectData": "物件資料",
-    "customPath": "自訂路徑",
-    "selectPath": "選擇資料路徑...",
-    "barChart": "長條圖",
-    "pieChart": "圓餅圖",
-    "lineChart": "折線圖",
-    "doughnutChart": "環形圖",
-    "noData": "沒有要顯示的資料"
   },
   "map": {
     "loading": "正在載入地圖...",

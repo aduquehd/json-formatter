@@ -51,13 +51,6 @@ const MapView = dynamic(
   }
 );
 
-const ChartView = dynamic(
-  () => import('@/components/ChartView'),
-  {
-    loading: () => <div className="flex items-center justify-center h-full">Loading Chart View...</div>,
-    ssr: false
-  }
-);
 
 const SearchView = dynamic(
   () => import('@/components/SearchView'),
@@ -492,11 +485,6 @@ export default function Home() {
             {activeTab === 'map' && (
               <ErrorBoundary>
                 <MapView json={parsedJson} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'chart' && (
-              <ErrorBoundary>
-                <ChartView json={parsedJson} />
               </ErrorBoundary>
             )}
             {activeTab === 'search' && (

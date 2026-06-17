@@ -24,7 +24,6 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange })
     { id: 'graph', label: mounted ? t('tabs.graph') : 'Graph View', beta: true },
     { id: 'stats', label: mounted ? t('tabs.stats') : 'Statistics' },
     { id: 'diff', label: mounted ? t('tabs.diff') : 'Diff View' },
-    { id: 'chart', label: mounted ? t('tabs.chart') : 'Charts', beta: true },
     { id: 'search', label: mounted ? t('tabs.search') : 'Search & Filter' },
     { id: 'map', label: mounted ? t('tabs.map') : 'Map View', beta: true },
   ];
