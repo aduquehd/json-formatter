@@ -12,7 +12,11 @@
     "example": "Perbeer 'n veurbeeld JSON",
     "download": "Downloade",
     "toggleTheme": "Thema wissele",
-    "language": "Spraok"
+    "language": "Spraok",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Editor",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "Originele JSON",
-    "modified": "Gewiezigde JSON",
-    "compare": "JSONs Verglieke",
+    "modified": "Gewiezig",
     "placeholder": "Plak JSON hie...",
     "noDifference": "Gein versjille gevonde",
     "added": "Toegevoog",
-    "removed": "Verwiederd",
-    "modified": "Gewiezig"
+    "removed": "Verwiederd"
   },
   "tree": {
     "collapse": "Alles Inklappe",

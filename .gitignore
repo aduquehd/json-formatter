@@ -101,3 +101,5 @@ pip-delete-this-directory.txt
 # Temporary files
 tmp/
 temp/
+# Self-hosted Monaco runtime (copied from node_modules at build time)
+/public/monaco/

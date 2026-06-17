@@ -292,7 +292,7 @@ function generateGraphView(
       return 6;
     })
     .style("fill", (d) => {
-      if (d.type === "root") return "#667eea";
+      if (d.type === "root") return "#7aa2f7";
       if (d.type === "value") {
         // Color based on value type
         if (d.valueType === "string") return "#00d4fe";

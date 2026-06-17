@@ -12,7 +12,11 @@
     "example": "Bispeel JSON utprobieren",
     "download": "Dalladen",
     "toggleTheme": "Thema wesseln",
-    "language": "Spraak"
+    "language": "Spraak",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Editor",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "Original JSON",
-    "modified": "Ännert JSON",
-    "compare": "JSONs Verglieken",
+    "modified": "Ännert",
     "placeholder": "JSON hier infögen...",
     "noDifference": "Keen Ünnerscheed funnen",
     "added": "Toföögt",
-    "removed": "Wegnahmen",
-    "modified": "Ännert"
+    "removed": "Wegnahmen"
   },
   "tree": {
     "collapse": "All tosammenklappen",

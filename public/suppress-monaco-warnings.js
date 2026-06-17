@@ -1,65 +1,59 @@
-// Suppress Monaco Editor worker warnings and errors
-(function() {
-  if (typeof window !== 'undefined') {
-    const originalWarn = console.warn;
-    const originalLog = console.log;
-    const originalError = console.error;
-    
-    // Override console.warn
-    console.warn = function(...args) {
-      const message = args[0] ? args[0].toString() : '';
-      if (message.includes('Could not create web worker') || 
-          message.includes('Falling back to loading web worker') ||
-          message.includes('monaco') ||
-          message.includes('worker')) {
-        return; // Suppress Monaco warnings
-      }
-      originalWarn.apply(console, args);
-    };
-    
-    // Override console.log for Monaco specific messages
-    console.log = function(...args) {
-      const message = args[0] ? args[0].toString() : '';
-      if (message.includes('Could not create web worker') || 
-          message.includes('Monaco Editor: Workers disabled')) {
-        return; // Suppress Monaco logs
-      }
-      originalLog.apply(console, args);
-    };
-    
-    // Override console.error for Monaco worker errors
-    console.error = function(...args) {
-      const message = args[0] ? args[0].toString() : '';
-      if (message.includes('FAILED to post message') || 
-          message.includes('postMessage is not a function') ||
-          message.includes('worker') ||
-          message.includes('Worker')) {
-        return; // Suppress Monaco worker errors
-      }
-      originalError.apply(console, args);
-    };
-    
-    // Completely disable Monaco workers by not providing getWorker
-    window.MonacoEnvironment = {
-      // Don't provide getWorker at all - this forces synchronous mode
-      getWorkerUrl: function() { 
-        return 'data:text/javascript;charset=utf-8,'; 
-      }
-    };
-    
-    // Also suppress uncaught errors from Monaco workers
-    const originalOnError = window.onerror;
-    window.onerror = function(message, source, lineno, colno, error) {
-      if (typeof message === 'string' && 
-          (message.includes('FAILED to post message') || 
-           message.includes('postMessage is not a function') ||
-           message.includes('worker'))) {
-        return true; // Prevent default error handling
-      }
-      if (originalOnError) {
-        return originalOnError(message, source, lineno, colno, error);
-      }
-      return false;
-    };
+// Suppress the specific (benign) Monaco Editor messages that appear when workers
+// are intentionally disabled. Scoped to exact known phrases so genuine app errors
+// — including unrelated ones that merely mention "worker" — are still logged.
+(function () {
+  if (typeof window === 'undefined') return;
+
+  // Exact phrases emitted by Monaco when running without web workers.
+  var MONACO_NOISE = [
+    'Could not create web worker',
+    'Falling back to loading web worker',
+    'You must define a function MonacoEnvironment.getWorkerUrl',
+    'FAILED to post message',
+    'postMessage is not a function',
+  ];
+
+  function isMonacoNoise(args) {
+    var message = args && args[0] ? String(args[0]) : '';
+    return MONACO_NOISE.some(function (phrase) {
+      return message.indexOf(phrase) !== -1;
+    });
   }
+
+  var originalWarn = console.warn;
+  console.warn = function () {
+    if (isMonacoNoise(arguments)) return;
+    originalWarn.apply(console, arguments);
+  };
+
+  var originalError = console.error;
+  console.error = function () {
+    if (isMonacoNoise(arguments)) return;
+    originalError.apply(console, arguments);
+  };
+
+  // Disable Monaco web workers — runs the editor in synchronous mode (reliable,
+  // and avoids worker/CORS issues). Monaco assets are served same-origin.
+  window.MonacoEnvironment = {
+    getWorkerUrl: function () {
+      return 'data:text/javascript;charset=utf-8,';
+    },
+  };
+
+  // Swallow only the matching uncaught worker errors; let everything else through.
+  var originalOnError = window.onerror;
+  window.onerror = function (message, source, lineno, colno, error) {
+    if (
+      typeof message === 'string' &&
+      MONACO_NOISE.some(function (phrase) {
+        return message.indexOf(phrase) !== -1;
+      })
+    ) {
+      return true; // Prevent default error handling for this known-benign case.
+    }
+    if (originalOnError) {
+      return originalOnError(message, source, lineno, colno, error);
+    }
+    return false;
+  };
 })();

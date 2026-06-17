@@ -28,9 +28,6 @@ export const metadata: Metadata = {
     default: 'Free Online JSON Viewer & Formatter',
     template: '%s | JSON Formatter'
   },
-  verification: {
-    google: 'YOUR_VERIFICATION_CODE_HERE', // Add your Google verification code
-  },
   description: 'JSON Formatter & Viewer - Free, open-source tool to format, validate, and beautify JSON. Auto-fix errors, tree view, syntax highlighting. 100% client-side.',
   keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
@@ -74,7 +71,6 @@ export const metadata: Metadata = {
   other: {
     'theme-color': '#2563eb',
     'msapplication-TileColor': '#2563eb',
-    'google-site-verification': '', // Add your Google verification code if you have one
   }
 };
 
@@ -120,13 +116,6 @@ export default function RootLayout({
     dateModified: new Date().toISOString().split('T')[0],
     inLanguage: 'en',
     isAccessibleForFree: true,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '3250',
-      bestRating: '5',
-      worstRating: '1',
-    },
     author: {
       '@type': 'Person',
       name: 'Andres Duque',

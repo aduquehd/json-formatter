@@ -5,18 +5,22 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
+    "prebuild": "node scripts/copy-monaco.mjs",
+    "postinstall": "node scripts/copy-monaco.mjs",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
+    "@lezer/highlight": "^1.2.1",
     "@monaco-editor/react": "^4.6.0",
-    "@sentry/nextjs": "^10.5.0",
+    "@uiw/codemirror-themes": "^4.23.0",
+    "@uiw/react-codemirror": "^4.23.0",
     "chart.js": "^4.4.1",
     "d3": "^7.8.5",
     "framer-motion": "^11.0.3",
     "i18next": "^25.4.2",
     "i18next-browser-languagedetector": "^8.2.0",
-    "import-in-the-middle": "^1.14.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.539.0",
     "monaco-editor": "^0.52.2",
@@ -27,8 +31,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^19.1.1",
     "react-i18next": "^15.7.2",
-    "react-leaflet": "^5.0.0",
-    "require-in-the-middle": "^7.5.2"
+    "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",

@@ -12,7 +12,11 @@
     "example": "Besykje in foarbyld JSON",
     "download": "Downloade",
     "toggleTheme": "Tema wikselje",
-    "language": "Taal"
+    "language": "Taal",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Bewurker",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "Orizjinele JSON",
-    "modified": "Wizige JSON",
-    "compare": "JSONs Ferlykje",
+    "modified": "Wizige",
     "placeholder": "Plak JSON hjir...",
     "noDifference": "Gjin ferskillen fûn",
     "added": "Tafoege",
-    "removed": "Fuorthelle",
-    "modified": "Wizige"
+    "removed": "Fuorthelle"
   },
   "tree": {
     "collapse": "Alles Ynklappe",

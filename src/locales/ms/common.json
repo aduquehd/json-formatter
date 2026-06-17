@@ -12,7 +12,11 @@
     "example": "Cuba contoh JSON",
     "download": "Muat turun",
     "toggleTheme": "Tukar tema",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "copied": "Disalin",
+    "open": "Buka",
+    "sortKeys": "Isih kunci",
+    "exampleShort": "Contoh"
   },
   "tabs": {
     "editor": "Editor JSON",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "JSON Asal",
-    "modified": "JSON Diubah Suai",
-    "compare": "Bandingkan JSON",
+    "modified": "Diubah Suai",
     "placeholder": "Tampal JSON di sini...",
     "noDifference": "Tiada perbezaan dijumpai",
     "added": "Ditambah",
-    "removed": "Dibuang",
-    "modified": "Diubah Suai"
+    "removed": "Dibuang"
   },
   "tree": {
     "collapse": "Runtuhkan Semua",

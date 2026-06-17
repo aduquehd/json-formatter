@@ -12,7 +12,11 @@
     "example": "உதாரண JSON முயற்சிக்கவும்",
     "download": "பதிவிறக்கம்",
     "toggleTheme": "தீம் மாற்று",
-    "language": "மொழி"
+    "language": "மொழி",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON எடிட்டர்",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "அசல் JSON",
-    "modified": "மாற்றப்பட்ட JSON",
-    "compare": "JSON ஒப்பிடு",
+    "modified": "மாற்றப்பட்டது",
     "placeholder": "JSON ஐ இங்கே ஒட்டவும்...",
     "noDifference": "வேறுபாடுகள் எதுவும் கண்டறியப்படவில்லை",
     "added": "சேர்க்கப்பட்டது",
-    "removed": "அகற்றப்பட்டது",
-    "modified": "மாற்றப்பட்டது"
+    "removed": "அகற்றப்பட்டது"
   },
   "tree": {
     "collapse": "அனைத்தையும் சுருக்கு",

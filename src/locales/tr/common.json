@@ -12,7 +12,11 @@
     "example": "Örnek JSON deneyin",
     "download": "İndir",
     "toggleTheme": "Temayı değiştir",
-    "language": "Dil"
+    "language": "Dil",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
+    "exampleShort": "Example"
   },
   "tabs": {
     "editor": "JSON Düzenleyici",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "Orijinal JSON",
-    "modified": "Değiştirilmiş JSON",
-    "compare": "JSON'ları Karşılaştır",
+    "modified": "Değiştirildi",
     "placeholder": "JSON'u buraya yapıştırın...",
     "noDifference": "Fark bulunamadı",
     "added": "Eklendi",
-    "removed": "Kaldırıldı",
-    "modified": "Değiştirildi"
+    "removed": "Kaldırıldı"
   },
   "tree": {
     "collapse": "Tümünü Daralt",

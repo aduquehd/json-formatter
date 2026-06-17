@@ -12,7 +12,11 @@
     "example": "试试示例 JSON",
     "download": "下载",
     "toggleTheme": "切换主题",
-    "language": "语言"
+    "language": "语言",
+    "copied": "已复制",
+    "open": "打开",
+    "sortKeys": "排序键",
+    "exampleShort": "示例"
   },
   "tabs": {
     "editor": "JSON 编辑器",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "原始 JSON",
-    "modified": "修改后的 JSON",
-    "compare": "比较 JSON",
+    "modified": "已修改",
     "placeholder": "在此粘贴 JSON...",
     "noDifference": "未发现差异",
     "added": "已添加",
-    "removed": "已删除",
-    "modified": "已修改"
+    "removed": "已删除"
   },
   "tree": {
     "collapse": "全部折叠",

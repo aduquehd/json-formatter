@@ -10,6 +10,10 @@
     "paste": "Paste",
     "clear": "Clear",
     "example": "Try an example JSON",
+    "exampleShort": "Example",
+    "copied": "Copied",
+    "open": "Open",
+    "sortKeys": "Sort keys",
     "download": "Download",
     "toggleTheme": "Toggle theme",
     "language": "Language"
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "Original JSON",
-    "modified": "Modified JSON",
-    "compare": "Compare JSONs",
+    "modified": "Modified",
     "placeholder": "Paste JSON here...",
     "noDifference": "No differences found",
     "added": "Added",
-    "removed": "Removed",
-    "modified": "Modified"
+    "removed": "Removed"
   },
   "tree": {
     "collapse": "Collapse All",

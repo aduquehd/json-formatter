@@ -372,14 +372,31 @@ export function analyzeBusinessLogic(data: any, nodes: any[], stats: any): void 
 
     if (typeof values[0] === "string") {
       const sampleValue = values[0];
+      const keyLower = key.toLowerCase();
+      const looksLikeDate =
+        /^\d{4}-\d{2}-\d{2}/.test(sampleValue) ||
+        /^\d{2}\/\d{2}\/\d{4}/.test(sampleValue) ||
+        /^\d{4}\/\d{2}\/\d{2}/.test(sampleValue);
+
+      // Phone detection is intentionally conservative. A bare run of digits
+      // (ISBNs, dates, years, IDs, zip/postal codes, SKUs) must NOT be flagged
+      // as a phone number, so require either a phone-like key name or an
+      // explicit international "+" prefix in addition to a phone-shaped value.
+      const digitsOnly = sampleValue.replace(/[\s()+\-.]/g, "");
+      const phoneShaped = /^[1-9]\d{6,14}$/.test(digitsOnly);
+      const keyHintsPhone = /(^|[^a-z])(phone|mobile|tel|telephone|cell|fax|whatsapp|contact)/.test(keyLower);
+      const keyLooksNonPhone = /(isbn|zip|postal|code|id|year|date|sku|barcode|ean|upc)/.test(keyLower);
+      const isPhone =
+        !looksLikeDate &&
+        !keyLooksNonPhone &&
+        phoneShaped &&
+        (keyHintsPhone || sampleValue.trim().startsWith("+"));
+
       if (/^[\w._%+-]+@[\w.-]+\.[A-Za-z]{2,}$/.test(sampleValue)) {
         stats.businessAnalytics.sensitiveData.set(key, "email");
-      } else if (/^\+?[1-9]\d{1,14}$/.test(sampleValue.replace(/[\s()-]/g, ""))) {
+      } else if (isPhone) {
         stats.businessAnalytics.sensitiveData.set(key, "phone");
-      } else if (
-        /^\d{4}-\d{2}-\d{2}/.test(sampleValue) ||
-        /^\d{2}\/\d{2}\/\d{4}/.test(sampleValue)
-      ) {
+      } else if (looksLikeDate) {
         stats.businessAnalytics.dateFields.add(key);
       }
     }

@@ -12,7 +12,11 @@
     "example": "उदाहरण JSON आज़माएं",
     "download": "डाउनलोड",
     "toggleTheme": "थीम बदलें",
-    "language": "भाषा"
+    "language": "भाषा",
+    "copied": "कॉपी किया गया",
+    "open": "खोलें",
+    "sortKeys": "कुंजियाँ क्रमबद्ध करें",
+    "exampleShort": "उदाहरण"
   },
   "tabs": {
     "editor": "JSON संपादक",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "मूल JSON",
-    "modified": "संशोधित JSON",
-    "compare": "JSONs की तुलना करें",
+    "modified": "संशोधित",
     "placeholder": "JSON यहाँ पेस्ट करें...",
     "noDifference": "कोई अंतर नहीं मिला",
     "added": "जोड़ा गया",
-    "removed": "हटाया गया",
-    "modified": "संशोधित"
+    "removed": "हटाया गया"
   },
   "tree": {
     "collapse": "सभी को संकुचित करें",

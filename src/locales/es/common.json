@@ -12,7 +12,11 @@
     "example": "Probar un JSON de ejemplo",
     "download": "Descargar",
     "toggleTheme": "Cambiar tema",
-    "language": "Idioma"
+    "language": "Idioma",
+    "copied": "Copiado",
+    "open": "Abrir",
+    "sortKeys": "Ordenar claves",
+    "exampleShort": "Ejemplo"
   },
   "tabs": {
     "editor": "Editor JSON",
@@ -103,13 +107,11 @@
   },
   "diff": {
     "original": "JSON Original",
-    "modified": "JSON Modificado",
-    "compare": "Comparar JSONs",
+    "modified": "Modificado",
     "placeholder": "Pega JSON aquí...",
     "noDifference": "No se encontraron diferencias",
     "added": "Añadido",
-    "removed": "Eliminado",
-    "modified": "Modificado"
+    "removed": "Eliminado"
   },
   "tree": {
     "collapse": "Colapsar Todo",
