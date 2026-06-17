@@ -22,13 +22,21 @@ const ClientNavbar: React.FC<ClientNavbarProps> = ({ theme, onThemeToggle }) => 
   return (
     <nav className="fixed top-0 left-0 right-0 h-auto bg-[var(--navbar-bg)] backdrop-blur-xl border-b border-[var(--navbar-border)] z-[1000] shadow-[var(--navbar-shadow)]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-14 py-3 md:py-2 h-full flex items-center justify-between gap-2 md:gap-4">
-        <div className="flex flex-col items-start gap-0.5 flex-1">
-          <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-gray-200 tracking-tight m-0 leading-tight">
-            {mounted ? t('nav.title') : 'JSON Formatter, Viewer & Editor Online'}
-          </h1>
-          <p className="text-[9px] sm:text-xs text-gray-600 dark:text-gray-400 m-0 font-normal tracking-tight leading-tight line-clamp-1 sm:line-clamp-none">
-            Free, open source, and secure. All JSON content is processed locally in your browser—no data is sent to any servers.
-          </p>
+        <div className="flex items-center gap-2.5 sm:gap-3 flex-1 min-w-0">
+          <div
+            className="hidden sm:flex items-center justify-center w-9 h-9 rounded-md border border-[var(--border-color)] bg-[var(--accent-bg)] font-mono text-[var(--accent-color)] text-lg font-bold leading-none shrink-0 shadow-[0_0_18px_-7px_var(--accent-color)]"
+            aria-hidden="true"
+          >
+            {'{ }'}
+          </div>
+          <div className="flex flex-col items-start gap-0.5 min-w-0">
+            <h1 className="text-base sm:text-lg md:text-xl font-bold text-[var(--text-primary)] tracking-tight m-0 leading-tight">
+              {mounted ? t('nav.title') : 'JSON Formatter, Viewer & Editor Online'}
+            </h1>
+            <p className="text-[9px] sm:text-xs text-[var(--text-secondary)] m-0 font-normal tracking-tight leading-tight line-clamp-1 sm:line-clamp-none">
+              Free, open source &amp; secure — all processing happens locally in your browser.
+            </p>
+          </div>
         </div>
         
         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-2 min-w-fit">
@@ -47,9 +55,9 @@ const ClientNavbar: React.FC<ClientNavbarProps> = ({ theme, onThemeToggle }) => 
               href="https://github.com/aduquehd/json-formatter"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-center gap-1 sm:gap-1.5 px-1 sm:px-3 md:px-3.5 py-0.5 sm:py-1.5 md:py-2 rounded-full bg-gray-900 dark:bg-black text-white text-[10px] sm:text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 border border-gray-800 dark:border-gray-700 w-6 sm:w-auto h-6 sm:h-auto"
+              className="group flex items-center justify-center gap-1.5 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--btn-secondary-bg)] text-[var(--text-secondary)] text-[10px] sm:text-sm font-medium hover:text-[var(--accent-color)] hover:border-[var(--border-hover)] transition-colors duration-200 w-6 sm:w-auto h-6 sm:h-auto"
             >
-              <Github className="w-3 h-3 sm:w-4 sm:h-4 group-hover:rotate-12 transition-transform duration-300" />
+              <Github className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Open Source</span>
             </Link>
             

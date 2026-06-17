@@ -96,12 +96,12 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
               <div
                 key={example.id}
                 onClick={() => onSelect(exampleJsonData[example.id])}
-                className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] hover:border-purple-500 hover:bg-[var(--bg-tertiary)] transition-all duration-300 overflow-hidden group cursor-pointer hover:shadow-xl hover:shadow-purple-500/20 hover:scale-[1.02]"
+                className="bg-[var(--bg-secondary)] rounded-xl border border-[var(--border-color)] hover:border-[var(--accent-color)] hover:bg-[var(--bg-tertiary)] transition-all duration-200 overflow-hidden group cursor-pointer hover:shadow-[0_10px_30px_-12px_var(--accent-color)]"
               >
                 <div className="p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <IconComponent className="w-7 h-7 text-purple-500 group-hover:text-purple-400 transition-colors" />
-                    <h3 className="font-semibold text-lg text-[var(--text-primary)] group-hover:text-purple-600 dark:text-white dark:group-hover:text-purple-100 transition-colors">{example.title}</h3>
+                    <IconComponent className="w-7 h-7 text-[var(--accent-color)] transition-colors" />
+                    <h3 className="font-semibold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-color)] transition-colors">{example.title}</h3>
                   </div>
                   
                   <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[var(--bg-secondary)] group-hover:bg-[var(--bg-primary)] transition-colors">
@@ -118,7 +118,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
                       e.stopPropagation();
                       onSelect(exampleJsonData[example.id]);
                     }}
-                    className="w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-all duration-200 hover:shadow-lg group-hover:bg-purple-500 group-hover:hover:bg-purple-600"
+                    className="w-full py-2.5 px-4 bg-[var(--accent-color)] hover:bg-[var(--accent-hover)] text-[var(--accent-text)] font-medium rounded-lg transition-colors duration-200"
                   >
                     {mounted ? t('modal.useExample') : 'Use this example'}
                   </button>

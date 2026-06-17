@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import Analytics from '@/components/Analytics';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
 
-const inter = Inter({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans',
   weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: false,
@@ -16,8 +16,8 @@ const inter = Inter({
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-jetbrains',
-  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
   preload: false,
 });
@@ -180,7 +180,7 @@ export default function RootLayout({
           />
         ))}
       </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body className={`${plexSans.variable} ${jetbrainsMono.variable}`}>
         <Analytics />
         <ErrorBoundary>
           <I18nProvider>

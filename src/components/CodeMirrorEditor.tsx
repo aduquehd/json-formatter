@@ -13,56 +13,56 @@ interface CodeMirrorEditorProps {
 }
 
 const FONT_FAMILY =
-  "'JetBrains Mono', 'Fira Code', Monaco, 'Courier New', monospace";
+  "var(--font-mono), 'JetBrains Mono', 'Fira Code', Monaco, 'Courier New', monospace";
 
-// Dark theme — matches the Monaco "customDark" (Tokyo Night) palette used on desktop.
+// Dark theme — Engineering Console palette (deep slate + aqua signal accent).
 const darkTheme = createTheme({
   theme: 'dark',
   settings: {
-    background: '#1f2335',
-    foreground: '#c0caf5',
-    caret: '#c0caf5',
-    selection: '#3b4261',
-    selectionMatch: '#3b4261',
-    lineHighlight: '#24283b',
-    gutterBackground: '#1f2335',
-    gutterForeground: '#3b4261',
-    gutterActiveForeground: '#7aa2f7',
+    background: '#0b0f14',
+    foreground: '#e6edf3',
+    caret: '#2dd4bf',
+    selection: '#173a36',
+    selectionMatch: '#12302c',
+    lineHighlight: '#0e141b',
+    gutterBackground: '#0b0f14',
+    gutterForeground: '#3a4654',
+    gutterActiveForeground: '#2dd4bf',
     fontFamily: FONT_FAMILY,
     fontSize: '16px',
   },
   styles: [
-    { tag: t.propertyName, color: '#7aa2f7' },
-    { tag: t.string, color: '#9ece6a' },
-    { tag: t.number, color: '#ff9e64' },
-    { tag: [t.bool, t.null], color: '#bb9af7' },
-    { tag: [t.brace, t.squareBracket, t.separator, t.punctuation], color: '#565f89' },
+    { tag: t.propertyName, color: '#79c0ff' },
+    { tag: t.string, color: '#7ee787' },
+    { tag: t.number, color: '#ffa657' },
+    { tag: [t.bool, t.null], color: '#d2a8ff' },
+    { tag: [t.brace, t.squareBracket, t.separator, t.punctuation], color: '#6e7b8a' },
   ],
 });
 
-// Light theme — matches the Monaco "customLight" (GitHub) palette.
+// Light theme — paper variant (off-white + teal accent).
 const lightTheme = createTheme({
   theme: 'light',
   settings: {
     background: '#ffffff',
-    foreground: '#24292e',
-    caret: '#24292e',
-    selection: '#0366d625',
-    selectionMatch: '#0366d625',
-    lineHighlight: '#f6f8fa',
+    foreground: '#0c1116',
+    caret: '#0d9488',
+    selection: '#0d948822',
+    selectionMatch: '#0d948822',
+    lineHighlight: '#f3f5f7',
     gutterBackground: '#ffffff',
-    gutterForeground: '#656d76',
-    gutterActiveForeground: '#24292e',
+    gutterForeground: '#8a949f',
+    gutterActiveForeground: '#0d9488',
     fontFamily: FONT_FAMILY,
     fontSize: '16px',
   },
   styles: [
-    { tag: t.propertyName, color: '#005cc5' },
-    { tag: t.string, color: '#22863a' },
-    { tag: t.number, color: '#005cc5' },
-    { tag: t.bool, color: '#d73a49' },
-    { tag: t.null, color: '#6f42c1' },
-    { tag: [t.brace, t.squareBracket, t.separator, t.punctuation], color: '#586069' },
+    { tag: t.propertyName, color: '#0550ae' },
+    { tag: t.string, color: '#1a7f37' },
+    { tag: t.number, color: '#0550ae' },
+    { tag: t.bool, color: '#cf222e' },
+    { tag: t.null, color: '#6639ba' },
+    { tag: [t.brace, t.squareBracket, t.separator, t.punctuation], color: '#656d76' },
   ],
 });
 

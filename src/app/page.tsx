@@ -506,37 +506,37 @@ export default function Home() {
             Why Use Our JSON Formatter?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Instant JSON Formatting</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 Paste your JSON and get beautifully formatted output in one click. Our formatter adds proper indentation and makes your JSON human-readable.
               </p>
             </article>
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Interactive JSON Viewer</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 Explore JSON with our tree view. Expand and collapse nodes, search for keys, and navigate complex nested structures with ease.
               </p>
             </article>
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">JSON Validation</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 Validate JSON syntax in real-time. Get clear error messages with line numbers to quickly identify and fix issues in your JSON data.
               </p>
             </article>
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Auto-Fix JSON Errors</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 Our smart JSON fixer automatically corrects common errors like trailing commas, single quotes, and unquoted keys.
               </p>
             </article>
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">100% Privacy</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 All JSON processing happens in your browser. Your data never leaves your computer - no servers, no tracking, complete privacy.
               </p>
             </article>
-            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6">
+            <article className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl p-6 transition-colors hover:border-[var(--accent-color)]">
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Advanced Features</h3>
               <p className="text-[var(--text-secondary)] text-sm">
                 Beyond formatting: JSON diff comparison, statistics, graph visualization, geographic map view, and more powerful tools.

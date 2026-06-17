@@ -36,7 +36,7 @@
 }
 
 .metricValue {
-  font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', 'SF Mono', Monaco, monospace;
   font-size: 26px;
   font-weight: 600;
   line-height: 1.1;
@@ -118,13 +118,13 @@
 
 .legendVal {
   margin-left: auto;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   color: var(--text-primary);
   font-weight: 600;
 }
 
 .legendPct {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   color: var(--text-muted);
   font-size: 12px;
   min-width: 46px;
@@ -145,7 +145,7 @@
 }
 
 .depthLabel {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--text-secondary);
   width: 28px;
@@ -168,7 +168,7 @@
 }
 
 .depthCount {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--text-primary);
   min-width: 36px;
@@ -190,7 +190,7 @@
 }
 
 .miniVal {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
@@ -230,7 +230,7 @@
 }
 
 .code {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   font-size: 12px;
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
@@ -284,7 +284,7 @@
 }
 
 .topKeyCount {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono), 'JetBrains Mono', monospace;
   font-size: 12px;
   color: var(--text-secondary);
   min-width: 28px;
