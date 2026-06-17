@@ -1,5 +1,6 @@
 allowBuilds:
   '@sentry/cli': true
   core-js: true
+  lefthook: true
   sharp: true
   unrs-resolver: true

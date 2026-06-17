@@ -4,8 +4,8 @@
     "help": "Ayuda"
   },
   "buttons": {
-    "format": "Formatear JSON",
-    "compact": "Compactar JSON",
+    "format": "Formatear",
+    "compact": "Compactar",
     "copy": "Copiar",
     "paste": "Pegar",
     "clear": "Limpiar",

@@ -4,8 +4,8 @@
     "help": "Bantuan"
   },
   "buttons": {
-    "format": "Format JSON",
-    "compact": "Padatkan JSON",
+    "format": "Format",
+    "compact": "Padatkan",
     "copy": "Salin",
     "paste": "Tampal",
     "clear": "Kosongkan",

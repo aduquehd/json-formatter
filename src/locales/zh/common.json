@@ -4,8 +4,8 @@
     "help": "說明"
   },
   "buttons": {
-    "format": "格式化 JSON",
-    "compact": "壓縮 JSON",
+    "format": "格式化",
+    "compact": "壓縮",
     "copy": "複製",
     "paste": "貼上",
     "clear": "清除",

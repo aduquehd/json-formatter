@@ -1,91 +1,163 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { 
-  ArrowLeft, 
-  CheckCircle, 
-  AlertCircle, 
-  Code2, 
-  Zap, 
-  Shield, 
-  BookOpen,
-  Search,
-  ChartBar,
+import {
+  AlertTriangle,
+  ArrowLeft,
+  BarChart3,
+  CheckCircle2,
+  FileJson,
   GitCompare,
+  Github,
+  ListTree,
   Map,
-  TreePine,
-  FileJson
+  Network,
+  Search,
+  Shield,
+  Wand2,
+  Zap,
 } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import HelpTabs, { type HelpTab } from '@/components/HelpTabs';
 
 export const metadata: Metadata = {
   title: 'JSON Formatter Help & Guide - How to Format JSON Online',
-  description: 'Complete guide on how to use our free JSON formatter, validator, and viewer. Learn JSON syntax, common errors, best practices, and formatting tips.',
-  keywords: 'json help, json guide, how to format json, json tutorial, json syntax, json errors, json best practices, json formatting guide, json validator help',
+  description:
+    'Complete guide to our free JSON formatter, validator, and viewer. Learn the views, JSON syntax, common errors, keyboard shortcuts, and best practices.',
+  keywords:
+    'json help, json guide, how to format json, json tutorial, json syntax, json errors, json best practices, json validator help, json viewer guide',
   openGraph: {
     title: 'JSON Formatter Help & Complete Guide',
-    description: 'Learn how to format, validate, and view JSON with our comprehensive guide. JSON syntax, examples, and best practices.',
+    description:
+      'Learn how to format, validate, and explore JSON with our comprehensive guide — views, syntax, examples, and best practices.',
     type: 'article',
     url: 'https://www.jsonformatter.me/help',
   },
-  alternates: {
-    canonical: 'https://www.jsonformatter.me/help',
-  }
+  alternates: { canonical: 'https://www.jsonformatter.me/help' },
 };
+
+const card = 'rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6';
+const eyebrow = 'font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent-color)]';
+const h2 = 'text-2xl font-bold text-[var(--text-primary)]';
+const h3 = 'font-semibold text-[var(--text-primary)]';
+const body = 'text-sm leading-relaxed text-[var(--text-secondary)]';
+const kbd =
+  'rounded border border-[var(--border-color)] bg-[var(--bg-primary)] px-1.5 py-0.5 font-mono text-xs text-[var(--text-primary)]';
+const codeChip =
+  'rounded border border-[var(--border-color)] bg-[var(--bg-primary)] px-1.5 py-0.5 font-mono text-[13px] text-[var(--accent-color)]';
+
+const VIEWS = [
+  {
+    icon: FileJson,
+    name: 'JSON Editor',
+    desc: 'A real code editor with syntax highlighting, line numbers, folding and bracket matching. Paste anything — invalid JSON is auto-fixed on format.',
+  },
+  {
+    icon: ListTree,
+    name: 'Tree View',
+    desc: 'Explore JSON as a collapsible tree. Expand/collapse nodes and edit any key or value inline by clicking it.',
+  },
+  {
+    icon: Network,
+    name: 'Graph View',
+    desc: 'A hierarchical node graph of your data. Click nodes to expand or collapse branches; zoom, pan, and fit to screen.',
+  },
+  {
+    icon: BarChart3,
+    name: 'Statistics',
+    desc: 'An analytics dashboard: total keys, values, depth, minified size, type distribution, nesting depth and most-frequent keys.',
+  },
+  {
+    icon: GitCompare,
+    name: 'Diff View',
+    desc: 'Compare two JSON documents side by side. Differences update automatically with a git-style added / removed / modified breakdown.',
+  },
+  {
+    icon: Search,
+    name: 'Search & Filter',
+    desc: 'Search keys and values across the whole document, filter by type, and surface quick insights about your data.',
+  },
+  {
+    icon: Map,
+    name: 'Map View',
+    desc: 'Plot geographic data on an interactive map — GeoJSON, lat/lng pairs, or coordinate arrays are detected automatically.',
+  },
+];
+
+const WHY = [
+  {
+    icon: Zap,
+    title: 'Instant formatting',
+    desc: 'Beautify minified or messy JSON in one click with clean, consistent indentation.',
+  },
+  {
+    icon: CheckCircle2,
+    title: 'Real-time validation',
+    desc: 'Catch syntax errors instantly with clear, located messages while you type.',
+  },
+  {
+    icon: Wand2,
+    title: 'Smart auto-fix',
+    desc: 'Trailing commas, single quotes and unquoted keys are repaired automatically.',
+  },
+  {
+    icon: Shield,
+    title: '100% private',
+    desc: 'Everything runs in your browser. No servers, no tracking, no data ever leaves your machine.',
+  },
+];
+
+const RULES = [
+  ['Keys are double-quoted strings', '{ "name": "Ada" }'],
+  ['Strings use double quotes (never single)', '"hello"'],
+  ['No trailing commas', '[1, 2, 3]'],
+  ['Values: string, number, boolean, null, object, array', 'true · 42 · null'],
+  ['No comments are allowed in strict JSON', '—'],
+];
+
+const ERRORS = [
+  ['Single quotes', `{ 'a': 1 }`, `{ "a": 1 }`],
+  ['Unquoted keys', `{ a: 1 }`, `{ "a": 1 }`],
+  ['Trailing comma', `[1, 2, ]`, `[1, 2]`],
+  ['Python literals', `{ "ok": True }`, `{ "ok": true }`],
+];
+
+const FAQ = [
+  [
+    'What is a JSON formatter?',
+    'A tool that takes raw or minified JSON and re-indents it with line breaks so it is easy to read. Ours adds 2/4-space or tab indentation, organizes nested structures, and syntax-highlights the result.',
+  ],
+  [
+    'What is JSON?',
+    'JSON (JavaScript Object Notation) is a lightweight, language-independent data-interchange format that is easy for humans to read and for machines to parse.',
+  ],
+  ['Is it free?', 'Yes — completely free and open source, with no signup, no ads, and no limits.'],
+  [
+    'Is my data secure?',
+    'Absolutely. All processing happens 100% locally in your browser; nothing is ever uploaded, so it is safe for confidential data.',
+  ],
+  [
+    'Can it fix invalid JSON?',
+    'Yes. The smart fixer repairs common mistakes — trailing commas, single quotes, unquoted keys and Python-style literals — when you format.',
+  ],
+  [
+    'Can I validate JSON?',
+    'Validation runs as you type. The status bar shows valid/invalid plus node count, depth and size at a glance.',
+  ],
+  [
+    'What can I do beyond formatting?',
+    'Explore data in Tree and Graph views, analyze it in Statistics, compare two documents in Diff, search and filter, and plot geographic data on a map.',
+  ],
+];
 
 export default function HelpPage() {
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     '@id': 'https://www.jsonformatter.me/help#faq',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is JSON?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'JSON (JavaScript Object Notation) is a lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse and generate.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I format JSON online?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Simply paste your JSON data into our editor and click the "Format" button. Our tool will automatically validate and beautify your JSON with proper indentation.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Is this JSON formatter free to use?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, our JSON formatter is completely free to use with no limitations, no ads, and no registration required.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Is my JSON data secure?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Absolutely! All JSON processing happens locally in your browser. No data is ever sent to our servers, ensuring complete privacy and security.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What are common JSON syntax errors?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Common JSON errors include: missing quotes around keys, trailing commas, single quotes instead of double quotes, and undefined values. Our formatter automatically fixes many of these issues.'
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I validate JSON syntax?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'Yes, our tool automatically validates JSON syntax as you type and shows real-time error messages with line numbers to help you fix issues quickly.'
-        }
-      }
-    ]
+    mainEntity: FAQ.map(([q, a]) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
   };
 
   const breadcrumbSchema = {
@@ -96,57 +168,286 @@ export default function HelpPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'JSON Formatter',
-        item: 'https://www.jsonformatter.me'
+        item: 'https://www.jsonformatter.me',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Help & Guide',
-        item: 'https://www.jsonformatter.me/help'
-      }
-    ]
+        item: 'https://www.jsonformatter.me/help',
+      },
+    ],
   };
 
   const howToSchema = {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
     name: 'How to Format JSON Online',
-    description: 'Step-by-step guide to format, validate, and beautify JSON data using our free online tool.',
+    description:
+      'Step-by-step guide to format, validate, and explore JSON with our free online tool.',
     totalTime: 'PT1M',
-    supply: [],
-    tool: [
-      {
-        '@type': 'HowToTool',
-        name: 'JSON Formatter & Viewer'
-      }
-    ],
+    tool: [{ '@type': 'HowToTool', name: 'JSON Formatter & Viewer' }],
     step: [
       {
         '@type': 'HowToStep',
-        name: 'Paste JSON Data',
-        text: 'Copy your JSON data and paste it into the editor',
-        url: 'https://www.jsonformatter.me/help#step1'
+        name: 'Paste JSON',
+        text: 'Paste your JSON into the editor — valid or not.',
       },
       {
         '@type': 'HowToStep',
-        name: 'Click Format Button',
-        text: 'Click the "Format" button to beautify and validate your JSON',
-        url: 'https://www.jsonformatter.me/help#step2'
+        name: 'Format',
+        text: 'Click Format (or press Cmd/Ctrl+Enter) to beautify and validate.',
       },
       {
         '@type': 'HowToStep',
-        name: 'View Results',
-        text: 'View your formatted JSON with syntax highlighting and explore different view modes',
-        url: 'https://www.jsonformatter.me/help#step3'
+        name: 'Explore',
+        text: 'Switch views — Tree, Graph, Statistics, Diff, Search, Map.',
       },
       {
         '@type': 'HowToStep',
         name: 'Copy or Download',
-        text: 'Copy the formatted JSON or use it in tree view, graph view, or other visualizations',
-        url: 'https://www.jsonformatter.me/help#step4'
-      }
-    ]
+        text: 'Copy the result or download it as a .json file.',
+      },
+    ],
   };
+
+  const tabs: HelpTab[] = [
+    {
+      id: 'start',
+      label: 'Getting Started',
+      content: (
+        <div className="space-y-10">
+          <section>
+            <p className={eyebrow}>// quick start</p>
+            <h2 className={`${h2} mt-1 mb-6`}>Format JSON in four steps</h2>
+            <ol className="grid gap-4 sm:grid-cols-2">
+              {[
+                [
+                  'Paste your JSON',
+                  'Drop raw, minified or even slightly broken JSON into the editor — or use Open / Paste.',
+                ],
+                [
+                  'Format',
+                  'Click Format (or press Cmd/Ctrl + Enter). Invalid JSON is auto-fixed where possible.',
+                ],
+                [
+                  'Explore',
+                  'Switch tabs to view your data as a tree, graph, stats dashboard, diff, search or map.',
+                ],
+                [
+                  'Copy or download',
+                  'Copy to the clipboard or download a .json file with Cmd/Ctrl + S.',
+                ],
+              ].map(([title, desc], i) => (
+                <li key={title} className={`${card} flex gap-4`}>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[var(--accent-bg)] font-mono font-bold text-[var(--accent-color)]">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className={`${h3} mb-1`}>{title}</h3>
+                    <p className={body}>{desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section>
+            <p className={eyebrow}>// shortcuts</p>
+            <h2 className={`${h2} mt-1 mb-4`}>Keyboard shortcuts</h2>
+            <div className={`${card} divide-y divide-[var(--border-color)] p-0`}>
+              {[
+                ['Format JSON', ['⌘', '/', 'Ctrl', '+', '↵']],
+                ['Download .json', ['⌘', '/', 'Ctrl', '+', 'S']],
+              ].map(([label, keys]) => (
+                <div key={label as string} className="flex items-center justify-between px-5 py-3">
+                  <span className={body}>{label as string}</span>
+                  <span className="flex items-center gap-1">
+                    {(keys as string[]).map((k, i) =>
+                      k === '/' || k === '+' ? (
+                        <span key={i} className="px-0.5 text-xs text-[var(--text-muted)]">
+                          {k}
+                        </span>
+                      ) : (
+                        <kbd key={i} className={kbd}>
+                          {k}
+                        </kbd>
+                      )
+                    )}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <p className={eyebrow}>// why use it</p>
+            <h2 className={`${h2} mt-1 mb-6`}>Built for developers</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {WHY.map(({ icon: Icon, title, desc }) => (
+                <div key={title} className={`${card} flex gap-4`}>
+                  <Icon className="h-5 w-5 shrink-0 text-[var(--accent-color)]" />
+                  <div>
+                    <h3 className={`${h3} mb-1`}>{title}</h3>
+                    <p className={body}>{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: 'views',
+      label: 'Views & Features',
+      content: (
+        <section>
+          <p className={eyebrow}>// the workspace</p>
+          <h2 className={`${h2} mt-1 mb-6`}>Seven ways to work with JSON</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {VIEWS.map(({ icon: Icon, name, desc }) => (
+              <article
+                key={name}
+                className={`${card} transition-colors hover:border-[var(--accent-color)]`}
+              >
+                <div className="mb-3 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[var(--accent-bg)]">
+                    <Icon className="h-5 w-5 text-[var(--accent-color)]" />
+                  </span>
+                  <h3 className={`${h3} text-base`}>{name}</h3>
+                </div>
+                <p className={body}>{desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ),
+    },
+    {
+      id: 'guide',
+      label: 'JSON Guide',
+      content: (
+        <div className="space-y-10">
+          <section>
+            <p className={eyebrow}>// valid json</p>
+            <h2 className={`${h2} mt-1 mb-2`}>Valid JSON rules</h2>
+            <p className={`${body} mb-5 max-w-2xl`}>
+              JSON is strict. Most &ldquo;broken&rdquo; JSON comes from JavaScript or Python habits.
+              These are the rules — and our formatter fixes the common slips automatically.
+            </p>
+            <ul className={`${card} divide-y divide-[var(--border-color)] p-0`}>
+              {RULES.map(([rule, ex]) => (
+                <li key={rule} className="flex items-center justify-between gap-4 px-5 py-3">
+                  <span className={`${body} text-[var(--text-primary)]`}>{rule}</span>
+                  <code className={codeChip}>{ex}</code>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section>
+            <p className={eyebrow}>// auto-fix</p>
+            <h2 className={`${h2} mt-1 mb-5`}>Common errors we fix</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {ERRORS.map(([label, bad, good]) => (
+                <div key={label} className={card}>
+                  <div className="mb-3 flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4 text-[var(--accent-warning)]" />
+                    <h3 className={`${h3} text-sm`}>{label}</h3>
+                  </div>
+                  <div className="space-y-2 font-mono text-[13px]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[var(--accent-error)]">✗</span>
+                      <code className="text-[var(--text-secondary)] line-through decoration-[var(--accent-error)]/50">
+                        {bad}
+                      </code>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[var(--accent-success)]">✓</span>
+                      <code className="text-[var(--text-primary)]">{good}</code>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: 'faq',
+      label: 'FAQ',
+      content: (
+        <section>
+          <p className={eyebrow}>// questions</p>
+          <h2 className={`${h2} mt-1 mb-6`}>Frequently asked questions</h2>
+          <div className="space-y-3">
+            {FAQ.map(([q, a]) => (
+              <details key={q} className={`${card} group p-5`}>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-[var(--text-primary)]">
+                  {q}
+                  <span className="text-[var(--text-muted)] transition-transform group-open:rotate-180">
+                    ▼
+                  </span>
+                </summary>
+                <p className={`${body} mt-3`}>{a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      ),
+    },
+    {
+      id: 'tools',
+      label: 'More Tools',
+      content: (
+        <div className="space-y-10">
+          <section>
+            <p className={eyebrow}>// more json tools</p>
+            <h2 className={`${h2} mt-1 mb-6`}>Dedicated tool pages</h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {[
+                ['JSON Formatter', '/tools/json-formatter'],
+                ['JSON Viewer', '/tools/json-viewer'],
+                ['JSON Validator', '/tools/json-validator'],
+                ['JSON Beautifier', '/tools/json-beautifier'],
+                ['JSON Editor', '/tools/json-editor'],
+                ['JSON Parser', '/tools/json-parser'],
+              ].map(([name, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-center font-mono text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
+                >
+                  {name}
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className={`${card} text-center`}>
+            <Shield className="mx-auto mb-3 h-6 w-6 text-[var(--accent-color)]" />
+            <h2 className={`${h2} mb-3`}>Private &amp; open source</h2>
+            <p className={`${body} mx-auto mb-4 max-w-2xl`}>
+              A free, open-source tool for developers. Format, validate, and explore JSON instantly
+              — every byte is processed locally in your browser, so your data never leaves your
+              computer.
+            </p>
+            <a
+              href="https://github.com/aduquehd/json-viewer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-4 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
+            >
+              <Github className="h-4 w-4" />
+              View source on GitHub
+            </a>
+          </section>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -162,451 +463,47 @@ export default function HelpPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-      
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-        <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <Link href="/" className="flex items-center gap-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                <ArrowLeft className="w-5 h-5" />
-                <span className="font-medium">Back to JSON Formatter</span>
-              </Link>
-              <nav aria-label="Breadcrumb">
-                <ol className="flex items-center space-x-2 text-sm">
-                  <li><Link href="/" className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Home</Link></li>
-                  <li className="text-gray-400">/</li>
-                  <li className="text-gray-700 dark:text-gray-200 font-medium">Help</li>
-                </ol>
-              </nav>
-            </div>
+
+      <div className="min-h-screen">
+        <nav className="sticky top-0 z-30 border-b border-[var(--navbar-border)] bg-[var(--navbar-bg)] backdrop-blur-xl">
+          <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <Link
+              href="/"
+              className="flex items-center gap-2 font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-color)]"
+            >
+              <ArrowLeft className="h-5 w-5" />
+              Back to the formatter
+            </Link>
+            <nav aria-label="Breadcrumb" className="font-mono text-xs text-[var(--text-muted)]">
+              <ol className="flex items-center gap-2">
+                <li>
+                  <Link href="/" className="hover:text-[var(--text-secondary)]">
+                    home
+                  </Link>
+                </li>
+                <li>/</li>
+                <li className="text-[var(--text-secondary)]">help</li>
+              </ol>
+            </nav>
           </div>
         </nav>
 
-        <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <header className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              JSON Formatter & Viewer Help Guide
+        <main className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+          <header className="mb-10">
+            <p className={`${eyebrow} mb-2 flex items-center gap-2`}>
+              <span className="font-mono text-base text-[var(--accent-color)]">{'{ }'}</span> docs
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-[var(--text-primary)] md:text-5xl">
+              JSON Formatter — Help &amp; Guide
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Everything you need to know about formatting, validating, and viewing JSON data online
+            <p className="mt-3 max-w-2xl text-lg text-[var(--text-secondary)]">
+              Everything about formatting, validating, and exploring JSON — the views, the syntax,
+              the shortcuts, and the answers to common questions.
             </p>
           </header>
 
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Quick Start: How to Format JSON
-            </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-              <ol className="space-y-6">
-                <li id="step1" className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
-                    1
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Paste Your JSON Data</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Copy your JSON data from any source and paste it into the editor. The tool accepts both valid and malformed JSON.
-                    </p>
-                  </div>
-                </li>
-                <li id="step2" className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
-                    2
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Click Format</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Click the "Format" button to beautify your JSON with proper indentation. Invalid JSON will be automatically fixed when possible.
-                    </p>
-                  </div>
-                </li>
-                <li id="step3" className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
-                    3
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Explore View Modes</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Switch between different views: Tree View for navigation, Graph View for visualization, Diff View for comparisons, and more.
-                    </p>
-                  </div>
-                </li>
-                <li id="step4" className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-full flex items-center justify-center font-bold">
-                    4
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Copy or Download</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Use the "Copy" button to copy formatted JSON to clipboard, or continue working with your data in various visualization modes.
-                    </p>
-                  </div>
-                </li>
-              </ol>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Features Overview
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <FileJson className="w-10 h-10 text-blue-600 dark:text-blue-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">JSON Editor</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Advanced Monaco editor with syntax highlighting, auto-completion, and real-time validation.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <TreePine className="w-10 h-10 text-green-600 dark:text-green-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tree View</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Interactive tree visualization for easy navigation and editing of nested JSON structures.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <GitCompare className="w-10 h-10 text-purple-600 dark:text-purple-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Diff View</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Compare two JSON objects side-by-side with highlighted differences.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <ChartBar className="w-10 h-10 text-orange-600 dark:text-orange-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Data Visualization</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Automatic chart generation from numerical JSON data with multiple chart types.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <Search className="w-10 h-10 text-indigo-600 dark:text-indigo-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Smart Search</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Search through JSON data with regex support, filters, and instant highlighting.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-                <Map className="w-10 h-10 text-teal-600 dark:text-teal-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Map View</h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
-                  Visualize geographic JSON data on an interactive map with markers and regions.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              JSON Syntax Guide
-            </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Valid JSON Rules</h3>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">Data must be in name/value pairs</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">Data is separated by commas</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">Curly braces {} hold objects</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">Square brackets [] hold arrays</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">Strings must be in double quotes ""</span>
-                </li>
-              </ul>
-
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Common JSON Errors</h3>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Trailing Commas</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Remove commas after the last item in objects or arrays</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Single Quotes</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Always use double quotes for strings, not single quotes</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Unquoted Keys</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Object keys must always be enclosed in double quotes</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Comments</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">JSON doesn't support comments (// or /* */)</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-16" id="faq">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-6">
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  What is JSON?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  JSON (JavaScript Object Notation) is a lightweight data-interchange format that is easy for humans to read and write, and easy for machines to parse and generate. It's based on JavaScript object syntax but is language-independent.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  How do I format JSON online?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Simply paste your JSON data into our editor and click the "Format" button. Our tool will automatically validate and beautify your JSON with proper indentation, making it easy to read and debug.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Is this JSON formatter free to use?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Yes, our JSON formatter is completely free to use with no limitations. There are no ads, no registration required, and no hidden fees. You can format as much JSON as you need.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Is my JSON data secure?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Absolutely! All JSON processing happens locally in your browser using JavaScript. No data is ever sent to our servers, ensuring complete privacy and security for sensitive information.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  What are common JSON syntax errors?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Common JSON errors include: missing quotes around keys, trailing commas, single quotes instead of double quotes, undefined values, and comments. Our formatter automatically fixes many of these issues.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Can I validate JSON syntax?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Yes, our tool automatically validates JSON syntax as you type and shows real-time error messages with line numbers to help you fix issues quickly. Invalid JSON is highlighted immediately.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  What's the difference between Format and Compact?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Format adds proper indentation and line breaks to make JSON readable. Compact removes all unnecessary whitespace to minimize file size, useful for production environments or APIs.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Can I edit JSON in tree view?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Yes! Our tree view is fully interactive. You can expand/collapse nodes, edit values directly, add new properties, delete nodes, and your changes will sync with the main editor.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  What file size limits are there?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  There are no strict file size limits since processing happens in your browser. However, extremely large files (&gt;10MB) may impact performance depending on your device's capabilities.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Does the tool work offline?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Once the page is loaded, most features work offline since JSON processing happens locally. However, you need an internet connection to initially load the tool and access map features.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              JSON Best Practices
-            </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-              <ul className="space-y-4">
-                <li className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Use Consistent Naming</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Stick to camelCase or snake_case throughout your JSON</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Keep It Simple</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Avoid deeply nested structures when possible</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Use Arrays for Lists</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">When order matters or items are similar, use arrays instead of objects</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Validate Before Production</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Always validate JSON before using in production environments</p>
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="text-gray-700 dark:text-gray-300 font-medium">Use Meaningful Keys</span>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Choose descriptive property names that clearly indicate the data they hold</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Keyboard Shortcuts
-            </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Editor Shortcuts</h3>
-                  <ul className="space-y-2">
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Format JSON</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + Shift + F</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Find</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + F</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Replace</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + H</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Undo</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + Z</kbd>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Navigation</h3>
-                  <ul className="space-y-2">
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Go to Line</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + G</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Fold All</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + K, 0</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Unfold All</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">Ctrl/Cmd + K, J</kbd>
-                    </li>
-                    <li className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-300">Command Palette</span>
-                      <kbd className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm">F1</kbd>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-16">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-white">
-              <div className="flex items-start gap-4">
-                <Shield className="w-12 h-12 flex-shrink-0" />
-                <div>
-                  <h2 className="text-2xl font-bold mb-3">Privacy & Security First</h2>
-                  <p className="text-blue-100 mb-4">
-                    Your JSON data never leaves your browser. All processing is done locally using JavaScript, ensuring complete privacy and security for your sensitive data. No server uploads, no data storage, no tracking.
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm">100% Client-Side</span>
-                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm">No Data Storage</span>
-                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm">Open Source</span>
-                    <span className="px-3 py-1 bg-white/20 rounded-full text-sm">No Tracking</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
-              <BookOpen className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                Need More Help?
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                If you have questions not covered in this guide, feel free to explore our tool or check out the source code on GitHub.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Link 
-                  href="/" 
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  Start Formatting JSON
-                </Link>
-                <a 
-                  href="https://github.com/aduquehd/json-formatter" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
-                >
-                  View on GitHub
-                </a>
-              </div>
-            </div>
-          </section>
+          <HelpTabs tabs={tabs} />
         </main>
-
-        <footer className="mt-16 py-8 border-t border-gray-200 dark:border-gray-700">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-400">
-            <p>© 2025 JSON Formatter & Viewer. Free, open-source, and privacy-focused.</p>
-          </div>
-        </footer>
       </div>
     </>
   );

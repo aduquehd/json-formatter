@@ -4,8 +4,8 @@
     "help": "Help"
   },
   "buttons": {
-    "format": "Format JSON",
-    "compact": "Compact JSON",
+    "format": "Format",
+    "compact": "Compact",
     "copy": "Copy",
     "paste": "Paste",
     "clear": "Clear",

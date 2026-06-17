@@ -1,20 +1,20 @@
 'use client';
 
-import React from 'react';
 import {
-  Code2,
-  Minimize2,
-  Copy,
+  ArrowDownAZ,
   Check,
   Clipboard,
-  Trash2,
+  Code2,
+  Copy,
+  Download,
   FileJson,
   FolderOpen,
-  Download,
-  ArrowDownAZ,
+  Minimize2,
   Moon,
   Sun,
+  Trash2,
 } from 'lucide-react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector';
 
@@ -68,14 +68,18 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-1.5 items-stretch sm:items-center flex-1 w-full sm:w-auto">
         {/* Primary action + transform */}
         <div className="flex gap-1 sm:gap-1.5 items-center">
-          <button onClick={onFormat} className={`${btn} btn-primary`} title="Format JSON (⌘/Ctrl + ↵)">
+          <button
+            onClick={onFormat}
+            className={`${btn} btn-primary`}
+            title="Format JSON (⌘/Ctrl + ↵)"
+          >
             <Code2 className={iconCls} />
-            {mounted ? t('buttons.format') : 'Format JSON'}
+            {mounted ? t('buttons.format') : 'Format'}
           </button>
 
           <button onClick={onCompact} className={`${btn} btn-secondary`} title="Minify JSON">
             <Minimize2 className={iconCls} />
-            {mounted ? t('buttons.compact') : 'Compact JSON'}
+            {mounted ? t('buttons.compact') : 'Compact'}
           </button>
         </div>
 
@@ -110,7 +114,11 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({
             {mounted ? t('buttons.open', 'Open') : 'Open'}
           </button>
 
-          <button onClick={onDownload} className={`${btn} btn-secondary`} title="Download (⌘/Ctrl + S)">
+          <button
+            onClick={onDownload}
+            className={`${btn} btn-secondary`}
+            title="Download (⌘/Ctrl + S)"
+          >
             <Download className={iconCls} />
             {mounted ? t('buttons.download') : 'Download'}
           </button>
@@ -146,10 +154,18 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({
         {/* Language Selector - Desktop only with label */}
         <div className="hidden md:block">{mounted && <LanguageSelector showLabel={true} />}</div>
 
-        <button onClick={onExampleClick} className={`${btn} btn-secondary`} title="Load a sample JSON">
+        <button
+          onClick={onExampleClick}
+          className={`${btn} btn-secondary`}
+          title="Load a sample JSON"
+        >
           <FileJson className={iconCls} />
-          <span className="sm:hidden">{mounted ? t('buttons.exampleShort', 'Example') : 'Example'}</span>
-          <span className="hidden sm:inline">{mounted ? t('buttons.example') : 'Try an example JSON'}</span>
+          <span className="sm:hidden">
+            {mounted ? t('buttons.exampleShort', 'Example') : 'Example'}
+          </span>
+          <span className="hidden sm:inline">
+            {mounted ? t('buttons.example') : 'Try an example JSON'}
+          </span>
         </button>
 
         <button
@@ -158,7 +174,11 @@ const ControlButtons: React.FC<ControlButtonsProps> = ({
           aria-label={mounted ? t('buttons.toggleTheme') : 'Toggle theme'}
           title="Toggle light / dark theme"
         >
-          {theme === 'light' ? <Moon className="w-4 h-4 sm:w-5 sm:h-5" /> : <Sun className="w-4 h-4 sm:w-5 sm:h-5" />}
+          {theme === 'light' ? (
+            <Moon className="w-4 h-4 sm:w-5 sm:h-5" />
+          ) : (
+            <Sun className="w-4 h-4 sm:w-5 sm:h-5" />
+          )}
         </button>
       </div>
     </div>

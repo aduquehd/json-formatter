@@ -1,0 +1,20 @@
+# Lefthook git hooks — https://lefthook.dev
+#
+# Pre-commit runs every validation, stopping at the first failure (piped):
+#   1. Biome  — format + lint + organize imports on staged files (auto-fixes,
+#               then re-stages the fixed files).
+#   2. ESLint — Next.js framework rules on staged JS/TS files.
+#   3. tsc    — whole-project type-check (runs only when a TS file is staged).
+pre-commit:
+  piped: true
+  commands:
+    1_biome:
+      glob: '*.{js,jsx,ts,tsx,json,jsonc,css}'
+      run: node_modules/.bin/biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+    2_eslint:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: node_modules/.bin/eslint {staged_files}
+    3_typecheck:
+      glob: '*.{ts,tsx}'
+      run: node_modules/.bin/tsc --noEmit

@@ -8,7 +8,6 @@ interface TabsContainerProps {
   onTabChange: (tab: string) => void;
 }
 
-
 const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = React.useState(false);
@@ -21,7 +20,7 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange })
   const tabs = [
     { id: 'formatted', label: mounted ? t('tabs.editor') : 'JSON Editor' },
     { id: 'tree', label: mounted ? t('tabs.tree') : 'Tree View' },
-    { id: 'graph', label: mounted ? t('tabs.graph') : 'Graph View', beta: true },
+    { id: 'graph', label: mounted ? t('tabs.graph') : 'Graph View' },
     { id: 'stats', label: mounted ? t('tabs.stats') : 'Statistics' },
     { id: 'diff', label: mounted ? t('tabs.diff') : 'Diff View' },
     { id: 'search', label: mounted ? t('tabs.search') : 'Search & Filter' },
