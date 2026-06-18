@@ -7,7 +7,7 @@
     "build": "next build",
     "prebuild": "node scripts/copy-monaco.mjs",
     "postinstall": "node scripts/copy-monaco.mjs",
-    "prepare": "lefthook install",
+    "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true",
     "start": "next start",
     "format": "biome format --write .",
     "lint": "eslint .",
