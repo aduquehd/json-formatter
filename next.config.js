@@ -69,37 +69,31 @@ const nextConfig = {
     ];
   },
   async redirects() {
+    // Views now live at clean paths (/, /tree, /diff, …). The editor view is the
+    // home page, so the formatter/validator/beautifier/editor/parser keyword
+    // URLs all consolidate there; viewer → /tree; diff/comparison → /diff.
+    const toEditor = [
+      'json-formatter',
+      'json-validator',
+      'json-beautifier',
+      'json-editor',
+      'json-parser',
+    ];
+
     return [
-      {
-        source: '/json-formatter',
-        destination: '/tools/json-formatter',
-        permanent: true,
-      },
-      {
-        source: '/json-viewer',
-        destination: '/tools/json-viewer',
-        permanent: true,
-      },
-      {
-        source: '/json-validator',
-        destination: '/tools/json-validator',
-        permanent: true,
-      },
-      {
-        source: '/json-beautifier',
-        destination: '/tools/json-beautifier',
-        permanent: true,
-      },
-      {
-        source: '/json-editor',
-        destination: '/tools/json-editor',
-        permanent: true,
-      },
-      {
-        source: '/json-parser',
-        destination: '/tools/json-parser',
-        permanent: true,
-      },
+      // Legacy bare + /tools/* keyword URLs → editor (home).
+      ...toEditor.flatMap((slug) => [
+        { source: `/${slug}`, destination: '/', permanent: true },
+        { source: `/tools/${slug}`, destination: '/', permanent: true },
+      ]),
+      // Viewer → tree view.
+      { source: '/json-viewer', destination: '/tree', permanent: true },
+      { source: '/tools/json-viewer', destination: '/tree', permanent: true },
+      // Diff / comparison → diff view.
+      { source: '/json-diff', destination: '/diff', permanent: true },
+      { source: '/json-comparison', destination: '/diff', permanent: true },
+      { source: '/compare', destination: '/diff', permanent: true },
+      { source: '/tools/json-diff', destination: '/diff', permanent: true },
     ];
   },
   async rewrites() {

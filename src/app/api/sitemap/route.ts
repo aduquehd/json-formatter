@@ -1,84 +1,39 @@
 import { NextResponse } from 'next/server';
+import { seoViews } from '@/lib/tools';
 
 export async function GET() {
   const baseUrl = 'https://www.jsonformatter.me';
   const lastModified = new Date().toISOString().split('T')[0];
 
-  // Build sitemap XML with proper formatting
-  const sitemap = '<?xml version="1.0" encoding="UTF-8"?>' + '\n' +
-'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + '\n' +
-`  <url>
-    <loc>${baseUrl}/</loc>
+  const urlEntry = (
+    path: string,
+    { changefreq = 'weekly', priority = '0.7' }: { changefreq?: string; priority?: string } = {}
+  ) =>
+    `  <url>
+    <loc>${baseUrl}${path === '/' ? '/' : path}</loc>
     <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/help</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-formatter</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-validator</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-viewer</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-beautifier</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-editor</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/tools/json-parser</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/guides</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/guides/what-is-json</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/guides/json-syntax</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/guides/common-json-errors</loc>
-    <lastmod>${lastModified}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+
+  // View routes are derived from the shared config so the sitemap can never
+  // drift from the pages that actually exist. The home/editor view is the
+  // top-priority entry.
+  const viewUrls = seoViews.map((v) =>
+    urlEntry(v.path, { changefreq: 'weekly', priority: v.path === '/' ? '1.0' : '0.9' })
+  );
+
+  const staticUrls = [
+    urlEntry('/help', { changefreq: 'monthly', priority: '0.8' }),
+    urlEntry('/guides', { changefreq: 'weekly', priority: '0.7' }),
+    urlEntry('/guides/what-is-json', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/json-syntax', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/common-json-errors', { changefreq: 'monthly', priority: '0.7' }),
+  ];
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${[...viewUrls, ...staticUrls].join('\n')}
 </urlset>`;
 
   return new NextResponse(sitemap.trim(), {

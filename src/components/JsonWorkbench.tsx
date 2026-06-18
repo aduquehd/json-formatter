@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,17 +10,19 @@ import EditorErrorBoundary from '@/components/EditorErrorBoundary';
 import EditorView from '@/components/EditorView';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import JsonExampleModal from '@/components/JsonExampleModal';
-import Navbar from '@/components/Navbar';
 import StatusBar from '@/components/StatusBar';
 import TabsContainer from '@/components/TabsContainer';
 import TreeView from '@/components/TreeView';
 import { useNotification } from '@/hooks/useNotification';
 import { useTheme } from '@/hooks/useTheme';
 import * as gtag from '@/lib/gtag';
+import { pathToView, type ToolView, viewToPath } from '@/lib/tools';
 import { JSONFixer } from '@/utils/jsonFixer';
-import { compactJSON, formatJSON } from '@/utils/jsonUtils';
+import { formatJSON } from '@/utils/jsonUtils';
 
-// Lazy load heavy components for better performance
+// Lazy load heavy components for better performance. Only the active view's
+// chunk loads, so each route pulls in just the view it opens (e.g. /diff loads
+// DiffView, not Graph/Stats/Map).
 const GraphView = dynamic(() => import('@/components/GraphView'), {
   loading: () => (
     <div className="flex items-center justify-center h-full">Loading Graph View...</div>
@@ -53,8 +56,18 @@ const SearchView = dynamic(() => import('@/components/SearchView'), {
   ssr: false,
 });
 
-export default function Home() {
+/**
+ * The JSON workbench. It lives in the persistent `(app)` layout, so its state
+ * (editor content, options) survives navigation between view routes. The active
+ * view is derived from the URL — clicking a tab navigates to that view's clean
+ * path (`/`, `/tree`, `/diff`, …) rather than flipping local state.
+ */
+export default function JsonWorkbench() {
   const { t } = useTranslation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const activeTab: ToolView = pathToView[pathname] ?? 'formatted';
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -62,7 +75,6 @@ export default function Home() {
   }, []);
   const [editorContent, setEditorContent] = useState('');
   const [parsedJson, setParsedJson] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('formatted');
   const [showExampleModal, setShowExampleModal] = useState(false);
   const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
   const [skipValidation, setSkipValidation] = useState(false);
@@ -72,7 +84,14 @@ export default function Home() {
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { theme, toggleTheme } = useTheme();
-  const { showSuccess, showError, showWarning } = useNotification();
+  const { showError, showWarning } = useNotification();
+
+  // Navigate to a view's clean URL. The layout persists, so the editor content
+  // is preserved across the navigation.
+  const goToView = (view: ToolView) => {
+    gtag.trackTabSwitch(view);
+    router.push(viewToPath(view), { scroll: false });
+  };
 
   // Indentation passed to JSON.stringify: a number of spaces, or a literal tab.
   const indentValue: string | number = indent === 'tab' ? '\t' : parseInt(indent, 10);
@@ -135,7 +154,6 @@ export default function Home() {
       setParsedJson(result.error ? null : result.data);
     }, 250);
     return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorContent, isUpdatingFromTree, skipValidation]);
 
   const handleFormat = () => {
@@ -259,7 +277,8 @@ export default function Home() {
         // Update parsed JSON directly
         setParsedJson(result.data);
 
-        setActiveTab('formatted');
+        // Show the editor so the pasted content is visible.
+        router.push('/', { scroll: false });
 
         if (result.wasFixed && result.fixes && result.fixes.length > 0) {
           // JSON was fixed - show warning after a brief delay to ensure UI updates
@@ -276,7 +295,7 @@ export default function Home() {
       } else {
         // Could not parse or fix the JSON
         setEditorContent(text);
-        setActiveTab('formatted');
+        router.push('/', { scroll: false });
         showError(result.error || (mounted ? t('messages.errorInvalid') : 'Invalid JSON format'));
       }
     } catch (error) {
@@ -306,7 +325,7 @@ export default function Home() {
       setEditorContent(exampleContent);
     }
     setShowExampleModal(false);
-    setActiveTab('formatted');
+    router.push('/', { scroll: false });
   };
 
   const handleTreeUpdate = (newContent: string) => {
@@ -352,7 +371,7 @@ export default function Home() {
       setEditorContent(text);
       showError(result.error || (mounted ? t('messages.errorInvalid') : 'Invalid JSON format'));
     }
-    setActiveTab('formatted');
+    router.push('/', { scroll: false });
   };
 
   const handleOpenFile = () => fileInputRef.current?.click();
@@ -400,125 +419,89 @@ export default function Home() {
   }, [editorContent, indent, sortKeys]);
 
   return (
-    <>
-      <Navbar theme={theme} onThemeToggle={toggleTheme} />
-
-      {/* Main Tool Section */}
-      <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
-        <main
-          id="main-content"
-          className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100dvh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-100px)] flex flex-col backdrop-blur-xl"
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json,application/json,text/plain"
-            onChange={handleFileInputChange}
-            className="hidden"
-            aria-hidden="true"
+    <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
+      <main
+        id="main-content"
+        className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100dvh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-100px)] flex flex-col backdrop-blur-xl"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json,application/json,text/plain"
+          onChange={handleFileInputChange}
+          className="hidden"
+          aria-hidden="true"
+        />
+        <div className="mb-2 sm:mb-3">
+          <ControlButtons
+            onFormat={handleFormat}
+            onCompact={handleCompact}
+            onClear={handleClear}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            onExampleClick={() => setShowExampleModal(true)}
+            onOpenFile={handleOpenFile}
+            onDownload={handleDownload}
+            copied={copied}
+            indent={indent}
+            onIndentChange={handleIndentChange}
+            sortKeys={sortKeys}
+            onSortKeysToggle={handleSortKeysToggle}
+            theme={theme}
+            onThemeToggle={toggleTheme}
           />
-          <div className="mb-2 sm:mb-3">
-            <ControlButtons
-              onFormat={handleFormat}
-              onCompact={handleCompact}
-              onClear={handleClear}
-              onCopy={handleCopy}
-              onPaste={handlePaste}
-              onExampleClick={() => setShowExampleModal(true)}
-              onOpenFile={handleOpenFile}
-              onDownload={handleDownload}
-              copied={copied}
-              indent={indent}
-              onIndentChange={handleIndentChange}
-              sortKeys={sortKeys}
-              onSortKeysToggle={handleSortKeysToggle}
-              theme={theme}
-              onThemeToggle={toggleTheme}
-            />
-          </div>
-
-          <TabsContainer
-            activeTab={activeTab}
-            onTabChange={(tab) => {
-              setActiveTab(tab);
-              gtag.trackTabSwitch(tab);
-            }}
-          />
-
-          <div
-            className={`flex-1 overflow-hidden editor-dropzone relative ${isDragOver ? 'drag-over' : ''}`}
-            role="tabpanel"
-            id={`${activeTab}-tab`}
-            aria-labelledby={`${activeTab}-tabbtn`}
-          >
-            {activeTab === 'formatted' && (
-              <EditorErrorBoundary>
-                <EditorView content={editorContent} onChange={setEditorContent} theme={theme} />
-              </EditorErrorBoundary>
-            )}
-            {activeTab === 'tree' && (
-              <ErrorBoundary>
-                <TreeView json={parsedJson} onUpdate={handleTreeUpdate} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'graph' && (
-              <ErrorBoundary>
-                <GraphView json={parsedJson} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'diff' && (
-              <ErrorBoundary>
-                <DiffView json={parsedJson} theme={theme} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'stats' && (
-              <ErrorBoundary>
-                <StatsView json={parsedJson} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'map' && (
-              <ErrorBoundary>
-                <MapView json={parsedJson} />
-              </ErrorBoundary>
-            )}
-            {activeTab === 'search' && (
-              <ErrorBoundary>
-                <SearchView json={parsedJson} />
-              </ErrorBoundary>
-            )}
-          </div>
-
-          <StatusBar content={editorContent} json={parsedJson} />
-        </main>
-      </div>
-
-      {/* Slim footer — full docs live on the Help page */}
-      <footer className="container mx-auto px-4 py-6 border-t border-[var(--border-color)]">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3 text-sm text-[var(--text-secondary)]">
-          <p className="font-mono text-xs">
-            © {new Date().getFullYear()} jsonformatter.me — free, open-source JSON tools
-          </p>
-          <nav className="flex gap-6">
-            <a href="/help" className="hover:text-[var(--accent-color)] transition-colors">
-              Help &amp; Guide
-            </a>
-            <a href="/guides" className="hover:text-[var(--accent-color)] transition-colors">
-              Guides
-            </a>
-            <a
-              href="https://github.com/aduquehd/json-viewer"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[var(--accent-color)] transition-colors"
-            >
-              GitHub
-            </a>
-          </nav>
         </div>
-      </footer>
+
+        <TabsContainer activeTab={activeTab} onTabChange={goToView} />
+
+        <div
+          className={`flex-1 overflow-hidden editor-dropzone relative ${isDragOver ? 'drag-over' : ''}`}
+          role="tabpanel"
+          id={`${activeTab}-tab`}
+          aria-labelledby={`${activeTab}-tabbtn`}
+        >
+          {activeTab === 'formatted' && (
+            <EditorErrorBoundary>
+              <EditorView content={editorContent} onChange={setEditorContent} theme={theme} />
+            </EditorErrorBoundary>
+          )}
+          {activeTab === 'tree' && (
+            <ErrorBoundary>
+              <TreeView json={parsedJson} onUpdate={handleTreeUpdate} />
+            </ErrorBoundary>
+          )}
+          {activeTab === 'graph' && (
+            <ErrorBoundary>
+              <GraphView json={parsedJson} />
+            </ErrorBoundary>
+          )}
+          {activeTab === 'diff' && (
+            <ErrorBoundary>
+              <DiffView json={parsedJson} theme={theme} />
+            </ErrorBoundary>
+          )}
+          {activeTab === 'stats' && (
+            <ErrorBoundary>
+              <StatsView json={parsedJson} />
+            </ErrorBoundary>
+          )}
+          {activeTab === 'map' && (
+            <ErrorBoundary>
+              <MapView json={parsedJson} />
+            </ErrorBoundary>
+          )}
+          {activeTab === 'search' && (
+            <ErrorBoundary>
+              <SearchView json={parsedJson} />
+            </ErrorBoundary>
+          )}
+        </div>
+
+        <StatusBar content={editorContent} json={parsedJson} />
+      </main>
 
       {showExampleModal && (
         <JsonExampleModal
@@ -526,6 +509,6 @@ export default function Home() {
           onClose={() => setShowExampleModal(false)}
         />
       )}
-    </>
+    </div>
   );
 }

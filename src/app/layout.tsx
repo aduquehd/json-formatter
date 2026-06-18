@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
-import { ThemeProvider } from '@/components/ThemeProvider';
 import Analytics from '@/components/Analytics';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -26,34 +27,42 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.jsonformatter.me'),
   title: {
     default: 'Free Online JSON Viewer & Formatter',
-    template: '%s | JSON Formatter'
+    template: '%s | JSON Formatter',
   },
-  description: 'JSON Formatter & Viewer - Free, open-source tool to format, validate, and beautify JSON. Auto-fix errors, tree view, syntax highlighting. 100% client-side.',
-  keywords: 'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
+  description:
+    'JSON Formatter & Viewer - Free, open-source tool to format, validate, and beautify JSON. Auto-fix errors, tree view, syntax highlighting. 100% client-side.',
+  keywords:
+    'json formatter, json viewer, json validator, json beautifier, format json, json online, json editor, json parser, json lint',
   authors: [{ name: 'Andres Duque' }],
   openGraph: {
     title: 'Free Online JSON Viewer & Formatter',
-    description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting and tree view.',
+    description:
+      'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON with syntax highlighting and tree view.',
     url: 'https://www.jsonformatter.me/',
     type: 'website',
     siteName: 'JSON Formatter',
-    images: [{
-      url: '/img/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: 'JSON Formatter Online - Format, View, and Validate JSON'
-    }],
+    images: [
+      {
+        url: '/img/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'JSON Formatter Online - Format, View, and Validate JSON',
+      },
+    ],
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Online JSON Viewer & Formatter',
-    description: 'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON.',
+    description:
+      'Free online JSON Formatter, JSON Viewer, and JSON Editor. Format, validate, beautify, and edit JSON.',
     creator: '@aduquehd',
-    images: [{
-      url: '/img/og-image.png',
-      alt: 'JSON Formatter Online - Format, View, and Validate JSON'
-    }],
+    images: [
+      {
+        url: '/img/og-image.png',
+        alt: 'JSON Formatter Online - Format, View, and Validate JSON',
+      },
+    ],
   },
   robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   icons: {
@@ -64,21 +73,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.jsonformatter.me/',
     languages: {
-      'en': 'https://www.jsonformatter.me/',
+      en: 'https://www.jsonformatter.me/',
       'x-default': 'https://www.jsonformatter.me/',
-    }
+    },
   },
   other: {
     'theme-color': '#2563eb',
     'msapplication-TileColor': '#2563eb',
-  }
+  },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   // Multiple structured data schemas for better SEO
   const webApplicationSchema = {
     '@context': 'https://schema.org',
@@ -88,7 +93,8 @@ export default function RootLayout({
     alternateName: ['JSON Viewer', 'JSON Validator', 'JSON Beautifier', 'JSON Editor'],
     applicationCategory: 'DeveloperApplication',
     applicationSubCategory: 'Web Development Tool',
-    description: 'Free online JSON formatter, viewer, and validator. Format, beautify, validate, and view JSON data instantly with syntax highlighting, tree view, and auto-fix capabilities.',
+    description:
+      'Free online JSON formatter, viewer, and validator. Format, beautify, validate, and view JSON data instantly with syntax highlighting, tree view, and auto-fix capabilities.',
     url: 'https://www.jsonformatter.me/',
     operatingSystem: 'Any',
     offers: {
@@ -171,7 +177,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
-        <script src="/suppress-monaco-warnings.js" />
+        <Script src="/suppress-monaco-warnings.js" strategy="beforeInteractive" />
         {jsonLdSchemas.map((schema, index) => (
           <script
             key={index}

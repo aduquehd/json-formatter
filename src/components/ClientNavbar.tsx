@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { Github, Heart, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
-import { Github, HelpCircle, Heart } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector';
 
@@ -30,15 +31,17 @@ const ClientNavbar: React.FC<ClientNavbarProps> = ({ theme, onThemeToggle }) => 
             {'{ }'}
           </div>
           <div className="flex flex-col items-start gap-0.5 min-w-0">
-            <h1 className="text-base sm:text-lg md:text-xl font-bold text-[var(--text-primary)] tracking-tight m-0 leading-tight">
+            {/* Site wordmark — a brand label, not the page heading (each page
+                owns its own <h1>), so this stays a div to avoid duplicate h1s. */}
+            <div className="text-base sm:text-lg md:text-xl font-bold text-[var(--text-primary)] tracking-tight m-0 leading-tight">
               {mounted ? t('nav.title') : 'JSON Formatter, Viewer & Editor Online'}
-            </h1>
+            </div>
             <p className="text-[9px] sm:text-xs text-[var(--text-secondary)] m-0 font-normal tracking-tight leading-tight line-clamp-1 sm:line-clamp-none">
               Free, open source &amp; secure — all processing happens locally in your browser.
             </p>
           </div>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-2 min-w-fit">
           <div className="flex flex-row items-center gap-1.5 sm:gap-2">
             <Link
@@ -48,9 +51,11 @@ const ClientNavbar: React.FC<ClientNavbarProps> = ({ theme, onThemeToggle }) => 
             >
               <HelpCircle className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-[var(--accent-color)]" />
               <span className="font-semibold">{mounted ? t('nav.help') : 'Help'}</span>
-              <span className="hidden sm:inline-flex ml-1 items-center justify-center text-[9px] px-1.5 py-0.5 bg-[var(--accent-color)] text-white rounded-full font-bold">NEW</span>
+              <span className="hidden sm:inline-flex ml-1 items-center justify-center text-[9px] px-1.5 py-0.5 bg-[var(--accent-color)] text-white rounded-full font-bold">
+                NEW
+              </span>
             </Link>
-            
+
             <Link
               href="https://github.com/aduquehd/json-formatter"
               target="_blank"
@@ -60,13 +65,13 @@ const ClientNavbar: React.FC<ClientNavbarProps> = ({ theme, onThemeToggle }) => 
               <Github className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Open Source</span>
             </Link>
-            
+
             {/* Language Selector - Mobile only, no label */}
             <div className="block md:hidden">
               {mounted && <LanguageSelector showLabel={false} />}
             </div>
           </div>
-          
+
           <Link
             href="https://aduquehd.com/"
             target="_blank"

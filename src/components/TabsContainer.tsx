@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import type { ToolView } from '@/lib/tools';
 
 interface TabsContainerProps {
   activeTab: string;
-  onTabChange: (tab: string) => void;
+  onTabChange: (tab: ToolView) => void;
 }
 
 const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange }) => {
@@ -17,7 +18,7 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange })
     setMounted(true);
   }, []);
 
-  const tabs = [
+  const tabs: { id: ToolView; label: string; beta?: boolean }[] = [
     { id: 'formatted', label: mounted ? t('tabs.editor') : 'JSON Editor' },
     { id: 'tree', label: mounted ? t('tabs.tree') : 'Tree View' },
     { id: 'graph', label: mounted ? t('tabs.graph') : 'Graph View' },
