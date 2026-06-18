@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ControlButtons from '@/components/ControlButtons';
 import EditorErrorBoundary from '@/components/EditorErrorBoundary';
-import EditorView from '@/components/EditorView';
+import EditorWorkspace from '@/components/EditorWorkspace';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import JsonExampleModal from '@/components/JsonExampleModal';
 import StatusBar from '@/components/StatusBar';
@@ -21,18 +21,12 @@ import { JSONFixer } from '@/utils/jsonFixer';
 import { formatJSON } from '@/utils/jsonUtils';
 
 // Lazy load heavy components for better performance. Only the active view's
-// chunk loads, so each route pulls in just the view it opens (e.g. /diff loads
-// DiffView, not Graph/Stats/Map).
+// chunk loads, so each route pulls in just the view it opens (e.g. /graph loads
+// GraphView, not Stats/Map). Diff lives inside the editor now and is lazy-loaded
+// from within EditorWorkspace.
 const GraphView = dynamic(() => import('@/components/GraphView'), {
   loading: () => (
     <div className="flex items-center justify-center h-full">Loading Graph View...</div>
-  ),
-  ssr: false,
-});
-
-const DiffView = dynamic(() => import('@/components/DiffView'), {
-  loading: () => (
-    <div className="flex items-center justify-center h-full">Loading Diff View...</div>
   ),
   ssr: false,
 });
@@ -67,6 +61,10 @@ export default function JsonWorkbench() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab: ToolView = pathToView[pathname] ?? 'formatted';
+  // The diff experience now lives inside the editor, so both `/` and the legacy
+  // `/diff` URL render the editor view; `/diff` just opens compare on arrival.
+  const isEditorView = activeTab === 'formatted' || activeTab === 'diff';
+  const panelView: ToolView = isEditorView ? 'formatted' : activeTab;
 
   const [mounted, setMounted] = useState(false);
 
@@ -74,6 +72,10 @@ export default function JsonWorkbench() {
     setMounted(true);
   }, []);
   const [editorContent, setEditorContent] = useState('');
+  // Compare mode (second editor + diff panel) and the document it diffs against.
+  // Held here, in the persistent layout, so they survive switching between views.
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareContent, setCompareContent] = useState('');
   const [parsedJson, setParsedJson] = useState<any>(null);
   const [showExampleModal, setShowExampleModal] = useState(false);
   const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
@@ -85,6 +87,19 @@ export default function JsonWorkbench() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { theme, toggleTheme } = useTheme();
   const { showError, showWarning } = useNotification();
+
+  // Landing on the legacy /diff URL opens compare automatically. Only fires on
+  // arrival, so the user can still close compare while staying on /diff.
+  useEffect(() => {
+    if (activeTab === 'diff') setCompareMode(true);
+  }, [activeTab]);
+
+  // Toggle compare mode; closing it while on /diff returns to the editor URL so
+  // the address bar never claims "diff" while a single editor is showing.
+  const handleCompareModeChange = (on: boolean) => {
+    setCompareMode(on);
+    if (!on && activeTab === 'diff') router.push(viewToPath('formatted'), { scroll: false });
+  };
 
   // Navigate to a view's clean URL. The layout persists, so the editor content
   // is preserved across the navigation.
@@ -422,7 +437,9 @@ export default function JsonWorkbench() {
     <div className="container mx-auto px-3 sm:px-4 md:px-5 pt-24 sm:pt-20 md:pt-20 pb-3 sm:pb-4 md:pb-5">
       <main
         id="main-content"
-        className="bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100dvh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-100px)] flex flex-col backdrop-blur-xl"
+        className={`bg-[var(--bg-tertiary)] border border-[var(--border-color)] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 shadow-lg h-[calc(100dvh-108px)] sm:h-[calc(100vh-104px)] md:h-[calc(100vh-100px)] flex flex-col backdrop-blur-xl${
+          compareMode && isEditorView ? ' compare-active' : ''
+        }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -455,17 +472,25 @@ export default function JsonWorkbench() {
           />
         </div>
 
-        <TabsContainer activeTab={activeTab} onTabChange={goToView} />
+        <TabsContainer activeTab={panelView} onTabChange={goToView} />
 
         <div
           className={`flex-1 overflow-hidden editor-dropzone relative ${isDragOver ? 'drag-over' : ''}`}
           role="tabpanel"
-          id={`${activeTab}-tab`}
-          aria-labelledby={`${activeTab}-tabbtn`}
+          id={`${panelView}-tab`}
+          aria-labelledby={`${panelView}-tabbtn`}
         >
-          {activeTab === 'formatted' && (
+          {isEditorView && (
             <EditorErrorBoundary>
-              <EditorView content={editorContent} onChange={setEditorContent} theme={theme} />
+              <EditorWorkspace
+                content={editorContent}
+                onChange={setEditorContent}
+                theme={theme}
+                compareMode={compareMode}
+                onCompareModeChange={handleCompareModeChange}
+                compareContent={compareContent}
+                onCompareContentChange={setCompareContent}
+              />
             </EditorErrorBoundary>
           )}
           {activeTab === 'tree' && (
@@ -476,11 +501,6 @@ export default function JsonWorkbench() {
           {activeTab === 'graph' && (
             <ErrorBoundary>
               <GraphView json={parsedJson} />
-            </ErrorBoundary>
-          )}
-          {activeTab === 'diff' && (
-            <ErrorBoundary>
-              <DiffView json={parsedJson} theme={theme} />
             </ErrorBoundary>
           )}
           {activeTab === 'stats' && (

@@ -19,7 +19,7 @@
     "language": "Language"
   },
   "tabs": {
-    "editor": "JSON Editor",
+    "editor": "Editor",
     "tree": "Tree View",
     "graph": "Graph View",
     "stats": "Statistics",

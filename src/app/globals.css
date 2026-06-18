@@ -75,8 +75,9 @@
     --tree-object: #0d9488;
     --tree-array: #8250df;
   }
-  
-  .dark, [data-theme="dark"] {
+
+  .dark,
+  [data-theme="dark"] {
     /* === Dark theme (primary) — Engineering Console === */
     --bg-primary: #0b0f14;
     --bg-secondary: #0e131a;
@@ -146,13 +147,16 @@
   }
 
   body {
-    font-family: var(--font-sans), 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      var(--font-sans), "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background-color: var(--bg-primary);
     /* Blueprint dot-grid + a soft accent glow above the fold */
     background-image:
       radial-gradient(circle at 50% -8%, rgba(13, 148, 136, 0.06), transparent 40%),
       radial-gradient(rgba(12, 17, 22, 0.05) 1px, transparent 1px);
-    background-size: 100% 720px, 22px 22px;
+    background-size:
+      100% 720px,
+      22px 22px;
     background-repeat: no-repeat, repeat;
     min-height: 100vh;
     color: var(--text-primary);
@@ -169,7 +173,9 @@
     background-image:
       radial-gradient(circle at 50% -8%, rgba(45, 212, 191, 0.08), transparent 40%),
       radial-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px);
-    background-size: 100% 720px, 22px 22px;
+    background-size:
+      100% 720px,
+      22px 22px;
     background-repeat: no-repeat, repeat;
   }
 }
@@ -179,11 +185,11 @@
     @apply absolute left-0 top-[-40px] z-[10000] rounded-br px-4 py-2 text-[var(--text-primary)] no-underline;
     background: var(--bg-primary);
   }
-  
+
   .skip-link:focus {
     @apply top-0;
   }
-  
+
   /* Main container styles */
   .container {
     @apply w-full;
@@ -197,18 +203,25 @@
   }
 
   .dark main {
-    background: linear-gradient(180deg, rgba(45, 212, 191, 0.025), transparent 140px), var(--bg-secondary);
+    background:
+      linear-gradient(180deg, rgba(45, 212, 191, 0.025), transparent 140px), var(--bg-secondary);
     border: 1px solid var(--border-color);
-    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(45, 212, 191, 0.06);
+    box-shadow:
+      0 24px 60px -24px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(45, 212, 191, 0.06);
   }
-  
+
   /* Button styles */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium;
     position: relative;
     cursor: pointer;
     border: 1px solid transparent;
-    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    transition:
+      background 0.18s ease,
+      color 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
   }
 
   /* Shimmer sweep intentionally removed for a calmer, pro-tool feel. */
@@ -283,11 +296,11 @@
     border-color: var(--accent-primary);
     color: var(--accent-primary);
   }
-  
+
   /* Tab styles */
   .tab-btn {
     @apply relative px-4 py-2.5 transition-all duration-200;
-    font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;
+    font-family: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.01em;
@@ -331,19 +344,19 @@
   .tab-btn:hover {
     color: var(--text-primary);
   }
-  
+
   .tab-btn.active {
     color: var(--text-primary);
   }
-  
+
   .tab-btn.active::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 right-0;
     height: 2px;
     background: var(--accent-color);
     box-shadow: 0 0 8px var(--accent-color);
   }
-  
+
   .beta-badge {
     display: inline-block;
     margin-left: 8px;
@@ -489,7 +502,9 @@
     overflow-y: auto;
     padding: 16px;
     background: var(--tree-bg);
-    font-family: var(--font-mono), 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+    font-family:
+      var(--font-mono), "JetBrains Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
+      monospace;
     font-size: 13px;
   }
 
@@ -611,7 +626,7 @@
   }
 
   .tree-edit-input {
-    font-family: var(--font-mono), 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: var(--font-mono), "JetBrains Mono", "Fira Code", monospace;
     font-size: 13px;
     font-weight: 500;
     padding: 2px 6px;
@@ -726,7 +741,8 @@
   }
 
   @keyframes glowSlide {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 0.3;
     }
     50% {
@@ -751,7 +767,9 @@
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+      border-color 0.2s,
+      color 0.2s;
   }
 
   .toolbar-select:hover {
@@ -774,7 +792,7 @@
     padding: 6px 10px;
     margin-top: 8px;
     border-top: 1px solid var(--border-color);
-    font-family: var(--font-mono), 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-family: var(--font-mono), "JetBrains Mono", "SF Mono", Monaco, monospace;
     font-size: 12px;
     color: var(--text-secondary);
   }
@@ -818,7 +836,6 @@
     outline-offset: -4px;
     border-radius: 10px;
   }
-
 }
 
 @layer utilities {
@@ -826,19 +843,19 @@
   .notyf__toast {
     @apply !rounded-lg !shadow-lg;
   }
-  
+
   .notyf__toast--success {
     @apply !bg-green-500;
   }
-  
+
   .notyf__toast--error {
     @apply !bg-red-500;
   }
-  
+
   .notyf__toast--warning {
     @apply !bg-orange-500;
   }
-  
+
   .notyf__toast--info {
     @apply !bg-blue-500;
   }
@@ -932,8 +949,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 20% 50%, var(--accent-bg) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, var(--accent-bg) 0%, transparent 50%);
+    background:
+      radial-gradient(circle at 20% 50%, var(--accent-bg) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, var(--accent-bg) 0%, transparent 50%);
     pointer-events: none;
     z-index: -1;
   }
@@ -946,10 +964,33 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: radial-gradient(circle at 1px 1px, rgba(122, 162, 247, 0.15) 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(122, 162, 247, 0.15) 1px,
+      transparent 1px
+    );
     background-size: 40px 40px;
     pointer-events: none;
     z-index: -1;
     opacity: 0.3;
+  }
+
+  /* ============================================================== *
+ * Compare (diff) view — mobile page scroll
+ *
+ * On small screens the compare view stacks two editors + toolbar + diff results,
+ * which is taller than the fixed-height app shell. Trapping that in a clipped,
+ * internally-scrolled box leaves the results unreachable by touch (the visible
+ * area is entirely editors/buttons). When compare is active we instead let the
+ * shell grow to its content and the whole page scroll naturally.
+ * ============================================================== */
+  @media (max-width: 768px) {
+    main#main-content.compare-active {
+      height: auto;
+      min-height: calc(100dvh - 108px);
+    }
+    main#main-content.compare-active .editor-dropzone {
+      overflow: visible;
+    }
   }
 }

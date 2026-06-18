@@ -52,5 +52,11 @@
       "semicolons": "always",
       "trailingCommas": "es5"
     }
+  },
+  "css": {
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
   }
 }

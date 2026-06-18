@@ -18,12 +18,13 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange })
     setMounted(true);
   }, []);
 
+  // Diff lives inside the Editor view now (via its "Compare" panel), so there's
+  // no standalone Diff tab.
   const tabs: { id: ToolView; label: string; beta?: boolean }[] = [
-    { id: 'formatted', label: mounted ? t('tabs.editor') : 'JSON Editor' },
+    { id: 'formatted', label: mounted ? t('tabs.editor') : 'Editor' },
     { id: 'tree', label: mounted ? t('tabs.tree') : 'Tree View' },
     { id: 'graph', label: mounted ? t('tabs.graph') : 'Graph View' },
     { id: 'stats', label: mounted ? t('tabs.stats') : 'Statistics' },
-    { id: 'diff', label: mounted ? t('tabs.diff') : 'Diff View' },
     { id: 'search', label: mounted ? t('tabs.search') : 'Search & Filter' },
     { id: 'map', label: mounted ? t('tabs.map') : 'Map View', beta: true },
   ];
@@ -62,7 +63,7 @@ const TabsContainer: React.FC<TabsContainerProps> = ({ activeTab, onTabChange })
     >
       {tabs.map((tab, index) => (
         <React.Fragment key={tab.id}>
-          {index === 4 && <div className="tab-separator" aria-hidden="true" />}
+          {tab.id === 'search' && <div className="tab-separator" aria-hidden="true" />}
           <button
             ref={(el) => {
               tabRefs.current[index] = el;

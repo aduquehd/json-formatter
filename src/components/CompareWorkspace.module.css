@@ -728,8 +728,24 @@
  * Responsive
  * ============================================================== */
 @media (max-width: 768px) {
+  /* The shell is allowed to grow (see main.compare-active in globals.css), so the
+     panel lays out in normal document flow and the page scrolls — no clipped,
+     hard-to-reach internal scroll area. */
+  .root {
+    height: auto;
+    overflow: visible;
+  }
   .inputs {
     grid-template-columns: 1fr;
+  }
+  .editorBox {
+    height: 200px;
+  }
+  /* Results grow to their natural height and flow with the page. */
+  .results {
+    flex: 0 0 auto;
+    min-height: 300px;
+    overflow: visible;
   }
   /* Stack the two split columns: original line on top, modified below. */
   .splitRow {

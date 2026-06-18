@@ -17,7 +17,6 @@ import {
   X,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNotification } from '../hooks/useNotification';
 import {
   charDiff,
@@ -32,11 +31,18 @@ import {
 } from '../utils/jsonDiff';
 import { JSONFixer } from '../utils/jsonFixer';
 import CodeMirrorEditor from './CodeMirrorEditor';
-import styles from './DiffView.module.css';
+import styles from './CompareWorkspace.module.css';
 
-interface DiffViewProps {
-  json: any;
+interface CompareWorkspaceProps {
+  /** Left "Your JSON" side — the shared main editor document. */
+  content: string;
+  onChange: (value: string) => void;
+  /** Right "Compare JSON" side — the document to diff against. */
+  compareContent: string;
+  onCompareContentChange: (value: string) => void;
   theme?: 'light' | 'dark';
+  /** Close compare mode and return to the single full-width editor. */
+  onExit: () => void;
 }
 
 type ViewMode = 'split' | 'unified' | 'semantic';
@@ -97,13 +103,21 @@ function clampValue(value: any): string {
   return str;
 }
 
-const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
-  const { t } = useTranslation();
+/**
+ * The JSON comparison surface that lives inside the Editor view. The left panel
+ * is the shared main editor (so "Your JSON" is whatever you were already
+ * editing); the right panel is a second document to diff against. Lazy-loaded —
+ * the diff machinery only ships once the user opens compare mode.
+ */
+const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
+  content,
+  onChange,
+  compareContent,
+  onCompareContentChange,
+  theme = 'dark',
+  onExit,
+}) => {
   const { showWarning, showError } = useNotification();
-
-  const [mounted, setMounted] = useState(false);
-  const [leftContent, setLeftContent] = useState(json ? JSON.stringify(json, null, 2) : '');
-  const [rightContent, setRightContent] = useState('');
 
   const [leftData, setLeftData] = useState<any>(undefined);
   const [rightData, setRightData] = useState<any>(undefined);
@@ -124,18 +138,17 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
   const resultsRef = useRef<HTMLDivElement>(null);
   const navIndexRef = useRef(-1);
 
-  useEffect(() => setMounted(true), []);
-
-  // Parse both panels (debounced) and stash the parsed values + validity.
+  // Parse both panels (debounced) and stash the parsed values + validity. The
+  // left side mirrors the live main-editor content passed in via props.
   useEffect(() => {
     const id = setTimeout(() => {
-      const leftFilled = leftContent.trim() !== '';
-      const rightFilled = rightContent.trim() !== '';
+      const leftFilled = content.trim() !== '';
+      const rightFilled = compareContent.trim() !== '';
       const lr = leftFilled
-        ? JSONFixer.parseWithFixInfo(leftContent)
+        ? JSONFixer.parseWithFixInfo(content)
         : { data: undefined, error: null };
       const rr = rightFilled
-        ? JSONFixer.parseWithFixInfo(rightContent)
+        ? JSONFixer.parseWithFixInfo(compareContent)
         : { data: undefined, error: null };
 
       setLeftInvalid(leftFilled && !!lr.error);
@@ -145,7 +158,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
       setReady(leftFilled && rightFilled && !lr.error && !rr.error);
     }, 300);
     return () => clearTimeout(id);
-  }, [leftContent, rightContent]);
+  }, [content, compareContent]);
 
   // Reset fold state whenever the underlying comparison changes.
   useEffect(() => {
@@ -154,37 +167,39 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
   }, [leftData, rightData, sortKeys, viewMode]);
 
   const transform = useCallback(
-    (content: string, side: 'left' | 'right', pretty: boolean) => {
-      const result = JSONFixer.parseWithFixInfo(content || '{}');
+    (value: string, side: 'left' | 'right', pretty: boolean) => {
+      const result = JSONFixer.parseWithFixInfo(value || '{}');
       if (result.error) {
         showError('Invalid JSON format');
         return;
       }
       if (result.wasFixed && result.fixes) {
-        const panel = side === 'left' ? 'Original' : 'Modified';
+        const panel = side === 'left' ? 'Your JSON' : 'Compare JSON';
         showWarning(`Repaired ${panel}: ${result.fixes.join(', ')}`);
       }
       const next = pretty ? JSON.stringify(result.data, null, 2) : JSON.stringify(result.data);
-      if (side === 'left') setLeftContent(next);
-      else setRightContent(next);
+      if (side === 'left') onChange(next);
+      else onCompareContentChange(next);
     },
-    [showWarning, showError]
+    [showWarning, showError, onChange, onCompareContentChange]
   );
 
   const handleSwap = useCallback(() => {
-    setLeftContent(rightContent);
-    setRightContent(leftContent);
-  }, [leftContent, rightContent]);
+    const previousLeft = content;
+    onChange(compareContent);
+    onCompareContentChange(previousLeft);
+  }, [content, compareContent, onChange, onCompareContentChange]);
 
-  const handleClear = useCallback(() => {
-    setLeftContent('');
-    setRightContent('');
-  }, []);
+  // Clears only the compare side, so swapping in a new comparison target never
+  // wipes the JSON you were editing. (The main toolbar's Clear empties the editor.)
+  const handleClearCompare = useCallback(() => {
+    onCompareContentChange('');
+  }, [onCompareContentChange]);
 
   const handleSample = useCallback(() => {
-    setLeftContent(SAMPLE_LEFT);
-    setRightContent(SAMPLE_RIGHT);
-  }, []);
+    onChange(SAMPLE_LEFT);
+    onCompareContentChange(SAMPLE_RIGHT);
+  }, [onChange, onCompareContentChange]);
 
   const copyPath = useCallback(
     (path: string) => {
@@ -272,8 +287,8 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
   const renderPanel = (
     side: 'left' | 'right',
     title: string,
-    content: string,
-    setContent: (v: string) => void,
+    value: string,
+    setValue: (v: string) => void,
     invalid: boolean
   ) => (
     <div className={styles.panel}>
@@ -286,14 +301,14 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
         <div className={styles.panelActions}>
           <button
             className={styles.miniBtn}
-            onClick={() => transform(content, side, true)}
+            onClick={() => transform(value, side, true)}
             title="Format"
           >
             <Code2 className="w-3.5 h-3.5" />
           </button>
           <button
             className={styles.miniBtn}
-            onClick={() => transform(content, side, false)}
+            onClick={() => transform(value, side, false)}
             title="Compact"
           >
             <Minimize2 className="w-3.5 h-3.5" />
@@ -301,7 +316,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
         </div>
       </div>
       <div className={`${styles.editorBox} ${invalid ? styles.editorInvalid : ''}`}>
-        <CodeMirrorEditor value={content} onChange={setContent} theme={theme} />
+        <CodeMirrorEditor value={value} onChange={setValue} theme={theme} />
       </div>
     </div>
   );
@@ -603,12 +618,12 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
           <p className={styles.placeholderTitle}>
             {leftInvalid || rightInvalid
               ? 'Fix the invalid JSON to compare'
-              : 'Compare two JSON documents'}
+              : 'Compare against another JSON'}
           </p>
           <p className={styles.placeholderText}>
             {leftInvalid || rightInvalid
               ? 'One of the panels has invalid JSON. Fix it (or hit Format) to see the diff.'
-              : 'Paste JSON into both panels — the diff updates automatically as you type.'}
+              : 'Paste JSON into the “Compare JSON” panel — the diff updates automatically as you type.'}
           </p>
           {!leftInvalid && !rightInvalid && (
             <button className={styles.sampleBtn} onClick={handleSample}>
@@ -622,9 +637,7 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
       return (
         <div className={styles.noChanges}>
           <Check className={styles.placeholderIcon} />
-          <p className={styles.placeholderTitle}>
-            {mounted ? t('diff.noDifference') : 'No differences found'}
-          </p>
+          <p className={styles.placeholderTitle}>No differences found</p>
           <p className={styles.placeholderText}>
             Both JSON documents are identical{sortKeys ? ' (ignoring key order)' : ''}.
           </p>
@@ -640,18 +653,12 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
       {/* Input editors */}
       {!editorsCollapsed && (
         <div className={styles.inputs}>
-          {renderPanel(
-            'left',
-            mounted ? t('diff.original') : 'Original JSON',
-            leftContent,
-            setLeftContent,
-            leftInvalid
-          )}
+          {renderPanel('left', 'Your JSON', content, onChange, leftInvalid)}
           {renderPanel(
             'right',
-            mounted ? t('diff.modified') : 'Modified JSON',
-            rightContent,
-            setRightContent,
+            'Compare JSON',
+            compareContent,
+            onCompareContentChange,
             rightInvalid
           )}
         </div>
@@ -724,9 +731,22 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
             )}
             {editorsCollapsed ? 'Show editors' : 'Hide editors'}
           </button>
-          <button className={styles.toolBtn} onClick={handleClear} title="Clear both panels">
+          <button
+            className={styles.toolBtn}
+            onClick={handleClearCompare}
+            title="Clear the Compare JSON panel"
+          >
             <Trash2 className="w-3.5 h-3.5" />
             Clear
+          </button>
+          <div className={styles.divider} />
+          <button
+            className={styles.toolBtn}
+            onClick={onExit}
+            title="Close compare and return to the editor"
+          >
+            <X className="w-3.5 h-3.5" />
+            Close compare
           </button>
         </div>
       </div>
@@ -796,4 +816,4 @@ const DiffView: React.FC<DiffViewProps> = ({ json, theme = 'dark' }) => {
   );
 };
 
-export default DiffView;
+export default CompareWorkspace;
