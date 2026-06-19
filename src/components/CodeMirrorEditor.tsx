@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import CodeMirror, { EditorView } from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
-import { createTheme } from '@uiw/codemirror-themes';
 import { tags as t } from '@lezer/highlight';
+import { createTheme } from '@uiw/codemirror-themes';
+import CodeMirror, { EditorView } from '@uiw/react-codemirror';
+import type React from 'react';
+import { useMemo } from 'react';
 
 interface CodeMirrorEditorProps {
   value: string;
@@ -24,7 +25,12 @@ const darkTheme = createTheme({
     caret: '#2dd4bf',
     selection: '#173a36',
     selectionMatch: '#12302c',
-    lineHighlight: '#0e141b',
+    // Translucent active line. CodeMirror paints the selection in a layer *below*
+    // the line backgrounds, so an opaque active line would hide the selection on
+    // the current line — making a single-word selection look invisible while a
+    // multi-line one still shows on the other rows. Keeping it translucent lets
+    // the selection show through, so single- and multi-line look identical.
+    lineHighlight: 'rgba(255, 255, 255, 0.04)',
     gutterBackground: '#0b0f14',
     gutterForeground: '#3a4654',
     gutterActiveForeground: '#2dd4bf',
@@ -49,7 +55,9 @@ const lightTheme = createTheme({
     caret: '#0d9488',
     selection: '#0d948822',
     selectionMatch: '#0d948822',
-    lineHighlight: '#f3f5f7',
+    // Translucent active line so it doesn't hide the selection on the current
+    // line (selection is painted *below* the line backgrounds). See dark theme.
+    lineHighlight: 'rgba(12, 17, 22, 0.04)',
     gutterBackground: '#ffffff',
     gutterForeground: '#8a949f',
     gutterActiveForeground: '#0d9488',
