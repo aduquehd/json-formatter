@@ -21,6 +21,10 @@ export interface ViewSeo {
   faqs: { question: string; answer: string }[];
   /** Feature bullets, surfaced in the WebApplication JSON-LD. */
   features: string[];
+  /** Numbered usage steps — rendered visibly and as HowTo JSON-LD. */
+  howTo: string[];
+  /** Internal cross-links to related views/guides for crawl depth + UX. */
+  related: { href: string; title: string; description: string }[];
 }
 
 function meta(path: string, title: string, description: string, keywords: string): Metadata {
@@ -86,6 +90,28 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Tree, graph, diff, and stats views',
       'No data sent to servers — 100% client-side',
     ],
+    howTo: [
+      'Paste or type your JSON into the editor — or drag in a .json file. Minified, messy, or invalid JSON all work.',
+      'Click Format (or press Ctrl/Cmd+Enter) to reindent and validate it. Trailing commas, single quotes, and other common errors are fixed automatically.',
+      'Copy the clean output, minify it, or switch to the Tree, Graph, or Diff views to explore your data further.',
+    ],
+    related: [
+      {
+        href: '/tree',
+        title: 'JSON Tree Viewer',
+        description: 'Explore JSON as an interactive, collapsible tree.',
+      },
+      {
+        href: '/diff',
+        title: 'JSON Diff',
+        description: 'Compare two JSON documents and find every difference.',
+      },
+      {
+        href: '/guides/common-json-errors',
+        title: 'Common JSON Errors',
+        description: 'Fix the most frequent JSON mistakes.',
+      },
+    ],
   },
   tree: {
     view: 'tree',
@@ -123,6 +149,24 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Search and filter',
       'No data sent to servers — 100% client-side',
     ],
+    howTo: [
+      'Paste your JSON into the editor at the top of the page.',
+      'The tree renders automatically — click any node to expand or collapse nested objects and arrays.',
+      'Click a value to edit it inline, or use search to jump straight to the key you need.',
+    ],
+    related: [
+      { href: '/', title: 'JSON Formatter', description: 'Format, validate, and beautify JSON.' },
+      {
+        href: '/graph',
+        title: 'JSON Graph Viewer',
+        description: 'Visualize JSON as an interactive node-link graph.',
+      },
+      {
+        href: '/stats',
+        title: 'JSON Analyzer',
+        description: 'Key counts, nesting depth, and data-type breakdown.',
+      },
+    ],
   },
   graph: {
     view: 'graph',
@@ -154,6 +198,20 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Relationship visualization',
       'No data sent to servers — 100% client-side',
     ],
+    howTo: [
+      'Paste your JSON into the editor.',
+      'Switch to the Graph view to see your data rendered as a network of connected nodes.',
+      'Pan and zoom to navigate large structures and trace relationships between objects and arrays.',
+    ],
+    related: [
+      {
+        href: '/tree',
+        title: 'JSON Tree Viewer',
+        description: 'Explore JSON as a collapsible tree.',
+      },
+      { href: '/stats', title: 'JSON Analyzer', description: 'Understand the shape of your JSON.' },
+      { href: '/', title: 'JSON Formatter', description: 'Format and validate JSON first.' },
+    ],
   },
   stats: {
     view: 'stats',
@@ -184,6 +242,20 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Data-type breakdown',
       'Structure insights',
       'No data sent to servers — 100% client-side',
+    ],
+    howTo: [
+      'Paste your JSON into the editor.',
+      'Open the Analyzer view to see key counts, maximum nesting depth, and a breakdown of every data type.',
+      'Use the insights to understand an unfamiliar API response before writing code against it.',
+    ],
+    related: [
+      {
+        href: '/tree',
+        title: 'JSON Tree Viewer',
+        description: 'Drill into the structure node by node.',
+      },
+      { href: '/graph', title: 'JSON Graph Viewer', description: 'See relationships visually.' },
+      { href: '/', title: 'JSON Formatter', description: 'Format and validate JSON.' },
     ],
   },
   diff: {
@@ -221,6 +293,15 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Collapse unchanged sections',
       'No data sent to servers — 100% client-side',
     ],
+    howTo: [
+      'Paste the original JSON in the left panel.',
+      'Paste the modified JSON in the right panel — the diff updates automatically.',
+      "Switch between split, unified, and semantic modes, and enable 'Ignore key order' so reordered keys aren't flagged.",
+    ],
+    related: [
+      { href: '/', title: 'JSON Formatter', description: 'Format both files before comparing.' },
+      { href: '/tree', title: 'JSON Tree Viewer', description: 'Explore each document as a tree.' },
+    ],
   },
   search: {
     view: 'search',
@@ -246,6 +327,19 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Filter large documents',
       'No data sent to servers — 100% client-side',
     ],
+    howTo: [
+      'Paste your JSON into the editor.',
+      'Type a query to find matching keys or values anywhere in the document.',
+      'Jump to any match — handy for navigating large API responses.',
+    ],
+    related: [
+      {
+        href: '/tree',
+        title: 'JSON Tree Viewer',
+        description: 'Browse the full structure as a tree.',
+      },
+      { href: '/', title: 'JSON Formatter', description: 'Format and validate JSON.' },
+    ],
   },
   map: {
     view: 'map',
@@ -270,6 +364,15 @@ export const viewSeo: Record<ToolView, ViewSeo> = {
       'Plot coordinates on a map',
       'Interactive pan and zoom',
       'No data sent to servers — 100% client-side',
+    ],
+    howTo: [
+      'Paste JSON containing latitude/longitude fields into the editor.',
+      'Open the Map view to see every coordinate plotted on an interactive map.',
+      'Pan and zoom to inspect the points — everything renders locally in your browser.',
+    ],
+    related: [
+      { href: '/tree', title: 'JSON Tree Viewer', description: 'Inspect the raw coordinate data.' },
+      { href: '/', title: 'JSON Formatter', description: 'Validate your GeoJSON first.' },
     ],
   },
 };
