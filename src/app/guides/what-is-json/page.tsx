@@ -1,13 +1,16 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'What is JSON? A Complete Guide to JavaScript Object Notation',
-  description: 'Learn what JSON is, how it works, and why it\'s the most popular data format for web APIs. Includes examples, syntax rules, and common use cases.',
-  keywords: 'what is json, json meaning, json definition, json tutorial, json explained, javascript object notation, json format, json data',
+  description:
+    "Learn what JSON is, how it works, and why it's the most popular data format for web APIs. Includes examples, syntax rules, and common use cases.",
+  keywords:
+    'what is json, json meaning, json definition, json tutorial, json explained, javascript object notation, json format, json data',
   openGraph: {
     title: 'What is JSON? A Complete Guide',
-    description: 'Learn what JSON is, how it works, and why it\'s the most popular data format for web APIs.',
+    description:
+      "Learn what JSON is, how it works, and why it's the most popular data format for web APIs.",
     type: 'article',
     url: 'https://www.jsonformatter.me/guides/what-is-json',
   },
@@ -21,7 +24,8 @@ export default function WhatIsJsonPage() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'What is JSON? A Complete Guide to JavaScript Object Notation',
-    description: 'Learn what JSON is, how it works, and why it\'s the most popular data format for web APIs.',
+    description:
+      "Learn what JSON is, how it works, and why it's the most popular data format for web APIs.",
     author: {
       '@type': 'Person',
       name: 'Andres Duque',
@@ -41,8 +45,18 @@ export default function WhatIsJsonPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'What is JSON?', item: 'https://www.jsonformatter.me/guides/what-is-json' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Guides',
+        item: 'https://www.jsonformatter.me/guides',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'What is JSON?',
+        item: 'https://www.jsonformatter.me/guides/what-is-json',
+      },
     ],
   };
 
@@ -57,14 +71,22 @@ export default function WhatIsJsonPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        <article className="container mx-auto px-4 py-20 max-w-4xl">
+      <div className="bg-[var(--bg-primary)]">
+        <article className="mx-auto w-full max-w-4xl px-4 py-12 sm:py-16">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
-              <li><Link href="/" className="hover:text-[var(--accent-primary)]">Home</Link></li>
+              <li>
+                <Link href="/" className="hover:text-[var(--accent-primary)]">
+                  Home
+                </Link>
+              </li>
               <li>/</li>
-              <li><Link href="/guides" className="hover:text-[var(--accent-primary)]">Guides</Link></li>
+              <li>
+                <Link href="/guides" className="hover:text-[var(--accent-primary)]">
+                  Guides
+                </Link>
+              </li>
               <li>/</li>
               <li className="text-[var(--text-primary)]">What is JSON?</li>
             </ol>
@@ -76,19 +98,29 @@ export default function WhatIsJsonPage() {
               What is JSON?
             </h1>
             <p className="text-xl text-[var(--text-secondary)]">
-              A complete guide to JavaScript Object Notation - the most popular data interchange format on the web.
+              A complete guide to JavaScript Object Notation - the most popular data interchange
+              format on the web.
             </p>
           </header>
 
           {/* Content */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">JSON Definition</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                JSON Definition
+              </h2>
               <p className="text-[var(--text-secondary)] mb-4">
-                <strong className="text-[var(--text-primary)]">JSON (JavaScript Object Notation)</strong> is a lightweight, text-based data format used to store and exchange data. Despite its name, JSON is language-independent and can be used with virtually any programming language.
+                <strong className="text-[var(--text-primary)]">
+                  JSON (JavaScript Object Notation)
+                </strong>{' '}
+                is a lightweight, text-based data format used to store and exchange data. Despite
+                its name, JSON is language-independent and can be used with virtually any
+                programming language.
               </p>
               <p className="text-[var(--text-secondary)] mb-4">
-                JSON was derived from JavaScript but has become the standard data format for web APIs, configuration files, and data storage. It&apos;s human-readable, easy to parse, and supported by every major programming language.
+                JSON was derived from JavaScript but has become the standard data format for web
+                APIs, configuration files, and data storage. It&apos;s human-readable, easy to
+                parse, and supported by every major programming language.
               </p>
             </section>
 
@@ -113,14 +145,16 @@ export default function WhatIsJsonPage() {
             </section>
 
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">JSON Data Types</h2>
-              <p className="text-[var(--text-secondary)] mb-4">
-                JSON supports six data types:
-              </p>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                JSON Data Types
+              </h2>
+              <p className="text-[var(--text-secondary)] mb-4">JSON supports six data types:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">String</h3>
-                  <code className="text-sm text-[var(--accent-primary)]">&quot;Hello World&quot;</code>
+                  <code className="text-sm text-[var(--accent-primary)]">
+                    &quot;Hello World&quot;
+                  </code>
                 </div>
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Number</h3>
@@ -149,50 +183,121 @@ export default function WhatIsJsonPage() {
               <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Why Use JSON?</h2>
               <ul className="space-y-3 text-[var(--text-secondary)]">
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span><strong className="text-[var(--text-primary)]">Human-readable:</strong> Easy to read and write compared to XML or binary formats</span>
+                  <span>
+                    <strong className="text-[var(--text-primary)]">Human-readable:</strong> Easy to
+                    read and write compared to XML or binary formats
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span><strong className="text-[var(--text-primary)]">Lightweight:</strong> Minimal syntax means smaller file sizes</span>
+                  <span>
+                    <strong className="text-[var(--text-primary)]">Lightweight:</strong> Minimal
+                    syntax means smaller file sizes
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span><strong className="text-[var(--text-primary)]">Universal support:</strong> Works with JavaScript, Python, Java, PHP, and every major language</span>
+                  <span>
+                    <strong className="text-[var(--text-primary)]">Universal support:</strong> Works
+                    with JavaScript, Python, Java, PHP, and every major language
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span><strong className="text-[var(--text-primary)]">Native to JavaScript:</strong> Parse and stringify with built-in methods</span>
+                  <span>
+                    <strong className="text-[var(--text-primary)]">Native to JavaScript:</strong>{' '}
+                    Parse and stringify with built-in methods
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span><strong className="text-[var(--text-primary)]">API standard:</strong> The default format for REST APIs and web services</span>
+                  <span>
+                    <strong className="text-[var(--text-primary)]">API standard:</strong> The
+                    default format for REST APIs and web services
+                  </span>
                 </li>
               </ul>
             </section>
 
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Common Uses of JSON</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                Common Uses of JSON
+              </h2>
               <div className="space-y-4 text-[var(--text-secondary)]">
-                <p><strong className="text-[var(--text-primary)]">Web APIs:</strong> Nearly all modern REST APIs use JSON to send and receive data between servers and clients.</p>
-                <p><strong className="text-[var(--text-primary)]">Configuration files:</strong> Many applications use JSON for settings (package.json, tsconfig.json, etc.).</p>
-                <p><strong className="text-[var(--text-primary)]">Data storage:</strong> NoSQL databases like MongoDB store data in JSON-like formats.</p>
-                <p><strong className="text-[var(--text-primary)]">Data exchange:</strong> Sharing data between different systems and programming languages.</p>
+                <p>
+                  <strong className="text-[var(--text-primary)]">Web APIs:</strong> Nearly all
+                  modern REST APIs use JSON to send and receive data between servers and clients.
+                </p>
+                <p>
+                  <strong className="text-[var(--text-primary)]">Configuration files:</strong> Many
+                  applications use JSON for settings (package.json, tsconfig.json, etc.).
+                </p>
+                <p>
+                  <strong className="text-[var(--text-primary)]">Data storage:</strong> NoSQL
+                  databases like MongoDB store data in JSON-like formats.
+                </p>
+                <p>
+                  <strong className="text-[var(--text-primary)]">Data exchange:</strong> Sharing
+                  data between different systems and programming languages.
+                </p>
               </div>
             </section>
 
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">JSON Syntax Rules</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                JSON Syntax Rules
+              </h2>
               <ul className="space-y-2 text-[var(--text-secondary)]">
                 <li>• Data is in key/value pairs</li>
                 <li>• Keys must be strings in double quotes</li>
@@ -226,13 +331,23 @@ export default function WhatIsJsonPage() {
           <nav className="mt-12 pt-8 border-t border-[var(--border-color)]">
             <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Related Guides</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href="/guides/json-syntax" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/json-syntax"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">JSON Syntax Guide</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Learn the rules and structure of JSON</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Learn the rules and structure of JSON
+                </p>
               </Link>
-              <Link href="/guides/common-json-errors" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/common-json-errors"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">Common JSON Errors</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Fix the most frequent JSON mistakes</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Fix the most frequent JSON mistakes
+                </p>
               </Link>
             </div>
           </nav>

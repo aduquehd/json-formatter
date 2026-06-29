@@ -29,6 +29,11 @@ export async function GET() {
     urlEntry('/guides/what-is-json', { changefreq: 'monthly', priority: '0.7' }),
     urlEntry('/guides/json-syntax', { changefreq: 'monthly', priority: '0.7' }),
     urlEntry('/guides/common-json-errors', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/json-parse', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/unexpected-token-in-json', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/json-in-javascript', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/json-vs-xml', { changefreq: 'monthly', priority: '0.7' }),
+    urlEntry('/guides/json-api-best-practices', { changefreq: 'monthly', priority: '0.7' }),
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

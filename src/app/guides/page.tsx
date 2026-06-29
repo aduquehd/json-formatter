@@ -1,13 +1,16 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'JSON Guides & Tutorials - Learn JSON Formatting, Validation & More',
-  description: 'Learn everything about JSON with our comprehensive guides. JSON syntax, formatting best practices, common errors and fixes, and advanced JSON tips for developers.',
-  keywords: 'json tutorial, json guide, learn json, json syntax, json best practices, json errors, json tips',
+  description:
+    'Learn everything about JSON with our comprehensive guides. JSON syntax, formatting best practices, common errors and fixes, and advanced JSON tips for developers.',
+  keywords:
+    'json tutorial, json guide, learn json, json syntax, json best practices, json errors, json tips',
   openGraph: {
     title: 'JSON Guides & Tutorials - Learn JSON',
-    description: 'Comprehensive JSON guides for developers. Learn syntax, formatting, validation, and best practices.',
+    description:
+      'Comprehensive JSON guides for developers. Learn syntax, formatting, validation, and best practices.',
     type: 'website',
     url: 'https://www.jsonformatter.me/guides',
   },
@@ -20,44 +23,66 @@ const guides = [
   {
     slug: 'what-is-json',
     title: 'What is JSON? A Complete Introduction',
-    description: 'Learn what JSON is, why it\'s used, and how it works. A beginner-friendly guide to JavaScript Object Notation.',
+    description:
+      "Learn what JSON is, why it's used, and how it works. A beginner-friendly guide to JavaScript Object Notation.",
     category: 'Basics',
     available: true,
   },
   {
     slug: 'json-syntax',
     title: 'JSON Syntax Guide: Rules and Examples',
-    description: 'Master JSON syntax with this comprehensive guide. Learn about objects, arrays, data types, and proper formatting.',
+    description:
+      'Master JSON syntax with this comprehensive guide. Learn about objects, arrays, data types, and proper formatting.',
     category: 'Basics',
     available: true,
   },
   {
     slug: 'common-json-errors',
     title: 'Common JSON Errors and How to Fix Them',
-    description: 'Troubleshoot JSON parsing errors. Learn about trailing commas, quote issues, and other common mistakes.',
+    description:
+      'Troubleshoot JSON parsing errors. Learn about trailing commas, quote issues, and other common mistakes.',
     category: 'Troubleshooting',
+    available: true,
+  },
+  {
+    slug: 'unexpected-token-in-json',
+    title: 'Fix "Unexpected token in JSON" Errors',
+    description:
+      'Diagnose and fix the JSON.parse SyntaxError — unexpected token, unexpected end of input, and HTML returned instead of JSON.',
+    category: 'Troubleshooting',
+    available: true,
+  },
+  {
+    slug: 'json-parse',
+    title: 'JSON.parse() Explained: Syntax, Examples & Errors',
+    description:
+      'What JSON.parse() does and how to use it — syntax, the reviver function, error handling, and decoding in Python and PHP.',
+    category: 'Programming',
     available: true,
   },
   {
     slug: 'json-vs-xml',
     title: 'JSON vs XML: Which Should You Use?',
-    description: 'Compare JSON and XML formats. Understand the pros and cons of each for different use cases.',
+    description:
+      'Compare JSON and XML formats. Understand the pros and cons of each for different use cases.',
     category: 'Comparison',
-    available: false,
+    available: true,
   },
   {
     slug: 'json-in-javascript',
     title: 'Working with JSON in JavaScript',
-    description: 'Learn to parse, stringify, and manipulate JSON data in JavaScript with practical examples.',
+    description:
+      'Learn to parse, stringify, and manipulate JSON data in JavaScript with practical examples.',
     category: 'Programming',
-    available: false,
+    available: true,
   },
   {
     slug: 'json-api-best-practices',
     title: 'JSON API Best Practices',
-    description: 'Design better APIs with JSON. Best practices for structure, naming conventions, and error handling.',
+    description:
+      'Design better APIs with JSON. Best practices for structure, naming conventions, and error handling.',
     category: 'Best Practices',
-    available: false,
+    available: true,
   },
 ];
 
@@ -88,8 +113,8 @@ export default function GuidesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        <div className="container mx-auto px-4 py-20">
+      <div className="bg-[var(--bg-primary)]">
+        <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
@@ -109,14 +134,14 @@ export default function GuidesPage() {
               JSON Guides & Tutorials
             </h1>
             <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-              Learn everything about JSON - from basic syntax to advanced techniques.
-              Comprehensive guides for developers of all skill levels.
+              Learn everything about JSON - from basic syntax to advanced techniques. Comprehensive
+              guides for developers of all skill levels.
             </p>
           </header>
 
           {/* Guides Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {guides.map((guide) => (
+            {guides.map((guide) =>
               guide.available ? (
                 <Link
                   key={guide.slug}
@@ -129,9 +154,7 @@ export default function GuidesPage() {
                   <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                     {guide.title}
                   </h2>
-                  <p className="text-sm text-[var(--text-secondary)] mb-4">
-                    {guide.description}
-                  </p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-4">{guide.description}</p>
                   <span className="text-[var(--accent-primary)] text-sm font-medium">
                     Read Guide →
                   </span>
@@ -147,15 +170,13 @@ export default function GuidesPage() {
                   <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                     {guide.title}
                   </h2>
-                  <p className="text-sm text-[var(--text-secondary)] mb-4">
-                    {guide.description}
-                  </p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-4">{guide.description}</p>
                   <span className="text-[var(--text-secondary)] text-sm font-medium">
                     Coming Soon
                   </span>
                 </article>
               )
-            ))}
+            )}
           </div>
 
           {/* CTA Section */}
@@ -174,17 +195,6 @@ export default function GuidesPage() {
             </Link>
           </section>
         </div>
-
-        {/* Footer */}
-        <footer className="container mx-auto px-4 py-8 border-t border-[var(--border-color)]">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[var(--text-secondary)]">
-            <p>&copy; {new Date().getFullYear()} jsonformatter.me - Free Online JSON Tools</p>
-            <nav className="flex gap-6">
-              <Link href="/" className="hover:text-[var(--accent-primary)] transition-colors">JSON Formatter</Link>
-              <Link href="/help" className="hover:text-[var(--accent-primary)] transition-colors">Help</Link>
-            </nav>
-          </div>
-        </footer>
       </div>
     </>
   );

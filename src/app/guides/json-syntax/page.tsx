@@ -1,13 +1,16 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'JSON Syntax Guide - Rules, Structure & Examples',
-  description: 'Master JSON syntax with this complete guide. Learn about objects, arrays, data types, nesting, and proper formatting with clear examples.',
-  keywords: 'json syntax, json structure, json rules, json format, json object, json array, json data types, json examples',
+  description:
+    'Master JSON syntax with this complete guide. Learn about objects, arrays, data types, nesting, and proper formatting with clear examples.',
+  keywords:
+    'json syntax, json structure, json rules, json format, json object, json array, json data types, json examples',
   openGraph: {
     title: 'JSON Syntax Guide - Rules, Structure & Examples',
-    description: 'Master JSON syntax with this complete guide. Objects, arrays, data types, and examples.',
+    description:
+      'Master JSON syntax with this complete guide. Objects, arrays, data types, and examples.',
     type: 'article',
     url: 'https://www.jsonformatter.me/guides/json-syntax',
   },
@@ -23,7 +26,11 @@ export default function JsonSyntaxPage() {
     headline: 'JSON Syntax Guide - Rules, Structure & Examples',
     description: 'Master JSON syntax with this complete guide.',
     author: { '@type': 'Person', name: 'Andres Duque' },
-    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://www.jsonformatter.me' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'jsonformatter.me',
+      url: 'https://www.jsonformatter.me',
+    },
     datePublished: '2024-01-01',
     dateModified: new Date().toISOString().split('T')[0],
   };
@@ -33,24 +40,48 @@ export default function JsonSyntaxPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'JSON Syntax', item: 'https://www.jsonformatter.me/guides/json-syntax' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Guides',
+        item: 'https://www.jsonformatter.me/guides',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'JSON Syntax',
+        item: 'https://www.jsonformatter.me/guides/json-syntax',
+      },
     ],
   };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        <article className="container mx-auto px-4 py-20 max-w-4xl">
+      <div className="bg-[var(--bg-primary)]">
+        <article className="mx-auto w-full max-w-4xl px-4 py-12 sm:py-16">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
-              <li><Link href="/" className="hover:text-[var(--accent-primary)]">Home</Link></li>
+              <li>
+                <Link href="/" className="hover:text-[var(--accent-primary)]">
+                  Home
+                </Link>
+              </li>
               <li>/</li>
-              <li><Link href="/guides" className="hover:text-[var(--accent-primary)]">Guides</Link></li>
+              <li>
+                <Link href="/guides" className="hover:text-[var(--accent-primary)]">
+                  Guides
+                </Link>
+              </li>
               <li>/</li>
               <li className="text-[var(--text-primary)]">JSON Syntax</li>
             </ol>
@@ -70,9 +101,12 @@ export default function JsonSyntaxPage() {
           <div className="space-y-12">
             {/* Basic Structure */}
             <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Basic Structure</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                Basic Structure
+              </h2>
               <p className="text-[var(--text-secondary)] mb-4">
-                JSON is built on two structures: objects and arrays. Every JSON document must be either an object or an array at the root level.
+                JSON is built on two structures: objects and arrays. Every JSON document must be
+                either an object or an array at the root level.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
@@ -95,7 +129,8 @@ export default function JsonSyntaxPage() {
             <section>
               <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Objects</h2>
               <p className="text-[var(--text-secondary)] mb-4">
-                Objects are collections of key-value pairs enclosed in curly braces <code className="bg-[var(--bg-secondary)] px-1 rounded">{`{ }`}</code>.
+                Objects are collections of key-value pairs enclosed in curly braces{' '}
+                <code className="bg-[var(--bg-secondary)] px-1 rounded">{`{ }`}</code>.
               </p>
               <pre className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 overflow-x-auto mb-4">
                 <code className="text-sm text-[var(--text-primary)]">{`{
@@ -121,7 +156,8 @@ export default function JsonSyntaxPage() {
             <section>
               <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Arrays</h2>
               <p className="text-[var(--text-secondary)] mb-4">
-                Arrays are ordered lists of values enclosed in square brackets <code className="bg-[var(--bg-secondary)] px-1 rounded">{`[ ]`}</code>.
+                Arrays are ordered lists of values enclosed in square brackets{' '}
+                <code className="bg-[var(--bg-secondary)] px-1 rounded">{`[ ]`}</code>.
               </p>
               <pre className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 overflow-x-auto mb-4">
                 <code className="text-sm text-[var(--text-primary)]">{`{
@@ -146,43 +182,53 @@ export default function JsonSyntaxPage() {
             {/* Data Types */}
             <section>
               <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Data Types</h2>
-              <p className="text-[var(--text-secondary)] mb-6">
-                JSON supports six data types:
-              </p>
+              <p className="text-[var(--text-secondary)] mb-6">JSON supports six data types:</p>
               <div className="space-y-4">
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">String</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">Text enclosed in double quotes.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    Text enclosed in double quotes.
+                  </p>
                   <code className="text-[var(--accent-primary)]">&quot;Hello, World!&quot;</code>
                 </div>
 
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Number</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">Integer or floating-point. No quotes.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    Integer or floating-point. No quotes.
+                  </p>
                   <code className="text-[var(--accent-primary)]">42, 3.14, -17, 1.5e10</code>
                 </div>
 
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Boolean</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">True or false. Lowercase, no quotes.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    True or false. Lowercase, no quotes.
+                  </p>
                   <code className="text-[var(--accent-primary)]">true, false</code>
                 </div>
 
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Null</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">Represents empty or no value. Lowercase, no quotes.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    Represents empty or no value. Lowercase, no quotes.
+                  </p>
                   <code className="text-[var(--accent-primary)]">null</code>
                 </div>
 
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Object</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">Collection of key-value pairs in curly braces.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    Collection of key-value pairs in curly braces.
+                  </p>
                   <code className="text-[var(--accent-primary)]">{`{"key": "value"}`}</code>
                 </div>
 
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4">
                   <h3 className="font-semibold text-[var(--text-primary)] mb-2">Array</h3>
-                  <p className="text-sm text-[var(--text-secondary)] mb-2">Ordered list of values in square brackets.</p>
+                  <p className="text-sm text-[var(--text-secondary)] mb-2">
+                    Ordered list of values in square brackets.
+                  </p>
                   <code className="text-[var(--accent-primary)]">[1, 2, 3]</code>
                 </div>
               </div>
@@ -190,7 +236,9 @@ export default function JsonSyntaxPage() {
 
             {/* String Escaping */}
             <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">String Escape Characters</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                String Escape Characters
+              </h2>
               <p className="text-[var(--text-secondary)] mb-4">
                 Special characters in strings must be escaped with a backslash:
               </p>
@@ -241,7 +289,9 @@ export default function JsonSyntaxPage() {
 
             {/* Rules Summary */}
             <section>
-              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Syntax Rules Summary</h2>
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">
+                Syntax Rules Summary
+              </h2>
               <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-6">
                 <ul className="space-y-3 text-[var(--text-secondary)]">
                   <li className="flex items-start gap-2">
@@ -297,13 +347,23 @@ export default function JsonSyntaxPage() {
           <nav className="mt-12 pt-8 border-t border-[var(--border-color)]">
             <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Related Guides</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href="/guides/what-is-json" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/what-is-json"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">What is JSON?</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Complete introduction to JSON</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Complete introduction to JSON
+                </p>
               </Link>
-              <Link href="/guides/common-json-errors" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/common-json-errors"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">Common JSON Errors</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Fix the most frequent mistakes</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Fix the most frequent mistakes
+                </p>
               </Link>
             </div>
           </nav>

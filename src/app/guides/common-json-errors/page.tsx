@@ -1,10 +1,12 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Common JSON Errors and How to Fix Them',
-  description: 'Learn how to fix the most common JSON errors: trailing commas, single quotes, unquoted keys, and more. With examples and solutions.',
-  keywords: 'json error, json parse error, json syntax error, fix json, invalid json, json trailing comma, json quotes, json validation error',
+  description:
+    'Learn how to fix the most common JSON errors: trailing commas, single quotes, unquoted keys, and more. With examples and solutions.',
+  keywords:
+    'json error, json parse error, json syntax error, fix json, invalid json, json trailing comma, json quotes, json validation error',
   openGraph: {
     title: 'Common JSON Errors and How to Fix Them',
     description: 'Learn how to fix the most common JSON errors with examples and solutions.',
@@ -23,7 +25,11 @@ export default function CommonJsonErrorsPage() {
     headline: 'Common JSON Errors and How to Fix Them',
     description: 'Learn how to fix the most common JSON errors with examples and solutions.',
     author: { '@type': 'Person', name: 'Andres Duque' },
-    publisher: { '@type': 'Organization', name: 'jsonformatter.me', url: 'https://www.jsonformatter.me' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'jsonformatter.me',
+      url: 'https://www.jsonformatter.me',
+    },
     datePublished: '2024-01-01',
     dateModified: new Date().toISOString().split('T')[0],
   };
@@ -33,8 +39,18 @@ export default function CommonJsonErrorsPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.jsonformatter.me/' },
-      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.jsonformatter.me/guides' },
-      { '@type': 'ListItem', position: 3, name: 'Common JSON Errors', item: 'https://www.jsonformatter.me/guides/common-json-errors' },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Guides',
+        item: 'https://www.jsonformatter.me/guides',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Common JSON Errors',
+        item: 'https://www.jsonformatter.me/guides/common-json-errors',
+      },
     ],
   };
 
@@ -140,17 +156,31 @@ export default function CommonJsonErrorsPage() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-      <div className="min-h-screen bg-[var(--bg-primary)]">
-        <article className="container mx-auto px-4 py-20 max-w-4xl">
+      <div className="bg-[var(--bg-primary)]">
+        <article className="mx-auto w-full max-w-4xl px-4 py-12 sm:py-16">
           {/* Breadcrumb */}
           <nav className="mb-8" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-2 text-sm text-[var(--text-secondary)]">
-              <li><Link href="/" className="hover:text-[var(--accent-primary)]">Home</Link></li>
+              <li>
+                <Link href="/" className="hover:text-[var(--accent-primary)]">
+                  Home
+                </Link>
+              </li>
               <li>/</li>
-              <li><Link href="/guides" className="hover:text-[var(--accent-primary)]">Guides</Link></li>
+              <li>
+                <Link href="/guides" className="hover:text-[var(--accent-primary)]">
+                  Guides
+                </Link>
+              </li>
               <li>/</li>
               <li className="text-[var(--text-primary)]">Common JSON Errors</li>
             </ol>
@@ -162,27 +192,33 @@ export default function CommonJsonErrorsPage() {
               Common JSON Errors and How to Fix Them
             </h1>
             <p className="text-xl text-[var(--text-secondary)]">
-              Troubleshoot and fix the most frequent JSON parsing errors with clear examples and solutions.
+              Troubleshoot and fix the most frequent JSON parsing errors with clear examples and
+              solutions.
             </p>
           </header>
 
           {/* Quick Tip */}
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mb-12">
             <p className="text-[var(--text-primary)]">
-              <strong>Quick fix:</strong> Paste your JSON into our <Link href="/" className="text-[var(--accent-primary)] underline">JSON Formatter</Link> - it automatically fixes many common errors like trailing commas and single quotes.
+              <strong>Quick fix:</strong> Paste your JSON into our{' '}
+              <Link href="/" className="text-[var(--accent-primary)] underline">
+                JSON Formatter
+              </Link>{' '}
+              - it automatically fixes many common errors like trailing commas and single quotes.
             </p>
           </div>
 
           {/* Errors List */}
           <div className="space-y-12">
             {errors.map((error, index) => (
-              <section key={index} className="border-b border-[var(--border-color)] pb-12 last:border-0">
+              <section
+                key={index}
+                className="border-b border-[var(--border-color)] pb-12 last:border-0"
+              >
                 <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-3">
                   {index + 1}. {error.title}
                 </h2>
-                <p className="text-[var(--text-secondary)] mb-6">
-                  {error.description}
-                </p>
+                <p className="text-[var(--text-secondary)] mb-6">{error.description}</p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
@@ -223,9 +259,7 @@ export default function CommonJsonErrorsPage() {
 
           {/* CTA */}
           <section className="mt-12 bg-[var(--accent-primary)] rounded-xl p-8 text-center">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              Validate Your JSON Now
-            </h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Validate Your JSON Now</h2>
             <p className="text-white/80 mb-6">
               Our JSON formatter automatically detects and fixes common errors.
             </p>
@@ -241,13 +275,23 @@ export default function CommonJsonErrorsPage() {
           <nav className="mt-12 pt-8 border-t border-[var(--border-color)]">
             <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Related Guides</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Link href="/guides/what-is-json" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/what-is-json"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">What is JSON?</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Complete introduction to JSON</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Complete introduction to JSON
+                </p>
               </Link>
-              <Link href="/guides/json-syntax" className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors">
+              <Link
+                href="/guides/json-syntax"
+                className="block bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl p-4 hover:border-[var(--accent-primary)] transition-colors"
+              >
                 <h3 className="font-semibold text-[var(--text-primary)]">JSON Syntax Guide</h3>
-                <p className="text-sm text-[var(--text-secondary)]">Learn the rules and structure</p>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Learn the rules and structure
+                </p>
               </Link>
             </div>
           </nav>
