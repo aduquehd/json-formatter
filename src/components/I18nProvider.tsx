@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import type React from 'react';
+import { useEffect } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/lib/i18n';
 
@@ -12,7 +13,7 @@ const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   useEffect(() => {
     // Check if there's a saved language preference
     const savedLanguage = localStorage.getItem('i18nextLng');
-    
+
     if (savedLanguage) {
       // Use saved language if it exists
       if (savedLanguage !== i18n.language) {
@@ -23,11 +24,11 @@ const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
       const browserLang = navigator.language || navigator.languages?.[0] || 'en';
       // Extract the language code (e.g., 'zh' from 'zh-CN')
       const langCode = browserLang.split('-')[0];
-      
+
       // Check if we support this language
       const supportedLangs = ['en', 'es', 'hi', 'tr', 'nl', 'ms', 'zh', 'ta', 'fy', 'nds', 'li'];
       const languageToUse = supportedLangs.includes(langCode) ? langCode : 'en';
-      
+
       if (languageToUse !== i18n.language) {
         i18n.changeLanguage(languageToUse);
       }

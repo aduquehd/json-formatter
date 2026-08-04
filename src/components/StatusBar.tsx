@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import type React from 'react';
+import { useMemo } from 'react';
 
 interface StatusBarProps {
   content: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 export default function GlobalError({
   error,
@@ -16,15 +16,17 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          padding: '20px',
-          textAlign: 'center'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            padding: '20px',
+            textAlign: 'center',
+          }}
+        >
           <h2>Something went wrong!</h2>
           <p>An unexpected error occurred. Please try again.</p>
           <button
@@ -36,7 +38,7 @@ export default function GlobalError({
               color: 'white',
               border: 'none',
               borderRadius: '5px',
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Try again

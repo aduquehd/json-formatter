@@ -12,11 +12,11 @@ export function formatJSON(jsonString: string): string {
   } catch (error) {
     // Try to fix common issues using JSONFixer
     const result = JSONFixer.parseWithFixInfo(jsonString);
-    
+
     if (result.data) {
       return JSON.stringify(result.data, null, 2);
     }
-    
+
     // If still can't parse, throw error
     throw new Error(result.error || 'Invalid JSON format');
   }
@@ -34,11 +34,11 @@ export function compactJSON(jsonString: string): string {
   } catch (error) {
     // Try to fix common issues using JSONFixer
     const result = JSONFixer.parseWithFixInfo(jsonString);
-    
+
     if (result.data) {
       return JSON.stringify(result.data);
     }
-    
+
     // If still can't parse, throw error
     throw new Error(result.error || 'Invalid JSON format');
   }

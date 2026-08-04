@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import { Braces, Brackets, HardDrive, KeyRound, Layers, Tags } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeyRound, Braces, Layers, Brackets, Tags, HardDrive } from 'lucide-react';
 import styles from './StatsView.module.css';
 
 interface StatsViewProps {
@@ -85,30 +86,66 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
     const stats = analyzeJSON(json);
     const totalValues = stats.totalValues;
     const typeEntries = Array.from(stats.typeDistribution.entries()).sort((a, b) => b[1] - a[1]);
-    const topKeys = Array.from(stats.keyAnalysis.keyFrequency.entries()).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const topKeys = Array.from(stats.keyAnalysis.keyFrequency.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6);
     const depthEntries = Array.from(stats.depthMap.entries()).sort((a, b) => a[0] - b[0]);
     const maxDepthCount = Math.max(...Array.from(stats.depthMap.values()), 1);
     const minifiedBytes = new TextEncoder().encode(JSON.stringify(json)).length;
-    const avgLength = stats.arrayStats.count ? stats.arrayStats.sumLength / stats.arrayStats.count : 0;
-    return { stats, totalValues, typeEntries, topKeys, depthEntries, maxDepthCount, minifiedBytes, avgLength };
+    const avgLength = stats.arrayStats.count
+      ? stats.arrayStats.sumLength / stats.arrayStats.count
+      : 0;
+    return {
+      stats,
+      totalValues,
+      typeEntries,
+      topKeys,
+      depthEntries,
+      maxDepthCount,
+      minifiedBytes,
+      avgLength,
+    };
   }, [json]);
 
   if (!data) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-[var(--text-secondary)]">{tr('stats.noData', 'No JSON data to analyze')}</p>
+        <p className="text-[var(--text-secondary)]">
+          {tr('stats.noData', 'No JSON data to analyze')}
+        </p>
       </div>
     );
   }
 
-  const { stats, totalValues, typeEntries, topKeys, depthEntries, maxDepthCount, minifiedBytes, avgLength } = data;
+  const {
+    stats,
+    totalValues,
+    typeEntries,
+    topKeys,
+    depthEntries,
+    maxDepthCount,
+    minifiedBytes,
+    avgLength,
+  } = data;
   const maxTopKey = topKeys.length ? topKeys[0][1] : 1;
 
   const metrics = [
-    { icon: KeyRound, label: tr('stats.totalKeys', 'Total Keys'), value: stats.totalKeys.toLocaleString() },
-    { icon: Braces, label: tr('stats.totalValues', 'Total Values'), value: stats.totalValues.toLocaleString() },
+    {
+      icon: KeyRound,
+      label: tr('stats.totalKeys', 'Total Keys'),
+      value: stats.totalKeys.toLocaleString(),
+    },
+    {
+      icon: Braces,
+      label: tr('stats.totalValues', 'Total Values'),
+      value: stats.totalValues.toLocaleString(),
+    },
     { icon: Layers, label: tr('stats.depth', 'Max Depth'), value: String(stats.maxDepth) },
-    { icon: Brackets, label: tr('stats.arrays', 'Arrays'), value: stats.arrayStats.count.toLocaleString() },
+    {
+      icon: Brackets,
+      label: tr('stats.arrays', 'Arrays'),
+      value: stats.arrayStats.count.toLocaleString(),
+    },
     { icon: Tags, label: 'Unique Keys', value: stats.keyAnalysis.uniqueKeys.size.toLocaleString() },
     { icon: HardDrive, label: 'Minified Size', value: formatBytes(minifiedBytes) },
   ];
@@ -138,7 +175,10 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
               <div
                 key={type}
                 className={styles.stackSeg}
-                style={{ width: `${(count / totalValues) * 100}%`, background: TYPE_COLORS[type] || '#888' }}
+                style={{
+                  width: `${(count / totalValues) * 100}%`,
+                  background: TYPE_COLORS[type] || '#888',
+                }}
                 title={`${type}: ${count}`}
               />
             ))}
@@ -149,7 +189,9 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
                 <span className={styles.dot} style={{ background: TYPE_COLORS[type] || '#888' }} />
                 <span className={styles.legendName}>{type}</span>
                 <span className={styles.legendVal}>{count.toLocaleString()}</span>
-                <span className={styles.legendPct}>{((count / totalValues) * 100).toFixed(1)}%</span>
+                <span className={styles.legendPct}>
+                  {((count / totalValues) * 100).toFixed(1)}%
+                </span>
               </div>
             ))}
           </div>
@@ -163,7 +205,10 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
               <div key={depth} className={styles.depthRow}>
                 <span className={styles.depthLabel}>L{depth}</span>
                 <div className={styles.depthTrack}>
-                  <div className={styles.depthFill} style={{ width: `${(count / maxDepthCount) * 100}%` }} />
+                  <div
+                    className={styles.depthFill}
+                    style={{ width: `${(count / maxDepthCount) * 100}%` }}
+                  />
                 </div>
                 <span className={styles.depthCount}>{count.toLocaleString()}</span>
               </div>
@@ -183,7 +228,9 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
                 <div className={styles.miniLabel}>Total</div>
               </div>
               <div className={styles.mini}>
-                <div className={styles.miniVal}>{stats.arrayStats.minLength === Infinity ? 0 : stats.arrayStats.minLength}</div>
+                <div className={styles.miniVal}>
+                  {stats.arrayStats.minLength === Infinity ? 0 : stats.arrayStats.minLength}
+                </div>
                 <div className={styles.miniLabel}>Min len</div>
               </div>
               <div className={styles.mini}>
@@ -203,7 +250,9 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
           <h4 className={styles.panelTitle}>Key Insights</h4>
           <div className={styles.kvRow}>
             <span className={styles.kvLabel}>Unique keys</span>
-            <span className={styles.kvVal}>{stats.keyAnalysis.uniqueKeys.size.toLocaleString()}</span>
+            <span className={styles.kvVal}>
+              {stats.keyAnalysis.uniqueKeys.size.toLocaleString()}
+            </span>
           </div>
           <div className={styles.kvRow}>
             <span className={styles.kvLabel}>Longest key</span>
@@ -220,7 +269,10 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
                   <div key={key} className={styles.topKeyRow}>
                     <code className={styles.code}>{key}</code>
                     <div className={styles.topKeyTrack}>
-                      <div className={styles.topKeyFill} style={{ width: `${(count / maxTopKey) * 100}%` }} />
+                      <div
+                        className={styles.topKeyFill}
+                        style={{ width: `${(count / maxTopKey) * 100}%` }}
+                      />
                     </div>
                     <span className={styles.topKeyCount}>{count}</span>
                   </div>

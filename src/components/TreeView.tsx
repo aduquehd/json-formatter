@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Pencil, Plus, Minus } from 'lucide-react';
+import { Minus, Pencil, Plus } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface TreeViewProps {
@@ -32,7 +33,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       setExpandedNodes(new Set());
       return;
     }
-    
+
     // Skip auto-expand if this is an update from the tree itself
     if (isUpdatingFromTree) {
       // Restore preserved expanded state if available
@@ -43,18 +44,19 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       setIsUpdatingFromTree(false);
       return;
     }
-    
+
     // Only auto-expand when JSON actually changes from external source
     const jsonString = JSON.stringify(json);
     if (jsonString !== prevJsonRef.current) {
       prevJsonRef.current = jsonString;
-      
+
       // Only auto-expand on new JSON (when not initialized or completely new content)
       if (!isInitialized) {
         const firstLevel = new Set<string>();
         // Expand root level
         Object.keys(json).forEach((key, index) => {
-          if (index < 10) { // Expand first 10 items
+          if (index < 10) {
+            // Expand first 10 items
             firstLevel.add(`root.${key}`);
           }
         });
@@ -95,7 +97,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
 
   const expandAll = () => {
     if (!json) return;
-    
+
     const allPaths = new Set<string>();
     const collectPaths = (obj: any, parentPath: string = '') => {
       if (obj && typeof obj === 'object') {
@@ -114,14 +116,14 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
         }
       }
     };
-    
+
     // Start collecting from root level
     Object.keys(json).forEach((key) => {
       const path = `root.${key}`;
       allPaths.add(path);
       collectPaths(json[key], path);
     });
-    
+
     setExpandedNodes(allPaths);
   };
 
@@ -144,52 +146,55 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       try {
         // Save current expanded state before any modifications
         const currentExpandedNodes = new Set(expandedNodes);
-        
+
         // Deep clone to ensure no mutations to original
         const newJson = JSON.parse(JSON.stringify(json));
-        
+
         if (editingNode.endsWith('_key')) {
           // Handle key editing
           const path = editingNode.replace('_key', '');
-          const pathParts = path.split(/\.|\[|\]/).filter(Boolean).slice(1);
-          
+          const pathParts = path
+            .split(/\.|\[|\]/)
+            .filter(Boolean)
+            .slice(1);
+
           // Navigate to parent object
           let parent = newJson;
           let grandParent = null;
           let grandParentKey = null;
-          
+
           for (let i = 0; i < pathParts.length - 1; i++) {
             grandParent = parent;
             grandParentKey = pathParts[i];
             parent = parent[pathParts[i]];
           }
-          
+
           const oldKey = pathParts[pathParts.length - 1];
           if (editValue !== oldKey && !Array.isArray(parent)) {
             // Create new object with preserved key order
             const orderedObj: any = {};
             const keys = Object.keys(parent);
-            
-            keys.forEach(k => {
+
+            keys.forEach((k) => {
               if (k === oldKey) {
                 orderedObj[editValue] = parent[oldKey];
               } else {
                 orderedObj[k] = parent[k];
               }
             });
-            
+
             // Replace the parent object in the tree
             if (grandParent && grandParentKey) {
               grandParent[grandParentKey] = orderedObj;
             } else {
               // If we're at the root level
-              Object.keys(newJson).forEach(k => delete newJson[k]);
+              Object.keys(newJson).forEach((k) => delete newJson[k]);
               Object.assign(newJson, orderedObj);
             }
-            
+
             // Update expanded node paths for renamed keys
             const updatedExpandedNodes = new Set<string>();
-            currentExpandedNodes.forEach(nodePath => {
+            currentExpandedNodes.forEach((nodePath) => {
               if (nodePath.includes(path)) {
                 const newPath = nodePath.replace(
                   new RegExp(`\\.${oldKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|\\.|\\[)`),
@@ -207,34 +212,37 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
           }
         } else {
           // Handle value editing
-          const pathParts = editingNode.split(/\.|\[|\]/).filter(Boolean).slice(1);
-          
+          const pathParts = editingNode
+            .split(/\.|\[|\]/)
+            .filter(Boolean)
+            .slice(1);
+
           // Navigate to the target location
           let current = newJson;
           let parent = null;
           let parentKey = null;
-          
+
           for (let i = 0; i < pathParts.length - 1; i++) {
             parent = current;
             parentKey = pathParts[i];
             current = current[pathParts[i]];
           }
-          
+
           const lastKey = pathParts[pathParts.length - 1];
           const oldValue = current[lastKey];
-          
+
           // Parse new value
-          let newValue;
+          let newValue: unknown;
           try {
             newValue = JSON.parse(editValue);
           } catch {
             newValue = editValue;
           }
-          
+
           // If updating a value in an object, preserve key order
           if (parent && parentKey !== null && !Array.isArray(current)) {
             const orderedObj: any = {};
-            Object.keys(current).forEach(k => {
+            Object.keys(current).forEach((k) => {
               if (k === lastKey) {
                 orderedObj[k] = newValue;
               } else {
@@ -246,11 +254,11 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
             // Direct assignment for arrays or root level
             current[lastKey] = newValue;
           }
-          
+
           // Always preserve expanded state for value edits
           setPreservedExpandedState(currentExpandedNodes);
         }
-        
+
         // Mark update as coming from tree and trigger update
         setIsUpdatingFromTree(true);
         onUpdate(JSON.stringify(newJson, null, 2));
@@ -304,7 +312,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
 
     if (value === null) {
       return (
-        <span 
+        <span
           className="tree-value tree-null"
           onClick={(e) => {
             e.stopPropagation();
@@ -318,7 +326,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
 
     if (typeof value !== 'object') {
       return (
-        <span 
+        <span
           className={`tree-value ${getValueColor(value)}`}
           onClick={(e) => {
             e.stopPropagation();
@@ -338,10 +346,17 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
     }
   };
 
-  const renderNode = (key: string, value: any, path: string, level: number = 0, isArrayItem: boolean = false) => {
+  const renderNode = (
+    key: string,
+    value: any,
+    path: string,
+    level: number = 0,
+    isArrayItem: boolean = false
+  ) => {
     const isExpanded = expandedNodes.has(path);
     const isExpandable = value && typeof value === 'object';
-    const hasChildren = isExpandable && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0);
+    const hasChildren =
+      isExpandable && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0);
 
     const handleLineClick = (e: React.MouseEvent) => {
       // Only toggle if clicking on the line itself, not on editable elements
@@ -352,24 +367,24 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
     };
 
     return (
-      <div key={path} className="tree-node" style={{ marginLeft: `calc(${level} * var(--tree-indent, 20px))` }}>
-        <div 
+      <div
+        key={path}
+        className="tree-node"
+        style={{ marginLeft: `calc(${level} * var(--tree-indent, 20px))` }}
+      >
+        <div
           className={`tree-node-header ${isExpandable ? 'expandable' : ''}`}
           onClick={handleLineClick}
           style={{ cursor: isExpandable ? 'pointer' : 'default' }}
         >
           {isExpandable ? (
-            <span
-              className="tree-toggle"
-            >
-              {isExpanded ? '▼' : '▶'}
-            </span>
+            <span className="tree-toggle">{isExpanded ? '▼' : '▶'}</span>
           ) : (
             <span className="tree-spacer"></span>
           )}
-          
+
           {!isArrayItem ? (
-            <span 
+            <span
               className="tree-key"
               onClick={(e) => {
                 e.stopPropagation();
@@ -400,25 +415,24 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
               ) : (
                 `"${key}"`
               )}
-              : 
+              :
             </span>
           ) : (
             <span className="tree-key">[{key}]: </span>
           )}
-          
+
           {renderValue(value, path)}
         </div>
-        
+
         {isExpandable && isExpanded && hasChildren && (
           <div className="tree-children">
-            {Array.isArray(value) 
-              ? value.map((item, index) => 
+            {Array.isArray(value)
+              ? value.map((item, index) =>
                   renderNode(String(index), item, `${path}[${index}]`, level + 1, true)
                 )
-              : Object.entries(value).map(([childKey, childValue]) => 
+              : Object.entries(value).map(([childKey, childValue]) =>
                   renderNode(childKey, childValue, `${path}.${childKey}`, level + 1, false)
-                )
-            }
+                )}
           </div>
         )}
       </div>
@@ -438,10 +452,15 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   return (
     <div className="tree-view-container">
       <div className="tree-controls">
-        <div className="tree-controls-left" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div
+          className="tree-controls-left"
+          style={{ display: 'flex', alignItems: 'center', gap: '20px' }}
+        >
           <div className="edit-hint">
             <Pencil className="w-4 h-4 inline-block mr-1" />
-            <span className="edit-text">{mounted ? t('tree.editHint') : 'Click on any value or key to edit directly'}</span>
+            <span className="edit-text">
+              {mounted ? t('tree.editHint') : 'Click on any value or key to edit directly'}
+            </span>
           </div>
           <div className="tree-buttons" style={{ display: 'flex', gap: '8px' }}>
             <button
@@ -463,11 +482,9 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="tree-output">
-        {Object.entries(json).map(([key, value]) => 
-          renderNode(key, value, `root.${key}`)
-        )}
+        {Object.entries(json).map(([key, value]) => renderNode(key, value, `root.${key}`))}
       </div>
     </div>
   );

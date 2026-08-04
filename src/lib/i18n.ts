@@ -1,19 +1,19 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { initReactI18next } from 'react-i18next';
 
 import enTranslations from '@/locales/en/common.json';
 import esTranslations from '@/locales/es/common.json';
-import hiTranslations from '@/locales/hi/common.json';
-import trTranslations from '@/locales/tr/common.json';
-import nlTranslations from '@/locales/nl/common.json';
-import msTranslations from '@/locales/ms/common.json';
-import zhCNTranslations from '@/locales/zh-CN/common.json';
-import zhTranslations from '@/locales/zh/common.json';
-import taTranslations from '@/locales/ta/common.json';
 import fyTranslations from '@/locales/fy/common.json';
-import ndsTranslations from '@/locales/nds/common.json';
+import hiTranslations from '@/locales/hi/common.json';
 import liTranslations from '@/locales/li/common.json';
+import msTranslations from '@/locales/ms/common.json';
+import ndsTranslations from '@/locales/nds/common.json';
+import nlTranslations from '@/locales/nl/common.json';
+import taTranslations from '@/locales/ta/common.json';
+import trTranslations from '@/locales/tr/common.json';
+import zhTranslations from '@/locales/zh/common.json';
+import zhCNTranslations from '@/locales/zh-CN/common.json';
 
 export const languages = [
   { code: 'en', name: 'English', flag: '🇬🇧' },

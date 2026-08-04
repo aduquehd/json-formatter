@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import { Check, ChevronDown, Globe } from 'lucide-react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { languages } from '@/lib/i18n';
-import { Globe, Check, ChevronDown } from 'lucide-react';
 
 interface LanguageSelectorProps {
   showLabel?: boolean;
@@ -15,7 +16,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ showLabel = false }
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   useEffect(() => {
     setMounted(true);
@@ -45,10 +46,12 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ showLabel = false }
         className={`flex items-center gap-2 ${showLabel ? 'px-3 py-1.5' : 'justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10'} rounded-lg bg-[var(--btn-secondary-bg)] hover:bg-[var(--btn-secondary-hover)] transition-all duration-300`}
         aria-label="Select language"
       >
-        <Globe className={showLabel ? "w-4 h-4" : "w-4 h-4 sm:w-5 sm:h-5"} />
+        <Globe className={showLabel ? 'w-4 h-4' : 'w-4 h-4 sm:w-5 sm:h-5'} />
         {showLabel && (
           <>
-            <span className="text-sm font-medium">{mounted ? t('buttons.language') : 'Language'}</span>
+            <span className="text-sm font-medium">
+              {mounted ? t('buttons.language') : 'Language'}
+            </span>
             <ChevronDown className="w-3 h-3" />
           </>
         )}

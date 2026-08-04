@@ -1,6 +1,6 @@
-import { Github } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { GithubIcon as Github } from '@/components/icons/GithubIcon';
 
 /**
  * Shared shell for every page under /guides. The guide pages are content pages

@@ -1,35 +1,78 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
+import babelParser from '@babel/eslint-parser';
+import nextPlugin from '@next/eslint-plugin-next';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({ baseDirectory: __dirname });
-
-// ESLint owns ONLY the Next.js framework layer (next/image, Core Web Vitals,
-// React Hooks, jsx-a11y). Formatting, import sorting, and general JS/TS lint
-// are handled by Biome (see biome.json) to avoid overlapping/duplicate work.
-const eslintConfig = [
+// Native flat config mirroring next/core-web-vitals without typescript-eslint.
+// TypeScript 7 has no JS compiler API yet, and typescript-eslint rejects TS 7,
+// so we parse TS/TSX via Babel instead. Biome still owns general JS/TS lint.
+const eslintConfig = defineConfig([
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'dist/**',
+    'node_modules/**',
+    'public/**',
+    'next-env.d.ts',
+  ]),
   {
-    ignores: [
-      '.next/**',
-      'out/**',
-      'build/**',
-      'dist/**',
-      'node_modules/**',
-      'public/**',
-      'next-env.d.ts',
-    ],
-  },
-  ...compat.extends('next/core-web-vitals'),
-  {
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ['@babel/preset-typescript', ['@babel/preset-react', { runtime: 'automatic' }]],
+        },
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    settings: {
+      react: { version: 'detect' },
+      next: { rootDir: '.' },
+    },
+    plugins: {
+      '@next/next': nextPlugin,
+      react,
+      'react-hooks': reactHooks,
+      'jsx-a11y': jsxA11y,
+    },
     rules: {
-      // The help page uses `// label` as intentional "eyebrow" heading text,
-      // not stray JS comments, so this is a design choice rather than a bug.
+      ...react.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      // Intentional "eyebrow" comments on the help page.
       'react/jsx-no-comment-textnodes': 'warn',
+      // Match Biome: a11y is warn-level so it does not block CI; Next/hooks stay
+      // error-level for real framework regressions.
+      'jsx-a11y/click-events-have-key-events': 'warn',
+      'jsx-a11y/no-static-element-interactions': 'warn',
+      'jsx-a11y/label-has-associated-control': 'warn',
+      'jsx-a11y/no-autofocus': 'warn',
+      'jsx-a11y/html-has-lang': 'warn',
+      // react-hooks v7 flags common client hydration / localStorage patterns.
+      // Warn for now; refactor in a follow-up.
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/refs': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/preserve-manual-memoization': 'warn',
+      'react-hooks/incompatible-library': 'warn',
     },
   },
-];
+]);
 
 export default eslintConfig;

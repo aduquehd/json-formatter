@@ -16,7 +16,7 @@ export const event = ({
   value?: number;
 }) => {
   if (!isGAEnabled || typeof window === 'undefined') return;
-  
+
   (window as any).gtag('event', action, {
     event_category: category,
     event_label: label,

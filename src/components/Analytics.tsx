@@ -17,7 +17,9 @@ export default function Analytics() {
     // Log only in development
     if (process.env.NODE_ENV === 'development') {
       if (!GA_MEASUREMENT_ID) {
-        console.log('Google Analytics not configured - Set NEXT_PUBLIC_GA_MEASUREMENT_ID in Vercel');
+        console.log(
+          'Google Analytics not configured - Set NEXT_PUBLIC_GA_MEASUREMENT_ID in Vercel'
+        );
       }
     }
   }, [GA_MEASUREMENT_ID]);

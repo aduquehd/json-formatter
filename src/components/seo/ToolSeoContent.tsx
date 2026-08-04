@@ -82,7 +82,7 @@ export default function ToolSeoContent({ view }: { view: ToolView }) {
           <ol className="space-y-4">
             {v.howTo.map((step, i) => (
               <li key={step} className="flex gap-4">
-                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[var(--accent-bg)] text-sm font-semibold text-[var(--accent-color)]">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--accent-bg)] text-sm font-semibold text-[var(--accent-color)]">
                   {i + 1}
                 </span>
                 <span className="pt-0.5 leading-relaxed text-[var(--text-secondary)]">{step}</span>
@@ -101,7 +101,7 @@ export default function ToolSeoContent({ view }: { view: ToolView }) {
                 className="flex items-start gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4"
               >
                 <svg
-                  className="mt-0.5 h-5 w-5 flex-shrink-0 text-[var(--accent-color)]"
+                  className="mt-0.5 h-5 w-5 shrink-0 text-[var(--accent-color)]"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   aria-hidden="true"

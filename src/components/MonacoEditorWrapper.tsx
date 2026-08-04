@@ -1,18 +1,19 @@
 'use client';
 
-import React, { useEffect } from 'react';
 import Editor, { loader } from '@monaco-editor/react';
+import type React from 'react';
+import { useEffect } from 'react';
 
 // Load Monaco from the same origin (copied into /public/monaco at build time)
 // instead of a third-party CDN. This keeps user data private (no request leaves
 // the browser to jsdelivr/unpkg), works offline, and removes a supply-chain risk.
 loader.config({
   paths: {
-    vs: '/monaco/vs'
+    vs: '/monaco/vs',
   },
   'vs/nls': {
-    availableLanguages: {}
-  }
+    availableLanguages: {},
+  },
 } as any);
 
 interface MonacoEditorWrapperProps {
@@ -36,7 +37,7 @@ const MonacoEditorWrapper: React.FC<MonacoEditorWrapperProps> = (props) => {
         getWorkerUrl: (_: string, label: string) => {
           // Return data URL to prevent network requests
           return 'data:text/javascript;charset=utf-8,';
-        }
+        },
       };
     }
   }, []);
@@ -51,12 +52,12 @@ const MonacoEditorWrapper: React.FC<MonacoEditorWrapperProps> = (props) => {
             validate: false,
             comments: 'ignore',
             trailingCommas: 'ignore',
-            schemas: []
+            schemas: [],
           });
         } catch (e) {
           console.info('JSON defaults configuration skipped');
         }
-        
+
         // Disable TypeScript/JavaScript workers if they exist
         try {
           if (monaco.languages.typescript) {

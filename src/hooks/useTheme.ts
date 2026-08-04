@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useTheme() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
@@ -9,7 +9,7 @@ export function useTheme() {
     const savedTheme = localStorage.getItem('theme');
     const isDarkTheme = savedTheme !== null ? savedTheme === 'dark' : true;
     setTheme(isDarkTheme ? 'dark' : 'light');
-    
+
     if (isDarkTheme) {
       document.documentElement.classList.add('dark');
     } else {
@@ -22,7 +22,7 @@ export function useTheme() {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
-    
+
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {

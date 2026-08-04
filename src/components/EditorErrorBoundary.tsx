@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import type React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 
 interface EditorErrorBoundaryProps {
@@ -38,12 +38,13 @@ const EditorErrorBoundary: React.FC<EditorErrorBoundaryProps> = ({ children, onE
           Editor Loading Error
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          The JSON editor failed to load. This might be due to network issues or browser compatibility.
+          The JSON editor failed to load. This might be due to network issues or browser
+          compatibility.
         </p>
         <div className="space-y-2">
           <button
             onClick={() => window.location.reload()}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500 transition-colors"
           >
             Reload Page
           </button>
@@ -56,10 +57,7 @@ const EditorErrorBoundary: React.FC<EditorErrorBoundaryProps> = ({ children, onE
   );
 
   return (
-    <ErrorBoundary
-      fallback={editorFallback}
-      onError={(error) => handleEditorError(error)}
-    >
+    <ErrorBoundary fallback={editorFallback} onError={(error) => handleEditorError(error)}>
       {children}
     </ErrorBoundary>
   );

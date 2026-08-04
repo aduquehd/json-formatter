@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Load legacy JS theme (xs breakpoint, primary colors, font families). */
+@config "../../tailwind.config.js";
+
+/* Match v3 `darkMode: 'class'` plus this app's `[data-theme="dark"]` attribute. */
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 @layer base {
   * {
@@ -841,23 +845,23 @@
 @layer utilities {
   /* Notification overrides */
   .notyf__toast {
-    @apply !rounded-lg !shadow-lg;
+    @apply rounded-lg! shadow-lg!;
   }
 
   .notyf__toast--success {
-    @apply !bg-green-500;
+    @apply bg-green-500!;
   }
 
   .notyf__toast--error {
-    @apply !bg-red-500;
+    @apply bg-red-500!;
   }
 
   .notyf__toast--warning {
-    @apply !bg-orange-500;
+    @apply bg-orange-500!;
   }
 
   .notyf__toast--info {
-    @apply !bg-blue-500;
+    @apply bg-blue-500!;
   }
 
   /* Leaflet control positioning adjustments */

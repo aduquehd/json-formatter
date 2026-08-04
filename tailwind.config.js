@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        'xs': '475px',
+        xs: '475px',
       },
       colors: {
         primary: {
@@ -25,4 +25,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
+};

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
 import { Notyf } from 'notyf';
+import { useCallback, useEffect, useRef } from 'react';
 import 'notyf/notyf.min.css';
 
 export function useNotification() {

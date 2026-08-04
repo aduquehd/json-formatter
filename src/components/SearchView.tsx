@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface SearchViewProps {
@@ -39,7 +40,7 @@ const TreeResultView: React.FC<{
   selectedResult: number | null;
 }> = ({ results, onSelectResult, selectedResult }) => {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
-  
+
   // Build tree structure from results
   const buildTree = (): TreeNode => {
     const root: TreeNode = {
@@ -55,7 +56,7 @@ const TreeResultView: React.FC<{
 
       pathParts.forEach((part, i) => {
         currentPath = currentPath ? `${currentPath}.${part}` : part;
-        
+
         if (!currentNode.children.has(part)) {
           currentNode.children.set(part, {
             path: currentPath,
@@ -63,9 +64,9 @@ const TreeResultView: React.FC<{
             children: new Map(),
           });
         }
-        
+
         currentNode = currentNode.children.get(part)!;
-        
+
         // Add result to the leaf node
         if (i === pathParts.length - 1) {
           currentNode.results.push({ ...result, originalIndex: index } as any);
@@ -90,25 +91,39 @@ const TreeResultView: React.FC<{
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'string': return '"';
-      case 'number': return '#';
-      case 'boolean': return '⊤';
-      case 'object': return '{}';
-      case 'array': return '[]';
-      case 'null': return '∅';
-      default: return '?';
+      case 'string':
+        return '"';
+      case 'number':
+        return '#';
+      case 'boolean':
+        return '⊤';
+      case 'object':
+        return '{}';
+      case 'array':
+        return '[]';
+      case 'null':
+        return '∅';
+      default:
+        return '?';
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'string': return 'text-green-500';
-      case 'number': return 'text-blue-500';
-      case 'boolean': return 'text-purple-500';
-      case 'object': return 'text-orange-500';
-      case 'array': return 'text-yellow-500';
-      case 'null': return 'text-gray-500';
-      default: return 'text-gray-400';
+      case 'string':
+        return 'text-green-500';
+      case 'number':
+        return 'text-blue-500';
+      case 'boolean':
+        return 'text-purple-500';
+      case 'object':
+        return 'text-orange-500';
+      case 'array':
+        return 'text-yellow-500';
+      case 'null':
+        return 'text-gray-500';
+      default:
+        return 'text-gray-400';
     }
   };
 
@@ -120,22 +135,20 @@ const TreeResultView: React.FC<{
     return (
       <div key={node.path || 'root'}>
         {key && (
-          <div 
+          <div
             className="flex items-center py-1 hover:bg-[var(--bg-secondary)]/50 rounded cursor-pointer transition-colors"
             style={{ paddingLeft: `${indent}px` }}
             onClick={() => hasChildren && toggleNode(node.path)}
           >
             {hasChildren && (
-              <span className="w-4 h-4 mr-2 text-[var(--text-secondary)] flex-shrink-0">
+              <span className="w-4 h-4 mr-2 text-[var(--text-secondary)] shrink-0">
                 {isExpanded ? '▼' : '▶'}
               </span>
             )}
             {!hasChildren && <span className="w-4 h-4 mr-2" />}
-            
-            <span className="text-sm font-medium text-[var(--text-primary)]">
-              {key}
-            </span>
-            
+
+            <span className="text-sm font-medium text-[var(--text-primary)]">{key}</span>
+
             {node.results.length > 0 && (
               <span className="ml-2 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500 text-xs">
                 {node.results.length} match{node.results.length !== 1 ? 'es' : ''}
@@ -150,55 +163,66 @@ const TreeResultView: React.FC<{
             key={`${node.path}-${result.originalIndex}`}
             onClick={() => onSelectResult(result.originalIndex)}
             className={`flex items-center py-2 px-3 ml-6 hover:bg-[var(--bg-secondary)]/50 rounded cursor-pointer transition-all ${
-              selectedResult === result.originalIndex ? 'bg-blue-500/10 border-l-2 border-blue-500' : ''
+              selectedResult === result.originalIndex
+                ? 'bg-blue-500/10 border-l-2 border-blue-500'
+                : ''
             }`}
             style={{ paddingLeft: `${indent + 24}px` }}
           >
-            <span className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}>
+            <span
+              className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}
+            >
               {getTypeIcon(result.dataType)}
             </span>
-            
+
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-mono text-sm text-[var(--json-key)]">
-                  {result.key}
-                </span>
+                <span className="font-mono text-sm text-[var(--json-key)]">{result.key}</span>
                 <span className="text-[var(--text-secondary)]">:</span>
-                <span className={`font-mono text-sm ${
-                  typeof result.value === 'string' ? 'text-green-500' :
-                  typeof result.value === 'number' ? 'text-blue-500' :
-                  typeof result.value === 'boolean' ? 'text-purple-500' :
-                  'text-gray-500'
-                }`}>
+                <span
+                  className={`font-mono text-sm ${
+                    typeof result.value === 'string'
+                      ? 'text-green-500'
+                      : typeof result.value === 'number'
+                        ? 'text-blue-500'
+                        : typeof result.value === 'boolean'
+                          ? 'text-purple-500'
+                          : 'text-gray-500'
+                  }`}
+                >
                   {typeof result.value === 'object' && result.value !== null
-                    ? Array.isArray(result.value) ? `[${result.value.length}]` : `{...}`
-                    : typeof result.value === 'string' 
+                    ? Array.isArray(result.value)
+                      ? `[${result.value.length}]`
+                      : `{...}`
+                    : typeof result.value === 'string'
                       ? `"${result.value.substring(0, 50)}${result.value.length > 50 ? '...' : ''}"`
-                      : String(result.value)
-                  }
+                      : String(result.value)}
                 </span>
               </div>
-              
+
               <div className="flex items-center gap-2 mt-1">
-                <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                  result.type === 'key' ? 'bg-blue-500/10 text-blue-500' : 
-                  result.type === 'value' ? 'bg-green-500/10 text-green-500' : 
-                  'bg-purple-500/10 text-purple-500'
-                }`}>
+                <span
+                  className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                    result.type === 'key'
+                      ? 'bg-blue-500/10 text-blue-500'
+                      : result.type === 'value'
+                        ? 'bg-green-500/10 text-green-500'
+                        : 'bg-purple-500/10 text-purple-500'
+                  }`}
+                >
                   {result.type.toUpperCase()}
                 </span>
-                <span className="text-xs text-[var(--text-secondary)]">
-                  Depth: {result.depth}
-                </span>
+                <span className="text-xs text-[var(--text-secondary)]">Depth: {result.depth}</span>
               </div>
             </div>
           </div>
         ))}
 
         {/* Render children */}
-        {isExpanded && Array.from(node.children.entries()).map(([childKey, childNode]) => 
-          renderTreeNode(childNode, childKey, level + 1)
-        )}
+        {isExpanded &&
+          Array.from(node.children.entries()).map(([childKey, childNode]) =>
+            renderTreeNode(childNode, childKey, level + 1)
+          )}
       </div>
     );
   };
@@ -217,24 +241,29 @@ const TreeResultView: React.FC<{
               key={result.originalIndex}
               onClick={() => onSelectResult(result.originalIndex)}
               className={`flex items-center py-2 px-3 hover:bg-[var(--bg-secondary)]/50 rounded cursor-pointer transition-all ${
-                selectedResult === result.originalIndex ? 'bg-blue-500/10 border-l-2 border-blue-500' : ''
+                selectedResult === result.originalIndex
+                  ? 'bg-blue-500/10 border-l-2 border-blue-500'
+                  : ''
               }`}
             >
-              <span className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}>
+              <span
+                className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}
+              >
                 {getTypeIcon(result.dataType)}
               </span>
               <div className="flex-1">
                 <span className="font-mono text-sm">
-                  {result.key}: {typeof result.value === 'object' ? JSON.stringify(result.value).substring(0, 50) + '...' : String(result.value)}
+                  {result.key}:{' '}
+                  {typeof result.value === 'object'
+                    ? JSON.stringify(result.value).substring(0, 50) + '...'
+                    : String(result.value)}
                 </span>
               </div>
             </div>
           ))}
-          
+
           {/* Render tree */}
-          {Array.from(tree.children.entries()).map(([key, node]) => 
-            renderTreeNode(node, key, 0)
-          )}
+          {Array.from(tree.children.entries()).map(([key, node]) => renderTreeNode(node, key, 0))}
         </>
       )}
     </div>
@@ -255,7 +284,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
   const [selectedResult, setSelectedResult] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'tree' | 'visual'>('list');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  
+
   // Filters
   const [activeFilters, setActiveFilters] = useState({
     strings: true,
@@ -265,7 +294,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     arrays: true,
     nulls: true,
   });
-  
+
   // Advanced Filters
   const [searchMode, setSearchMode] = useState<SearchMode>('contains');
   const [searchTarget, setSearchTarget] = useState<SearchTarget>('both');
@@ -275,7 +304,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
   const [maxLength, setMaxLength] = useState<number>(-1);
   const [pathPattern, setPathPattern] = useState('');
   const [excludePattern, setExcludePattern] = useState('');
-  
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -300,7 +329,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
       if (searchQuery) {
         performSearch();
         if (!searchHistory.includes(searchQuery)) {
-          setSearchHistory(prev => [searchQuery, ...prev].slice(0, 10));
+          setSearchHistory((prev) => [searchQuery, ...prev].slice(0, 10));
         }
       } else {
         setSearchResults([]);
@@ -308,7 +337,18 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, activeFilters, searchMode, searchTarget, caseSensitive, maxDepth, minLength, maxLength, pathPattern, excludePattern]);
+  }, [
+    searchQuery,
+    activeFilters,
+    searchMode,
+    searchTarget,
+    caseSensitive,
+    maxDepth,
+    minLength,
+    maxLength,
+    pathPattern,
+    excludePattern,
+  ]);
 
   const analyzeJsonStructure = () => {
     setIsAnalyzing(true);
@@ -332,9 +372,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         Object.entries(obj).forEach(([key, value]) => {
           totalKeys++;
           paths.push(`${path}${path ? '.' : ''}${key}`);
-          
+
           // Extract words for frequency analysis
-          key.split(/[^a-zA-Z0-9]+/).forEach(word => {
+          key.split(/[^a-zA-Z0-9]+/).forEach((word) => {
             if (word.length > 2) {
               words[word.toLowerCase()] = (words[word.toLowerCase()] || 0) + 1;
             }
@@ -343,7 +383,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
           if (typeof value === 'string') {
             totalValues++;
             typeCount.string = (typeCount.string || 0) + 1;
-            value.split(/[^a-zA-Z0-9]+/).forEach(word => {
+            value.split(/[^a-zA-Z0-9]+/).forEach((word) => {
               if (word.length > 2) {
                 words[word.toLowerCase()] = (words[word.toLowerCase()] || 0) + 1;
               }
@@ -408,9 +448,10 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         return targetText.startsWith(searchText);
       case 'ends':
         return targetText.endsWith(searchText);
-      case 'regex':
+      case 'regex': {
         const regex = testRegex(query);
         return regex ? regex.test(text) : false;
+      }
       case 'contains':
       default:
         return targetText.includes(searchText);
@@ -490,11 +531,11 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
           if (searchTarget === 'both' || searchTarget === 'values') {
             if (typeof value === 'string') {
               if (!activeFilters.strings) return;
-              
+
               // Check length filters
               if (minLength > 0 && value.length < minLength) return;
               if (maxLength !== -1 && value.length > maxLength) return;
-              
+
               valueMatch = matchesSearch(value, query);
               dataType = 'string';
             } else if (typeof value === 'number') {
@@ -540,17 +581,17 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
   const getSuggestions = useMemo(() => {
     if (!searchQuery) return [];
-    
+
     const query = searchQuery.toLowerCase();
     const pathSuggestions = allPaths
-      .filter(path => path.toLowerCase().includes(query))
+      .filter((path) => path.toLowerCase().includes(query))
       .slice(0, 5);
-    
+
     const wordSuggestions = wordFrequencies
-      .filter(w => w.word.startsWith(query))
+      .filter((w) => w.word.startsWith(query))
       .slice(0, 5)
-      .map(w => w.word);
-    
+      .map((w) => w.word);
+
     return Array.from(new Set([...pathSuggestions, ...wordSuggestions])).slice(0, 8);
   }, [searchQuery, allPaths, wordFrequencies]);
 
@@ -581,7 +622,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
   };
 
   const toggleFilter = (filterKey: keyof typeof activeFilters) => {
-    setActiveFilters(prev => ({
+    setActiveFilters((prev) => ({
       ...prev,
       [filterKey]: !prev[filterKey],
     }));
@@ -589,37 +630,56 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'string': return '"';
-      case 'number': return '#';
-      case 'boolean': return '⊤';
-      case 'object': return '{}';
-      case 'array': return '[]';
-      case 'null': return '∅';
-      default: return '?';
+      case 'string':
+        return '"';
+      case 'number':
+        return '#';
+      case 'boolean':
+        return '⊤';
+      case 'object':
+        return '{}';
+      case 'array':
+        return '[]';
+      case 'null':
+        return '∅';
+      default:
+        return '?';
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'string': return 'text-green-500 bg-green-500/10';
-      case 'number': return 'text-blue-500 bg-blue-500/10';
-      case 'boolean': return 'text-purple-500 bg-purple-500/10';
-      case 'object': return 'text-orange-500 bg-orange-500/10';
-      case 'array': return 'text-yellow-500 bg-yellow-500/10';
-      case 'null': return 'text-gray-500 bg-gray-500/10';
-      default: return 'text-gray-400 bg-gray-400/10';
+      case 'string':
+        return 'text-green-500 bg-green-500/10';
+      case 'number':
+        return 'text-blue-500 bg-blue-500/10';
+      case 'boolean':
+        return 'text-purple-500 bg-purple-500/10';
+      case 'object':
+        return 'text-orange-500 bg-orange-500/10';
+      case 'array':
+        return 'text-yellow-500 bg-yellow-500/10';
+      case 'null':
+        return 'text-gray-500 bg-gray-500/10';
+      default:
+        return 'text-gray-400 bg-gray-400/10';
     }
   };
 
   const highlightMatch = (text: string) => {
     if (!searchQuery || searchMode === 'regex') return text;
-    
-    const parts = text.split(new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+
+    const parts = text.split(
+      new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    );
     return (
       <>
-        {parts.map((part, i) => 
+        {parts.map((part, i) =>
           part.toLowerCase() === searchQuery.toLowerCase() ? (
-            <mark key={i} className="bg-yellow-400/30 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-300 px-0.5 rounded">
+            <mark
+              key={i}
+              className="bg-yellow-400/30 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-300 px-0.5 rounded"
+            >
               {part}
             </mark>
           ) : (
@@ -650,7 +710,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
       },
       timestamp: new Date().toISOString(),
       resultsCount: searchResults.length,
-      results: searchResults.map(r => ({
+      results: searchResults.map((r) => ({
         path: r.path,
         key: r.key,
         value: r.value,
@@ -659,7 +719,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         depth: r.depth,
       })),
     };
-    
+
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -679,7 +739,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               {mounted ? t('search.smartSearch') : 'Smart Search & Discovery'}
             </h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              {dataInsights.totalKeys} {mounted ? t('search.keys') : 'keys'} • {dataInsights.totalValues} {mounted ? t('search.values') : 'values'} • {mounted ? t('search.depth') : 'Depth'}: {dataInsights.maxDepth}
+              {dataInsights.totalKeys} {mounted ? t('search.keys') : 'keys'} •{' '}
+              {dataInsights.totalValues} {mounted ? t('search.values') : 'values'} •{' '}
+              {mounted ? t('search.depth') : 'Depth'}: {dataInsights.maxDepth}
             </p>
           </div>
           <div className="flex gap-2">
@@ -704,7 +766,12 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
           <div className="relative flex items-center">
             <div className="absolute left-4 text-[var(--text-secondary)]">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
             </div>
             <input
@@ -717,15 +784,25 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder={mounted ? t('search.placeholder') : 'Search keys or values...'}
-              className="w-full pl-12 pr-24 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
+              className="w-full pl-12 pr-24 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--input-bg)] text-[var(--text-primary)] focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all"
             />
             {searchQuery && (
               <button
                 onClick={clearSearch}
                 className="absolute right-14 p-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
               >
-                <svg className="w-5 h-5 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-5 h-5 text-[var(--text-secondary)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             )}
@@ -741,9 +818,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
           {/* Regex Error */}
           {regexError && searchMode === 'regex' && (
-            <div className="absolute mt-1 text-xs text-red-500">
-              Regex Error: {regexError}
-            </div>
+            <div className="absolute mt-1 text-xs text-red-500">Regex Error: {regexError}</div>
           )}
 
           {/* Search Suggestions */}
@@ -760,8 +835,18 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                     }}
                     className="w-full text-left px-3 py-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    <svg
+                      className="w-4 h-4 text-[var(--text-secondary)]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
                     </svg>
                     <span className="text-sm text-[var(--text-primary)]">{suggestion}</span>
                   </button>
@@ -779,8 +864,8 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               key={key}
               onClick={() => toggleFilter(key as any)}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
-                active 
-                  ? 'bg-blue-500/10 text-blue-500 border border-blue-500/30' 
+                active
+                  ? 'bg-blue-500/10 text-blue-500 border border-blue-500/30'
                   : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-transparent opacity-50'
               }`}
             >
@@ -794,14 +879,36 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               className="px-3 py-1.5 rounded-lg text-sm font-medium bg-[var(--bg-secondary)] text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-all flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                />
               </svg>
               Advanced
-              <svg className={`w-4 h-4 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <svg
+                className={`w-4 h-4 transition-transform ${showAdvancedFilters ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </button>
-            {(searchMode !== 'contains' || searchTarget !== 'both' || caseSensitive || maxDepth !== -1 || minLength > 0 || maxLength !== -1 || pathPattern || excludePattern) && (
+            {(searchMode !== 'contains' ||
+              searchTarget !== 'both' ||
+              caseSensitive ||
+              maxDepth !== -1 ||
+              minLength > 0 ||
+              maxLength !== -1 ||
+              pathPattern ||
+              excludePattern) && (
               <button
                 onClick={resetFilters}
                 className="px-3 py-1.5 rounded-lg text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-all"
@@ -818,7 +925,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {/* Search Mode */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Search Mode</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Search Mode
+                </label>
                 <select
                   value={searchMode}
                   onChange={(e) => setSearchMode(e.target.value as SearchMode)}
@@ -834,7 +943,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
               {/* Search Target */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Search In</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Search In
+                </label>
                 <select
                   value={searchTarget}
                   onChange={(e) => setSearchTarget(e.target.value as SearchTarget)}
@@ -848,7 +959,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
               {/* Max Depth */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Max Depth</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Max Depth
+                </label>
                 <input
                   type="number"
                   value={maxDepth}
@@ -861,7 +974,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
               {/* Case Sensitive */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Options</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Options
+                </label>
                 <div className="flex items-center h-[38px]">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -870,14 +985,18 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       onChange={(e) => setCaseSensitive(e.target.checked)}
                       className="rounded border-[var(--border-color)]"
                     />
-                    <span className="text-sm text-[var(--text-primary)]">{mounted ? t('search.caseSensitive') : 'Case Sensitive'}</span>
+                    <span className="text-sm text-[var(--text-primary)]">
+                      {mounted ? t('search.caseSensitive') : 'Case Sensitive'}
+                    </span>
                   </label>
                 </div>
               </div>
 
               {/* String Length Filters */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Min String Length</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Min String Length
+                </label>
                 <input
                   type="number"
                   value={minLength}
@@ -889,7 +1008,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Max String Length</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Max String Length
+                </label>
                 <input
                   type="number"
                   value={maxLength}
@@ -902,7 +1023,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
               {/* Path Pattern */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Path Pattern (Regex)</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Path Pattern (Regex)
+                </label>
                 <input
                   type="text"
                   value={pathPattern}
@@ -914,7 +1037,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
               {/* Exclude Pattern */}
               <div>
-                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">Exclude Pattern (Regex)</label>
+                <label className="block text-xs font-medium text-[var(--text-secondary)] mb-1">
+                  Exclude Pattern (Regex)
+                </label>
                 <input
                   type="text"
                   value={excludePattern}
@@ -987,8 +1112,18 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                 <div className="flex gap-2 text-sm">
                   {searchHistory.length > 0 && (
                     <div className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[var(--bg-secondary)] text-[var(--text-secondary)]">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       Recent: {searchHistory.length}
                     </div>
@@ -999,12 +1134,18 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               {viewMode === 'tree' && (
                 <div className="space-y-4">
                   <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 p-4 max-h-[60vh] overflow-auto">
-                    <TreeResultView results={searchResults} onSelectResult={setSelectedResult} selectedResult={selectedResult} />
+                    <TreeResultView
+                      results={searchResults}
+                      onSelectResult={setSelectedResult}
+                      selectedResult={selectedResult}
+                    />
                   </div>
-                  
+
                   {selectedResult !== null && searchResults[selectedResult] && (
                     <div className="rounded-xl border border-blue-500/30 bg-blue-500/5 p-4">
-                      <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Selected Result Details</h4>
+                      <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                        Selected Result Details
+                      </h4>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-[var(--text-secondary)]">Path:</span>
@@ -1014,115 +1155,148 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-[var(--text-secondary)]">Type:</span>
-                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                            searchResults[selectedResult].type === 'key' ? 'bg-blue-500/10 text-blue-500' : 
-                            searchResults[selectedResult].type === 'value' ? 'bg-green-500/10 text-green-500' : 
-                            'bg-purple-500/10 text-purple-500'
-                          }`}>
+                          <span
+                            className={`px-2 py-0.5 rounded text-xs font-medium ${
+                              searchResults[selectedResult].type === 'key'
+                                ? 'bg-blue-500/10 text-blue-500'
+                                : searchResults[selectedResult].type === 'value'
+                                  ? 'bg-green-500/10 text-green-500'
+                                  : 'bg-purple-500/10 text-purple-500'
+                            }`}
+                          >
                             {searchResults[selectedResult].type.toUpperCase()}
                           </span>
                           <span className="text-xs text-[var(--text-secondary)]">
                             Data: {searchResults[selectedResult].dataType}
                           </span>
                         </div>
-                        {typeof searchResults[selectedResult].value === 'object' && searchResults[selectedResult].value !== null && (
-                          <div className="mt-3">
-                            <span className="text-xs text-[var(--text-secondary)]">Value:</span>
-                            <pre className="mt-2 p-3 bg-[var(--bg-primary)] rounded text-xs overflow-x-auto">
-                              {JSON.stringify(searchResults[selectedResult].value, null, 2)}
-                            </pre>
-                          </div>
-                        )}
+                        {typeof searchResults[selectedResult].value === 'object' &&
+                          searchResults[selectedResult].value !== null && (
+                            <div className="mt-3">
+                              <span className="text-xs text-[var(--text-secondary)]">Value:</span>
+                              <pre className="mt-2 p-3 bg-[var(--bg-primary)] rounded text-xs overflow-x-auto">
+                                {JSON.stringify(searchResults[selectedResult].value, null, 2)}
+                              </pre>
+                            </div>
+                          )}
                       </div>
                     </div>
                   )}
                 </div>
               )}
 
-              {viewMode === 'list' && searchResults.map((result, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedResult(index)}
-                  className={`group relative rounded-xl border transition-all cursor-pointer overflow-hidden ${
-                    selectedResult === index 
-                      ? 'border-blue-500 bg-blue-500/5 shadow-lg' 
-                      : 'border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 hover:border-blue-500/50 hover:shadow-md'
-                  }`}
-                >
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${getTypeColor(result.dataType)}`}>
-                          {getTypeIcon(result.dataType)}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                              result.type === 'key' ? 'bg-blue-500/10 text-blue-500' : 
-                              result.type === 'value' ? 'bg-green-500/10 text-green-500' : 
-                              'bg-purple-500/10 text-purple-500'
-                            }`}>
-                              {result.type.toUpperCase()}
-                            </span>
-                            <span className="text-xs text-[var(--text-secondary)]">
-                              Depth: {result.depth}
-                            </span>
+              {viewMode === 'list' &&
+                searchResults.map((result, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedResult(index)}
+                    className={`group relative rounded-xl border transition-all cursor-pointer overflow-hidden ${
+                      selectedResult === index
+                        ? 'border-blue-500 bg-blue-500/5 shadow-lg'
+                        : 'border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 hover:border-blue-500/50 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${getTypeColor(result.dataType)}`}
+                          >
+                            {getTypeIcon(result.dataType)}
                           </div>
-                          <p className="text-xs text-[var(--text-secondary)] mt-1 font-mono">
-                            {result.path}
-                          </p>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                  result.type === 'key'
+                                    ? 'bg-blue-500/10 text-blue-500'
+                                    : result.type === 'value'
+                                      ? 'bg-green-500/10 text-green-500'
+                                      : 'bg-purple-500/10 text-purple-500'
+                                }`}
+                              >
+                                {result.type.toUpperCase()}
+                              </span>
+                              <span className="text-xs text-[var(--text-secondary)]">
+                                Depth: {result.depth}
+                              </span>
+                            </div>
+                            <p className="text-xs text-[var(--text-secondary)] mt-1 font-mono">
+                              {result.path}
+                            </p>
+                          </div>
                         </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyToClipboard(result.path);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-all"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                            />
+                          </svg>
+                        </button>
                       </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          copyToClipboard(result.path);
-                        }}
-                        className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-all"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                        </svg>
-                      </button>
+                      <div className="font-mono text-sm bg-[var(--bg-primary)] rounded-lg p-3 mt-3">
+                        <span className="text-[var(--json-key)]">
+                          {result.type !== 'value' ? highlightMatch(result.key) : `"${result.key}"`}
+                        </span>
+                        <span className="text-[var(--text-secondary)]">: </span>
+                        {typeof result.value === 'object' && result.value !== null ? (
+                          <span className="text-[var(--text-secondary)]">
+                            {Array.isArray(result.value)
+                              ? `[${result.value.length} items]`
+                              : `{${Object.keys(result.value).length} keys}`}
+                          </span>
+                        ) : (
+                          <span
+                            className={
+                              typeof result.value === 'string'
+                                ? 'text-green-500'
+                                : typeof result.value === 'number'
+                                  ? 'text-blue-500'
+                                  : typeof result.value === 'boolean'
+                                    ? 'text-purple-500'
+                                    : 'text-gray-500'
+                            }
+                          >
+                            {typeof result.value === 'string'
+                              ? `"${result.type !== 'key' ? highlightMatch(result.value) : result.value}"`
+                              : String(result.value)}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="font-mono text-sm bg-[var(--bg-primary)] rounded-lg p-3 mt-3">
-                      <span className="text-[var(--json-key)]">
-                        {result.type !== 'value' ? highlightMatch(result.key) : `"${result.key}"`}
-                      </span>
-                      <span className="text-[var(--text-secondary)]">: </span>
-                      {typeof result.value === 'object' && result.value !== null ? (
-                        <span className="text-[var(--text-secondary)]">
-                          {Array.isArray(result.value) ? `[${result.value.length} items]` : `{${Object.keys(result.value).length} keys}`}
-                        </span>
-                      ) : (
-                        <span className={
-                          typeof result.value === 'string' ? 'text-green-500' :
-                          typeof result.value === 'number' ? 'text-blue-500' :
-                          typeof result.value === 'boolean' ? 'text-purple-500' :
-                          'text-gray-500'
-                        }>
-                          {typeof result.value === 'string' 
-                            ? `"${result.type !== 'key' ? highlightMatch(result.value) : result.value}"` 
-                            : String(result.value)}
-                        </span>
+                    {selectedResult === index &&
+                      typeof result.value === 'object' &&
+                      result.value !== null && (
+                        <div className="border-t border-[var(--border-color)] p-4 bg-[var(--bg-primary)]/50">
+                          <pre className="text-xs overflow-x-auto">
+                            {JSON.stringify(result.value, null, 2)}
+                          </pre>
+                        </div>
                       )}
-                    </div>
                   </div>
-                  {selectedResult === index && typeof result.value === 'object' && result.value !== null && (
-                    <div className="border-t border-[var(--border-color)] p-4 bg-[var(--bg-primary)]/50">
-                      <pre className="text-xs overflow-x-auto">
-                        {JSON.stringify(result.value, null, 2)}
-                      </pre>
-                    </div>
-                  )}
-                </div>
-              ))}
+                ))}
 
               {viewMode === 'visual' && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Word Cloud */}
                   <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 p-4">
-                    <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Word Frequency</h4>
+                    <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                      Word Frequency
+                    </h4>
                     <div className="flex flex-wrap gap-2">
                       {wordFrequencies.slice(0, 20).map((word, i) => (
                         <button
@@ -1143,22 +1317,31 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
                   {/* Data Type Distribution */}
                   <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-tertiary)]/50 p-4">
-                    <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">Data Types</h4>
+                    <h4 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                      Data Types
+                    </h4>
                     <div className="space-y-2">
                       {Object.entries(dataInsights.dataTypes).map(([type, count]) => {
-                        const percentage = (count / Object.values(dataInsights.dataTypes).reduce((a, b) => a + b, 0)) * 100;
+                        const percentage =
+                          (count /
+                            Object.values(dataInsights.dataTypes).reduce((a, b) => a + b, 0)) *
+                          100;
                         return (
                           <div key={type} className="flex items-center gap-3">
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold ${getTypeColor(type)}`}>
+                            <div
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold ${getTypeColor(type)}`}
+                            >
                               {getTypeIcon(type)}
                             </div>
                             <div className="flex-1">
                               <div className="flex justify-between items-center mb-1">
                                 <span className="text-sm text-[var(--text-primary)]">{type}</span>
-                                <span className="text-xs text-[var(--text-secondary)]">{count}</span>
+                                <span className="text-xs text-[var(--text-secondary)]">
+                                  {count}
+                                </span>
                               </div>
                               <div className="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
-                                <div 
+                                <div
                                   className="h-full bg-[var(--accent-color)] transition-all"
                                   style={{ width: `${percentage}%` }}
                                 />
@@ -1175,21 +1358,45 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
           ) : searchQuery ? (
             <div className="flex flex-col items-center justify-center h-full">
               <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-4">
-                <svg className="w-12 h-12 text-[var(--text-secondary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-12 h-12 text-[var(--text-secondary)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
               <p className="text-lg font-medium text-[var(--text-primary)]">No results found</p>
-              <p className="text-sm text-[var(--text-secondary)] mt-2">Try adjusting your filters or search term</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-2">
+                Try adjusting your filters or search term
+              </p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
               <div className="w-32 h-32 rounded-full bg-blue-500/10 flex items-center justify-center mb-6">
-                <svg className="w-16 h-16 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="w-16 h-16 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Ready to Search</h3>
+              <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-2">
+                Ready to Search
+              </h3>
               <p className="text-sm text-[var(--text-secondary)] text-center max-w-md">
                 Start typing to search through your JSON data. Use filters to refine results.
               </p>
@@ -1216,11 +1423,15 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         {/* Side Panel - Insights */}
         {viewMode === 'list' && wordFrequencies.length > 0 && (
           <div className="w-80 border-l border-[var(--border-color)] bg-[var(--bg-tertiary)]/30 p-6 overflow-auto">
-            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">{mounted ? t('search.quickInsights') : 'Quick Insights'}</h3>
-            
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+              {mounted ? t('search.quickInsights') : 'Quick Insights'}
+            </h3>
+
             {/* Top Words */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">{mounted ? t('search.topWords') : 'Top Words'}</h4>
+              <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">
+                {mounted ? t('search.topWords') : 'Top Words'}
+              </h4>
               <div className="space-y-2">
                 {wordFrequencies.slice(0, 10).map((word, i) => (
                   <button
@@ -1240,7 +1451,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             {/* Recent Paths */}
             {allPaths.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">{mounted ? t('search.samplePaths') : 'Sample Paths'}</h4>
+                <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-3">
+                  {mounted ? t('search.samplePaths') : 'Sample Paths'}
+                </h4>
                 <div className="space-y-1">
                   {allPaths.slice(0, 8).map((path, i) => (
                     <button
@@ -1248,7 +1461,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       onClick={() => setSearchQuery(path)}
                       className="w-full text-left p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
                     >
-                      <p className="text-xs font-mono text-[var(--text-primary)] truncate">{path}</p>
+                      <p className="text-xs font-mono text-[var(--text-primary)] truncate">
+                        {path}
+                      </p>
                     </button>
                   ))}
                 </div>

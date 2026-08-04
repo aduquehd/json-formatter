@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useNotification } from '@/hooks/useNotification';
 
 // Single editor across all devices: CodeMirror 6. It's fully bundled (no CDN
@@ -10,7 +11,9 @@ import { useNotification } from '@/hooks/useNotification';
 const CodeMirrorEditor = dynamic(() => import('./CodeMirrorEditor'), {
   ssr: false,
   loading: () => (
-    <div className="flex items-center justify-center h-full text-[var(--text-secondary)]">Loading editor…</div>
+    <div className="flex items-center justify-center h-full text-[var(--text-secondary)]">
+      Loading editor…
+    </div>
   ),
 });
 
@@ -32,7 +35,9 @@ const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => 
   useEffect(() => {
     const contentSize = content.length;
     if (contentSize > MAX_FILE_SIZE) {
-      showError(`File too large (${(contentSize / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 10MB.`);
+      showError(
+        `File too large (${(contentSize / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 10MB.`
+      );
       onChange('{"error": "File too large. Please use a file smaller than 10MB"}');
       return;
     }

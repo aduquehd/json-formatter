@@ -9,8 +9,8 @@ export function configureMonacoLoader() {
   // rather than a third-party CDN — keeps data private and works offline.
   loader.config({
     paths: {
-      vs: '/monaco/vs'
-    }
+      vs: '/monaco/vs',
+    },
   });
 }
 
@@ -24,7 +24,7 @@ export function configureMonacoEnvironment() {
     // Return undefined to disable workers
     getWorker: () => undefined,
     // Alternative method to disable workers
-    getWorkerUrl: () => undefined
+    getWorkerUrl: () => undefined,
   };
 }
 
@@ -37,7 +37,7 @@ export function initializeMonaco() {
   } catch (error) {
     console.warn('Monaco environment configuration warning:', error);
   }
-  
+
   // Configure the loader
   configureMonacoLoader();
 }

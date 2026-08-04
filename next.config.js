@@ -104,19 +104,9 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = { fs: false, path: false };
-    }
-
-    // Ignore Monaco Editor warnings
-    config.ignoreWarnings = [
-      { module: /node_modules\/monaco-editor/ },
-      { module: /@monaco-editor\/react/ },
-    ];
-
-    return config;
-  },
+  // Next.js 16 defaults to Turbopack for `next dev` and `next build`.
+  // Keep this block empty-but-present only if we need Turbopack options later.
+  turbopack: {},
 };
 
 module.exports = nextConfig;

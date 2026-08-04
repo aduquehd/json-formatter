@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   FileJson,
   GitCompare,
-  Github,
   ListTree,
   Map,
   Network,
@@ -17,6 +16,7 @@ import {
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import HelpTabs, { type HelpTab } from '@/components/HelpTabs';
+import { GithubIcon as Github } from '@/components/icons/GithubIcon';
 
 export const metadata: Metadata = {
   title: 'JSON Formatter Help & Guide - How to Format JSON Online',

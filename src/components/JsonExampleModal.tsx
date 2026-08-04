@@ -1,7 +1,7 @@
 'use client';
 
+import { DollarSign, Globe, Settings, ShoppingCart, X } from 'lucide-react';
 import React from 'react';
-import { X, ShoppingCart, DollarSign, Settings, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { exampleJsonData } from '@/utils/exampleData';
 
@@ -74,12 +74,14 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
 
   return (
     <div className="json-example-modal" onClick={onClose}>
-      <div 
+      <div
         className="bg-[var(--bg-tertiary)] rounded-2xl p-6 max-w-5xl w-full mx-4 max-h-[85vh] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-[var(--text-primary)]">{mounted ? t('modal.selectExample') : 'Select a JSON Example'}</h2>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">
+            {mounted ? t('modal.selectExample') : 'Select a JSON Example'}
+          </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-[var(--bg-secondary)] rounded-lg transition-colors"
@@ -88,7 +90,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
             <X className="w-6 h-6 text-[var(--text-primary)]" />
           </button>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {examples.map((example) => {
             const IconComponent = example.icon;
@@ -101,9 +103,11 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
                 <div className="p-5">
                   <div className="flex items-center gap-3 mb-4">
                     <IconComponent className="w-7 h-7 text-[var(--accent-color)] transition-colors" />
-                    <h3 className="font-semibold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-color)] transition-colors">{example.title}</h3>
+                    <h3 className="font-semibold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent-color)] transition-colors">
+                      {example.title}
+                    </h3>
                   </div>
-                  
+
                   <div className="relative h-40 mb-4 overflow-hidden rounded-lg bg-[var(--bg-secondary)] group-hover:bg-[var(--bg-primary)] transition-colors">
                     <pre className="absolute inset-0 p-3 text-xs text-[var(--text-secondary)] font-mono blur-example-code group-hover:text-[var(--text-primary)] transition-colors">
                       {`{
@@ -112,7 +116,7 @@ const JsonExampleModal: React.FC<JsonExampleModalProps> = ({ onSelect, onClose }
                     </pre>
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--bg-secondary)] group-hover:to-[var(--bg-primary)] transition-colors"></div>
                   </div>
-                  
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

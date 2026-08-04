@@ -184,7 +184,7 @@ export default function WhatIsJsonPage() {
               <ul className="space-y-3 text-[var(--text-secondary)]">
                 <li className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    className="w-5 h-5 text-green-500 shrink-0 mt-1"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -201,7 +201,7 @@ export default function WhatIsJsonPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    className="w-5 h-5 text-green-500 shrink-0 mt-1"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -218,7 +218,7 @@ export default function WhatIsJsonPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    className="w-5 h-5 text-green-500 shrink-0 mt-1"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -235,7 +235,7 @@ export default function WhatIsJsonPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    className="w-5 h-5 text-green-500 shrink-0 mt-1"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -252,7 +252,7 @@ export default function WhatIsJsonPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-1"
+                    className="w-5 h-5 text-green-500 shrink-0 mt-1"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
