@@ -7,13 +7,16 @@ const isProd = process.env.NODE_ENV === 'production';
 // 'unsafe-inline' covers Next's inline bootstrap/hydration scripts and the
 // JSON-LD blocks; 'unsafe-eval' is required by Monaco's AMD loader. These can be
 // tightened to a nonce-based policy later via middleware.
+// GA4 (gtag) loads from googletagmanager.com and posts to analytics.google.com,
+// with www.google.com as a dual-collect fallback. www.google-analytics.com is
+// kept for legacy collect paths.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://www.google-analytics.com https://*.tile.openstreetmap.org",
+  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.google.com https://*.tile.openstreetmap.org",
   "worker-src 'self' blob: data:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
