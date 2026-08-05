@@ -103,3 +103,9 @@ tmp/
 temp/
 # Self-hosted Monaco runtime (copied from node_modules at build time)
 /public/monaco/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

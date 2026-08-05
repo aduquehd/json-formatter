@@ -4,17 +4,21 @@
 #   1. Biome  — format + lint + organize imports on staged files (auto-fixes,
 #               then re-stages the fixed files).
 #   2. ESLint — Next.js framework rules on staged JS/TS files.
-#   3. tsc    — whole-project type-check (runs only when a TS file is staged).
+#   3. tsc    — whole-project type-check (only when a TS file is staged).
+#   4. vitest — unit tests (only when TS/JS source or test files are staged).
 pre-commit:
   piped: true
   commands:
     1_biome:
-      glob: '*.{js,jsx,ts,tsx,json,jsonc,css}'
+      glob: '*.{js,jsx,ts,tsx,json,jsonc,css,mts}'
       run: node_modules/.bin/biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
     2_eslint:
-      glob: '*.{js,jsx,ts,tsx}'
+      glob: '*.{js,jsx,ts,tsx,mts}'
       run: node_modules/.bin/eslint {staged_files}
     3_typecheck:
-      glob: '*.{ts,tsx}'
+      glob: '*.{ts,tsx,mts}'
       run: node_modules/.bin/tsc --noEmit
+    4_unit_tests:
+      glob: '*.{js,jsx,ts,tsx,mts}'
+      run: node_modules/.bin/vitest run
