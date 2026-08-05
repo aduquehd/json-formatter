@@ -46,6 +46,8 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  // Stable in Next.js 16 — auto-memoizes components (needs babel-plugin-react-compiler).
+  reactCompiler: true,
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
