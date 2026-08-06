@@ -19,7 +19,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isUpdatingFromTree, setIsUpdatingFromTree] = useState(false);
   const [preservedExpandedState, setPreservedExpandedState] = useState<Set<string> | null>(null);
-  const prevJsonRef = useRef<string>('');
+  const prevJsonRef = useRef<unknown>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -28,7 +28,7 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
   useEffect(() => {
     // Handle null/undefined json
     if (!json) {
-      prevJsonRef.current = '';
+      prevJsonRef.current = null;
       setIsInitialized(false);
       setExpandedNodes(new Set());
       return;
@@ -45,10 +45,11 @@ const TreeView: React.FC<TreeViewProps> = ({ json, onUpdate }) => {
       return;
     }
 
-    // Only auto-expand when JSON actually changes from external source
-    const jsonString = JSON.stringify(json);
-    if (jsonString !== prevJsonRef.current) {
-      prevJsonRef.current = jsonString;
+    // Only auto-expand when JSON actually changes from an external source.
+    // Reference equality is enough — each re-parse produces a fresh object, and
+    // stringifying multi-MB documents here just to compare was itself a cost.
+    if (json !== prevJsonRef.current) {
+      prevJsonRef.current = json;
 
       // Only auto-expand on new JSON (when not initialized or completely new content)
       if (!isInitialized) {
