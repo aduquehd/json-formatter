@@ -12,6 +12,7 @@ import globals from 'globals';
 const eslintConfig = defineConfig([
   globalIgnores([
     '.next/**',
+    '.next-e2e/**',
     'out/**',
     'build/**',
     'dist/**',
@@ -20,7 +21,7 @@ const eslintConfig = defineConfig([
     'next-env.d.ts',
   ]),
   {
-    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

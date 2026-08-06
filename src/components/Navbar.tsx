@@ -21,13 +21,8 @@ const ClientNavbar = dynamic(() => import('./ClientNavbar'), {
   ),
 });
 
-interface NavbarProps {
-  theme: 'light' | 'dark';
-  onThemeToggle: () => void;
-}
-
-const Navbar: React.FC<NavbarProps> = (props) => {
-  return <ClientNavbar {...props} />;
+const Navbar = () => {
+  return <ClientNavbar />;
 };
 
 export default Navbar;

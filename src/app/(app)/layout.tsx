@@ -3,7 +3,6 @@
 import type { ReactNode } from 'react';
 import JsonWorkbench from '@/components/JsonWorkbench';
 import Navbar from '@/components/Navbar';
-import { useTheme } from '@/hooks/useTheme';
 
 /**
  * Shared shell for every workbench view (`/`, `/tree`, `/diff`, …). Because a
@@ -13,11 +12,9 @@ import { useTheme } from '@/hooks/useTheme';
  * derived from the URL inside the workbench.
  */
 export default function AppLayout({ children }: { children: ReactNode }) {
-  const { theme, toggleTheme } = useTheme();
-
   return (
     <>
-      <Navbar theme={theme} onThemeToggle={toggleTheme} />
+      <Navbar />
 
       <JsonWorkbench />
 

@@ -2,18 +2,12 @@
 
 import { Heart, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
-import type React from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GithubIcon as Github } from '@/components/icons/GithubIcon';
 import LanguageSelector from './LanguageSelector';
 
-interface ClientNavbarProps {
-  theme: 'light' | 'dark';
-  onThemeToggle: () => void;
-}
-
-const ClientNavbar: React.FC<ClientNavbarProps> = () => {
+const ClientNavbar = () => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
