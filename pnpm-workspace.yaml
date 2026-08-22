@@ -14,3 +14,9 @@ minimumReleaseAgeExclude:
   - '@biomejs/cli-linux-x64@2.5.7'
   - '@biomejs/cli-win32-arm64@2.5.7'
   - '@biomejs/cli-win32-x64@2.5.7'
+patchedDependencies:
+  eslint-plugin-react@7.37.5: patches/eslint-plugin-react@7.37.5.patch
+peerDependencyRules:
+  allowedVersions:
+    # eslint-plugin-react / eslint-plugin-jsx-a11y declare eslint ^9 but run fine on 10.
+    eslint: '10'

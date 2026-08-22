@@ -6,6 +6,10 @@ import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
+// eslint-plugin-react 7.37.5 is patched (patches/) to run on ESLint 10 — it still
+// calls the removed context.getFilename(). Drop the patch once upstream ships
+// ESLint 10 support (jsx-eslint/eslint-plugin-react#3977).
+//
 // Native flat config mirroring next/core-web-vitals without typescript-eslint.
 // TypeScript 7 has no JS compiler API yet, and typescript-eslint rejects TS 7,
 // so we parse TS/TSX via Babel instead. Biome still owns general JS/TS lint.
