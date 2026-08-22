@@ -328,9 +328,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     const timer = setTimeout(() => {
       if (searchQuery) {
         performSearch();
-        if (!searchHistory.includes(searchQuery)) {
-          setSearchHistory((prev) => [searchQuery, ...prev].slice(0, 10));
-        }
+        setSearchHistory((prev) =>
+          prev.includes(searchQuery) ? prev : [searchQuery, ...prev].slice(0, 10)
+        );
       } else {
         setSearchResults([]);
       }
@@ -338,6 +338,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
 
     return () => clearTimeout(timer);
   }, [
+    json,
     searchQuery,
     activeFilters,
     searchMode,

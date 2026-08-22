@@ -1,4 +1,16 @@
-import { expect, test } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
+
+/**
+ * Opens the example modal and loads the e-commerce sample by its card title,
+ * so the tests don't depend on the order examples are listed in. The whole
+ * card is clickable, so clicking its heading selects the example.
+ */
+async function loadEcommerceExample(page: Page) {
+  await page.goto('/');
+  await page.getByRole('button', { name: /Try an example JSON/i }).click();
+  await expect(page.getByRole('heading', { name: /Select a JSON Example/i })).toBeVisible();
+  await page.getByRole('heading', { name: 'E-commerce Catalog' }).click();
+}
 
 const ROUTES = [
   { path: '/', title: /JSON Formatter/i },
@@ -22,24 +34,22 @@ test.describe('workbench smoke', () => {
   });
 
   test('example load shows valid status', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: /Try an example JSON/i }).click();
-    await expect(page.getByRole('heading', { name: /Select a JSON Example/i })).toBeVisible();
-    await page.getByRole('button', { name: 'Use this example' }).first().click();
+    await loadEcommerceExample(page);
     // exact: true — otherwise matches "Invalid JSON" and FAQ copy that contains "valid JSON"
     await expect(page.getByText('Valid JSON', { exact: true })).toBeVisible({ timeout: 15_000 });
   });
 
   test('tree tab renders nodes after loading example', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: /Try an example JSON/i }).click();
-    await page.getByRole('button', { name: 'Use this example' }).first().click();
+    await loadEcommerceExample(page);
     await expect(page.getByText('Valid JSON', { exact: true })).toBeVisible({ timeout: 15_000 });
 
     await page.getByRole('tab', { name: 'Tree View' }).click();
     await expect(page).toHaveURL(/\/tree/);
-    // Tree shows expandable catalog/metadata keys from the e-commerce sample.
-    await expect(page.getByText('"catalog"').first()).toBeVisible({ timeout: 15_000 });
+    // Scope to the tree panel: the editor stays mounted (hidden) across view
+    // switches, and its syntax-highlighted spans would also match this text.
+    await expect(page.locator('#tree-tab').getByText('"catalog"').first()).toBeVisible({
+      timeout: 15_000,
+    });
   });
 });
 

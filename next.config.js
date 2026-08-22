@@ -7,16 +7,18 @@ const isProd = process.env.NODE_ENV === 'production';
 // 'unsafe-inline' covers Next's inline bootstrap/hydration scripts and the
 // JSON-LD blocks; 'unsafe-eval' is required by Monaco's AMD loader. These can be
 // tightened to a nonce-based policy later via middleware.
-// GA4 (gtag) loads from googletagmanager.com and posts to analytics.google.com,
-// with www.google.com as a dual-collect fallback. www.google-analytics.com is
-// kept for legacy collect paths.
+// GA4 (gtag) loads from googletagmanager.com and posts collect beacons to
+// google-analytics.com / analytics.google.com. Wildcard subdomains follow
+// Google's official CSP guidance: EU traffic is routed to regional endpoints
+// (e.g. region1.analytics.google.com), which the bare domains would block.
+// www.google.com covers the consent-mode dual-collect fallback.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.google.com https://*.tile.openstreetmap.org",
+  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com https://*.tile.openstreetmap.org",
   "worker-src 'self' blob: data:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -49,6 +51,9 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  // Overridable so e2e builds (.next-e2e, see playwright.config.ts) don't
+  // clobber the .next directory a running `pnpm dev` depends on.
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   // Stable in Next.js 16 — auto-memoizes components (needs babel-plugin-react-compiler).
   reactCompiler: true,
   images: {

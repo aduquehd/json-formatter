@@ -13,6 +13,13 @@
     box-sizing: border-box;
   }
 
+  /* Tailwind v4 preflight switched buttons to `cursor: default`; restore the
+     v3 behavior so every clickable control shows a pointer. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   :root {
     /* === Light theme — Engineering Console (paper) === */
     --bg-primary: #f3f5f7;

@@ -11,6 +11,8 @@ coverage/
 
 # Next.js
 .next/
+# e2e production build (see playwright.config.ts)
+.next-e2e/
 out/
 next-dist/
 build/

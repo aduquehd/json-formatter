@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter } from 'next/navigation';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { startTransition, useEffect, useOptimistic, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ControlButtons from '@/components/ControlButtons';
 import EditorErrorBoundary from '@/components/EditorErrorBoundary';
@@ -60,11 +60,21 @@ export default function JsonWorkbench() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const activeTab: ToolView = pathToView[pathname] ?? 'formatted';
+  const routeView: ToolView = pathToView[pathname] ?? 'formatted';
+  // Optimistic view: the panel swaps the moment a tab is clicked, while the URL
+  // (and the SEO content below the workbench) catches up when the navigation
+  // commits. Without this, the switch would wait on the route's RSC fetch.
+  const [activeTab, setOptimisticView] = useOptimistic(routeView);
   // The diff experience now lives inside the editor, so both `/` and the legacy
   // `/diff` URL render the editor view; `/diff` just opens compare on arrival.
   const isEditorView = activeTab === 'formatted' || activeTab === 'diff';
   const panelView: ToolView = isEditorView ? 'formatted' : activeTab;
+
+  // Warm every view route so the URL swap on tab clicks doesn't wait on the
+  // network (no-op in dev, where routes still compile on first visit).
+  useEffect(() => {
+    for (const path of Object.keys(pathToView)) router.prefetch(path);
+  }, [router]);
 
   const [mounted, setMounted] = useState(false);
 
@@ -105,7 +115,10 @@ export default function JsonWorkbench() {
   // is preserved across the navigation.
   const goToView = (view: ToolView) => {
     gtag.trackTabSwitch(view);
-    router.push(viewToPath(view), { scroll: false });
+    startTransition(() => {
+      setOptimisticView(view);
+      router.push(viewToPath(view), { scroll: false });
+    });
   };
 
   // Indentation passed to JSON.stringify: a number of spaces, or a literal tab.
@@ -476,11 +489,17 @@ export default function JsonWorkbench() {
 
         <div
           className={`flex-1 overflow-hidden editor-dropzone relative ${isDragOver ? 'drag-over' : ''}`}
-          role="tabpanel"
-          id={`${panelView}-tab`}
-          aria-labelledby={`${panelView}-tabbtn`}
         >
-          {isEditorView && (
+          {/* The editor stays mounted across view switches (hidden, not
+              unmounted), so CodeMirror keeps its instance, scroll position and
+              cursor — switching back to the Editor tab is instant. */}
+          <div
+            className="h-full"
+            role="tabpanel"
+            id="formatted-tab"
+            aria-labelledby="formatted-tabbtn"
+            hidden={!isEditorView}
+          >
             <EditorErrorBoundary>
               <EditorWorkspace
                 content={editorContent}
@@ -492,31 +511,40 @@ export default function JsonWorkbench() {
                 onCompareContentChange={setCompareContent}
               />
             </EditorErrorBoundary>
-          )}
-          {activeTab === 'tree' && (
-            <ErrorBoundary>
-              <TreeView json={parsedJson} onUpdate={handleTreeUpdate} />
-            </ErrorBoundary>
-          )}
-          {activeTab === 'graph' && (
-            <ErrorBoundary>
-              <GraphView json={parsedJson} />
-            </ErrorBoundary>
-          )}
-          {activeTab === 'stats' && (
-            <ErrorBoundary>
-              <StatsView json={parsedJson} />
-            </ErrorBoundary>
-          )}
-          {activeTab === 'map' && (
-            <ErrorBoundary>
-              <MapView json={parsedJson} />
-            </ErrorBoundary>
-          )}
-          {activeTab === 'search' && (
-            <ErrorBoundary>
-              <SearchView json={parsedJson} />
-            </ErrorBoundary>
+          </div>
+          {!isEditorView && (
+            <div
+              className="h-full"
+              role="tabpanel"
+              id={`${panelView}-tab`}
+              aria-labelledby={`${panelView}-tabbtn`}
+            >
+              {activeTab === 'tree' && (
+                <ErrorBoundary>
+                  <TreeView json={parsedJson} onUpdate={handleTreeUpdate} />
+                </ErrorBoundary>
+              )}
+              {activeTab === 'graph' && (
+                <ErrorBoundary>
+                  <GraphView json={parsedJson} />
+                </ErrorBoundary>
+              )}
+              {activeTab === 'stats' && (
+                <ErrorBoundary>
+                  <StatsView json={parsedJson} />
+                </ErrorBoundary>
+              )}
+              {activeTab === 'map' && (
+                <ErrorBoundary>
+                  <MapView json={parsedJson} />
+                </ErrorBoundary>
+              )}
+              {activeTab === 'search' && (
+                <ErrorBoundary>
+                  <SearchView json={parsedJson} />
+                </ErrorBoundary>
+              )}
+            </div>
           )}
         </div>
 
