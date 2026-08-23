@@ -82,7 +82,8 @@
     "objects": "Objekten",
     "distribution": "Typ Verdelung",
     "keyFrequency": "Top Slötel Frequenz",
-    "noData": "Keen JSON Daten to analysieren"
+    "noData": "Keen JSON Daten to analysieren",
+    "noArrays": "Keen Arrays funnen"
   },
   "search": {
     "placeholder": "Slötels oder Weerten söken...",

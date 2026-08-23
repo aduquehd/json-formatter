@@ -52,7 +52,7 @@ const ClientNavbar = () => {
             </Link>
 
             <Link
-              href="https://github.com/aduquehd/json-formatter"
+              href="https://github.com/aduquehd/json-viewer"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center justify-center gap-1.5 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--btn-secondary-bg)] text-[var(--text-secondary)] text-[10px] sm:text-sm font-medium hover:text-[var(--accent-color)] hover:border-[var(--border-hover)] transition-colors duration-200 w-6 sm:w-auto h-6 sm:h-auto"

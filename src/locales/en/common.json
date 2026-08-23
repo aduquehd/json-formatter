@@ -82,7 +82,8 @@
     "objects": "Objects",
     "distribution": "Type Distribution",
     "keyFrequency": "Top Key Frequency",
-    "noData": "No JSON data to analyze"
+    "noData": "No JSON data to analyze",
+    "noArrays": "No arrays found"
   },
   "search": {
     "placeholder": "Search keys or values...",

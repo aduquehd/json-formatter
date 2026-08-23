@@ -82,7 +82,8 @@
     "objects": "Objecte",
     "distribution": "Tiep Verdeling",
     "keyFrequency": "Top Sleutel Frequentie",
-    "noData": "Gein JSON data om te analysere"
+    "noData": "Gein JSON data om te analysere",
+    "noArrays": "Gein arrays gevonde"
   },
   "search": {
     "placeholder": "Zeuk sleutels of waerdes...",

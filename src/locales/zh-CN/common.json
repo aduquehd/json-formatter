@@ -82,7 +82,8 @@
     "objects": "对象",
     "distribution": "类型分布",
     "keyFrequency": "顶级键频率",
-    "noData": "没有要分析的 JSON 数据"
+    "noData": "没有要分析的 JSON 数据",
+    "noArrays": "未找到数组"
   },
   "search": {
     "placeholder": "搜索键或值...",

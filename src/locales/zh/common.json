@@ -82,7 +82,8 @@
     "objects": "物件",
     "distribution": "類型分佈",
     "keyFrequency": "頂級鍵頻率",
-    "noData": "沒有要分析的 JSON 資料"
+    "noData": "沒有要分析的 JSON 資料",
+    "noArrays": "未找到陣列"
   },
   "search": {
     "placeholder": "搜尋鍵或值...",

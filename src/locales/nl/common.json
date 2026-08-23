@@ -82,7 +82,8 @@
     "objects": "Objecten",
     "distribution": "Type Verdeling",
     "keyFrequency": "Top Sleutel Frequentie",
-    "noData": "Geen JSON data om te analyseren"
+    "noData": "Geen JSON data om te analyseren",
+    "noArrays": "Geen arrays gevonden"
   },
   "search": {
     "placeholder": "Zoek sleutels of waarden...",

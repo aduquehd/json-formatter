@@ -82,7 +82,8 @@
     "objects": "Objetos",
     "distribution": "Distribución de Tipos",
     "keyFrequency": "Frecuencia de Claves Principales",
-    "noData": "No hay datos JSON para analizar"
+    "noData": "No hay datos JSON para analizar",
+    "noArrays": "No se encontraron arrays"
   },
   "search": {
     "placeholder": "Buscar claves o valores...",

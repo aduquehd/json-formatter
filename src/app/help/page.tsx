@@ -17,6 +17,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import HelpTabs, { type HelpTab } from '@/components/HelpTabs';
 import { GithubIcon as Github } from '@/components/icons/GithubIcon';
+import { seoViews } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'JSON Formatter Help & Guide - How to Format JSON Online',
@@ -407,22 +408,17 @@ export default function HelpPage() {
             <p className={eyebrow}>// more json tools</p>
             <h2 className={`${h2} mt-1 mb-6`}>Dedicated tool pages</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {[
-                ['JSON Formatter', '/tools/json-formatter'],
-                ['JSON Viewer', '/tools/json-viewer'],
-                ['JSON Validator', '/tools/json-validator'],
-                ['JSON Beautifier', '/tools/json-beautifier'],
-                ['JSON Editor', '/tools/json-editor'],
-                ['JSON Parser', '/tools/json-parser'],
-              ].map(([name, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-center font-mono text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
-                >
-                  {name}
-                </Link>
-              ))}
+              {seoViews
+                .filter((seo) => seo.path !== '/')
+                .map((seo) => (
+                  <Link
+                    key={seo.path}
+                    href={seo.path}
+                    className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-center font-mono text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
+                  >
+                    {seo.heading}
+                  </Link>
+                ))}
             </div>
           </section>
 

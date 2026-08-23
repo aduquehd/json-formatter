@@ -82,7 +82,8 @@
     "objects": "Objekten",
     "distribution": "Type Ferdieling",
     "keyFrequency": "Top Kaai Frekwinsje",
-    "noData": "Gjin JSON data om te analysearjen"
+    "noData": "Gjin JSON data om te analysearjen",
+    "noArrays": "Gjin arrays fûn"
   },
   "search": {
     "placeholder": "Sykje kaaien of wearden...",

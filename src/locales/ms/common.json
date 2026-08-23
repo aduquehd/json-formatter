@@ -82,7 +82,8 @@
     "objects": "Objek",
     "distribution": "Agihan Jenis",
     "keyFrequency": "Kekerapan Kunci Teratas",
-    "noData": "Tiada data JSON untuk dianalisis"
+    "noData": "Tiada data JSON untuk dianalisis",
+    "noArrays": "Tiada tatasusunan dijumpai"
   },
   "search": {
     "placeholder": "Cari kunci atau nilai...",

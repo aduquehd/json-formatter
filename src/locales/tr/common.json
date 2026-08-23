@@ -82,7 +82,8 @@
     "objects": "Nesneler",
     "distribution": "Tür Dağılımı",
     "keyFrequency": "En Sık Anahtar Frekansı",
-    "noData": "Analiz edilecek JSON verisi yok"
+    "noData": "Analiz edilecek JSON verisi yok",
+    "noArrays": "Dizi bulunamadı"
   },
   "search": {
     "placeholder": "Anahtar veya değer arayın...",

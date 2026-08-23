@@ -220,7 +220,7 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
         <section className={styles.panel}>
           <h4 className={styles.panelTitle}>{tr('stats.arrays', 'Arrays')}</h4>
           {stats.arrayStats.count === 0 ? (
-            <p className={styles.empty}>{tr('stats.noData', 'No arrays found')}</p>
+            <p className={styles.empty}>{tr('stats.noArrays', 'No arrays found')}</p>
           ) : (
             <div className={styles.miniGrid}>
               <div className={styles.mini}>

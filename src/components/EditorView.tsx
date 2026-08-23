@@ -6,8 +6,7 @@ import { useEffect, useState } from 'react';
 import { useNotification } from '@/hooks/useNotification';
 
 // Single editor across all devices: CodeMirror 6. It's fully bundled (no CDN
-// egress, matching the privacy-first stance), touch-friendly, and theme-aware —
-// replacing the previous Monaco-on-desktop / CodeMirror-on-mobile split.
+// egress, matching the privacy-first stance), touch-friendly, and theme-aware.
 const CodeMirrorEditor = dynamic(() => import('./CodeMirrorEditor'), {
   ssr: false,
   loading: () => (
@@ -45,7 +44,7 @@ const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => 
   }, [content, onChange, showError]);
 
   return (
-    <div className="monaco-editor-container h-full">
+    <div className="editor-container h-full">
       {isLargeFile && (
         <div className="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-4 py-2 text-sm">
           Large file detected. Some features may be slower.

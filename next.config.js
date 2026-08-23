@@ -5,8 +5,9 @@ const isProd = process.env.NODE_ENV === 'production';
 // Content-Security-Policy applied in production only (dev needs 'unsafe-eval' +
 // websockets for HMR, which we don't want to bless permanently).
 // 'unsafe-inline' covers Next's inline bootstrap/hydration scripts and the
-// JSON-LD blocks; 'unsafe-eval' is required by Monaco's AMD loader. These can be
-// tightened to a nonce-based policy later via middleware.
+// JSON-LD blocks. 'unsafe-eval' was only needed by Monaco's AMD loader, which is
+// gone — the allowance below is now unused and is slated for removal in the
+// CSP-tightening pass, along with a move to a nonce-based policy via middleware.
 // GA4 (gtag) loads from googletagmanager.com and posts collect beacons to
 // google-analytics.com / analytics.google.com. Wildcard subdomains follow
 // Google's official CSP guidance: EU traffic is routed to regional endpoints
