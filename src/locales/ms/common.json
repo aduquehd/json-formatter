@@ -52,6 +52,16 @@
     "loadingMap": "Memuatkan Paparan Peta...",
     "loadingSearch": "Memuatkan Paparan Carian..."
   },
+  "format": {
+    "lossy": {
+      "warning": "JSON anda telah ditulis semula dan sebahagian nilai berubah: {{details}}.",
+      "unsafeInteger": "nombor bulat besar kehilangan digit",
+      "precision": "nombor perpuluhan telah dibundarkan",
+      "overflow": "nombor yang terlalu besar untuk JavaScript menjadi null",
+      "negativeZero": "sifar negatif menjadi sifar",
+      "duplicateKey": "kunci berganda telah digabungkan, mengekalkan nilai terakhir"
+    }
+  },
   "modal": {
     "selectExample": "Pilih Contoh JSON",
     "close": "Tutup",
@@ -102,7 +112,20 @@
     "samplePaths": "Laluan Sampel",
     "keys": "kunci",
     "values": "nilai",
-    "depth": "Kedalaman"
+    "depth": "Kedalaman",
+    "regexTooLong": "Corak ini sepanjang {{length}} aksara; hadnya ialah {{limit}}. Ia tidak dijalankan.",
+    "regexNestedQuantifier": "Corak ini menyarangkan satu pengkuantiti di dalam yang lain, seperti (a+)+, bentuk yang boleh mengambil masa hampir tidak berkesudahan untuk dipadankan. Ia tidak dijalankan.",
+    "regexTooSlow": "Corak ini terlalu perlahan pada rentetan ujian yang pendek, jadi ia tidak dijalankan. Cuba corak yang lebih ringkas.",
+    "regexInvalid": "Ini bukan ungkapan biasa yang sah.",
+    "queryPatternLabel": "Corak carian",
+    "pathPatternLabel": "Corak laluan",
+    "excludePatternLabel": "Corak kecualian",
+    "showingFirst": "Memaparkan {{shown}} pertama daripada {{total}} keputusan",
+    "resultCountOne": "1 keputusan",
+    "resultCountMany": "{{total}} keputusan",
+    "truncatedNotice": "Hanya {{shown}} pertama daripada {{total}} padanan disenaraikan. Persempitkan pertanyaan, atau tambah corak laluan, untuk mencapai selebihnya.",
+    "stoppedEarlyNotice": "Carian berhenti awal untuk memastikan halaman kekal responsif, jadi dokumen tidak diimbas hingga ke hujung dan jumlah padanan hanyalah had bawah.",
+    "stoppedEarlyEmpty": "Carian berhenti awal untuk memastikan halaman kekal responsif, jadi dokumen tidak diimbas hingga ke hujung."
   },
   "diff": {
     "original": "JSON Asal",
@@ -112,13 +135,32 @@
     "added": "Ditambah",
     "removed": "Dibuang"
   },
+  "compare": {
+    "positionalArraysNotice": "Tatasusunan yang lebih panjang daripada {{limit}} item dibandingkan mengikut kedudukan dan bukan mengikut kandungan, jadi item yang disisipkan atau dibuang menyebabkan setiap item selepasnya kelihatan diubah suai. Dibandingkan mengikut kedudukan: {{paths}}",
+    "lineFallbackNotice": "Perubahan ini terlalu besar untuk dijajarkan baris demi baris, jadi keseluruhan kawasan yang berubah dipaparkan sebagai satu penggantian: setiap baris di sebelah kiri dikira sebagai dibuang dan setiap baris di sebelah kanan sebagai ditambah, termasuk baris yang sama pada kedua-dua belah."
+  },
   "tree": {
     "collapse": "Runtuhkan Semua",
     "expand": "Kembangkan Semua",
     "items": "item",
     "empty": "Kosong",
     "null": "null",
-    "editHint": "Klik pada mana-mana nilai atau kunci untuk mengedit secara langsung"
+    "editHint": "Klik pada mana-mana nilai atau kunci untuk mengedit secara langsung",
+    "noData": "Tiada JSON sah untuk dipaparkan",
+    "ariaLabel": "Pokok JSON",
+    "editKey": "Edit kunci",
+    "editValue": "Edit nilai",
+    "typeHint": "Enter mengekalkan jenis nilai ini. Ctrl/Cmd+Enter membaca teks sebagai JSON, dan itulah caranya anda menukar jenisnya.",
+    "errors": {
+      "discarded": "Suntingan dibuang",
+      "duplicateKey": "Kunci itu sudah wujud pada objek ini.",
+      "emptyKey": "Nama kunci tidak boleh kosong.",
+      "expectedBoolean": "Nilai ini ialah boolean. Masukkan true atau false, atau tekan Ctrl/Cmd+Enter untuk menukar jenisnya.",
+      "expectedNumber": "Nilai ini ialah nombor. Masukkan nombor, atau tekan Ctrl/Cmd+Enter untuk menukar jenisnya.",
+      "invalidJson": "Itu bukan JSON yang sah.",
+      "missingNode": "Nod itu tidak lagi wujud dalam dokumen.",
+      "notRenameable": "Item tatasusunan dirujuk mengikut indeks dan tidak boleh dinamakan semula."
+    }
   },
   "map": {
     "loading": "Memuatkan peta...",
@@ -130,7 +172,12 @@
     "locationSingular": "lokasi dijumpai",
     "locationPlural": "lokasi dijumpai",
     "geoJSONDetected": "Format GeoJSON dikesan",
-    "mapStyle": "Gaya Peta"
+    "mapStyle": "Gaya Peta",
+    "tilesOffTitle": "Peta latar dimatikan",
+    "tilesOffBody": "JSON anda kekal dalam pelayar. Memuatkan jubin menghantar permintaan imej peta kepada pihak ketiga yang disenaraikan di sini, bagi mana-mana gaya peta yang anda pilih, dan mendedahkan kawasan yang anda sedang lihat serta alamat IP anda kepada mereka.",
+    "tilesLoad": "Muatkan jubin peta",
+    "markerCap": "Memaparkan {{shown}} pertama daripada {{total}} — selebihnya tidak diplot.",
+    "shapesFound": "Bentuk dilukis ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Punca",
@@ -168,7 +215,13 @@
     "type_object": "objek",
     "type_array": "tatasusunan",
     "type_null": "null",
-    "type_undefined": "tidak ditakrifkan"
+    "type_undefined": "tidak ditakrifkan",
+    "zoomIn": "Zum masuk",
+    "zoomOut": "Zum keluar",
+    "fitToScreen": "Muat ke skrin",
+    "expandAll": "Kembangkan semua",
+    "collapseAll": "Runtuhkan semua",
+    "hint": "klik nod untuk kembang / runtuh · tatal untuk zum · seret untuk mengalih paparan"
   },
   "error": {
     "title": "JSON Formatter",
@@ -177,5 +230,12 @@
   },
   "footer": {
     "copyright": "© 2024 Pemapar dan Pemformat JSON. Hak cipta terpelihara."
+  },
+  "depth": {
+    "title": "Terlalu dalam bersarang untuk dipaparkan",
+    "body": "Dokumen ini bersarang lebih daripada {{limit}} aras. Pelayar kehabisan ruang tindanan pada struktur sedalam itu, jadi paparan ini tidak dapat melukisnya. Ratakan atau pecahkan dokumen untuk melihatnya di sini.",
+    "searchNotice": "Cabang yang bersarang lebih daripada {{limit}} aras telah dilangkau, jadi sebahagian hasil mungkin tiada.",
+    "sortFailed": "Dokumen ini terlalu dalam bersarang untuk mengisih kuncinya (had: {{limit}} aras).",
+    "expandFailed": "Dokumen ini terlalu dalam bersarang untuk mengembangkan setiap nod (had: {{limit}} aras)."
   }
 }

@@ -52,6 +52,16 @@
     "loadingMap": "Koortansicht ward laden...",
     "loadingSearch": "Sökansicht ward laden..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Dien JSON is nee schreven worrn un en poor Weerten hebbt sik ännert: {{details}}.",
+      "unsafeInteger": "grote heele Tallen hebbt Ziffern verloren",
+      "precision": "Dezimaaltallen worrn afrundt",
+      "overflow": "Tallen, de to groot för JavaScript sünd, worrn to null",
+      "negativeZero": "minus null wurr to null",
+      "duplicateKey": "dubbelte Slötels worrn tosamenfoot, bloots de leste Weert blifft"
+    }
+  },
   "modal": {
     "selectExample": "JSON Bispeel utwählen",
     "close": "Sluten",
@@ -102,7 +112,20 @@
     "samplePaths": "Bispeel Padden",
     "keys": "slötels",
     "values": "weerten",
-    "depth": "Deep"
+    "depth": "Deep",
+    "regexTooLong": "Dit Muster is {{length}} Teken lang; de Grenz is {{limit}}. Dat wurr nich utföhrt.",
+    "regexNestedQuantifier": "Dit Muster schachtelt en Quantor in en annern, as (a+)+, en Form, de meist ewig bruken kann to matchen. Dat wurr nich utföhrt.",
+    "regexTooSlow": "Dit Muster weer to langsam bi en korten Teststring, dorüm wurr dat nich utföhrt. Versöök en eenfacher Muster.",
+    "regexInvalid": "Dat is keen gültig reguleer Utdruck.",
+    "queryPatternLabel": "Söökmuster",
+    "pathPatternLabel": "Paddmuster",
+    "excludePatternLabel": "Utsluutmuster",
+    "showingFirst": "De ersten {{shown}} vun {{total}} Resultaten warrt wiest",
+    "resultCountOne": "1 Resultat",
+    "resultCountMany": "{{total}} Resultaten",
+    "truncatedNotice": "Bloots de ersten {{shown}} vun {{total}} Drepers staht in de List. Maak de Anfraag enger oder föög en Paddmuster to, üm an de annern to kamen.",
+    "stoppedEarlyNotice": "De Söök hett fröher ophollt, üm de Siet flink to hollen, dorüm wurr dat Dokument nich bet to'n Enn dörsöcht un de Tall vun Drepers is bloots en Ünnergrenz.",
+    "stoppedEarlyEmpty": "De Söök hett fröher ophollt, üm de Siet flink to hollen, dorüm wurr dat Dokument nich bet to'n Enn dörsöcht."
   },
   "diff": {
     "original": "Original JSON",
@@ -112,13 +135,32 @@
     "added": "Toföögt",
     "removed": "Wegnahmen"
   },
+  "compare": {
+    "positionalArraysNotice": "Arrays mit mehr as {{limit}} Elementen warrt na Positioon vergleken un nich na Inholt, dorüm lett en inföögt oder wegnahmen Element elk Element dorna ännert utsehn. Na Positioon vergleken: {{paths}}",
+    "lineFallbackNotice": "Disse Ännern is to groot, üm Reeg för Reeg uttorichten, dorüm warrt dat hele ännerte Rebeed as een Utwesseln wiest: elke Reeg links gellt as wegnahmen un elke Reeg rechts as toföögt, ok Regen, de op beide Sieden liek sünd."
+  },
   "tree": {
     "collapse": "All tosammenklappen",
     "expand": "All utklappen",
     "items": "Elementen",
     "empty": "Leddig",
     "null": "null",
-    "editHint": "Klik op elke Weert oder Slötel to direkt bearbeiten"
+    "editHint": "Klik op elke Weert oder Slötel to direkt bearbeiten",
+    "noData": "Keen gültig JSON to wiesen",
+    "ariaLabel": "JSON-Boom",
+    "editKey": "Slötel bearbeiten",
+    "editValue": "Weert bearbeiten",
+    "typeHint": "Enter hollt den Typ vun dissen Weert. Ctrl/Cmd+Enter leest den Text as JSON, un so ännerst du den Typ.",
+    "errors": {
+      "discarded": "Bearbeiden verworpen",
+      "duplicateKey": "Dissen Slötel gifft dat al op dit Objekt.",
+      "emptyKey": "En Slötelnaam mutt nich leddig wesen.",
+      "expectedBoolean": "Disse Weert is en Boolean. Giff true oder false in, oder drück Ctrl/Cmd+Enter, üm den Typ to ännern.",
+      "expectedNumber": "Disse Weert is en Tall. Giff en Tall in, oder drück Ctrl/Cmd+Enter, üm den Typ to ännern.",
+      "invalidJson": "Dat is keen gültig JSON.",
+      "missingNode": "Dissen Knütten gifft dat nich mehr in't Dokument.",
+      "notRenameable": "Array-Elementen warrt över ehren Index ansproken un köönt nich ümnöömt warrn."
+    }
   },
   "map": {
     "loading": "Koort ward laden...",
@@ -130,7 +172,12 @@
     "locationSingular": "Ort funnen",
     "locationPlural": "Örter funnen",
     "geoJSONDetected": "GeoJSON Format erkannt",
-    "mapStyle": "Koortstyl"
+    "mapStyle": "Koortstyl",
+    "tilesOffTitle": "Achtergrundkoort is ut",
+    "tilesOffBody": "Dien JSON blifft in'n Browser. Dat Laden vun Kacheln schickt Anfragen na Koortbiller an de hier nöömten drütten Parteien, för jeden Koortstyl, den du utsöchst, un gifft jem dat Rebeed, dat du bekiekst, un dien IP-Adress prieß.",
+    "tilesLoad": "Koortkacheln laden",
+    "markerCap": "De ersten {{shown}} vun {{total}} warrt wiest — de annern warrt nich intekent.",
+    "shapesFound": "Tekente Formen ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Wörtel",
@@ -168,7 +215,13 @@
     "type_object": "objekt",
     "type_array": "array",
     "type_null": "null",
-    "type_undefined": "undefineert"
+    "type_undefined": "undefineert",
+    "zoomIn": "Ranzoomen",
+    "zoomOut": "Rutzoomen",
+    "fitToScreen": "Op Schirm topassen",
+    "expandAll": "All utklappen",
+    "collapseAll": "All tosammenklappen",
+    "hint": "klik op en Knoop to ut- oder tosammenklappen · scrollen to zoomen · trecken to schuven"
   },
   "error": {
     "title": "JSON Formatter",
@@ -177,5 +230,12 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Kieker un Formatierer. All Rechten vörbehollen."
+  },
+  "depth": {
+    "title": "To deep schachtelt üm to wiesen",
+    "body": "Dit Dokument is mehr as {{limit}} Evenen deep schachtelt. Browsers geiht bi so deepe Strukturen de Stapelplatz ut, dorüm kann disse Ansicht dat nich tekenen. Maak dat Dokument flacker oder deel dat op, üm dat hier to bekieken.",
+    "searchNotice": "Telgen, de deeper as {{limit}} Evenen schachtelt sünd, worrn övergahn; dorüm köönt Resultaten fehlen.",
+    "sortFailed": "Dit Dokument is to deep schachtelt, üm de Slötels to sorteren (Grenz: {{limit}} Evenen).",
+    "expandFailed": "Dit Dokument is to deep schachtelt, üm all Knütten uttoklappen (Grenz: {{limit}} Evenen)."
   }
 }

@@ -52,6 +52,16 @@
     "loadingMap": "Loading Map View...",
     "loadingSearch": "Loading Search View..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Your JSON was rewritten and some values changed: {{details}}.",
+      "unsafeInteger": "large whole numbers lost digits",
+      "precision": "decimal numbers were rounded",
+      "overflow": "numbers too large for JavaScript became null",
+      "negativeZero": "minus zero became zero",
+      "duplicateKey": "duplicate keys were merged, keeping the last value"
+    }
+  },
   "modal": {
     "selectExample": "Select a JSON Example",
     "close": "Close",
@@ -102,7 +112,20 @@
     "samplePaths": "Sample Paths",
     "keys": "keys",
     "values": "values",
-    "depth": "Depth"
+    "depth": "Depth",
+    "regexTooLong": "This pattern is {{length}} characters long; the limit is {{limit}}. It was not run.",
+    "regexNestedQuantifier": "This pattern nests one quantifier inside another, like (a+)+, a shape that can take effectively forever to match. It was not run.",
+    "regexTooSlow": "This pattern was too slow on a short test string, so it was not run. Try a simpler one.",
+    "regexInvalid": "This is not a valid regular expression.",
+    "queryPatternLabel": "Search pattern",
+    "pathPatternLabel": "Path pattern",
+    "excludePatternLabel": "Exclude pattern",
+    "showingFirst": "Showing first {{shown}} of {{total}} results",
+    "resultCountOne": "1 result",
+    "resultCountMany": "{{total}} results",
+    "truncatedNotice": "Only the first {{shown}} of {{total}} matches are listed. Narrow the query, or add a path pattern, to reach the rest.",
+    "stoppedEarlyNotice": "The search stopped early to keep the page responsive, so the document was not scanned to the end and the match count is a lower bound.",
+    "stoppedEarlyEmpty": "The search stopped early to keep the page responsive, so the document was not scanned to the end."
   },
   "diff": {
     "original": "Original JSON",
@@ -112,13 +135,32 @@
     "added": "Added",
     "removed": "Removed"
   },
+  "compare": {
+    "positionalArraysNotice": "Arrays longer than {{limit}} items are compared by position instead of by content, so an inserted or removed item makes every item after it look modified. Compared by position: {{paths}}",
+    "lineFallbackNotice": "This change is too large to line up row by row, so the whole changed region is shown as one replacement: every line on the left counts as removed and every line on the right as added, including lines that are the same on both sides."
+  },
   "tree": {
     "collapse": "Collapse All",
     "expand": "Expand All",
     "items": "items",
     "empty": "Empty",
     "null": "null",
-    "editHint": "Click on any value or key to edit directly"
+    "editHint": "Click on any value or key to edit directly",
+    "noData": "No valid JSON to display",
+    "ariaLabel": "JSON tree",
+    "editKey": "Edit key",
+    "editValue": "Edit value",
+    "typeHint": "Enter keeps this value's type. Ctrl/Cmd+Enter reads the text as JSON, which is how you change the type.",
+    "errors": {
+      "discarded": "Edit discarded",
+      "duplicateKey": "That key already exists on this object.",
+      "emptyKey": "A key name cannot be empty.",
+      "expectedBoolean": "This value is a boolean. Enter true or false, or press Ctrl/Cmd+Enter to change its type.",
+      "expectedNumber": "This value is a number. Enter a number, or press Ctrl/Cmd+Enter to change its type.",
+      "invalidJson": "That is not valid JSON.",
+      "missingNode": "That node no longer exists in the document.",
+      "notRenameable": "Array items are addressed by index and cannot be renamed."
+    }
   },
   "map": {
     "loading": "Loading map...",
@@ -130,7 +172,12 @@
     "locationSingular": "location found",
     "locationPlural": "locations found",
     "geoJSONDetected": "GeoJSON format detected",
-    "mapStyle": "Map Style"
+    "mapStyle": "Map Style",
+    "tilesOffTitle": "Background map is off",
+    "tilesOffBody": "Your JSON stays in the browser. Loading tiles sends map image requests to the third parties listed here, for any map style you pick, and reveals the area you are viewing and your IP address to them.",
+    "tilesLoad": "Load map tiles",
+    "markerCap": "Showing the first {{shown}} of {{total}} — the rest are not plotted.",
+    "shapesFound": "{{total}} shape(s) drawn: {{types}}"
   },
   "graph": {
     "rootNode": "Root",
@@ -168,7 +215,13 @@
     "type_object": "object",
     "type_array": "array",
     "type_null": "null",
-    "type_undefined": "undefined"
+    "type_undefined": "undefined",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "fitToScreen": "Fit to screen",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "hint": "click a node to expand / collapse · scroll to zoom · drag to pan"
   },
   "error": {
     "title": "Something went wrong!",
@@ -177,5 +230,12 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Viewer & Formatter. All rights reserved."
+  },
+  "depth": {
+    "title": "Nested too deeply to display",
+    "body": "This document nests more than {{limit}} levels deep. Browsers run out of stack space on structures that deep, so this view cannot render it. Flatten or split the document to view it here.",
+    "searchNotice": "Branches nested more than {{limit}} levels deep were skipped, so some results may be missing.",
+    "sortFailed": "This document is nested too deeply to sort its keys (limit: {{limit}} levels).",
+    "expandFailed": "This document is nested too deeply to expand every node (limit: {{limit}} levels)."
   }
 }

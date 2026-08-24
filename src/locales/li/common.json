@@ -52,6 +52,16 @@
     "loadingMap": "Kaartweergaaf weurt gelade...",
     "loadingSearch": "Zeukweergaaf weurt gelade..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Dien JSON is herschreve en sommige waerdes zin verangerd: {{details}}.",
+      "unsafeInteger": "groete heile getalle hebbe cijfers verlore",
+      "precision": "decimale getalle zin afgerond",
+      "overflow": "getalle die te groet zin veur JavaScript woorte null",
+      "negativeZero": "min nul woort nul",
+      "duplicateKey": "dubbele sleutels zin samegevoegd, woebie de lètste waerde blijf"
+    }
+  },
   "modal": {
     "selectExample": "Selecteer 'n JSON Veurbeeld",
     "close": "Sluite",
@@ -102,7 +112,20 @@
     "samplePaths": "Veurbeeld Paejer",
     "keys": "sleutels",
     "values": "waerdes",
-    "depth": "Deepte"
+    "depth": "Deepte",
+    "regexTooLong": "Dit patroen is {{length}} teikes lank; de limiet is {{limit}}. 't Is neet oetgeveurd.",
+    "regexNestedQuantifier": "Dit patroen nesteld 'ne kwantificator in 'ne angere, wie (a+)+, 'ne vorm die praktisch eindeloes kèn dore óm te matche. 't Is neet oetgeveurd.",
+    "regexTooSlow": "Dit patroen waor te traag op 'ne korte teststring, dus 't is neet oetgeveurd. Perbeer 'n einvoudiger patroen.",
+    "regexInvalid": "Dit is gein geldige reguliere expressie.",
+    "queryPatternLabel": "Zeukpatroen",
+    "pathPatternLabel": "Padpatroen",
+    "excludePatternLabel": "Oetsloetpatroen",
+    "showingFirst": "Ierste {{shown}} van {{total}} resultate waere getuind",
+    "resultCountOne": "1 resultaat",
+    "resultCountMany": "{{total}} resultate",
+    "truncatedNotice": "Allein de ierste {{shown}} van {{total}} treffers staon in de lies. Maak de zeukopdrach enger, of veug 'n padpatroen toe, óm bie de res te kómme.",
+    "stoppedEarlyNotice": "'t Zeuke is vreug gestop óm de pagina vlot te haute, dus 't dokkemènt is neet tot 't ind doorzoch en 't aantal treffers is 'n ongergrens.",
+    "stoppedEarlyEmpty": "'t Zeuke is vreug gestop óm de pagina vlot te haute, dus 't dokkemènt is neet tot 't ind doorzoch."
   },
   "diff": {
     "original": "Originele JSON",
@@ -112,13 +135,32 @@
     "added": "Toegevoog",
     "removed": "Verwiederd"
   },
+  "compare": {
+    "positionalArraysNotice": "Arrays mit mieë es {{limit}} items waere op positie vergeleke in plaats van op inhoud, dus door 'n toegevoegd of verwiederd item lik edere item daonao gewiezigd. Op positie vergeleke: {{paths}}",
+    "lineFallbackNotice": "Dees wieziging is te groet óm regel veur regel oet te lijne, dus 't hiele gewiezigde gebied weurt es ein vervanging getuind: edere regel links tèlt es verwiederd en edere regel rechs es toegevoegd, ouch regels die aan beide kante 'tzelfde zin."
+  },
   "tree": {
     "collapse": "Alles Inklappe",
     "expand": "Alles Oetklappe",
     "items": "items",
     "empty": "Laeg",
     "null": "null",
-    "editHint": "Klik op get waerde of sleutel om direkt te bewirke"
+    "editHint": "Klik op get waerde of sleutel om direkt te bewirke",
+    "noData": "Gein geldige JSON óm te tuine",
+    "ariaLabel": "JSON-boum",
+    "editKey": "Sleutel bewirke",
+    "editValue": "Waerde bewirke",
+    "typeHint": "Enter hilt 't tiep van dees waerde. Ctrl/Cmd+Enter lees de teks es JSON, en zoe verangers se 't tiep.",
+    "errors": {
+      "discarded": "Bewirking verworpe",
+      "duplicateKey": "Dae sleutel besteit al op dit object.",
+      "emptyKey": "'ne Sleutelnaam mag neet laeg zin.",
+      "expectedBoolean": "Dees waerde is 'ne boolean. Voer true of false in, of druk op Ctrl/Cmd+Enter óm 't tiep te verangere.",
+      "expectedNumber": "Dees waerde is 'n getal. Voer 'n getal in, of druk op Ctrl/Cmd+Enter óm 't tiep te verangere.",
+      "invalidJson": "Dat is gein geldige JSON.",
+      "missingNode": "Dae knuup besteit neet mieë in 't dokkemènt.",
+      "notRenameable": "Array-items waere via hun index aangesproke en kènne neet herneump waere."
+    }
   },
   "map": {
     "loading": "Kaart weurt gelade...",
@@ -130,7 +172,12 @@
     "locationSingular": "lokatie gevonde",
     "locationPlural": "lokaties gevonde",
     "geoJSONDetected": "GeoJSON formaat gedetecteerd",
-    "mapStyle": "Kaartstijl"
+    "mapStyle": "Kaartstijl",
+    "tilesOffTitle": "Achtergrondkaart steit oet",
+    "tilesOffBody": "Dien JSON blijf in de browser. 't Lade van tegels sjik verzeuke óm kaartafbeeldinge nao de hie genumde derde partieje, veur edere kaartstijl die se kies, en verroad hun 't gebied das se bekiks en dien IP-adres.",
+    "tilesLoad": "Kaarttegels lade",
+    "markerCap": "De ierste {{shown}} van {{total}} waere getuind — de res weurt neet ingeteikend.",
+    "shapesFound": "Geteikende vörm ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Wortel",
@@ -168,7 +215,13 @@
     "type_object": "object",
     "type_array": "array",
     "type_null": "null",
-    "type_undefined": "ongedefinieerd"
+    "type_undefined": "ongedefinieerd",
+    "zoomIn": "Inzoome",
+    "zoomOut": "Oetzoome",
+    "fitToScreen": "Op 't sjerm passe",
+    "expandAll": "Alles oetklappe",
+    "collapseAll": "Alles inklappe",
+    "hint": "klik op 'n node om oet- of in te klappe · scroll om te zoome · sleip om te versjuve"
   },
   "error": {
     "title": "JSON Formatter",
@@ -177,5 +230,12 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Bekieker en Formatter. Alle rechte veurbehaude."
+  },
+  "depth": {
+    "title": "Te deep genesteld óm te tuine",
+    "body": "Dit dokkemènt is mieë es {{limit}} nivo's deep genesteld. Browsers rake bie zoe deep strukture zonder stackruumde, dus dees weergaaf kèn 't neet teikene. Maak 't dokkemènt platter of splits 't óm 't hie te bekieke.",
+    "searchNotice": "Tekke die deeper es {{limit}} nivo's genesteld zin, zin euversjlage; doedoor kènne resultate ontbreke.",
+    "sortFailed": "Dit dokkemènt is te deep genesteld óm de sleutels te sortere (limiet: {{limit}} nivo's).",
+    "expandFailed": "Dit dokkemènt is te deep genesteld óm alle knuup oet te klappe (limiet: {{limit}} nivo's)."
   }
 }
