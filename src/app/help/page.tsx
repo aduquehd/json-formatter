@@ -17,6 +17,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import HelpTabs, { type HelpTab } from '@/components/HelpTabs';
 import { GithubIcon as Github } from '@/components/icons/GithubIcon';
+import JsonLd from '@/components/seo/JsonLd';
 import { seoViews } from '@/lib/tools';
 
 export const metadata: Metadata = {
@@ -102,7 +103,7 @@ const WHY = [
   {
     icon: Shield,
     title: '100% private',
-    desc: 'Everything runs in your browser. No servers, no tracking, no data ever leaves your machine.',
+    desc: 'Your JSON is parsed, formatted and explored entirely in your browser — it is never uploaded. Page visits are counted anonymously, with no cookies and no profile.',
   },
 ];
 
@@ -133,7 +134,7 @@ const FAQ = [
   ['Is it free?', 'Yes — completely free and open source, with no signup, no ads, and no limits.'],
   [
     'Is my data secure?',
-    'Absolutely. All processing happens 100% locally in your browser; nothing is ever uploaded, so it is safe for confidential data.',
+    'Yes. Your JSON is processed 100% locally in your browser and is never sent anywhere, so it is safe for confidential data. The only thing we collect is an anonymous, cookieless count of page visits — never your content or what you do with it.',
   ],
   [
     'Can it fix invalid JSON?',
@@ -447,18 +448,9 @@ export default function HelpPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
-      />
+      <JsonLd data={faqSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={howToSchema} />
 
       <div className="min-h-screen">
         <nav className="sticky top-0 z-30 border-b border-[var(--navbar-border)] bg-[var(--navbar-bg)] backdrop-blur-xl">

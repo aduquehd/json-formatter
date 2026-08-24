@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import JsonLd from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
   title: 'JSON Guides & Tutorials - Learn JSON Formatting, Validation & More',
@@ -108,10 +109,7 @@ export default function GuidesPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <JsonLd data={breadcrumbSchema} />
 
       <div className="bg-[var(--bg-primary)]">
         <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:py-16">

@@ -5,6 +5,7 @@ import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { canonicalLanguage, languages } from '@/lib/i18n';
+import { writeStored } from '@/utils/safeStorage';
 
 interface LanguageSelectorProps {
   showLabel?: boolean;
@@ -40,7 +41,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ showLabel = false }
 
   const handleLanguageChange = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
-    localStorage.setItem('i18nextLng', languageCode);
+    writeStored('i18nextLng', languageCode);
     setIsOpen(false);
   };
 

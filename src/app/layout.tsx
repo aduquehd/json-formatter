@@ -4,6 +4,7 @@ import './globals.css';
 import Analytics from '@/components/Analytics';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
+import JsonLd from '@/components/seo/JsonLd';
 import { ThemeProvider } from '@/components/ThemeProvider';
 
 const plexSans = IBM_Plex_Sans({
@@ -174,11 +175,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
         {jsonLdSchemas.map((schema, index) => (
-          <script
-            key={index}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
+          <JsonLd key={index} data={schema} />
         ))}
       </head>
       <body className={`${plexSans.variable} ${jetbrainsMono.variable}`}>

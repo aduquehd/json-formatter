@@ -24,6 +24,7 @@ import {
 import { runDepthGuarded } from '@/utils/jsonWalk';
 import DepthLimitNotice from './DepthLimitNotice';
 import 'leaflet/dist/leaflet.css';
+import { readStored, writeStored } from '@/utils/safeStorage';
 
 interface MapViewProps {
   json: any;
@@ -46,7 +47,7 @@ interface MapViewProps {
  */
 function readTileConsent(): boolean {
   try {
-    return tileConsentCovers(localStorage.getItem(TILE_CONSENT_KEY));
+    return tileConsentCovers(readStored(TILE_CONSENT_KEY));
   } catch {
     return false;
   }
@@ -54,7 +55,7 @@ function readTileConsent(): boolean {
 
 function storeTileConsent(): void {
   try {
-    localStorage.setItem(TILE_CONSENT_KEY, serializeTileConsent());
+    writeStored(TILE_CONSENT_KEY, serializeTileConsent());
   } catch {
     // Private mode or blocked storage — consent then lasts for this session only.
   }

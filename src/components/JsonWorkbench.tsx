@@ -15,7 +15,6 @@ import TabsContainer from '@/components/TabsContainer';
 import TreeView from '@/components/TreeView';
 import { useNotification } from '@/hooks/useNotification';
 import { useTheme } from '@/hooks/useTheme';
-import * as gtag from '@/lib/gtag';
 import { pathToView, type ToolView, viewToPath } from '@/lib/tools';
 import {
   isParseSuccess,
@@ -140,7 +139,6 @@ export default function JsonWorkbench() {
   // Navigate to a view's clean URL. The layout persists, so the editor content
   // is preserved across the navigation.
   const goToView = (view: ToolView) => {
-    gtag.trackTabSwitch(view);
     startTransition(() => {
       setOptimisticView(view);
       router.push(viewToPath(view), { scroll: false });
@@ -262,7 +260,6 @@ export default function JsonWorkbench() {
     }
 
     // Track format action
-    gtag.trackJsonFormat();
 
     // Format is the explicit action, so this is where the repair pipeline runs.
     const result = JSONFixer.parseWithFixInfo(editorContent);
@@ -296,7 +293,6 @@ export default function JsonWorkbench() {
     }
 
     // Track compact action
-    gtag.trackJsonCompact();
 
     // Compact rewrites the document, so the repair pipeline runs here too.
     const result = JSONFixer.parseWithFixInfo(editorContent);
@@ -324,7 +320,6 @@ export default function JsonWorkbench() {
   };
 
   const handleClear = () => {
-    gtag.trackJsonClear();
     setEditorContent('');
     setParsed(EMPTY_DOCUMENT);
   };
@@ -334,8 +329,6 @@ export default function JsonWorkbench() {
       showError(mounted ? t('messages.errorEmpty') : 'Please enter some JSON to format');
       return;
     }
-
-    gtag.trackJsonCopy();
 
     try {
       await navigator.clipboard.writeText(editorContent);
@@ -359,8 +352,6 @@ export default function JsonWorkbench() {
   };
 
   const handlePaste = async () => {
-    gtag.trackJsonPaste();
-
     try {
       const text = await navigator.clipboard.readText();
       if (!text || text.trim() === '') {
@@ -435,7 +426,6 @@ export default function JsonWorkbench() {
           : exampleContent.includes('coordinates')
             ? 'geographic'
             : 'unknown';
-    gtag.trackExampleUsed(exampleName);
 
     try {
       // Format the example content immediately

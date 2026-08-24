@@ -4,23 +4,35 @@ const isProd = process.env.NODE_ENV === 'production';
 
 // Content-Security-Policy applied in production only (dev needs 'unsafe-eval' +
 // websockets for HMR, which we don't want to bless permanently).
+//
 // 'unsafe-inline' covers Next's inline bootstrap/hydration scripts and the
-// JSON-LD blocks. 'unsafe-eval' was only needed by Monaco's AMD loader, which is
-// gone — the allowance below is now unused and is slated for removal in the
-// CSP-tightening pass, along with a move to a nonce-based policy via middleware.
-// GA4 (gtag) loads from googletagmanager.com and posts collect beacons to
-// google-analytics.com / analytics.google.com. Wildcard subdomains follow
-// Google's official CSP guidance: EU traffic is routed to regional endpoints
-// (e.g. region1.analytics.google.com), which the bare domains would block.
-// www.google.com covers the consent-mode dual-collect fallback.
+// JSON-LD blocks, and is the one remaining relaxation. Removing it needs a
+// nonce, which needs middleware, which would make these statically prerendered
+// pages dynamic — a deliberate trade left for its own change.
+//
+// Everything else is named explicitly. Deliberately absent:
+//   - 'unsafe-eval'          only Monaco's AMD loader ever needed it.
+//   - Google Fonts hosts     next/font/google self-hosts at build time.
+//   - googletagmanager /     GA4 was replaced by Vercel Web Analytics, which
+//     google-analytics       is same-origin (/_vercel/insights/*) and cookieless.
+//   - img-src https:         a blanket allowance that let any host serve images;
+//                            the two map tile providers are named instead.
+//   - *.tile.openstreetmap   no map style has pointed there for some time.
+//
+// va.vercel-scripts.com is the analytics script's off-Vercel fallback; on a
+// Vercel deployment the same-origin path is used, but naming it keeps analytics
+// working if that ever changes.
+const TILE_HOSTS = 'https://*.basemaps.cartocdn.com https://server.arcgisonline.com';
+const ANALYTICS_HOST = 'https://va.vercel-scripts.com';
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com data:",
-  "img-src 'self' data: blob: https:",
-  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://www.google.com https://*.tile.openstreetmap.org",
-  "worker-src 'self' blob: data:",
+  `script-src 'self' 'unsafe-inline' ${ANALYTICS_HOST}`,
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+  `img-src 'self' data: blob: ${TILE_HOSTS}`,
+  `connect-src 'self' ${ANALYTICS_HOST}`,
+  "worker-src 'self' blob:",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

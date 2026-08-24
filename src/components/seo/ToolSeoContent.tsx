@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { type ToolView, viewSeo } from '@/lib/tools';
+import JsonLd from './JsonLd';
 
 /**
  * The SEO payload that sits below the workbench on every view route. The app
@@ -51,18 +52,9 @@ export default function ToolSeoContent({ view }: { view: ToolView }) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(appJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-      />
+      <JsonLd data={faqJsonLd} />
+      <JsonLd data={appJsonLd} />
+      <JsonLd data={howToJsonLd} />
 
       <section className="container mx-auto max-w-4xl border-t border-[var(--border-color)] px-4 py-12 sm:py-16">
         <header className="mb-10">
