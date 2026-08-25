@@ -11,15 +11,21 @@ import { expect, test } from '@playwright/test';
  * not to the test runner.
  */
 
-/** Hosts and keywords the policy must no longer permit. */
-const REMOVED = [
-  'unsafe-eval',
-  'googletagmanager',
-  'google-analytics',
-  'analytics.google.com',
-  'fonts.googleapis',
-  'fonts.gstatic',
-  'openstreetmap',
+/**
+ * Hosts and keywords the policy must no longer permit.
+ *
+ * Google Analytics is deliberately NOT in this list: it was reinstated behind
+ * Consent Mode for audience metrics, so googletagmanager and the analytics
+ * beacon hosts are expected. What must stay gone is everything nothing uses.
+ */
+const REMOVED = ['unsafe-eval', 'fonts.googleapis', 'fonts.gstatic', 'openstreetmap'];
+
+/** Hosts the policy must still permit, or the feature that needs them breaks. */
+const REQUIRED = [
+  'https://*.basemaps.cartocdn.com',
+  'https://server.arcgisonline.com',
+  'https://*.googletagmanager.com',
+  'https://*.google-analytics.com',
 ];
 
 const ROUTES = ['/', '/tree', '/diff', '/graph', '/stats', '/search', '/map', '/help', '/guides'];
@@ -41,9 +47,10 @@ test('production CSP is the tightened policy', async ({ request }) => {
     expect(csp, `policy should no longer allow ${gone}`).not.toContain(gone);
   }
 
-  // Tile hosts are named rather than allowed via a blanket `https:`.
-  expect(csp).toContain('https://*.basemaps.cartocdn.com');
-  expect(csp).toContain('https://server.arcgisonline.com');
+  // Every third-party host is named rather than allowed via a blanket `https:`.
+  for (const host of REQUIRED) {
+    expect(csp, `policy must still allow ${host}`).toContain(host);
+  }
   expect(csp).not.toMatch(/img-src[^;]*\shttps:(\s|;|$)/);
 
   // Clickjacking and base-tag hijacking stay closed.

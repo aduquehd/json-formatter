@@ -237,5 +237,11 @@
     "searchNotice": "Se omitieron las ramas con más de {{limit}} niveles de anidamiento, por lo que pueden faltar resultados.",
     "sortFailed": "Este documento está demasiado anidado para ordenar sus claves (límite: {{limit}} niveles).",
     "expandFailed": "Este documento está demasiado anidado para expandir todos los nodos (límite: {{limit}} niveles)."
+  },
+  "consent": {
+    "title": "Cookies de analítica",
+    "body": "Usamos cookies de analítica para contar visitantes y ver de qué países llegan. Tu JSON siempre se procesa en tu navegador y nunca se envía a ningún sitio, elijas lo que elijas.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
   }
 }

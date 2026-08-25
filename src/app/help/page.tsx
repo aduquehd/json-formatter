@@ -103,7 +103,7 @@ const WHY = [
   {
     icon: Shield,
     title: '100% private',
-    desc: 'Your JSON is parsed, formatted and explored entirely in your browser — it is never uploaded. Page visits are counted anonymously, with no cookies and no profile.',
+    desc: 'Your JSON is parsed, formatted and explored entirely in your browser — it is never uploaded, and nothing you do with it is recorded. We count page visits to see where our traffic comes from, and ask before setting any cookie.',
   },
 ];
 
@@ -134,7 +134,7 @@ const FAQ = [
   ['Is it free?', 'Yes — completely free and open source, with no signup, no ads, and no limits.'],
   [
     'Is my data secure?',
-    'Yes. Your JSON is processed 100% locally in your browser and is never sent anywhere, so it is safe for confidential data. The only thing we collect is an anonymous, cookieless count of page visits — never your content or what you do with it.',
+    'Yes. Your JSON is processed 100% locally in your browser and is never sent anywhere, so it is safe for confidential data. We do measure page traffic — visits, countries, browsers — and ask for your consent before setting any analytics cookie. That measurement never includes your JSON or anything you do with it.',
   ],
   [
     'Can it fix invalid JSON?',

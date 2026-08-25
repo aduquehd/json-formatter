@@ -1,26 +1,52 @@
+'use client';
+
 import { Analytics as VercelAnalytics } from '@vercel/analytics/next';
+import Script from 'next/script';
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 /**
- * Page analytics.
+ * Page analytics: Google Analytics 4 for audience metrics, Vercel Web Analytics
+ * as a cookieless baseline.
  *
- * Vercel Web Analytics, deliberately chosen over Google Analytics: it sets no
- * cookies at all (visitors are identified by a hash of the incoming request,
- * discarded after 24 hours), so there is nothing to ask consent for and no
- * consent banner, and the data stays first-party rather than going to Google.
+ * GA4 answers "how many new vs returning users, from which countries" — that
+ * needs a persistent identifier, i.e. a cookie, so it runs behind Consent Mode.
+ * Vercel Web Analytics needs no cookie and no consent, so it keeps counting
+ * regardless and covers the traffic GA loses to declines and blockers.
  *
- * It records page views with country, referrer, device and browser — enough to
- * see how the site is used. It does NOT record what anyone does with their JSON:
- * the previous setup sent format/compact/copy/paste/clear/tab events, which is
- * behavioural data this tool has no business collecting. Those are gone.
+ * Deliberately absent: any event describing what a visitor does with their JSON.
+ * An earlier version sent format / compact / clear / copy / paste / tab-switch /
+ * example-used events. Document content never left the browser then either, but
+ * a behavioural stream is more than audience measurement needs. Page views only.
  *
- * The trade-off is that a 24-hour hash carries no cross-day identity, so
- * "visitors" means unique-per-period and new-vs-returning is not available.
- * Getting that back would require a persistent identifier, i.e. a cookie and a
- * consent banner.
- *
- * Requires Web Analytics to be enabled for the project in the Vercel dashboard;
- * the component is inert everywhere else, including local development.
+ * The Consent Mode default is NOT set here — it is inlined into the document
+ * head in `src/app/layout.tsx`, because it has to execute before the tag below
+ * initialises. Anything a component schedules would land after GA had already
+ * written its cookies.
  */
 export default function Analytics() {
-  return <VercelAnalytics />;
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+  return (
+    <>
+      <VercelAnalytics />
+
+      {gaId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`gtag('js', new Date());\ngtag('config', ${JSON.stringify(gaId)});`}
+          </Script>
+        </>
+      )}
+    </>
+  );
 }

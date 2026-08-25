@@ -237,5 +237,11 @@
     "searchNotice": "Takken die dieper dan {{limit}} niveaus genest zijn, zijn overgeslagen; er kunnen dus resultaten ontbreken.",
     "sortFailed": "Dit document is te diep genest om de sleutels te sorteren (limiet: {{limit}} niveaus).",
     "expandFailed": "Dit document is te diep genest om alle knooppunten uit te klappen (limiet: {{limit}} niveaus)."
+  },
+  "consent": {
+    "title": "Analytische cookies",
+    "body": "We gebruiken analytische cookies om bezoekers te tellen en te zien uit welke landen ze komen. Je JSON wordt altijd in je browser verwerkt en nooit ergens naartoe gestuurd, wat je ook kiest.",
+    "accept": "Accepteren",
+    "decline": "Weigeren"
   }
 }

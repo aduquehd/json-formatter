@@ -237,5 +237,11 @@
     "searchNotice": "Tûken dy't djipper as {{limit}} nivo's nêstele binne, binne oerslein; dêrom kinne der resultaten ûntbrekke.",
     "sortFailed": "Dit dokumint is te djip nêstele om de kaaien te sortearjen (limyt: {{limit}} nivo's).",
     "expandFailed": "Dit dokumint is te djip nêstele om alle knooppunten út te klappen (limyt: {{limit}} nivo's)."
+  },
+  "consent": {
+    "title": "Analytics-koekjes",
+    "body": "Wy brûke analytics-koekjes om besikers te tellen en te sjen út hokker lannen se komme. Dyn JSON wurdt altyd yn dyn browser ferwurke en wurdt nea earne hinne stjoerd, wat't do ek kiest.",
+    "accept": "Akseptearje",
+    "decline": "Wegerje"
   }
 }

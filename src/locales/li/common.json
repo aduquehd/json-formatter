@@ -237,5 +237,11 @@
     "searchNotice": "Tekke die deeper es {{limit}} nivo's genesteld zin, zin euversjlage; doedoor kènne resultate ontbreke.",
     "sortFailed": "Dit dokkemènt is te deep genesteld óm de sleutels te sortere (limiet: {{limit}} nivo's).",
     "expandFailed": "Dit dokkemènt is te deep genesteld óm alle knuup oet te klappe (limiet: {{limit}} nivo's)."
+  },
+  "consent": {
+    "title": "Analytics-koekskes",
+    "body": "Veer gebruke analytics-koekskes om bezeukers te telle en te zien oet welke landj ze kome. Dien JSON weurt altied in dien browser verwerk en weurt noets ergens hin gestuurd, wat se ouch keus.",
+    "accept": "Akseptere",
+    "decline": "Weigere"
   }
 }

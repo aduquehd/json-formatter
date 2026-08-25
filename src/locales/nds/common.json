@@ -237,5 +237,11 @@
     "searchNotice": "Telgen, de deeper as {{limit}} Evenen schachtelt sünd, worrn övergahn; dorüm köönt Resultaten fehlen.",
     "sortFailed": "Dit Dokument is to deep schachtelt, üm de Slötels to sorteren (Grenz: {{limit}} Evenen).",
     "expandFailed": "Dit Dokument is to deep schachtelt, üm all Knütten uttoklappen (Grenz: {{limit}} Evenen)."
+  },
+  "consent": {
+    "title": "Analytics-Kekse",
+    "body": "Wi bruukt Analytics-Kekse, üm Besökers to tellen un to kieken, ut welke Länner se kaamt. Dien JSON warrt jümmers in dien Browser verarbeidt un nienich ferrn schickt, wat du ok utsöchst.",
+    "accept": "Annehmen",
+    "decline": "Afwiesen"
   }
 }

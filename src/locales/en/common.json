@@ -237,5 +237,11 @@
     "searchNotice": "Branches nested more than {{limit}} levels deep were skipped, so some results may be missing.",
     "sortFailed": "This document is nested too deeply to sort its keys (limit: {{limit}} levels).",
     "expandFailed": "This document is nested too deeply to expand every node (limit: {{limit}} levels)."
+  },
+  "consent": {
+    "title": "Analytics cookies",
+    "body": "We use analytics cookies to count visitors and see which countries they come from. Your JSON is always processed in your browser and is never sent anywhere, whichever you choose.",
+    "accept": "Accept",
+    "decline": "Decline"
   }
 }

@@ -237,5 +237,11 @@
     "searchNotice": "Cabang yang bersarang lebih daripada {{limit}} aras telah dilangkau, jadi sebahagian hasil mungkin tiada.",
     "sortFailed": "Dokumen ini terlalu dalam bersarang untuk mengisih kuncinya (had: {{limit}} aras).",
     "expandFailed": "Dokumen ini terlalu dalam bersarang untuk mengembangkan setiap nod (had: {{limit}} aras)."
+  },
+  "consent": {
+    "title": "Kuki analitik",
+    "body": "Kami menggunakan kuki analitik untuk mengira pelawat dan melihat negara asal mereka. JSON anda sentiasa diproses dalam pelayar anda dan tidak pernah dihantar ke mana-mana, apa pun pilihan anda.",
+    "accept": "Terima",
+    "decline": "Tolak"
   }
 }

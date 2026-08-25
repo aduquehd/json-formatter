@@ -13,8 +13,7 @@ const isProd = process.env.NODE_ENV === 'production';
 // Everything else is named explicitly. Deliberately absent:
 //   - 'unsafe-eval'          only Monaco's AMD loader ever needed it.
 //   - Google Fonts hosts     next/font/google self-hosts at build time.
-//   - googletagmanager /     GA4 was replaced by Vercel Web Analytics, which
-//     google-analytics       is same-origin (/_vercel/insights/*) and cookieless.
+//   - a nonce               see above; 'unsafe-inline' is the standing trade.
 //   - img-src https:         a blanket allowance that let any host serve images;
 //                            the two map tile providers are named instead.
 //   - *.tile.openstreetmap   no map style has pointed there for some time.
@@ -24,14 +23,20 @@ const isProd = process.env.NODE_ENV === 'production';
 // working if that ever changes.
 const TILE_HOSTS = 'https://*.basemaps.cartocdn.com https://server.arcgisonline.com';
 const ANALYTICS_HOST = 'https://va.vercel-scripts.com';
+// GA4 loads from googletagmanager and beacons to google-analytics. Wildcards
+// follow Google's own CSP guidance: EU traffic is routed to regional endpoints
+// (region1.analytics.google.com etc.) that the bare domains would block.
+const GA_SCRIPT_HOST = 'https://*.googletagmanager.com';
+const GA_BEACON_HOSTS =
+  'https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com';
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${ANALYTICS_HOST}`,
+  `script-src 'self' 'unsafe-inline' ${ANALYTICS_HOST} ${GA_SCRIPT_HOST}`,
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
-  `img-src 'self' data: blob: ${TILE_HOSTS}`,
-  `connect-src 'self' ${ANALYTICS_HOST}`,
+  `img-src 'self' data: blob: ${TILE_HOSTS} ${GA_BEACON_HOSTS}`,
+  `connect-src 'self' ${ANALYTICS_HOST} ${GA_BEACON_HOSTS}`,
   "worker-src 'self' blob:",
   "frame-ancestors 'none'",
   "base-uri 'self'",

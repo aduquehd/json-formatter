@@ -237,5 +237,11 @@
     "searchNotice": "{{limit}} seviyeden derin dallar atlandı, bu nedenle bazı sonuçlar eksik olabilir.",
     "sortFailed": "Bu belge, anahtarları sıralanamayacak kadar derin iç içe geçmiş (sınır: {{limit}} seviye).",
     "expandFailed": "Bu belge, tüm düğümleri genişletilemeyecek kadar derin iç içe geçmiş (sınır: {{limit}} seviye)."
+  },
+  "consent": {
+    "title": "Analiz çerezleri",
+    "body": "Ziyaretçileri saymak ve hangi ülkelerden geldiklerini görmek için analiz çerezleri kullanıyoruz. Neyi seçerseniz seçin, JSON'unuz her zaman tarayıcınızda işlenir ve hiçbir yere gönderilmez.",
+    "accept": "Kabul et",
+    "decline": "Reddet"
   }
 }

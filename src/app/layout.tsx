@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import Analytics from '@/components/Analytics';
+import ConsentBanner from '@/components/ConsentBanner';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
 import JsonLd from '@/components/seo/JsonLd';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { consentBootstrapScript } from '@/lib/consent';
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -174,6 +176,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
+        {/* Consent Mode defaults, inlined so they run before the gtag script
+            initialises — otherwise GA writes its cookies before the default
+            applies. Reads the stored choice so a returning visitor who accepted
+            is not downgraded to cookieless on every load. Omitted entirely when
+            no measurement ID is configured, since then nothing sets cookies. */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <script dangerouslySetInnerHTML={{ __html: consentBootstrapScript() }} />
+        )}
         {jsonLdSchemas.map((schema, index) => (
           <JsonLd key={index} data={schema} />
         ))}
@@ -187,6 +197,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Skip to main content
               </a>
               {children}
+              <ConsentBanner />
             </ThemeProvider>
           </I18nProvider>
         </ErrorBoundary>
