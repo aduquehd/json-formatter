@@ -5,19 +5,20 @@ import { ChevronsDownUp, ChevronsUpDown, Maximize2, ZoomIn, ZoomOut } from 'luci
 import type React from 'react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { buildTooltipModel, buildTree, type JsonNode, previewValue } from '@/utils/graphData';
+import { exceedsJsonDepth, MAX_JSON_DEPTH, runDepthGuarded } from '@/utils/jsonWalk';
+import DepthLimitNotice from './DepthLimitNotice';
 import styles from './GraphView.module.css';
 
 interface GraphViewProps {
   json: any;
-}
-
-interface JsonNode {
-  name: string;
-  type: 'object' | 'array' | 'value';
-  path: string;
-  value?: any;
-  valueType?: string;
-  children?: JsonNode[];
+  /**
+   * Whether the editor holds a document at all. Carried explicitly rather than
+   * inferred from `json`, because `null`, `0`, `false` and `""` are valid JSON
+   * documents that a truthiness test reports as "nothing to visualise" — while
+   * the status bar, which does carry the flag, calls the same document valid.
+   */
+  isValid: boolean;
 }
 
 // Theme-aware value color (the CSS vars resolve per light/dark automatically).
@@ -36,45 +37,11 @@ function valueColor(valueType?: string): string {
   }
 }
 
-function preview(value: any): string {
-  if (value === null) return 'null';
-  if (typeof value === 'string') {
-    return value.length > 28 ? `"${value.slice(0, 28)}…"` : `"${value}"`;
-  }
-  return String(value);
-}
-
-function buildTree(data: any, name: string, path: string): JsonNode {
-  if (data !== null && Array.isArray(data)) {
-    return {
-      name,
-      type: 'array',
-      path,
-      children: data.map((v, i) => buildTree(v, String(i), `${path}[${i}]`)),
-    };
-  }
-  if (data !== null && typeof data === 'object') {
-    return {
-      name,
-      type: 'object',
-      path,
-      children: Object.entries(data).map(([k, v]) => buildTree(v, k, `${path}.${k}`)),
-    };
-  }
-  return {
-    name,
-    type: 'value',
-    path,
-    value: data,
-    valueType: data === null ? 'null' : typeof data,
-  };
-}
-
 const NODE_HEIGHT = 26; // vertical spacing between siblings
 const LEVEL_WIDTH = 250; // horizontal spacing between depths
 const INITIAL_DEPTH = 2; // collapse nodes at this depth and deeper on load
 
-const GraphView: React.FC<GraphViewProps> = ({ json }) => {
+const GraphView: React.FC<GraphViewProps> = ({ json, isValid }) => {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const apiRef = useRef<{
@@ -84,17 +51,38 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
     collapseAll: () => void;
   } | null>(null);
 
+  // Asked with the iterative probe, before anything recursive touches the
+  // document. Derived during render (the React Compiler memoizes it on `json`)
+  // rather than set from the effect, which would mean a cascading render.
+  const tooDeep = json != null && exceedsJsonDepth(json);
+
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !json) return;
-    container.innerHTML = '';
+    if (!container || !isValid || tooDeep) return;
+    container.replaceChildren();
+
+    // Every `setTimeout` scheduled by this effect lands here so cleanup can
+    // cancel it; a fit() that fires after unmount would call getBBox() on a
+    // detached <g>, which throws NS_ERROR_FAILURE in Firefox.
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const scheduleFit = (delay: number) => {
+      const id = setTimeout(() => {
+        timers.delete(id);
+        fit();
+      }, delay);
+      timers.add(id);
+    };
 
     const rootLabel = Array.isArray(json)
       ? '[ ]'
       : json !== null && typeof json === 'object'
         ? '{ }'
         : 'value';
-    const rootData = buildTree(json, rootLabel, '$');
+    // Belt and braces behind the probe above: if the two ever disagreed, an
+    // empty canvas beats an error boundary.
+    const built = runDepthGuarded(() => buildTree(json, rootLabel, '$'));
+    if (!built.ok) return;
+    const rootData = built.value;
 
     const svg = d3
       .select(container)
@@ -152,7 +140,10 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
       if (data.type === 'value') {
         sel.append('tspan').style('fill', 'var(--json-key)').text(data.name);
         sel.append('tspan').style('fill', 'var(--text-muted)').text(': ');
-        sel.append('tspan').style('fill', valueColor(data.valueType)).text(preview(data.value));
+        sel
+          .append('tspan')
+          .style('fill', valueColor(data.valueType))
+          .text(previewValue(data.value));
       } else {
         const n = data.children ? data.children.length : 0;
         const wrap = data.type === 'array' ? ['[', ']'] : ['{', '}'];
@@ -172,15 +163,26 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
     }
 
     function showTip(event: MouseEvent, d: any) {
-      const data: JsonNode = d.data;
-      const count = data.children ? data.children.length : 0;
-      let html = `<div class="${styles.tipPath}">${data.path}</div>`;
-      if (data.type === 'value') {
-        html += `<div class="${styles.tipVal}">${preview(data.value)} <span class="${styles.tipType}">${data.valueType}</span></div>`;
+      const tip = buildTooltipModel(d.data as JsonNode);
+      // Built with DOM nodes and .text(), never .html(): the path and the value
+      // are raw user JSON, so anything that parsed them as markup would execute
+      // a key like `<img src=x onerror=…>` on hover.
+      tooltip.selectAll('*').remove();
+      tooltip.append('div').attr('class', styles.tipPath).text(tip.path);
+      if (tip.kind === 'value') {
+        // .text() wipes children, so it has to run before the type span is
+        // appended — the trailing space is the separator the old markup had.
+        tooltip
+          .append('div')
+          .attr('class', styles.tipVal)
+          .text(`${tip.value} `)
+          .append('span')
+          .attr('class', styles.tipType)
+          .text(tip.valueType);
       } else {
-        html += `<div class="${styles.tipType}">${data.type} · ${count} ${data.type === 'array' ? 'items' : 'keys'}</div>`;
+        tooltip.append('div').attr('class', styles.tipType).text(tip.summary);
       }
-      tooltip.html(html).style('opacity', '1');
+      tooltip.style('opacity', '1');
       moveTip(event);
     }
     function moveTip(event: MouseEvent) {
@@ -280,7 +282,9 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
 
     function fit() {
       const node = g.node() as SVGGElement | null;
-      if (!node) return;
+      // getBBox() on a detached / non-rendered element throws NS_ERROR_FAILURE in
+      // Firefox, so bail out if this graph was torn down since fit() was queued.
+      if (!node || !node.isConnected) return;
       const b = node.getBBox();
       if (!b.width || !b.height) return;
       const fw = container!.clientWidth || 800;
@@ -309,7 +313,7 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
           if (d._children) d.children = d._children;
         });
         update(root);
-        setTimeout(fit, 260);
+        scheduleFit(260);
       },
       collapseAll: () => {
         root.descendants().forEach((d: any) => {
@@ -319,20 +323,30 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
           }
         });
         update(root);
-        setTimeout(fit, 260);
+        scheduleFit(260);
       },
     };
 
     update(root);
-    setTimeout(fit, 60);
+    scheduleFit(60);
 
     return () => {
+      for (const id of timers) clearTimeout(id);
+      timers.clear();
+      // The 240–300ms node/link/zoom transitions keep ticking after the nodes
+      // are detached, so stop them before tearing the DOM down.
+      svg.interrupt();
+      svg.selectAll('*').interrupt();
+      // d3-zoom's listeners live on the <svg> we are about to drop, but a
+      // gesture in flight also holds window-level ones; detaching them here
+      // keeps nothing pointed at this effect's closure.
+      svg.on('.zoom', null);
       apiRef.current = null;
-      container.innerHTML = '';
+      container.replaceChildren();
     };
-  }, [json]);
+  }, [json, isValid, tooDeep]);
 
-  if (!json) {
+  if (!isValid) {
     return (
       <div className="h-full flex items-center justify-center">
         <p className="text-[var(--text-secondary)]">
@@ -347,55 +361,71 @@ const GraphView: React.FC<GraphViewProps> = ({ json }) => {
   const btnCls =
     'w-8 h-8 flex items-center justify-center rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--accent-color)] hover:border-[var(--border-hover)] transition-colors';
 
+  const zoomInLabel = t('graph.zoomIn', 'Zoom in');
+  const zoomOutLabel = t('graph.zoomOut', 'Zoom out');
+  const fitLabel = t('graph.fitToScreen', 'Fit to screen');
+  const expandLabel = t('graph.expandAll', 'Expand all');
+  const collapseLabel = t('graph.collapseAll', 'Collapse all');
+
   return (
     <div className={`${styles.wrap} absolute inset-0 overflow-hidden`}>
-      <div className={`${styles.controls} absolute top-3 right-3 z-10 flex flex-col gap-1.5`}>
-        <button
-          className={btnCls}
-          onClick={() => apiRef.current?.zoom(1.3)}
-          title="Zoom in"
-          aria-label="Zoom in"
-        >
-          <ZoomIn className="w-4 h-4" />
-        </button>
-        <button
-          className={btnCls}
-          onClick={() => apiRef.current?.zoom(0.75)}
-          title="Zoom out"
-          aria-label="Zoom out"
-        >
-          <ZoomOut className="w-4 h-4" />
-        </button>
-        <button
-          className={btnCls}
-          onClick={() => apiRef.current?.fit()}
-          title="Fit to screen"
-          aria-label="Fit to screen"
-        >
-          <Maximize2 className="w-4 h-4" />
-        </button>
-        <button
-          className={btnCls}
-          onClick={() => apiRef.current?.expandAll()}
-          title="Expand all"
-          aria-label="Expand all"
-        >
-          <ChevronsUpDown className="w-4 h-4" />
-        </button>
-        <button
-          className={btnCls}
-          onClick={() => apiRef.current?.collapseAll()}
-          title="Collapse all"
-          aria-label="Collapse all"
-        >
-          <ChevronsDownUp className="w-4 h-4" />
-        </button>
-      </div>
-      <div
-        className={`${styles.hint} absolute bottom-3 left-3 z-10 pointer-events-none font-mono text-[11px] text-[var(--text-muted)]`}
-      >
-        click a node to expand / collapse · scroll to zoom · drag to pan
-      </div>
+      {tooDeep ? (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--bg-primary)]">
+          <DepthLimitNotice limit={MAX_JSON_DEPTH} />
+        </div>
+      ) : (
+        <>
+          <div className={`${styles.controls} absolute top-3 right-3 z-10 flex flex-col gap-1.5`}>
+            <button
+              className={btnCls}
+              onClick={() => apiRef.current?.zoom(1.3)}
+              title={zoomInLabel}
+              aria-label={zoomInLabel}
+            >
+              <ZoomIn className="w-4 h-4" />
+            </button>
+            <button
+              className={btnCls}
+              onClick={() => apiRef.current?.zoom(0.75)}
+              title={zoomOutLabel}
+              aria-label={zoomOutLabel}
+            >
+              <ZoomOut className="w-4 h-4" />
+            </button>
+            <button
+              className={btnCls}
+              onClick={() => apiRef.current?.fit()}
+              title={fitLabel}
+              aria-label={fitLabel}
+            >
+              <Maximize2 className="w-4 h-4" />
+            </button>
+            <button
+              className={btnCls}
+              onClick={() => apiRef.current?.expandAll()}
+              title={expandLabel}
+              aria-label={expandLabel}
+            >
+              <ChevronsUpDown className="w-4 h-4" />
+            </button>
+            <button
+              className={btnCls}
+              onClick={() => apiRef.current?.collapseAll()}
+              title={collapseLabel}
+              aria-label={collapseLabel}
+            >
+              <ChevronsDownUp className="w-4 h-4" />
+            </button>
+          </div>
+          <div
+            className={`${styles.hint} absolute bottom-3 left-3 z-10 pointer-events-none font-mono text-[11px] text-[var(--text-muted)]`}
+          >
+            {t('graph.hint', 'click a node to expand / collapse · scroll to zoom · drag to pan')}
+          </div>
+        </>
+      )}
+      {/* Always mounted, in both branches: unmounting it would null out
+          `containerRef` and the effect would then refuse every later document. */}
       <div ref={containerRef} className={`${styles.canvas} absolute inset-0`} />
     </div>
   );

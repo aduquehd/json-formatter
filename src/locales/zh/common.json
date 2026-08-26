@@ -52,6 +52,16 @@
     "loadingMap": "正在載入地圖檢視...",
     "loadingSearch": "正在載入搜尋檢視..."
   },
+  "format": {
+    "lossy": {
+      "warning": "您的 JSON 已被重寫，部分值有所變動：{{details}}。",
+      "unsafeInteger": "大整數遺失了位數",
+      "precision": "小數已被四捨五入",
+      "overflow": "超出 JavaScript 範圍的數字變成了 null",
+      "negativeZero": "負零變成了零",
+      "duplicateKey": "重複的索引鍵已合併，只保留最後一個值"
+    }
+  },
   "modal": {
     "selectExample": "選擇 JSON 範例",
     "close": "關閉",
@@ -82,7 +92,8 @@
     "objects": "物件",
     "distribution": "類型分佈",
     "keyFrequency": "頂級鍵頻率",
-    "noData": "沒有要分析的 JSON 資料"
+    "noData": "沒有要分析的 JSON 資料",
+    "noArrays": "未找到陣列"
   },
   "search": {
     "placeholder": "搜尋鍵或值...",
@@ -101,7 +112,20 @@
     "samplePaths": "範例路徑",
     "keys": "鍵",
     "values": "值",
-    "depth": "深度"
+    "depth": "深度",
+    "regexTooLong": "此模式長度為 {{length}} 個字元，上限是 {{limit}}。並未執行。",
+    "regexNestedQuantifier": "此模式將一個量詞巢狀放在另一個量詞內，例如 (a+)+，這種形式的比對可能會耗費近乎無限的時間。並未執行。",
+    "regexTooSlow": "此模式在一段簡短的測試字串上就太慢了，因此並未執行。請改用較簡單的模式。",
+    "regexInvalid": "這不是有效的正規表示式。",
+    "queryPatternLabel": "搜尋模式",
+    "pathPatternLabel": "路徑模式",
+    "excludePatternLabel": "排除模式",
+    "showingFirst": "顯示 {{total}} 筆結果中的前 {{shown}} 筆",
+    "resultCountOne": "1 筆結果",
+    "resultCountMany": "{{total}} 筆結果",
+    "truncatedNotice": "{{total}} 個相符項目中只列出前 {{shown}} 個。請縮小查詢範圍，或加上路徑模式，以取得其餘項目。",
+    "stoppedEarlyNotice": "為了維持頁面的回應速度，搜尋提早停止，因此文件並未掃描到結尾，相符數量只是下限。",
+    "stoppedEarlyEmpty": "為了維持頁面的回應速度，搜尋提早停止，因此文件並未掃描到結尾。"
   },
   "diff": {
     "original": "原始 JSON",
@@ -111,13 +135,32 @@
     "added": "已新增",
     "removed": "已刪除"
   },
+  "compare": {
+    "positionalArraysNotice": "超過 {{limit}} 個項目的陣列會依位置而非依內容比較，因此插入或移除一個項目，會讓其後的每個項目都看起來像被修改過。依位置比較：{{paths}}",
+    "lineFallbackNotice": "這項變更太大，無法逐行對齊，因此整個變更區域會顯示為單一次取代：左側的每一行都算作已移除，右側的每一行都算作已新增，包括兩側完全相同的行。"
+  },
   "tree": {
     "collapse": "全部收合",
     "expand": "全部展開",
     "items": "項目",
     "empty": "空",
     "null": "空值",
-    "editHint": "點擊任何值或鍵可直接編輯"
+    "editHint": "點擊任何值或鍵可直接編輯",
+    "noData": "沒有可顯示的有效 JSON",
+    "ariaLabel": "JSON 樹狀圖",
+    "editKey": "編輯索引鍵",
+    "editValue": "編輯值",
+    "typeHint": "Enter 會保留此值的型別。Ctrl/Cmd+Enter 會將文字當作 JSON 讀取，這就是變更型別的方式。",
+    "errors": {
+      "discarded": "已捨棄編輯",
+      "duplicateKey": "此物件上已經有這個索引鍵。",
+      "emptyKey": "索引鍵名稱不能是空的。",
+      "expectedBoolean": "此值為布林值。請輸入 true 或 false，或按 Ctrl/Cmd+Enter 變更其型別。",
+      "expectedNumber": "此值為數字。請輸入數字，或按 Ctrl/Cmd+Enter 變更其型別。",
+      "invalidJson": "那不是有效的 JSON。",
+      "missingNode": "該節點已不存在於文件中。",
+      "notRenameable": "陣列項目以索引定位，無法重新命名。"
+    }
   },
   "map": {
     "loading": "正在載入地圖...",
@@ -129,7 +172,12 @@
     "locationSingular": "找到位置",
     "locationPlural": "找到位置",
     "geoJSONDetected": "檢測到 GeoJSON 格式",
-    "mapStyle": "地圖樣式"
+    "mapStyle": "地圖樣式",
+    "tilesOffTitle": "背景地圖已關閉",
+    "tilesOffBody": "您的 JSON 只留在瀏覽器中。載入圖磚會向此處列出的第三方發送地圖影像請求（無論您選擇哪一種地圖樣式），並讓他們得知您正在檢視的區域以及您的 IP 位址。",
+    "tilesLoad": "載入地圖圖磚",
+    "markerCap": "顯示 {{total}} 個中的前 {{shown}} 個，其餘未繪製。",
+    "shapesFound": "已繪製的圖形（{{total}}）：{{types}}"
   },
   "graph": {
     "rootNode": "根節點",
@@ -167,7 +215,13 @@
     "type_object": "物件",
     "type_array": "陣列",
     "type_null": "空",
-    "type_undefined": "未定義"
+    "type_undefined": "未定義",
+    "zoomIn": "放大",
+    "zoomOut": "縮小",
+    "fitToScreen": "適應螢幕",
+    "expandAll": "全部展開",
+    "collapseAll": "全部收合",
+    "hint": "點擊節點展開 / 收合 · 滾動縮放 · 拖曳平移"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 JSON 檢視器與格式化工具。保留所有權利。"
+  },
+  "depth": {
+    "title": "巢狀層級過深，無法顯示",
+    "body": "此文件的巢狀層級超過 {{limit}} 層。瀏覽器在處理如此深的結構時會耗盡堆疊空間，因此這個檢視無法繪製它。請將文件扁平化或拆分後再於此檢視。",
+    "searchNotice": "巢狀層級超過 {{limit}} 層的分支已略過，因此部分結果可能遺漏。",
+    "sortFailed": "此文件的巢狀層級過深，無法排序索引鍵（上限：{{limit}} 層）。",
+    "expandFailed": "此文件的巢狀層級過深，無法展開所有節點（上限：{{limit}} 層）。"
+  },
+  "consent": {
+    "title": "分析 Cookie",
+    "body": "我們使用分析 Cookie 來統計訪客人數並瞭解訪客來自哪些國家/地區。無論您如何選擇，您的 JSON 一律在瀏覽器中處理，絕不會傳送到任何地方。",
+    "accept": "接受",
+    "decline": "拒絕"
   }
 }

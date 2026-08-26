@@ -88,7 +88,7 @@ JSON as an interactive node-link graph — click nodes to expand/collapse, scrol
    ```bash
    pnpm install
    ```
-   (This also copies self-hosted editor assets and installs the Lefthook git hooks.)
+   (This also installs the Lefthook git hooks.)
 
 3. Run the development server (Turbopack):
    ```bash
@@ -138,9 +138,7 @@ Bypass once with `git commit --no-verify` if needed.
 json-viewer/
 ├── 📁 docs/
 │   └── 📁 screenshots/            # README screenshots
-├── 📁 public/                     # Static assets (manifest, robots.txt, images, self-hosted editor assets)
-├── 📁 scripts/
-│   └── 📄 copy-monaco.mjs         # Copies editor assets into public/ (no CDN egress)
+├── 📁 public/                     # Static assets (manifest, robots.txt, images)
 ├── 📁 src/
 │   ├── 📁 app/                    # Next.js App Router
 │   │   ├── 📁 (app)/              # Workbench views — one URL per view

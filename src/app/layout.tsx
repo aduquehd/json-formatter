@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google';
-import Script from 'next/script';
 import './globals.css';
 import Analytics from '@/components/Analytics';
+import ConsentBanner from '@/components/ConsentBanner';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import I18nProvider from '@/components/I18nProvider';
+import JsonLd from '@/components/seo/JsonLd';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { consentBootstrapScript } from '@/lib/consent';
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -109,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       'Interactive tree view for JSON exploration',
       'Automatic JSON error detection and fixing',
       'JSON diff comparison between two files',
-      'Monaco Editor with syntax highlighting',
+      'Syntax-highlighted JSON editor with line numbers, code folding, and bracket matching',
       'JSON minification/compacting',
       'Copy formatted JSON to clipboard',
       'No data sent to servers - 100% client-side',
@@ -169,21 +171,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="JSON Tools" />
-        <Script src="/suppress-monaco-warnings.js" strategy="beforeInteractive" />
+        {/* Consent Mode defaults, inlined so they run before the gtag script
+            initialises — otherwise GA writes its cookies before the default
+            applies. Reads the stored choice so a returning visitor who accepted
+            is not downgraded to cookieless on every load. Omitted entirely when
+            no measurement ID is configured, since then nothing sets cookies. */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <script dangerouslySetInnerHTML={{ __html: consentBootstrapScript() }} />
+        )}
         {jsonLdSchemas.map((schema, index) => (
-          <script
-            key={index}
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
+          <JsonLd key={index} data={schema} />
         ))}
       </head>
       <body className={`${plexSans.variable} ${jetbrainsMono.variable}`}>
@@ -195,6 +197,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Skip to main content
               </a>
               {children}
+              <ConsentBanner />
             </ThemeProvider>
           </I18nProvider>
         </ErrorBoundary>

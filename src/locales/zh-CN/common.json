@@ -52,6 +52,16 @@
     "loadingMap": "正在加载地图视图...",
     "loadingSearch": "正在加载搜索视图..."
   },
+  "format": {
+    "lossy": {
+      "warning": "您的 JSON 已被重写，部分值发生了变化：{{details}}。",
+      "unsafeInteger": "大整数丢失了位数",
+      "precision": "小数已被四舍五入",
+      "overflow": "超出 JavaScript 范围的数字变成了 null",
+      "negativeZero": "负零变成了零",
+      "duplicateKey": "重复的键已合并，仅保留最后一个值"
+    }
+  },
   "modal": {
     "selectExample": "选择 JSON 示例",
     "close": "关闭",
@@ -82,7 +92,8 @@
     "objects": "对象",
     "distribution": "类型分布",
     "keyFrequency": "顶级键频率",
-    "noData": "没有要分析的 JSON 数据"
+    "noData": "没有要分析的 JSON 数据",
+    "noArrays": "未找到数组"
   },
   "search": {
     "placeholder": "搜索键或值...",
@@ -101,7 +112,20 @@
     "samplePaths": "示例路径",
     "keys": "键",
     "values": "值",
-    "depth": "深度"
+    "depth": "深度",
+    "regexTooLong": "此模式长度为 {{length}} 个字符，上限是 {{limit}}。未执行。",
+    "regexNestedQuantifier": "此模式将一个量词嵌套在另一个量词内，例如 (a+)+，这种形式的匹配可能耗费近乎无限的时间。未执行。",
+    "regexTooSlow": "此模式在一段很短的测试字符串上就太慢了，因此未执行。请换一个更简单的模式。",
+    "regexInvalid": "这不是有效的正则表达式。",
+    "queryPatternLabel": "搜索模式",
+    "pathPatternLabel": "路径模式",
+    "excludePatternLabel": "排除模式",
+    "showingFirst": "显示 {{total}} 条结果中的前 {{shown}} 条",
+    "resultCountOne": "1 条结果",
+    "resultCountMany": "{{total}} 条结果",
+    "truncatedNotice": "{{total}} 个匹配项中仅列出前 {{shown}} 个。请缩小查询范围，或添加路径模式，以获取其余匹配项。",
+    "stoppedEarlyNotice": "为保持页面响应速度，搜索提前停止，因此文档未扫描到结尾，匹配数量只是一个下限。",
+    "stoppedEarlyEmpty": "为保持页面响应速度，搜索提前停止，因此文档未扫描到结尾。"
   },
   "diff": {
     "original": "原始 JSON",
@@ -111,13 +135,32 @@
     "added": "已添加",
     "removed": "已删除"
   },
+  "compare": {
+    "positionalArraysNotice": "超过 {{limit}} 个元素的数组会按位置而非按内容比较，因此插入或删除一个元素，会让其后的每个元素都看起来像被修改过。按位置比较：{{paths}}",
+    "lineFallbackNotice": "此更改太大，无法逐行对齐，因此整个更改区域显示为一次替换：左侧的每一行都算作已删除，右侧的每一行都算作已添加，包括两侧完全相同的行。"
+  },
   "tree": {
     "collapse": "全部折叠",
     "expand": "全部展开",
     "items": "项",
     "empty": "空",
     "null": "空值",
-    "editHint": "点击任何值或键可直接编辑"
+    "editHint": "点击任何值或键可直接编辑",
+    "noData": "没有可显示的有效 JSON",
+    "ariaLabel": "JSON 树",
+    "editKey": "编辑键",
+    "editValue": "编辑值",
+    "typeHint": "Enter 会保留此值的类型。Ctrl/Cmd+Enter 会将文本当作 JSON 读取，这就是更改类型的方式。",
+    "errors": {
+      "discarded": "已放弃编辑",
+      "duplicateKey": "该对象上已存在这个键。",
+      "emptyKey": "键名不能为空。",
+      "expectedBoolean": "此值为布尔值。请输入 true 或 false，或按 Ctrl/Cmd+Enter 更改其类型。",
+      "expectedNumber": "此值为数字。请输入数字，或按 Ctrl/Cmd+Enter 更改其类型。",
+      "invalidJson": "那不是有效的 JSON。",
+      "missingNode": "该节点已不存在于文档中。",
+      "notRenameable": "数组项通过索引寻址，无法重命名。"
+    }
   },
   "map": {
     "loading": "正在加载地图...",
@@ -129,7 +172,12 @@
     "locationSingular": "找到位置",
     "locationPlural": "找到位置",
     "geoJSONDetected": "检测到 GeoJSON 格式",
-    "mapStyle": "地图样式"
+    "mapStyle": "地图样式",
+    "tilesOffTitle": "背景地图已关闭",
+    "tilesOffBody": "您的 JSON 只保留在浏览器中。加载瓦片会向此处列出的第三方发送地图图像请求（无论您选择哪种地图样式），并会让他们得知您正在查看的区域以及您的 IP 地址。",
+    "tilesLoad": "加载地图瓦片",
+    "markerCap": "显示 {{total}} 个中的前 {{shown}} 个，其余未绘制。",
+    "shapesFound": "已绘制的图形（{{total}}）：{{types}}"
   },
   "graph": {
     "rootNode": "根",
@@ -167,7 +215,13 @@
     "type_object": "对象",
     "type_array": "数组",
     "type_null": "空",
-    "type_undefined": "未定义"
+    "type_undefined": "未定义",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "fitToScreen": "适应屏幕",
+    "expandAll": "全部展开",
+    "collapseAll": "全部折叠",
+    "hint": "点击节点展开 / 折叠 · 滚动缩放 · 拖动平移"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 JSON 查看器和格式化工具。保留所有权利。"
+  },
+  "depth": {
+    "title": "嵌套层级过深，无法显示",
+    "body": "此文档的嵌套层级超过 {{limit}} 层。浏览器在处理如此深的结构时会耗尽堆栈空间，因此该视图无法渲染它。请将文档扁平化或拆分后再在此查看。",
+    "searchNotice": "嵌套层级超过 {{limit}} 层的分支已跳过，因此部分结果可能缺失。",
+    "sortFailed": "此文档嵌套层级过深，无法对键排序（上限：{{limit}} 层）。",
+    "expandFailed": "此文档嵌套层级过深，无法展开所有节点（上限：{{limit}} 层）。"
+  },
+  "consent": {
+    "title": "分析 Cookie",
+    "body": "我们使用分析 Cookie 来统计访客人数并了解访客来自哪些国家/地区。无论您如何选择，您的 JSON 始终在浏览器中处理，绝不会发送到任何地方。",
+    "accept": "接受",
+    "decline": "拒绝"
   }
 }

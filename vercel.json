@@ -4,13 +4,5 @@
   "devCommand": "pnpm run dev",
   "installCommand": "pnpm install",
   "outputDirectory": ".next",
-  "regions": ["iad1"],
-  "functions": {
-    "src/app/layout.tsx": {
-      "maxDuration": 10
-    },
-    "src/app/page.tsx": {
-      "maxDuration": 10
-    }
-  }
+  "regions": ["iad1"]
 }

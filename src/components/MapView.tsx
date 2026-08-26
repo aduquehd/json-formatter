@@ -24,9 +24,10 @@ const DynamicMapComponent = dynamic(
 
 interface MapViewProps {
   json: any;
+  isValid?: boolean;
 }
 
-const MapView: React.FC<MapViewProps> = ({ json }) => {
+const MapView: React.FC<MapViewProps> = ({ json, isValid }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -34,7 +35,7 @@ const MapView: React.FC<MapViewProps> = ({ json }) => {
     setMounted(true);
   }, []);
 
-  return <DynamicMapComponent json={json} />;
+  return <DynamicMapComponent json={json} isValid={isValid} />;
 };
 
 export default MapView;

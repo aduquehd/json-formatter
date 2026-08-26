@@ -26,6 +26,29 @@ describe('formatJSON', () => {
   it('throws on unfixable input', () => {
     expect(() => formatJSON('{not json at all!!!')).toThrow(/Invalid JSON|JSON/i);
   });
+
+  it('formats a falsy scalar the fixer repaired', () => {
+    // These used to throw "Invalid JSON format": success was decided by the
+    // truthiness of the repaired value, and `0`, `false`, `null` and `""` are
+    // all falsy — and all perfectly valid JSON documents.
+    expect(formatJSON('0,')).toBe('0');
+    expect(formatJSON('false,')).toBe('false');
+    expect(formatJSON('null,')).toBe('null');
+    expect(formatJSON("''")).toBe('""');
+  });
+
+  it('formats a falsy scalar that needs no repair', () => {
+    expect(formatJSON('0')).toBe('0');
+    expect(formatJSON('false')).toBe('false');
+    expect(formatJSON('null')).toBe('null');
+    expect(formatJSON('""')).toBe('""');
+  });
+
+  it('formats a document whose only member is falsy', () => {
+    expect(formatJSON('{"a": null,}')).toBe(`{
+  "a": null
+}`);
+  });
 });
 
 describe('compactJSON', () => {
@@ -49,6 +72,13 @@ describe('compactJSON', () => {
   it('throws on unfixable input', () => {
     // Pure non-JSON text that no heuristic can turn into a value.
     expect(() => compactJSON('@@@ not json @@@')).toThrow();
+  });
+
+  it('compacts a falsy scalar the fixer repaired', () => {
+    expect(compactJSON('0,')).toBe('0');
+    expect(compactJSON('false,')).toBe('false');
+    expect(compactJSON('null,')).toBe('null');
+    expect(compactJSON("''")).toBe('""');
   });
 });
 
@@ -75,5 +105,14 @@ describe('isValidJSON', () => {
   it('returns false for unrecoverable garbage', () => {
     expect(isValidJSON('not-json')).toBe(false);
     expect(isValidJSON('@@@')).toBe(false);
+  });
+
+  it('accepts falsy scalars, repaired or not', () => {
+    // `result.data !== null` rejected `null,` outright and the truthiness tests
+    // in formatJSON/compactJSON rejected the other three.
+    for (const document of ['0', 'false', 'null', '""']) {
+      expect(isValidJSON(document), document).toBe(true);
+      expect(isValidJSON(`${document},`), `${document},`).toBe(true);
+    }
   });
 });

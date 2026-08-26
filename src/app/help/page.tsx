@@ -17,6 +17,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import HelpTabs, { type HelpTab } from '@/components/HelpTabs';
 import { GithubIcon as Github } from '@/components/icons/GithubIcon';
+import JsonLd from '@/components/seo/JsonLd';
+import { seoViews } from '@/lib/tools';
 
 export const metadata: Metadata = {
   title: 'JSON Formatter Help & Guide - How to Format JSON Online',
@@ -101,7 +103,7 @@ const WHY = [
   {
     icon: Shield,
     title: '100% private',
-    desc: 'Everything runs in your browser. No servers, no tracking, no data ever leaves your machine.',
+    desc: 'Your JSON is parsed, formatted and explored entirely in your browser — it is never uploaded, and nothing you do with it is recorded. We count page visits to see where our traffic comes from, and ask before setting any cookie.',
   },
 ];
 
@@ -132,7 +134,7 @@ const FAQ = [
   ['Is it free?', 'Yes — completely free and open source, with no signup, no ads, and no limits.'],
   [
     'Is my data secure?',
-    'Absolutely. All processing happens 100% locally in your browser; nothing is ever uploaded, so it is safe for confidential data.',
+    'Yes. Your JSON is processed 100% locally in your browser and is never sent anywhere, so it is safe for confidential data. We do measure page traffic — visits, countries, browsers — and ask for your consent before setting any analytics cookie. That measurement never includes your JSON or anything you do with it.',
   ],
   [
     'Can it fix invalid JSON?',
@@ -407,22 +409,17 @@ export default function HelpPage() {
             <p className={eyebrow}>// more json tools</p>
             <h2 className={`${h2} mt-1 mb-6`}>Dedicated tool pages</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {[
-                ['JSON Formatter', '/tools/json-formatter'],
-                ['JSON Viewer', '/tools/json-viewer'],
-                ['JSON Validator', '/tools/json-validator'],
-                ['JSON Beautifier', '/tools/json-beautifier'],
-                ['JSON Editor', '/tools/json-editor'],
-                ['JSON Parser', '/tools/json-parser'],
-              ].map(([name, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-center font-mono text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
-                >
-                  {name}
-                </Link>
-              ))}
+              {seoViews
+                .filter((seo) => seo.path !== '/')
+                .map((seo) => (
+                  <Link
+                    key={seo.path}
+                    href={seo.path}
+                    className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-center font-mono text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--accent-color)] hover:text-[var(--accent-color)]"
+                  >
+                    {seo.heading}
+                  </Link>
+                ))}
             </div>
           </section>
 
@@ -451,18 +448,9 @@ export default function HelpPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
-      />
+      <JsonLd data={faqSchema} />
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={howToSchema} />
 
       <div className="min-h-screen">
         <nav className="sticky top-0 z-30 border-b border-[var(--navbar-border)] bg-[var(--navbar-bg)] backdrop-blur-xl">

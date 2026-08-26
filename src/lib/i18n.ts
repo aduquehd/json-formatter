@@ -23,7 +23,7 @@ export const languages = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
   { code: 'ms', name: 'Bahasa Melayu', flag: '🇸🇬' },
-  { code: 'zh', name: '中文 (新加坡)', flag: '🇸🇬' },
+  { code: 'zh', name: '中文 (繁體)', flag: '🇹🇼' },
   { code: 'ta', name: 'தமிழ்', flag: '🇸🇬' },
   { code: 'fy', name: 'Frysk', flag: '🇳🇱' },
   { code: 'nds', name: 'Plattdüütsch', flag: '🇳🇱' },
@@ -31,6 +31,26 @@ export const languages = [
 ];
 
 export const defaultLanguage = 'en';
+
+// Chinese needs explicit script/region aliases. The bare `zh` bundle is Traditional,
+// so without these a Simplified-script navigator ('zh-Hans', 'zh-SG') would fall back
+// to `zh` and get Traditional — the same mix-up that `load: 'languageOnly'` used to
+// cause for 'zh-CN'. Each alias maps to the canonical code whose bundle it should use.
+const languageAliases: Record<string, string> = {
+  'zh-Hans': 'zh-CN',
+  'zh-SG': 'zh-CN',
+  'zh-Hant': 'zh',
+};
+
+/**
+ * Collapse an alias tag onto the canonical language code the `languages` list knows
+ * about, so UI that matches against that list (e.g. the selector's checkmark) does not
+ * fall through to English when i18next resolved an alias bundle.
+ */
+export function canonicalLanguage(code: string | undefined): string {
+  if (!code) return defaultLanguage;
+  return languageAliases[code] ?? code;
+}
 
 const resources = {
   en: { translation: enTranslations },
@@ -40,7 +60,10 @@ const resources = {
   nl: { translation: nlTranslations },
   ms: { translation: msTranslations },
   'zh-CN': { translation: zhCNTranslations },
+  'zh-Hans': { translation: zhCNTranslations },
+  'zh-SG': { translation: zhCNTranslations },
   zh: { translation: zhTranslations },
+  'zh-Hant': { translation: zhTranslations },
   ta: { translation: taTranslations },
   fy: { translation: fyTranslations },
   nds: { translation: ndsTranslations },
@@ -62,11 +85,28 @@ if (!i18n.isInitialized) {
         order: ['localStorage', 'navigator', 'htmlTag'],
         caches: ['localStorage'],
         lookupLocalStorage: 'i18nextLng',
-        lookupFromPathIndex: 0,
-        lookupFromSubdomainIndex: 0,
       },
-      supportedLngs: ['en', 'es', 'hi', 'tr', 'nl', 'ms', 'zh-CN', 'zh', 'ta', 'fy', 'nds', 'li'],
-      load: 'languageOnly', // This will treat 'zh-CN' as 'zh'
+      // No `load: 'languageOnly'`: that stripped the region tag, so 'zh-CN' (Simplified)
+      // resolved to the 'zh' bundle (Traditional). With the default `load`, i18next matches
+      // the full tag first and only then falls back to the base language, so 'zh-CN' gets its
+      // own bundle while 'zh-TW'/'es-MX'/'en-GB' still resolve to 'zh'/'es'/'en'.
+      supportedLngs: [
+        'en',
+        'es',
+        'hi',
+        'tr',
+        'nl',
+        'ms',
+        'zh-CN',
+        'zh-Hans',
+        'zh-SG',
+        'zh',
+        'zh-Hant',
+        'ta',
+        'fy',
+        'nds',
+        'li',
+      ],
     });
 }
 

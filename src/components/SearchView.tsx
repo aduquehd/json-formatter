@@ -1,30 +1,36 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  analyzeJsonStructure,
+  buildSuggestions,
+  DEFAULT_RESULT_LIMIT,
+  highlightSegments,
+  type RegexIssue,
+  type SearchMode,
+  type SearchOutcome,
+  type SearchResult,
+  type SearchTarget,
+  type StructureAnalysis,
+  searchJson,
+} from '@/utils/jsonSearch';
+import { MAX_JSON_DEPTH } from '@/utils/jsonWalk';
 
 interface SearchViewProps {
   json: any;
+  /**
+   * Whether `json` holds a parsed document at all.
+   *
+   * Carried explicitly rather than inferred from the value, because `0`,
+   * `false`, `""` and `null` are all perfectly valid JSON documents that a
+   * truthiness test reports as "nothing loaded". Optional while the workbench
+   * is being threaded: with the prop absent this falls back to the old
+   * inference, so behaviour is unchanged until it arrives.
+   */
+  isValid?: boolean;
 }
-
-interface SearchResult {
-  type: 'key' | 'value' | 'both';
-  path: string;
-  key: string;
-  value: any;
-  depth: number;
-  dataType: string;
-}
-
-interface WordFrequency {
-  word: string;
-  count: number;
-  percentage: number;
-}
-
-type SearchMode = 'contains' | 'exact' | 'starts' | 'ends' | 'regex';
-type SearchTarget = 'both' | 'keys' | 'values';
 
 interface TreeNode {
   path: string;
@@ -32,6 +38,80 @@ interface TreeNode {
   children: Map<string, TreeNode>;
   expanded?: boolean;
 }
+
+const TYPE_META: Record<string, { icon: string; text: string; badge: string }> = {
+  string: { icon: '"', text: 'text-green-500', badge: 'text-green-500 bg-green-500/10' },
+  number: { icon: '#', text: 'text-blue-500', badge: 'text-blue-500 bg-blue-500/10' },
+  boolean: { icon: '⊤', text: 'text-purple-500', badge: 'text-purple-500 bg-purple-500/10' },
+  object: { icon: '{}', text: 'text-orange-500', badge: 'text-orange-500 bg-orange-500/10' },
+  array: { icon: '[]', text: 'text-yellow-500', badge: 'text-yellow-500 bg-yellow-500/10' },
+  null: { icon: '∅', text: 'text-gray-500', badge: 'text-gray-500 bg-gray-500/10' },
+};
+
+const UNKNOWN_TYPE_META = {
+  icon: '?',
+  text: 'text-gray-400',
+  badge: 'text-gray-400 bg-gray-400/10',
+};
+
+const typeMeta = (type: string) => TYPE_META[type] ?? UNKNOWN_TYPE_META;
+const getTypeIcon = (type: string) => typeMeta(type).icon;
+const getTypeTextColor = (type: string) => typeMeta(type).text;
+const getTypeBadgeColor = (type: string) => typeMeta(type).badge;
+
+const EMPTY_RESULTS: SearchResult[] = [];
+
+const EMPTY_ANALYSIS: StructureAnalysis = {
+  paths: [],
+  pathsTruncated: false,
+  totalKeys: 0,
+  totalValues: 0,
+  maxDepth: 0,
+  depthExceeded: false,
+  dataTypes: {},
+  wordFrequencies: [],
+};
+
+// The search engine bounds its own recursion rather than throwing, so this view
+// keeps working on a deeply nested document and only has to say what it skipped.
+const DEPTH_NOTICE_FALLBACK =
+  'Branches nested more than {{limit}} levels deep were skipped, so some results may be missing.';
+
+/**
+ * Fills `{{name}}` placeholders in an English fallback, for the first render —
+ * before i18next has resolved the browser language and can do it itself.
+ */
+const interpolate = (text: string, vars?: Record<string, string | number>) =>
+  vars ? text.replace(/{{(\w+)}}/g, (whole, name) => String(vars[name] ?? whole)) : text;
+
+/**
+ * English copy for a pattern the search engine refused.
+ *
+ * The engine returns a code rather than a sentence: it has no locale, and these
+ * twelve translations belong with the component that renders them. Every one of
+ * them says the pattern was *not run* — none of them claims the patterns that
+ * do run have been checked and found safe, because they have not been.
+ */
+const REGEX_ISSUE_COPY: Record<RegexIssue['code'], { key: string; fallback: string }> = {
+  'too-long': {
+    key: 'search.regexTooLong',
+    fallback: 'This pattern is {{length}} characters long; the limit is {{limit}}. It was not run.',
+  },
+  'nested-quantifier': {
+    key: 'search.regexNestedQuantifier',
+    fallback:
+      'This pattern nests one quantifier inside another, like (a+)+, a shape that can take effectively forever to match. It was not run.',
+  },
+  'too-slow': {
+    key: 'search.regexTooSlow',
+    fallback:
+      'This pattern was too slow on a short test string, so it was not run. Try a simpler one.',
+  },
+  invalid: {
+    key: 'search.regexInvalid',
+    fallback: 'This is not a valid regular expression.',
+  },
+};
 
 // Tree Result View Component
 const TreeResultView: React.FC<{
@@ -89,44 +169,6 @@ const TreeResultView: React.FC<{
     setExpandedNodes(newExpanded);
   };
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'string':
-        return '"';
-      case 'number':
-        return '#';
-      case 'boolean':
-        return '⊤';
-      case 'object':
-        return '{}';
-      case 'array':
-        return '[]';
-      case 'null':
-        return '∅';
-      default:
-        return '?';
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'string':
-        return 'text-green-500';
-      case 'number':
-        return 'text-blue-500';
-      case 'boolean':
-        return 'text-purple-500';
-      case 'object':
-        return 'text-orange-500';
-      case 'array':
-        return 'text-yellow-500';
-      case 'null':
-        return 'text-gray-500';
-      default:
-        return 'text-gray-400';
-    }
-  };
-
   const renderTreeNode = (node: TreeNode, key: string, level: number = 0): React.ReactElement => {
     const hasChildren = node.children.size > 0;
     const isExpanded = expandedNodes.has(node.path);
@@ -170,7 +212,7 @@ const TreeResultView: React.FC<{
             style={{ paddingLeft: `${indent + 24}px` }}
           >
             <span
-              className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}
+              className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeTextColor(result.dataType)}`}
             >
               {getTypeIcon(result.dataType)}
             </span>
@@ -247,7 +289,7 @@ const TreeResultView: React.FC<{
               }`}
             >
               <span
-                className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeColor(result.dataType)}`}
+                className={`w-6 h-6 flex items-center justify-center font-bold text-sm mr-3 ${getTypeTextColor(result.dataType)}`}
               >
                 {getTypeIcon(result.dataType)}
               </span>
@@ -270,7 +312,7 @@ const TreeResultView: React.FC<{
   );
 };
 
-const SearchView: React.FC<SearchViewProps> = ({ json }) => {
+const SearchView: React.FC<SearchViewProps> = ({ json, isValid }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -278,9 +320,8 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     setMounted(true);
   }, []);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [allPaths, setAllPaths] = useState<string[]>([]);
-  const [wordFrequencies, setWordFrequencies] = useState<WordFrequency[]>([]);
+  const [searchOutcome, setSearchOutcome] = useState<SearchOutcome | null>(null);
+  const [analysis, setAnalysis] = useState<StructureAnalysis>(EMPTY_ANALYSIS);
   const [selectedResult, setSelectedResult] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'tree' | 'visual'>('list');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -305,40 +346,89 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
   const [pathPattern, setPathPattern] = useState('');
   const [excludePattern, setExcludePattern] = useState('');
 
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [regexError, setRegexError] = useState<string>('');
-  const [dataInsights, setDataInsights] = useState({
-    totalKeys: 0,
-    totalValues: 0,
-    maxDepth: 0,
-    dataTypes: {} as Record<string, number>,
+
+  // `0`, `false`, `""` and `null` are documents; only the absence of one is not.
+  const hasDocument = isValid ?? (json !== null && json !== undefined);
+
+  const searchResults = searchOutcome?.results ?? EMPTY_RESULTS;
+  const totalMatches = searchOutcome?.totalMatches ?? 0;
+  const resultsTruncated = searchOutcome?.truncated ?? false;
+  const budgetExhausted = searchOutcome?.budgetExhausted ?? false;
+  // Either walk can hit the ceiling: the search itself, or the structure pass
+  // behind the insight panel.
+  const depthExceeded = (searchOutcome?.depthExceeded ?? false) || analysis.depthExceeded;
+
+  // Translated copy with an English fallback, so the first render matches what
+  // the server produced before i18next has resolved the browser language.
+  const label = (key: string, fallback: string, vars?: Record<string, string | number>) =>
+    mounted ? t(key, { defaultValue: fallback, ...vars }) : interpolate(fallback, vars);
+
+  const depthNotice = label('depth.searchNotice', DEPTH_NOTICE_FALLBACK, {
+    limit: MAX_JSON_DEPTH,
   });
 
-  // Analyze JSON structure on mount
+  // The trailing '+' says the walk gave up before the end, so the number is a
+  // floor. Built here rather than passed as its own placeholder, which would
+  // leave every translator a bare '+' to find a home for. `count` is avoided as
+  // a placeholder name throughout: i18next reserves it for pluralisation.
+  const matchCountLabel = budgetExhausted ? `${totalMatches}+` : String(totalMatches);
+
+  const regexIssueText = (issue: RegexIssue | null | undefined): string => {
+    if (!issue) return '';
+    const { key, fallback } = REGEX_ISSUE_COPY[issue.code];
+    const message = label(key, fallback, { length: issue.length ?? 0, limit: issue.limit ?? 0 });
+    // The engine's own wording for an unparseable pattern. It arrives in
+    // English from the JS runtime and there is nothing to translate it against,
+    // so it is appended rather than folded into the sentence.
+    return issue.code === 'invalid' && issue.detail ? `${message} (${issue.detail})` : message;
+  };
+
+  const regexError = regexIssueText(searchOutcome?.queryError);
+  const pathPatternError = regexIssueText(searchOutcome?.pathPatternError);
+  const excludePatternError = regexIssueText(searchOutcome?.excludePatternError);
+  const { paths: allPaths, wordFrequencies, dataTypes } = analysis;
+
+  // Structure analysis is a whole-document walk, so it is kept in state and
+  // recomputed only when the document itself changes - never per keystroke.
   useEffect(() => {
-    if (json) {
-      analyzeJsonStructure();
-    }
-  }, [json]);
+    setAnalysis(hasDocument ? analyzeJsonStructure(json) : EMPTY_ANALYSIS);
+  }, [json, hasDocument]);
 
   // Real-time search with debounce
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchQuery) {
-        performSearch();
-        setSearchHistory((prev) =>
-          prev.includes(searchQuery) ? prev : [searchQuery, ...prev].slice(0, 10)
-        );
-      } else {
-        setSearchResults([]);
+      if (!searchQuery.trim() || !hasDocument) {
+        setSearchOutcome(null);
+        setSelectedResult(null);
+        return;
       }
+
+      setSearchOutcome(
+        searchJson(json, {
+          query: searchQuery,
+          mode: searchMode,
+          target: searchTarget,
+          caseSensitive,
+          maxDepth,
+          minLength,
+          maxLength,
+          pathPattern,
+          excludePattern,
+          filters: activeFilters,
+          resultLimit: DEFAULT_RESULT_LIMIT,
+        })
+      );
+      // Selection is an index into the previous result set, so a new search
+      // must drop it rather than leave a stale card highlighted.
+      setSelectedResult(null);
     }, 200);
 
     return () => clearTimeout(timer);
   }, [
     json,
+    hasDocument,
     searchQuery,
     activeFilters,
     searchMode,
@@ -351,256 +441,26 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     excludePattern,
   ]);
 
-  const analyzeJsonStructure = () => {
-    setIsAnalyzing(true);
-    const paths: string[] = [];
-    const words: Record<string, number> = {};
-    const typeCount: Record<string, number> = {};
-    let totalKeys = 0;
-    let totalValues = 0;
-    let maxDepthFound = 0;
-
-    const analyze = (obj: any, path: string = '', depth: number = 0) => {
-      maxDepthFound = Math.max(maxDepthFound, depth);
-
-      if (Array.isArray(obj)) {
-        typeCount.array = (typeCount.array || 0) + 1;
-        obj.forEach((item, index) => {
-          analyze(item, `${path}[${index}]`, depth + 1);
-        });
-      } else if (obj && typeof obj === 'object') {
-        typeCount.object = (typeCount.object || 0) + 1;
-        Object.entries(obj).forEach(([key, value]) => {
-          totalKeys++;
-          paths.push(`${path}${path ? '.' : ''}${key}`);
-
-          // Extract words for frequency analysis
-          key.split(/[^a-zA-Z0-9]+/).forEach((word) => {
-            if (word.length > 2) {
-              words[word.toLowerCase()] = (words[word.toLowerCase()] || 0) + 1;
-            }
-          });
-
-          if (typeof value === 'string') {
-            totalValues++;
-            typeCount.string = (typeCount.string || 0) + 1;
-            value.split(/[^a-zA-Z0-9]+/).forEach((word) => {
-              if (word.length > 2) {
-                words[word.toLowerCase()] = (words[word.toLowerCase()] || 0) + 1;
-              }
-            });
-          } else if (typeof value === 'number') {
-            totalValues++;
-            typeCount.number = (typeCount.number || 0) + 1;
-          } else if (typeof value === 'boolean') {
-            totalValues++;
-            typeCount.boolean = (typeCount.boolean || 0) + 1;
-          } else if (value === null) {
-            totalValues++;
-            typeCount.null = (typeCount.null || 0) + 1;
-          }
-
-          analyze(value, `${path}${path ? '.' : ''}${key}`, depth + 1);
-        });
-      }
-    };
-
-    analyze(json);
-
-    // Calculate word frequencies
-    const totalWords = Object.values(words).reduce((a, b) => a + b, 0);
-    const frequencies = Object.entries(words)
-      .map(([word, count]) => ({
-        word,
-        count,
-        percentage: (count / totalWords) * 100,
-      }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 30);
-
-    setAllPaths(paths);
-    setWordFrequencies(frequencies);
-    setDataInsights({
-      totalKeys,
-      totalValues,
-      maxDepth: maxDepthFound,
-      dataTypes: typeCount,
-    });
-    setIsAnalyzing(false);
+  // Only committed searches (Enter, a suggestion, an insight chip) are
+  // remembered - not every debounced keystroke on the way there.
+  const rememberSearch = (term: string) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    setSearchHistory((prev) => (prev.includes(trimmed) ? prev : [trimmed, ...prev].slice(0, 10)));
   };
 
-  const testRegex = (pattern: string): RegExp | null => {
-    try {
-      return new RegExp(pattern, caseSensitive ? 'g' : 'gi');
-    } catch (e) {
-      setRegexError(e instanceof Error ? e.message : 'Invalid regex');
-      return null;
-    }
+  const commitSearch = (term: string) => {
+    setSearchQuery(term);
+    setShowSuggestions(false);
+    rememberSearch(term);
   };
 
-  const matchesSearch = (text: string, query: string): boolean => {
-    const targetText = caseSensitive ? text : text.toLowerCase();
-    const searchText = caseSensitive ? query : query.toLowerCase();
-
-    switch (searchMode) {
-      case 'exact':
-        return targetText === searchText;
-      case 'starts':
-        return targetText.startsWith(searchText);
-      case 'ends':
-        return targetText.endsWith(searchText);
-      case 'regex': {
-        const regex = testRegex(query);
-        return regex ? regex.test(text) : false;
-      }
-      case 'contains':
-      default:
-        return targetText.includes(searchText);
-    }
-  };
-
-  const performSearch = () => {
-    if (!json || !searchQuery.trim()) {
-      setSearchResults([]);
-      setRegexError('');
-      return;
-    }
-
-    // Clear regex error if not in regex mode
-    if (searchMode !== 'regex') {
-      setRegexError('');
-    }
-
-    const results: SearchResult[] = [];
-    const query = searchQuery;
-
-    // Test regex validity if in regex mode
-    if (searchMode === 'regex') {
-      const regex = testRegex(query);
-      if (!regex) return;
-    }
-
-    // Compile path pattern regex if provided
-    let pathRegex: RegExp | null = null;
-    if (pathPattern) {
-      try {
-        pathRegex = new RegExp(pathPattern, 'i');
-      } catch {
-        // Invalid path pattern, skip
-      }
-    }
-
-    // Compile exclude pattern regex if provided
-    let excludeRegex: RegExp | null = null;
-    if (excludePattern) {
-      try {
-        excludeRegex = new RegExp(excludePattern, 'i');
-      } catch {
-        // Invalid exclude pattern, skip
-      }
-    }
-
-    const search = (obj: any, path: string = '', depth: number = 0) => {
-      // Check max depth
-      if (maxDepth !== -1 && depth > maxDepth) return;
-
-      // Check path pattern
-      if (pathRegex && !pathRegex.test(path)) return;
-
-      // Check exclude pattern
-      if (excludeRegex && excludeRegex.test(path)) return;
-
-      if (Array.isArray(obj)) {
-        if (!activeFilters.arrays) return;
-        obj.forEach((item, index) => {
-          search(item, `${path}[${index}]`, depth + 1);
-        });
-      } else if (obj && typeof obj === 'object') {
-        if (!activeFilters.objects) return;
-        Object.entries(obj).forEach(([key, value]) => {
-          const currentPath = `${path}${path ? '.' : ''}${key}`;
-          let keyMatch = false;
-          let valueMatch = false;
-          let dataType = 'unknown';
-
-          // Check if we should search in keys
-          if (searchTarget === 'both' || searchTarget === 'keys') {
-            keyMatch = matchesSearch(key, query);
-          }
-
-          // Check if we should search in values
-          if (searchTarget === 'both' || searchTarget === 'values') {
-            if (typeof value === 'string') {
-              if (!activeFilters.strings) return;
-
-              // Check length filters
-              if (minLength > 0 && value.length < minLength) return;
-              if (maxLength !== -1 && value.length > maxLength) return;
-
-              valueMatch = matchesSearch(value, query);
-              dataType = 'string';
-            } else if (typeof value === 'number') {
-              if (!activeFilters.numbers) return;
-              valueMatch = matchesSearch(String(value), query);
-              dataType = 'number';
-            } else if (typeof value === 'boolean') {
-              if (!activeFilters.booleans) return;
-              valueMatch = matchesSearch(String(value), query);
-              dataType = 'boolean';
-            } else if (value === null) {
-              if (!activeFilters.nulls) return;
-              valueMatch = matchesSearch('null', query);
-              dataType = 'null';
-            } else if (Array.isArray(value)) {
-              dataType = 'array';
-            } else if (typeof value === 'object') {
-              dataType = 'object';
-            }
-          }
-
-          if (keyMatch || valueMatch) {
-            results.push({
-              type: keyMatch && valueMatch ? 'both' : keyMatch ? 'key' : 'value',
-              path: currentPath,
-              key,
-              value,
-              depth,
-              dataType,
-            });
-          }
-
-          if (typeof value === 'object' && value !== null) {
-            search(value, currentPath, depth + 1);
-          }
-        });
-      }
-    };
-
-    search(json);
-    setSearchResults(results);
-  };
-
-  const getSuggestions = useMemo(() => {
-    if (!searchQuery) return [];
-
-    const query = searchQuery.toLowerCase();
-    const pathSuggestions = allPaths
-      .filter((path) => path.toLowerCase().includes(query))
-      .slice(0, 5);
-
-    const wordSuggestions = wordFrequencies
-      .filter((w) => w.word.startsWith(query))
-      .slice(0, 5)
-      .map((w) => w.word);
-
-    return Array.from(new Set([...pathSuggestions, ...wordSuggestions])).slice(0, 8);
-  }, [searchQuery, allPaths, wordFrequencies]);
+  const suggestions = buildSuggestions(searchQuery, allPaths, wordFrequencies);
 
   const clearSearch = () => {
     setSearchQuery('');
-    setSearchResults([]);
+    setSearchOutcome(null);
     setSelectedResult(null);
-    setRegexError('');
   };
 
   const resetFilters = () => {
@@ -629,62 +489,20 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     }));
   };
 
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'string':
-        return '"';
-      case 'number':
-        return '#';
-      case 'boolean':
-        return '⊤';
-      case 'object':
-        return '{}';
-      case 'array':
-        return '[]';
-      case 'null':
-        return '∅';
-      default:
-        return '?';
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'string':
-        return 'text-green-500 bg-green-500/10';
-      case 'number':
-        return 'text-blue-500 bg-blue-500/10';
-      case 'boolean':
-        return 'text-purple-500 bg-purple-500/10';
-      case 'object':
-        return 'text-orange-500 bg-orange-500/10';
-      case 'array':
-        return 'text-yellow-500 bg-yellow-500/10';
-      case 'null':
-        return 'text-gray-500 bg-gray-500/10';
-      default:
-        return 'text-gray-400 bg-gray-400/10';
-    }
-  };
-
   const highlightMatch = (text: string) => {
-    if (!searchQuery || searchMode === 'regex') return text;
-
-    const parts = text.split(
-      new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
-    );
+    const segments = highlightSegments(text, searchQuery, searchMode, caseSensitive);
     return (
       <>
-        {parts.map((part, i) =>
-          part.toLowerCase() === searchQuery.toLowerCase() ? (
+        {segments.map((segment, i) =>
+          segment.match ? (
             <mark
               key={i}
               className="bg-yellow-400/30 text-yellow-900 dark:bg-yellow-400/20 dark:text-yellow-300 px-0.5 rounded"
             >
-              {part}
+              {segment.text}
             </mark>
           ) : (
-            <span key={i}>{part}</span>
+            <span key={i}>{segment.text}</span>
           )
         )}
       </>
@@ -692,7 +510,10 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
   };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+    // Copying is a convenience: the clipboard can be unavailable (insecure
+    // context, denied permission), so handle the rejection instead of leaving
+    // an unhandled promise behind.
+    navigator.clipboard?.writeText(text).catch(() => undefined);
   };
 
   const exportResults = () => {
@@ -710,7 +531,12 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
         dataTypes: activeFilters,
       },
       timestamp: new Date().toISOString(),
+      // resultsCount is what the export contains; totalMatches is what the
+      // document holds, which is larger when the cap kicked in.
       resultsCount: searchResults.length,
+      totalMatches,
+      truncated: resultsTruncated,
+      searchStoppedEarly: budgetExhausted,
       results: searchResults.map((r) => ({
         path: r.path,
         key: r.key,
@@ -726,7 +552,11 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
     const a = document.createElement('a');
     a.href = url;
     a.download = `search-results-${Date.now()}.json`;
+    // The anchor has to be in the document for the click to start a download
+    // in every browser, and it must outlive the click before the URL is freed.
+    document.body.appendChild(a);
     a.click();
+    a.remove();
     URL.revokeObjectURL(url);
   };
 
@@ -740,9 +570,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               {mounted ? t('search.smartSearch') : 'Smart Search & Discovery'}
             </h2>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
-              {dataInsights.totalKeys} {mounted ? t('search.keys') : 'keys'} •{' '}
-              {dataInsights.totalValues} {mounted ? t('search.values') : 'values'} •{' '}
-              {mounted ? t('search.depth') : 'Depth'}: {dataInsights.maxDepth}
+              {analysis.totalKeys} {mounted ? t('search.keys') : 'keys'} • {analysis.totalValues}{' '}
+              {mounted ? t('search.values') : 'values'} • {mounted ? t('search.depth') : 'Depth'}:{' '}
+              {analysis.maxDepth}
             </p>
           </div>
           <div className="flex gap-2">
@@ -782,6 +612,9 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                 setSearchQuery(e.target.value);
                 setShowSuggestions(true);
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') commitSearch(searchQuery);
+              }}
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder={mounted ? t('search.placeholder') : 'Search keys or values...'}
@@ -817,23 +650,36 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             )}
           </div>
 
-          {/* Regex Error */}
-          {regexError && searchMode === 'regex' && (
-            <div className="absolute mt-1 text-xs text-red-500">Regex Error: {regexError}</div>
+          {/* Pattern errors */}
+          {(regexError || pathPatternError || excludePatternError) && (
+            <div className="absolute mt-1 space-y-0.5 text-xs text-red-500">
+              {regexError && (
+                <div>
+                  {label('search.queryPatternLabel', 'Search pattern')}: {regexError}
+                </div>
+              )}
+              {pathPatternError && (
+                <div>
+                  {label('search.pathPatternLabel', 'Path pattern')}: {pathPatternError}
+                </div>
+              )}
+              {excludePatternError && (
+                <div>
+                  {label('search.excludePatternLabel', 'Exclude pattern')}: {excludePatternError}
+                </div>
+              )}
+            </div>
           )}
 
           {/* Search Suggestions */}
-          {showSuggestions && getSuggestions.length > 0 && (
+          {showSuggestions && suggestions.length > 0 && (
             <div className="absolute z-10 w-full mt-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-tertiary)] shadow-2xl overflow-hidden">
               <div className="p-2">
                 <p className="text-xs text-[var(--text-secondary)] px-3 py-1">Suggestions</p>
-                {getSuggestions.map((suggestion, i) => (
+                {suggestions.map((suggestion, i) => (
                   <button
                     key={i}
-                    onClick={() => {
-                      setSearchQuery(suggestion);
-                      setShowSuggestions(false);
-                    }}
+                    onClick={() => commitSearch(suggestion)}
                     className="w-full text-left px-3 py-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors flex items-center gap-2"
                   >
                     <svg
@@ -1108,7 +954,16 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-[var(--text-primary)]">
-                  {searchResults.length} Result{searchResults.length !== 1 ? 's' : ''}
+                  {resultsTruncated
+                    ? label('search.showingFirst', 'Showing first {{shown}} of {{total}} results', {
+                        shown: searchResults.length,
+                        total: matchCountLabel,
+                      })
+                    : searchResults.length === 1
+                      ? label('search.resultCountOne', '1 result')
+                      : label('search.resultCountMany', '{{total}} results', {
+                          total: searchResults.length,
+                        })}
                 </h3>
                 <div className="flex gap-2 text-sm">
                   {searchHistory.length > 0 && (
@@ -1131,6 +986,29 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                   )}
                 </div>
               </div>
+
+              {(resultsTruncated || budgetExhausted || depthExceeded) && (
+                <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-400">
+                  {depthExceeded && <p>{depthNotice}</p>}
+                  {resultsTruncated && (
+                    <p className={depthExceeded ? 'mt-1' : undefined}>
+                      {label(
+                        'search.truncatedNotice',
+                        'Only the first {{shown}} of {{total}} matches are listed. Narrow the query, or add a path pattern, to reach the rest.',
+                        { shown: searchResults.length, total: matchCountLabel }
+                      )}
+                    </p>
+                  )}
+                  {budgetExhausted && (
+                    <p className={resultsTruncated || depthExceeded ? 'mt-1' : undefined}>
+                      {label(
+                        'search.stoppedEarlyNotice',
+                        'The search stopped early to keep the page responsive, so the document was not scanned to the end and the match count is a lower bound.'
+                      )}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {viewMode === 'tree' && (
                 <div className="space-y-4">
@@ -1201,7 +1079,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${getTypeColor(result.dataType)}`}
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${getTypeBadgeColor(result.dataType)}`}
                           >
                             {getTypeIcon(result.dataType)}
                           </div>
@@ -1272,9 +1150,17 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                                     : 'text-gray-500'
                             }
                           >
-                            {typeof result.value === 'string'
-                              ? `"${result.type !== 'key' ? highlightMatch(result.value) : result.value}"`
-                              : String(result.value)}
+                            {typeof result.value === 'string' ? (
+                              <>
+                                {'"'}
+                                {result.type !== 'key'
+                                  ? highlightMatch(result.value)
+                                  : result.value}
+                                {'"'}
+                              </>
+                            ) : (
+                              String(result.value)
+                            )}
                           </span>
                         )}
                       </div>
@@ -1302,7 +1188,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       {wordFrequencies.slice(0, 20).map((word, i) => (
                         <button
                           key={i}
-                          onClick={() => setSearchQuery(word.word)}
+                          onClick={() => commitSearch(word.word)}
                           className="px-3 py-1 rounded-lg hover:scale-105 transition-transform cursor-pointer"
                           style={{
                             fontSize: `${Math.max(12, Math.min(24, word.percentage * 3))}px`,
@@ -1322,15 +1208,13 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                       Data Types
                     </h4>
                     <div className="space-y-2">
-                      {Object.entries(dataInsights.dataTypes).map(([type, count]) => {
+                      {Object.entries(dataTypes).map(([type, count]) => {
                         const percentage =
-                          (count /
-                            Object.values(dataInsights.dataTypes).reduce((a, b) => a + b, 0)) *
-                          100;
+                          (count / Object.values(dataTypes).reduce((a, b) => a + b, 0)) * 100;
                         return (
                           <div key={type} className="flex items-center gap-3">
                             <div
-                              className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold ${getTypeColor(type)}`}
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold ${getTypeBadgeColor(type)}`}
                             >
                               {getTypeIcon(type)}
                             </div>
@@ -1377,6 +1261,19 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
               <p className="text-sm text-[var(--text-secondary)] mt-2">
                 Try adjusting your filters or search term
               </p>
+              {budgetExhausted && (
+                <p className="text-sm text-amber-700 dark:text-amber-400 mt-2 max-w-md text-center">
+                  {label(
+                    'search.stoppedEarlyEmpty',
+                    'The search stopped early to keep the page responsive, so the document was not scanned to the end.'
+                  )}
+                </p>
+              )}
+              {depthExceeded && (
+                <p className="text-sm text-amber-700 dark:text-amber-400 mt-2 max-w-md text-center">
+                  {depthNotice}
+                </p>
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full">
@@ -1408,7 +1305,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                     {searchHistory.slice(0, 5).map((term, i) => (
                       <button
                         key={i}
-                        onClick={() => setSearchQuery(term)}
+                        onClick={() => commitSearch(term)}
                         className="px-3 py-1 rounded-lg bg-[var(--bg-secondary)] text-sm text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors"
                       >
                         {term}
@@ -1437,7 +1334,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                 {wordFrequencies.slice(0, 10).map((word, i) => (
                   <button
                     key={i}
-                    onClick={() => setSearchQuery(word.word)}
+                    onClick={() => commitSearch(word.word)}
                     className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors group"
                   >
                     <span className="text-sm text-[var(--text-primary)]">{word.word}</span>
@@ -1459,7 +1356,7 @@ const SearchView: React.FC<SearchViewProps> = ({ json }) => {
                   {allPaths.slice(0, 8).map((path, i) => (
                     <button
                       key={i}
-                      onClick={() => setSearchQuery(path)}
+                      onClick={() => commitSearch(path)}
                       className="w-full text-left p-2 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors"
                     >
                       <p className="text-xs font-mono text-[var(--text-primary)] truncate">

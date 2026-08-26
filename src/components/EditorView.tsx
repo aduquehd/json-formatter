@@ -2,12 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import type React from 'react';
-import { useEffect, useState } from 'react';
-import { useNotification } from '@/hooks/useNotification';
+import { describeDocumentSize } from '@/utils/jsonDocument';
 
 // Single editor across all devices: CodeMirror 6. It's fully bundled (no CDN
-// egress, matching the privacy-first stance), touch-friendly, and theme-aware —
-// replacing the previous Monaco-on-desktop / CodeMirror-on-mobile split.
+// egress, matching the privacy-first stance), touch-friendly, and theme-aware.
 const CodeMirrorEditor = dynamic(() => import('./CodeMirrorEditor'), {
   ssr: false,
   loading: () => (
@@ -23,35 +21,27 @@ interface EditorViewProps {
   theme: 'light' | 'dark';
 }
 
-// File size limits
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const LARGE_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-
 const EditorView: React.FC<EditorViewProps> = ({ content, onChange, theme }) => {
-  const { showError } = useNotification();
-  const [isLargeFile, setIsLargeFile] = useState(false);
-
-  // Check file size. Uses string length as a fast proxy for byte size.
-  useEffect(() => {
-    const contentSize = content.length;
-    if (contentSize > MAX_FILE_SIZE) {
-      showError(
-        `File too large (${(contentSize / 1024 / 1024).toFixed(2)}MB). Maximum allowed is 10MB.`
-      );
-      onChange('{"error": "File too large. Please use a file smaller than 10MB"}');
-      return;
-    }
-    setIsLargeFile(contentSize > LARGE_FILE_SIZE);
-  }, [content, onChange, showError]);
+  // Derived during render, not written from an effect.
+  //
+  // This used to be an effect that, past the 10MB cap, called
+  // `onChange('{"error": "File too large…"}')` — replacing whatever the user had
+  // just pasted with an error object. A warning must never destroy the
+  // document: the size cap is enforced where content enters from outside (file
+  // open, drag-and-drop, the Paste button), and content typed or pasted
+  // directly into the editor is kept and flagged here instead.
+  const size = describeDocumentSize(content.length);
 
   return (
-    <div className="monaco-editor-container h-full">
-      {isLargeFile && (
-        <div className="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-4 py-2 text-sm">
-          Large file detected. Some features may be slower.
+    <div className="editor-container flex flex-col">
+      {size !== 'normal' && (
+        <div className="shrink-0 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-4 py-2 text-sm">
+          {size === 'over-max'
+            ? `Very large document (${(content.length / 1024 / 1024).toFixed(2)}MB, over the 10MB limit). Nothing was discarded — editing and the other views may be slow.`
+            : 'Large file detected. Some features may be slower.'}
         </div>
       )}
-      <div className={isLargeFile ? 'h-[calc(100%-40px)]' : 'h-full'}>
+      <div className="min-h-0 flex-1">
         <CodeMirrorEditor value={content} onChange={onChange} theme={theme} />
       </div>
     </div>

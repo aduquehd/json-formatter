@@ -52,6 +52,16 @@
     "loadingMap": "Harita Görünümü yükleniyor...",
     "loadingSearch": "Arama Görünümü yükleniyor..."
   },
+  "format": {
+    "lossy": {
+      "warning": "JSON'unuz yeniden yazıldı ve bazı değerler değişti: {{details}}.",
+      "unsafeInteger": "büyük tam sayılar basamak kaybetti",
+      "precision": "ondalık sayılar yuvarlandı",
+      "overflow": "JavaScript için fazla büyük sayılar null oldu",
+      "negativeZero": "eksi sıfır sıfıra dönüştü",
+      "duplicateKey": "yinelenen anahtarlar birleştirildi, son değer korundu"
+    }
+  },
   "modal": {
     "selectExample": "JSON Örneği Seçin",
     "close": "Kapat",
@@ -82,7 +92,8 @@
     "objects": "Nesneler",
     "distribution": "Tür Dağılımı",
     "keyFrequency": "En Sık Anahtar Frekansı",
-    "noData": "Analiz edilecek JSON verisi yok"
+    "noData": "Analiz edilecek JSON verisi yok",
+    "noArrays": "Dizi bulunamadı"
   },
   "search": {
     "placeholder": "Anahtar veya değer arayın...",
@@ -101,7 +112,20 @@
     "samplePaths": "Örnek Yollar",
     "keys": "anahtarlar",
     "values": "değerler",
-    "depth": "Derinlik"
+    "depth": "Derinlik",
+    "regexTooLong": "Bu desen {{length}} karakter uzunluğunda; sınır {{limit}}. Çalıştırılmadı.",
+    "regexNestedQuantifier": "Bu desen bir niceleyiciyi başka bir niceleyicinin içine yerleştiriyor; (a+)+ gibi, eşleşmesi neredeyse sonsuza kadar sürebilen bir yapı. Çalıştırılmadı.",
+    "regexTooSlow": "Bu desen kısa bir test dizesinde çok yavaş kaldı, bu yüzden çalıştırılmadı. Daha basit bir desen deneyin.",
+    "regexInvalid": "Bu geçerli bir düzenli ifade değil.",
+    "queryPatternLabel": "Arama deseni",
+    "pathPatternLabel": "Yol deseni",
+    "excludePatternLabel": "Hariç tutma deseni",
+    "showingFirst": "{{total}} sonuçtan ilk {{shown}} tanesi gösteriliyor",
+    "resultCountOne": "1 sonuç",
+    "resultCountMany": "{{total}} sonuç",
+    "truncatedNotice": "{{total}} eşleşmeden yalnızca ilk {{shown}} tanesi listeleniyor. Geri kalanına ulaşmak için sorguyu daraltın veya bir yol deseni ekleyin.",
+    "stoppedEarlyNotice": "Sayfanın yanıt verebilirliğini korumak için arama erken durdu, bu yüzden belge sonuna kadar taranmadı ve eşleşme sayısı yalnızca bir alt sınırdır.",
+    "stoppedEarlyEmpty": "Sayfanın yanıt verebilirliğini korumak için arama erken durdu, bu yüzden belge sonuna kadar taranmadı."
   },
   "diff": {
     "original": "Orijinal JSON",
@@ -111,13 +135,32 @@
     "added": "Eklendi",
     "removed": "Kaldırıldı"
   },
+  "compare": {
+    "positionalArraysNotice": "{{limit}} öğeden uzun diziler içeriğe göre değil konuma göre karşılaştırılır; bu yüzden eklenen veya kaldırılan bir öğe, kendisinden sonraki her öğenin değişmiş görünmesine yol açar. Konuma göre karşılaştırılanlar: {{paths}}",
+    "lineFallbackNotice": "Bu değişiklik satır satır hizalanamayacak kadar büyük, bu yüzden değişen bölgenin tamamı tek bir değiştirme olarak gösteriliyor: soldaki her satır kaldırılmış, sağdaki her satır eklenmiş sayılır; iki tarafta da aynı olan satırlar dahil."
+  },
   "tree": {
     "collapse": "Tümünü Daralt",
     "expand": "Tümünü Genişlet",
     "items": "öğe",
     "empty": "Boş",
     "null": "null",
-    "editHint": "Herhangi bir değeri veya anahtarı doğrudan düzenlemek için tıklayın"
+    "editHint": "Herhangi bir değeri veya anahtarı doğrudan düzenlemek için tıklayın",
+    "noData": "Görüntülenecek geçerli JSON yok",
+    "ariaLabel": "JSON ağacı",
+    "editKey": "Anahtarı düzenle",
+    "editValue": "Değeri düzenle",
+    "typeHint": "Enter bu değerin türünü korur. Ctrl/Cmd+Enter metni JSON olarak okur; türü böyle değiştirirsiniz.",
+    "errors": {
+      "discarded": "Düzenleme iptal edildi",
+      "duplicateKey": "Bu anahtar bu nesnede zaten var.",
+      "emptyKey": "Anahtar adı boş olamaz.",
+      "expectedBoolean": "Bu değer bir boolean. true veya false girin ya da türünü değiştirmek için Ctrl/Cmd+Enter'a basın.",
+      "expectedNumber": "Bu değer bir sayı. Bir sayı girin ya da türünü değiştirmek için Ctrl/Cmd+Enter'a basın.",
+      "invalidJson": "Bu geçerli bir JSON değil.",
+      "missingNode": "Bu düğüm artık belgede yok.",
+      "notRenameable": "Dizi öğelerine indise göre erişilir ve yeniden adlandırılamazlar."
+    }
   },
   "map": {
     "loading": "Harita yükleniyor...",
@@ -129,7 +172,12 @@
     "locationSingular": "konum bulundu",
     "locationPlural": "konum bulundu",
     "geoJSONDetected": "GeoJSON biçimi algılandı",
-    "mapStyle": "Harita Stili"
+    "mapStyle": "Harita Stili",
+    "tilesOffTitle": "Arka plan haritası kapalı",
+    "tilesOffBody": "JSON'unuz tarayıcıda kalır. Döşemeleri yüklemek, hangi harita stilini seçerseniz seçin, burada listelenen üçüncü taraflara harita görüntüsü istekleri gönderir ve görüntülediğiniz alanı ve IP adresinizi onlara açık eder.",
+    "tilesLoad": "Harita döşemelerini yükle",
+    "markerCap": "{{total}} öğeden ilk {{shown}} tanesi gösteriliyor — geri kalanı çizilmedi.",
+    "shapesFound": "Çizilen şekiller ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Kök",
@@ -167,7 +215,13 @@
     "type_object": "nesne",
     "type_array": "dizi",
     "type_null": "null",
-    "type_undefined": "tanımsız"
+    "type_undefined": "tanımsız",
+    "zoomIn": "Yakınlaştır",
+    "zoomOut": "Uzaklaştır",
+    "fitToScreen": "Ekrana sığdır",
+    "expandAll": "Tümünü genişlet",
+    "collapseAll": "Tümünü daralt",
+    "hint": "genişletmek / daraltmak için düğüme tıklayın · yakınlaştırmak için tekerleği kaydırın · gezinmek için sürükleyin"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Görüntüleyici ve Biçimlendirici. Tüm hakları saklıdır."
+  },
+  "depth": {
+    "title": "Görüntülenemeyecek kadar derin iç içe geçmiş",
+    "body": "Bu belge {{limit}} seviyeden daha derin iç içe geçmiş. Tarayıcıların yığın alanı bu kadar derin yapılarda tükenir, bu yüzden bu görünüm belgeyi çizemez. Burada görüntülemek için belgeyi düzleştirin veya bölün.",
+    "searchNotice": "{{limit}} seviyeden derin dallar atlandı, bu nedenle bazı sonuçlar eksik olabilir.",
+    "sortFailed": "Bu belge, anahtarları sıralanamayacak kadar derin iç içe geçmiş (sınır: {{limit}} seviye).",
+    "expandFailed": "Bu belge, tüm düğümleri genişletilemeyecek kadar derin iç içe geçmiş (sınır: {{limit}} seviye)."
+  },
+  "consent": {
+    "title": "Analiz çerezleri",
+    "body": "Ziyaretçileri saymak ve hangi ülkelerden geldiklerini görmek için analiz çerezleri kullanıyoruz. Neyi seçerseniz seçin, JSON'unuz her zaman tarayıcınızda işlenir ve hiçbir yere gönderilmez.",
+    "accept": "Kabul et",
+    "decline": "Reddet"
   }
 }

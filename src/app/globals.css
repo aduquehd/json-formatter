@@ -407,8 +407,8 @@
     opacity: 0.9;
   }
 
-  /* Monaco Editor Container */
-  .monaco-editor-container {
+  /* Editor Container */
+  .editor-container {
     @apply h-full w-full rounded-lg overflow-hidden;
     border: 1px solid var(--border-color);
   }

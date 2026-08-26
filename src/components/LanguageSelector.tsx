@@ -4,7 +4,8 @@ import { Check, ChevronDown, Globe } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { languages } from '@/lib/i18n';
+import { canonicalLanguage, languages } from '@/lib/i18n';
+import { writeStored } from '@/utils/safeStorage';
 
 interface LanguageSelectorProps {
   showLabel?: boolean;
@@ -16,7 +17,12 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ showLabel = false }
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
+  // `resolvedLanguage` is the bundle actually in use, which is what the checkmark should
+  // track; `i18n.language` can keep a raw region tag when `changeLanguage` is called with
+  // one directly. `canonicalLanguage` then folds script aliases (e.g. 'zh-Hans') onto the
+  // code the `languages` list actually holds, so the checkmark never falls back to English.
+  const activeLanguage = canonicalLanguage(i18n.resolvedLanguage || i18n.language);
+  const currentLanguage = languages.find((lang) => lang.code === activeLanguage) || languages[0];
 
   useEffect(() => {
     setMounted(true);
@@ -35,7 +41,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ showLabel = false }
 
   const handleLanguageChange = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
-    localStorage.setItem('i18nextLng', languageCode);
+    writeStored('i18nextLng', languageCode);
     setIsOpen(false);
   };
 

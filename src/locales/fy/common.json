@@ -52,6 +52,16 @@
     "loadingMap": "Kaartwerjefte wurdt laden...",
     "loadingSearch": "Sykwerjefte wurdt laden..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Dyn JSON is opnij skreaun en guon wearden binne feroare: {{details}}.",
+      "unsafeInteger": "grutte hiele getallen ferlearen sifers",
+      "precision": "desimale getallen binne ôfrûne",
+      "overflow": "getallen dy't te grut binne foar JavaScript waarden null",
+      "negativeZero": "min nul waard nul",
+      "duplicateKey": "dûbele kaaien binne gearfoege, wêrby't de lêste wearde bewarre bleau"
+    }
+  },
   "modal": {
     "selectExample": "Selektearje in JSON Foarbyld",
     "close": "Slute",
@@ -82,7 +92,8 @@
     "objects": "Objekten",
     "distribution": "Type Ferdieling",
     "keyFrequency": "Top Kaai Frekwinsje",
-    "noData": "Gjin JSON data om te analysearjen"
+    "noData": "Gjin JSON data om te analysearjen",
+    "noArrays": "Gjin arrays fûn"
   },
   "search": {
     "placeholder": "Sykje kaaien of wearden...",
@@ -101,7 +112,20 @@
     "samplePaths": "Foarbyld Paden",
     "keys": "kaaien",
     "values": "wearden",
-    "depth": "Djipte"
+    "depth": "Djipte",
+    "regexTooLong": "Dit patroan is {{length}} tekens lang; de limyt is {{limit}}. It is net útfierd.",
+    "regexNestedQuantifier": "Dit patroan nêstelet in kwantifikator yn in oare, lykas (a+)+, in foarm dy't sawat einleaze tiid nedich hawwe kin om te matchen. It is net útfierd.",
+    "regexTooSlow": "Dit patroan wie te stadich op in koarte teststring, dus it is net útfierd. Besykje in ienfâldiger patroan.",
+    "regexInvalid": "Dit is gjin jildige reguliere ekspresje.",
+    "queryPatternLabel": "Sykpatroan",
+    "pathPatternLabel": "Padpatroan",
+    "excludePatternLabel": "Útslútpatroan",
+    "showingFirst": "Earste {{shown}} fan {{total}} resultaten wurde toand",
+    "resultCountOne": "1 resultaat",
+    "resultCountMany": "{{total}} resultaten",
+    "truncatedNotice": "Allinnich de earste {{shown}} fan {{total}} oerienkomsten steane yn de list. Ferfyn de sykopdracht, of foegje in padpatroan ta, om de rest te berikken.",
+    "stoppedEarlyNotice": "It sykjen is betiid stoppe om de side responsyf te hâlden, dus it dokumint is net oant it ein trochsocht en it tal oerienkomsten is in ûndergrins.",
+    "stoppedEarlyEmpty": "It sykjen is betiid stoppe om de side responsyf te hâlden, dus it dokumint is net oant it ein trochsocht."
   },
   "diff": {
     "original": "Orizjinele JSON",
@@ -111,13 +135,32 @@
     "added": "Tafoege",
     "removed": "Fuorthelle"
   },
+  "compare": {
+    "positionalArraysNotice": "Arrays mei mear as {{limit}} items wurde op posysje ferlike ynstee fan op ynhâld, dus troch in tafoege of fuorthelle item liket elk item dêrnei wizige. Op posysje ferlike: {{paths}}",
+    "lineFallbackNotice": "Dizze wiziging is te grut om rigel foar rigel út te lijnen, dus it hiele wizige gebiet wurdt as ien ferfanging toand: elke rigel links telt as fuorthelle en elke rigel rjochts as tafoege, ek rigels dy't oan beide kanten itselde binne."
+  },
   "tree": {
     "collapse": "Alles Ynklappe",
     "expand": "Alles Útklappe",
     "items": "items",
     "empty": "Leech",
     "null": "null",
-    "editHint": "Klik op elke wearde of kaai om direkt te bewurkjen"
+    "editHint": "Klik op elke wearde of kaai om direkt te bewurkjen",
+    "noData": "Gjin jildige JSON om sjen te litten",
+    "ariaLabel": "JSON-beam",
+    "editKey": "Kaai bewurkje",
+    "editValue": "Wearde bewurkje",
+    "typeHint": "Enter hâldt it type fan dizze wearde. Ctrl/Cmd+Enter lêst de tekst as JSON, en sa feroarest do it type.",
+    "errors": {
+      "discarded": "Bewurking ferwurpen",
+      "duplicateKey": "Dy kaai bestiet al op dit objekt.",
+      "emptyKey": "In kaainamme mei net leech wêze.",
+      "expectedBoolean": "Dizze wearde is in boolean. Fier true of false yn, of druk op Ctrl/Cmd+Enter om it type te feroarjen.",
+      "expectedNumber": "Dizze wearde is in getal. Fier in getal yn, of druk op Ctrl/Cmd+Enter om it type te feroarjen.",
+      "invalidJson": "Dat is gjin jildige JSON.",
+      "missingNode": "Dat knooppunt bestiet net mear yn it dokumint.",
+      "notRenameable": "Array-items wurde fia harren yndeks oansprutsen en kinne net omneamd wurde."
+    }
   },
   "map": {
     "loading": "Kaart wurdt laden...",
@@ -129,7 +172,12 @@
     "locationSingular": "lokaasje fûn",
     "locationPlural": "lokaasjes fûn",
     "geoJSONDetected": "GeoJSON formaat detektearre",
-    "mapStyle": "Kaartstyl"
+    "mapStyle": "Kaartstyl",
+    "tilesOffTitle": "Eftergrûnkaart stiet út",
+    "tilesOffBody": "Dyn JSON bliuwt yn de browser. It laden fan tegels stjoert fersiken om kaartôfbyldings nei de hjir neamde tredde partijen, foar elke kaartstyl dy'tst kiest, en jout harren it gebiet dat do besjochst en dyn IP-adres priis.",
+    "tilesLoad": "Kaarttegels lade",
+    "markerCap": "De earste {{shown}} fan {{total}} wurde toand — de rest wurdt net yntekene.",
+    "shapesFound": "Tekene foarmen ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Woartel",
@@ -167,7 +215,13 @@
     "type_object": "objekt",
     "type_array": "array",
     "type_null": "null",
-    "type_undefined": "ûndefinearre"
+    "type_undefined": "ûndefinearre",
+    "zoomIn": "Ynzoome",
+    "zoomOut": "Útzoome",
+    "fitToScreen": "Op skerm passe",
+    "expandAll": "Alles útklappe",
+    "collapseAll": "Alles ynklappe",
+    "hint": "klik op in knooppunt om út- of yn te klappen · scrolle om te zoomen · sleep om te ferskowen"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Werjouwer en Formattearder. Alle rjochten foarbehâlden."
+  },
+  "depth": {
+    "title": "Te djip nêstele om sjen te litten",
+    "body": "Dit dokumint is mear as {{limit}} nivo's djip nêstele. Browsers reitsje by sokke djippe struktueren sûnder stackromte, dus dizze werjefte kin it net tekenje. Meitsje it dokumint flakker of splits it om it hjir te besjen.",
+    "searchNotice": "Tûken dy't djipper as {{limit}} nivo's nêstele binne, binne oerslein; dêrom kinne der resultaten ûntbrekke.",
+    "sortFailed": "Dit dokumint is te djip nêstele om de kaaien te sortearjen (limyt: {{limit}} nivo's).",
+    "expandFailed": "Dit dokumint is te djip nêstele om alle knooppunten út te klappen (limyt: {{limit}} nivo's)."
+  },
+  "consent": {
+    "title": "Analytics-koekjes",
+    "body": "Wy brûke analytics-koekjes om besikers te tellen en te sjen út hokker lannen se komme. Dyn JSON wurdt altyd yn dyn browser ferwurke en wurdt nea earne hinne stjoerd, wat't do ek kiest.",
+    "accept": "Akseptearje",
+    "decline": "Wegerje"
   }
 }

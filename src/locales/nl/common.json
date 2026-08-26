@@ -52,6 +52,16 @@
     "loadingMap": "Kaartweergave wordt geladen...",
     "loadingSearch": "Zoekweergave wordt geladen..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Je JSON is herschreven en sommige waarden zijn veranderd: {{details}}.",
+      "unsafeInteger": "grote gehele getallen verloren cijfers",
+      "precision": "decimale getallen zijn afgerond",
+      "overflow": "getallen die te groot zijn voor JavaScript werden null",
+      "negativeZero": "min nul werd nul",
+      "duplicateKey": "dubbele sleutels zijn samengevoegd, waarbij de laatste waarde behouden bleef"
+    }
+  },
   "modal": {
     "selectExample": "Selecteer een JSON Voorbeeld",
     "close": "Sluiten",
@@ -82,7 +92,8 @@
     "objects": "Objecten",
     "distribution": "Type Verdeling",
     "keyFrequency": "Top Sleutel Frequentie",
-    "noData": "Geen JSON data om te analyseren"
+    "noData": "Geen JSON data om te analyseren",
+    "noArrays": "Geen arrays gevonden"
   },
   "search": {
     "placeholder": "Zoek sleutels of waarden...",
@@ -101,7 +112,20 @@
     "samplePaths": "Voorbeeld Paden",
     "keys": "sleutels",
     "values": "waarden",
-    "depth": "Diepte"
+    "depth": "Diepte",
+    "regexTooLong": "Dit patroon is {{length}} tekens lang; de limiet is {{limit}}. Het is niet uitgevoerd.",
+    "regexNestedQuantifier": "Dit patroon nest een kwantificator in een andere, zoals (a+)+, een vorm die vrijwel eindeloos kan duren om te matchen. Het is niet uitgevoerd.",
+    "regexTooSlow": "Dit patroon was te traag op een korte teststring, dus het is niet uitgevoerd. Probeer een eenvoudiger patroon.",
+    "regexInvalid": "Dit is geen geldige reguliere expressie.",
+    "queryPatternLabel": "Zoekpatroon",
+    "pathPatternLabel": "Padpatroon",
+    "excludePatternLabel": "Uitsluitpatroon",
+    "showingFirst": "Eerste {{shown}} van {{total}} resultaten worden getoond",
+    "resultCountOne": "1 resultaat",
+    "resultCountMany": "{{total}} resultaten",
+    "truncatedNotice": "Alleen de eerste {{shown}} van {{total}} overeenkomsten staan in de lijst. Verfijn de zoekopdracht, of voeg een padpatroon toe, om de rest te bereiken.",
+    "stoppedEarlyNotice": "Het zoeken is vroegtijdig gestopt om de pagina responsief te houden, dus het document is niet tot het einde doorzocht en het aantal overeenkomsten is een ondergrens.",
+    "stoppedEarlyEmpty": "Het zoeken is vroegtijdig gestopt om de pagina responsief te houden, dus het document is niet tot het einde doorzocht."
   },
   "diff": {
     "original": "Originele JSON",
@@ -111,13 +135,32 @@
     "added": "Toegevoegd",
     "removed": "Verwijderd"
   },
+  "compare": {
+    "positionalArraysNotice": "Arrays met meer dan {{limit}} items worden op positie vergeleken in plaats van op inhoud, dus door een toegevoegd of verwijderd item lijkt elk item daarna gewijzigd. Op positie vergeleken: {{paths}}",
+    "lineFallbackNotice": "Deze wijziging is te groot om regel voor regel uit te lijnen, dus het hele gewijzigde gebied wordt als één vervanging getoond: elke regel links telt als verwijderd en elke regel rechts als toegevoegd, ook regels die aan beide kanten hetzelfde zijn."
+  },
   "tree": {
     "collapse": "Alles Inklappen",
     "expand": "Alles Uitklappen",
     "items": "items",
     "empty": "Leeg",
     "null": "null",
-    "editHint": "Klik op elke waarde of sleutel om direct te bewerken"
+    "editHint": "Klik op elke waarde of sleutel om direct te bewerken",
+    "noData": "Geen geldige JSON om weer te geven",
+    "ariaLabel": "JSON-boom",
+    "editKey": "Sleutel bewerken",
+    "editValue": "Waarde bewerken",
+    "typeHint": "Enter behoudt het type van deze waarde. Ctrl/Cmd+Enter leest de tekst als JSON, en zo verander je het type.",
+    "errors": {
+      "discarded": "Bewerking verworpen",
+      "duplicateKey": "Die sleutel bestaat al op dit object.",
+      "emptyKey": "Een sleutelnaam mag niet leeg zijn.",
+      "expectedBoolean": "Deze waarde is een boolean. Voer true of false in, of druk op Ctrl/Cmd+Enter om het type te veranderen.",
+      "expectedNumber": "Deze waarde is een getal. Voer een getal in, of druk op Ctrl/Cmd+Enter om het type te veranderen.",
+      "invalidJson": "Dat is geen geldige JSON.",
+      "missingNode": "Dat knooppunt bestaat niet meer in het document.",
+      "notRenameable": "Array-items worden via hun index aangesproken en kunnen niet hernoemd worden."
+    }
   },
   "map": {
     "loading": "Kaart wordt geladen...",
@@ -129,7 +172,12 @@
     "locationSingular": "locatie gevonden",
     "locationPlural": "locaties gevonden",
     "geoJSONDetected": "GeoJSON formaat gedetecteerd",
-    "mapStyle": "Kaartstijl"
+    "mapStyle": "Kaartstijl",
+    "tilesOffTitle": "Achtergrondkaart staat uit",
+    "tilesOffBody": "Je JSON blijft in de browser. Het laden van tegels stuurt verzoeken om kaartafbeeldingen naar de hier vermelde derde partijen, voor elke kaartstijl die je kiest, en onthult aan hen het gebied dat je bekijkt en je IP-adres.",
+    "tilesLoad": "Kaarttegels laden",
+    "markerCap": "De eerste {{shown}} van {{total}} worden getoond — de rest wordt niet ingetekend.",
+    "shapesFound": "Getekende vormen ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Root",
@@ -167,7 +215,13 @@
     "type_object": "object",
     "type_array": "array",
     "type_null": "null",
-    "type_undefined": "ongedefinieerd"
+    "type_undefined": "ongedefinieerd",
+    "zoomIn": "Inzoomen",
+    "zoomOut": "Uitzoomen",
+    "fitToScreen": "Passend maken",
+    "expandAll": "Alles uitklappen",
+    "collapseAll": "Alles inklappen",
+    "hint": "klik op een node om uit- of in te klappen · scroll om te zoomen · sleep om te verschuiven"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 JSON Viewer en Formatter. Alle rechten voorbehouden."
+  },
+  "depth": {
+    "title": "Te diep genest om weer te geven",
+    "body": "Dit document is meer dan {{limit}} niveaus diep genest. Browsers raken bij zulke diepe structuren zonder stackruimte, dus deze weergave kan het niet tekenen. Maak het document platter of splits het om het hier te bekijken.",
+    "searchNotice": "Takken die dieper dan {{limit}} niveaus genest zijn, zijn overgeslagen; er kunnen dus resultaten ontbreken.",
+    "sortFailed": "Dit document is te diep genest om de sleutels te sorteren (limiet: {{limit}} niveaus).",
+    "expandFailed": "Dit document is te diep genest om alle knooppunten uit te klappen (limiet: {{limit}} niveaus)."
+  },
+  "consent": {
+    "title": "Analytische cookies",
+    "body": "We gebruiken analytische cookies om bezoekers te tellen en te zien uit welke landen ze komen. Je JSON wordt altijd in je browser verwerkt en nooit ergens naartoe gestuurd, wat je ook kiest.",
+    "accept": "Accepteren",
+    "decline": "Weigeren"
   }
 }

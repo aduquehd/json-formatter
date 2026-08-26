@@ -4,20 +4,20 @@ import { Braces, Brackets, HardDrive, KeyRound, Layers, Tags } from 'lucide-reac
 import type React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { analyzeJSON } from '@/utils/jsonStats';
+import { runDepthGuarded } from '@/utils/jsonWalk';
+import DepthLimitNotice from './DepthLimitNotice';
 import styles from './StatsView.module.css';
 
 interface StatsViewProps {
   json: any;
-}
-
-interface JSONStats {
-  totalKeys: number;
-  totalValues: number;
-  maxDepth: number;
-  typeDistribution: Map<string, number>;
-  arrayStats: { count: number; minLength: number; maxLength: number; sumLength: number };
-  keyAnalysis: { uniqueKeys: Set<string>; keyFrequency: Map<string, number>; longestKey: string };
-  depthMap: Map<number, number>;
+  /**
+   * Whether the editor holds a document at all. Carried explicitly rather than
+   * inferred from `json`, because `null`, `0`, `false` and `""` are valid JSON
+   * documents that a truthiness test reports as "nothing to analyse" — while the
+   * status bar, which does carry the flag, calls the same document valid.
+   */
+  isValid: boolean;
 }
 
 // JSON value-type colors — shared with the editor / tree (Tokyo Night palette).
@@ -30,82 +30,47 @@ const TYPE_COLORS: Record<string, string> = {
   null: '#565f89',
 };
 
-function analyzeJSON(data: any, depth = 0, stats?: JSONStats): JSONStats {
-  if (!stats) {
-    stats = {
-      totalKeys: 0,
-      totalValues: 0,
-      maxDepth: 0,
-      typeDistribution: new Map(),
-      arrayStats: { count: 0, minLength: Infinity, maxLength: 0, sumLength: 0 },
-      keyAnalysis: { uniqueKeys: new Set(), keyFrequency: new Map(), longestKey: '' },
-      depthMap: new Map(),
-    };
-  }
-
-  stats.maxDepth = Math.max(stats.maxDepth, depth);
-  stats.depthMap.set(depth, (stats.depthMap.get(depth) || 0) + 1);
-
-  const type = data === null ? 'null' : Array.isArray(data) ? 'array' : typeof data;
-  stats.typeDistribution.set(type, (stats.typeDistribution.get(type) || 0) + 1);
-  stats.totalValues++;
-
-  if (Array.isArray(data)) {
-    stats.arrayStats.count++;
-    stats.arrayStats.minLength = Math.min(stats.arrayStats.minLength, data.length);
-    stats.arrayStats.maxLength = Math.max(stats.arrayStats.maxLength, data.length);
-    stats.arrayStats.sumLength += data.length;
-    data.forEach((item) => analyzeJSON(item, depth + 1, stats));
-  } else if (typeof data === 'object' && data !== null) {
-    Object.entries(data).forEach(([key, value]) => {
-      stats!.totalKeys++;
-      stats!.keyAnalysis.uniqueKeys.add(key);
-      stats!.keyAnalysis.keyFrequency.set(key, (stats!.keyAnalysis.keyFrequency.get(key) || 0) + 1);
-      if (key.length > stats!.keyAnalysis.longestKey.length) stats!.keyAnalysis.longestKey = key;
-      analyzeJSON(value, depth + 1, stats);
-    });
-  }
-
-  return stats;
-}
-
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
   return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
 }
 
-const StatsView: React.FC<StatsViewProps> = ({ json }) => {
+const StatsView: React.FC<StatsViewProps> = ({ json, isValid }) => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const tr = (key: string, fallback: string) => (mounted ? t(key, fallback) : fallback);
 
+  // Guarded as one unit: the walk and `JSON.stringify` below are both recursive,
+  // and `JSON.stringify` is engine-internal so it can only be caught, not capped.
   const data = useMemo(() => {
-    if (!json) return null;
-    const stats = analyzeJSON(json);
-    const totalValues = stats.totalValues;
-    const typeEntries = Array.from(stats.typeDistribution.entries()).sort((a, b) => b[1] - a[1]);
-    const topKeys = Array.from(stats.keyAnalysis.keyFrequency.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
-    const depthEntries = Array.from(stats.depthMap.entries()).sort((a, b) => a[0] - b[0]);
-    const maxDepthCount = Math.max(...Array.from(stats.depthMap.values()), 1);
-    const minifiedBytes = new TextEncoder().encode(JSON.stringify(json)).length;
-    const avgLength = stats.arrayStats.count
-      ? stats.arrayStats.sumLength / stats.arrayStats.count
-      : 0;
-    return {
-      stats,
-      totalValues,
-      typeEntries,
-      topKeys,
-      depthEntries,
-      maxDepthCount,
-      minifiedBytes,
-      avgLength,
-    };
-  }, [json]);
+    if (!isValid) return null;
+    return runDepthGuarded(() => {
+      const stats = analyzeJSON(json);
+      const totalValues = stats.totalValues;
+      const typeEntries = Array.from(stats.typeDistribution.entries()).sort((a, b) => b[1] - a[1]);
+      const topKeys = Array.from(stats.keyAnalysis.keyFrequency.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+      const depthEntries = Array.from(stats.depthMap.entries()).sort((a, b) => a[0] - b[0]);
+      const maxDepthCount = Math.max(...Array.from(stats.depthMap.values()), 1);
+      const minifiedBytes = new TextEncoder().encode(JSON.stringify(json)).length;
+      const avgLength = stats.arrayStats.count
+        ? stats.arrayStats.sumLength / stats.arrayStats.count
+        : 0;
+      return {
+        stats,
+        totalValues,
+        typeEntries,
+        topKeys,
+        depthEntries,
+        maxDepthCount,
+        minifiedBytes,
+        avgLength,
+      };
+    });
+  }, [json, isValid]);
 
   if (!data) {
     return (
@@ -113,6 +78,14 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
         <p className="text-[var(--text-secondary)]">
           {tr('stats.noData', 'No JSON data to analyze')}
         </p>
+      </div>
+    );
+  }
+
+  if (!data.ok) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <DepthLimitNotice limit={data.limit} />
       </div>
     );
   }
@@ -126,7 +99,7 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
     maxDepthCount,
     minifiedBytes,
     avgLength,
-  } = data;
+  } = data.value;
   const maxTopKey = topKeys.length ? topKeys[0][1] : 1;
 
   const metrics = [
@@ -220,7 +193,7 @@ const StatsView: React.FC<StatsViewProps> = ({ json }) => {
         <section className={styles.panel}>
           <h4 className={styles.panelTitle}>{tr('stats.arrays', 'Arrays')}</h4>
           {stats.arrayStats.count === 0 ? (
-            <p className={styles.empty}>{tr('stats.noData', 'No arrays found')}</p>
+            <p className={styles.empty}>{tr('stats.noArrays', 'No arrays found')}</p>
           ) : (
             <div className={styles.miniGrid}>
               <div className={styles.mini}>

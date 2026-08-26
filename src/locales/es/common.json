@@ -52,6 +52,16 @@
     "loadingMap": "Cargando Vista de Mapa...",
     "loadingSearch": "Cargando Vista de Búsqueda..."
   },
+  "format": {
+    "lossy": {
+      "warning": "Tu JSON se reescribió y algunos valores cambiaron: {{details}}.",
+      "unsafeInteger": "los números enteros grandes perdieron dígitos",
+      "precision": "los números decimales se redondearon",
+      "overflow": "los números demasiado grandes para JavaScript se convirtieron en null",
+      "negativeZero": "el cero negativo se convirtió en cero",
+      "duplicateKey": "las claves duplicadas se fusionaron, conservando el último valor"
+    }
+  },
   "modal": {
     "selectExample": "Seleccionar un Ejemplo JSON",
     "close": "Cerrar",
@@ -82,7 +92,8 @@
     "objects": "Objetos",
     "distribution": "Distribución de Tipos",
     "keyFrequency": "Frecuencia de Claves Principales",
-    "noData": "No hay datos JSON para analizar"
+    "noData": "No hay datos JSON para analizar",
+    "noArrays": "No se encontraron arrays"
   },
   "search": {
     "placeholder": "Buscar claves o valores...",
@@ -101,7 +112,20 @@
     "samplePaths": "Rutas de Ejemplo",
     "keys": "claves",
     "values": "valores",
-    "depth": "Profundidad"
+    "depth": "Profundidad",
+    "regexTooLong": "Este patrón tiene {{length}} caracteres; el límite es {{limit}}. No se ejecutó.",
+    "regexNestedQuantifier": "Este patrón anida un cuantificador dentro de otro, como (a+)+, una forma que puede tardar prácticamente una eternidad en coincidir. No se ejecutó.",
+    "regexTooSlow": "Este patrón fue demasiado lento con una cadena de prueba corta, así que no se ejecutó. Prueba con uno más simple.",
+    "regexInvalid": "Esto no es una expresión regular válida.",
+    "queryPatternLabel": "Patrón de búsqueda",
+    "pathPatternLabel": "Patrón de ruta",
+    "excludePatternLabel": "Patrón de exclusión",
+    "showingFirst": "Mostrando los primeros {{shown}} de {{total}} resultados",
+    "resultCountOne": "1 resultado",
+    "resultCountMany": "{{total}} resultados",
+    "truncatedNotice": "Solo se listan las primeras {{shown}} de {{total}} coincidencias. Acota la consulta, o añade un patrón de ruta, para llegar al resto.",
+    "stoppedEarlyNotice": "La búsqueda se detuvo antes de tiempo para que la página siguiera respondiendo, así que el documento no se recorrió hasta el final y el número de coincidencias es solo un mínimo.",
+    "stoppedEarlyEmpty": "La búsqueda se detuvo antes de tiempo para que la página siguiera respondiendo, así que el documento no se recorrió hasta el final."
   },
   "diff": {
     "original": "JSON Original",
@@ -111,13 +135,32 @@
     "added": "Añadido",
     "removed": "Eliminado"
   },
+  "compare": {
+    "positionalArraysNotice": "Los arrays con más de {{limit}} elementos se comparan por posición en lugar de por contenido, así que un elemento insertado o eliminado hace que todos los siguientes parezcan modificados. Comparados por posición: {{paths}}",
+    "lineFallbackNotice": "Este cambio es demasiado grande para alinearlo línea por línea, así que toda la región modificada se muestra como una sola sustitución: cada línea de la izquierda cuenta como eliminada y cada línea de la derecha como añadida, incluidas las líneas que son idénticas en ambos lados."
+  },
   "tree": {
     "collapse": "Colapsar Todo",
     "expand": "Expandir Todo",
     "items": "elementos",
     "empty": "Vacío",
     "null": "nulo",
-    "editHint": "Haz clic en cualquier valor o clave para editar directamente"
+    "editHint": "Haz clic en cualquier valor o clave para editar directamente",
+    "noData": "No hay JSON válido para mostrar",
+    "ariaLabel": "Árbol JSON",
+    "editKey": "Editar clave",
+    "editValue": "Editar valor",
+    "typeHint": "Enter conserva el tipo de este valor. Ctrl/Cmd+Enter lee el texto como JSON, que es la forma de cambiar el tipo.",
+    "errors": {
+      "discarded": "Edición descartada",
+      "duplicateKey": "Esa clave ya existe en este objeto.",
+      "emptyKey": "El nombre de una clave no puede estar vacío.",
+      "expectedBoolean": "Este valor es un booleano. Introduce true o false, o pulsa Ctrl/Cmd+Enter para cambiar su tipo.",
+      "expectedNumber": "Este valor es un número. Introduce un número, o pulsa Ctrl/Cmd+Enter para cambiar su tipo.",
+      "invalidJson": "Eso no es JSON válido.",
+      "missingNode": "Ese nodo ya no existe en el documento.",
+      "notRenameable": "Los elementos de un array se identifican por índice y no se pueden renombrar."
+    }
   },
   "map": {
     "loading": "Cargando mapa...",
@@ -129,7 +172,12 @@
     "locationSingular": "ubicación encontrada",
     "locationPlural": "ubicaciones encontradas",
     "geoJSONDetected": "Formato GeoJSON detectado",
-    "mapStyle": "Estilo de Mapa"
+    "mapStyle": "Estilo de Mapa",
+    "tilesOffTitle": "El mapa de fondo está desactivado",
+    "tilesOffBody": "Tu JSON permanece en el navegador. Cargar los mosaicos envía solicitudes de imágenes de mapa a los terceros indicados aquí, sea cual sea el estilo de mapa que elijas, y les revela la zona que estás viendo y tu dirección IP.",
+    "tilesLoad": "Cargar mosaicos del mapa",
+    "markerCap": "Mostrando los primeros {{shown}} de {{total}} — el resto no se representa.",
+    "shapesFound": "Formas dibujadas ({{total}}): {{types}}"
   },
   "graph": {
     "rootNode": "Raíz",
@@ -167,7 +215,13 @@
     "type_object": "objeto",
     "type_array": "array",
     "type_null": "nulo",
-    "type_undefined": "indefinido"
+    "type_undefined": "indefinido",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "fitToScreen": "Ajustar a la pantalla",
+    "expandAll": "Expandir todo",
+    "collapseAll": "Colapsar todo",
+    "hint": "haz clic en un nodo para expandir / colapsar · desplaza para acercar · arrastra para mover"
   },
   "error": {
     "title": "JSON Formatter",
@@ -176,5 +230,18 @@
   },
   "footer": {
     "copyright": "© 2024 Visor y Formateador JSON. Todos los derechos reservados."
+  },
+  "depth": {
+    "title": "Anidamiento demasiado profundo para mostrarlo",
+    "body": "Este documento tiene más de {{limit}} niveles de anidamiento. Los navegadores se quedan sin espacio de pila con estructuras tan profundas, así que esta vista no puede representarlo. Aplana o divide el documento para verlo aquí.",
+    "searchNotice": "Se omitieron las ramas con más de {{limit}} niveles de anidamiento, por lo que pueden faltar resultados.",
+    "sortFailed": "Este documento está demasiado anidado para ordenar sus claves (límite: {{limit}} niveles).",
+    "expandFailed": "Este documento está demasiado anidado para expandir todos los nodos (límite: {{limit}} niveles)."
+  },
+  "consent": {
+    "title": "Cookies de analítica",
+    "body": "Usamos cookies de analítica para contar visitantes y ver de qué países llegan. Tu JSON siempre se procesa en tu navegador y nunca se envía a ningún sitio, elijas lo que elijas.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
   }
 }

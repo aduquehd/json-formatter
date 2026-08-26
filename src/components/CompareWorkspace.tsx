@@ -17,21 +17,25 @@ import {
   X,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNotification } from '../hooks/useNotification';
 import {
   charDiff,
   compareStructured,
   computeLineDiff,
-  type DiffBlock,
   type DiffType,
   type EqualRow,
+  type LineDiffResult,
   lineStats,
+  MAX_ARRAY_ALIGN_ITEMS,
   normalize,
-  type StructuralDiff,
+  type StructuralDiffResult,
 } from '../utils/jsonDiff';
 import { JSONFixer } from '../utils/jsonFixer';
+import { runDepthGuarded } from '../utils/jsonWalk';
 import CodeMirrorEditor from './CodeMirrorEditor';
 import styles from './CompareWorkspace.module.css';
+import DepthLimitNotice from './DepthLimitNotice';
 
 interface CompareWorkspaceProps {
   /** Left "Your JSON" side — the shared main editor document. */
@@ -52,6 +56,21 @@ type SemanticFilter = DiffType | 'all';
 // is on; equal runs longer than 2x this + 2 get folded.
 const CONTEXT = 3;
 const MAX_VALUE_CHARS = 1500;
+
+// Module-level so the "too deep" path hands the downstream memos the same
+// reference every render instead of a fresh empty result.
+const NO_LINE_DIFF: LineDiffResult = { blocks: [], lcsFallback: false };
+const NO_STRUCTURAL: StructuralDiffResult = { diffs: [], positionalArrays: [] };
+
+// Both caps in the diff engine trade accuracy for speed, and both produce a
+// result that looks like a confident answer, so whichever one is in play has to
+// name itself. See MAX_LCS_CELLS / MAX_ARRAY_ALIGN_ITEMS in ../utils/jsonDiff.
+const LINE_FALLBACK_NOTICE =
+  'This change is too large to line up row by row, so the whole changed region is shown as one replacement: every line on the left counts as removed and every line on the right as added, including lines that are the same on both sides.';
+const POSITIONAL_ARRAYS_NOTICE =
+  'Arrays longer than {{limit}} items are compared by position instead of by content, so an inserted or removed item makes every item after it look modified. Compared by position: {{paths}}';
+// How many degraded array paths to name before trailing off.
+const MAX_LISTED_PATHS = 3;
 
 const TYPE_META: Record<DiffType, { label: string; item: string; badge: string; pill: string }> = {
   added: { label: 'Added', item: 'itemAdded', badge: 'badgeAdded', pill: 'pillAdded' },
@@ -117,6 +136,7 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
   theme = 'dark',
   onExit,
 }) => {
+  const { t } = useTranslation();
   const { showWarning, showError } = useNotification();
 
   const [leftData, setLeftData] = useState<any>(undefined);
@@ -216,17 +236,32 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
 
   // Textual line diff over normalized (pretty-printed) JSON, so whitespace /
   // key-order noise never masquerades as a real change.
-  const blocks = useMemo<DiffBlock[]>(() => {
-    if (!ready) return [];
-    return computeLineDiff(normalize(leftData, sortKeys), normalize(rightData, sortKeys));
+  // Both diffs recurse, and `normalize` also runs the engine's own recursive
+  // `JSON.stringify`, so each is guarded: a document too deep to walk shows the
+  // notice instead of throwing out of render into the error boundary.
+  const blocksResult = useMemo(() => {
+    if (!ready) return null;
+    return runDepthGuarded(() =>
+      computeLineDiff(normalize(leftData, sortKeys), normalize(rightData, sortKeys))
+    );
   }, [ready, leftData, rightData, sortKeys]);
+  const lineDiff = blocksResult?.ok ? blocksResult.value : NO_LINE_DIFF;
+  const blocks = lineDiff.blocks;
 
   const stats = useMemo(() => lineStats(blocks), [blocks]);
 
-  const structural = useMemo<StructuralDiff[]>(
-    () => (ready ? compareStructured(leftData, rightData) : []),
+  const structuralResult = useMemo(
+    () => (ready ? runDepthGuarded(() => compareStructured(leftData, rightData)) : null),
     [ready, leftData, rightData]
   );
+  const structuralDiff = structuralResult?.ok ? structuralResult.value : NO_STRUCTURAL;
+  const structural = structuralDiff.diffs;
+
+  // Non-null when either walk gave up. Without this the empty results below would
+  // read as "no differences found", which is the one wrong thing to say.
+  const depthLimit =
+    (blocksResult && !blocksResult.ok ? blocksResult.limit : null) ??
+    (structuralResult && !structuralResult.ok ? structuralResult.limit : null);
 
   const semanticCounts = useMemo(
     () => ({
@@ -252,7 +287,28 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
     });
   }, [structural, semanticFilter, query]);
 
-  const identical = ready && stats.hunks === 0 && structural.length === 0;
+  const identical = ready && depthLimit === null && stats.hunks === 0 && structural.length === 0;
+
+  // Whichever cap the engine hit, say so — in the words of the view the user is
+  // actually reading. `lcsFallback` only describes the line diff (Split /
+  // Unified) and `positionalArrays` only the structural one (Semantic), so a
+  // single merged notice would warn about a result that is off screen. Nothing
+  // is claimed when the two documents came out identical: a positional walk can
+  // over-report edits, never invent them, so "no differences" is still exact.
+  let degradedNotice: string | null = null;
+  if (ready && depthLimit === null && !identical) {
+    const positionalArrays = structuralDiff.positionalArrays;
+    if (viewMode === 'semantic' && positionalArrays.length > 0) {
+      const listed = positionalArrays.slice(0, MAX_LISTED_PATHS).join(', ');
+      degradedNotice = t('compare.positionalArraysNotice', {
+        defaultValue: POSITIONAL_ARRAYS_NOTICE,
+        limit: MAX_ARRAY_ALIGN_ITEMS.toLocaleString(),
+        paths: positionalArrays.length > MAX_LISTED_PATHS ? `${listed}, …` : listed,
+      });
+    } else if (viewMode !== 'semantic' && lineDiff.lcsFallback) {
+      degradedNotice = t('compare.lineFallbackNotice', { defaultValue: LINE_FALLBACK_NOTICE });
+    }
+  }
 
   // Jump between change hunks in the scrollable results area.
   const navigate = useCallback((dir: 1 | -1) => {
@@ -633,6 +689,13 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
         </div>
       );
     }
+    if (depthLimit !== null) {
+      return (
+        <div className={styles.placeholder}>
+          <DepthLimitNotice limit={depthLimit} />
+        </div>
+      );
+    }
     if (identical) {
       return (
         <div className={styles.noChanges}>
@@ -752,7 +815,7 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
       </div>
 
       {/* Summary bar */}
-      {ready && !identical && (
+      {ready && !identical && depthLimit === null && (
         <div className={styles.summary}>
           {viewMode === 'semantic' ? (
             <div className={styles.summaryStats}>
@@ -805,6 +868,17 @@ const CompareWorkspace: React.FC<CompareWorkspaceProps> = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Degraded-accuracy notice: the diff below is real, but coarser than
+          usual, and the reader has no way to tell from the diff itself. */}
+      {degradedNotice && (
+        <div
+          role="status"
+          className="shrink-0 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-400"
+        >
+          {degradedNotice}
         </div>
       )}
 

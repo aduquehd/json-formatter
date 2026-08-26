@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { readStored, writeStored } from '@/utils/safeStorage';
 
 export function useTheme() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = readStored('theme');
     const isDarkTheme = savedTheme !== null ? savedTheme === 'dark' : true;
     setTheme(isDarkTheme ? 'dark' : 'light');
 
@@ -21,7 +22,7 @@ export function useTheme() {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    writeStored('theme', newTheme);
 
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
